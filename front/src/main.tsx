@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import { IndexPage } from './pages'
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <IndexPage />
     </React.StrictMode>,
     document.getElementById('root')
 )

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import RoomsImage from './rooms.png'
 import { RoomsImageStore } from './RoomsImageStore'
 
-export const Rooms = () => {
+export const RoomsCanvas = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     useEffect(() => {

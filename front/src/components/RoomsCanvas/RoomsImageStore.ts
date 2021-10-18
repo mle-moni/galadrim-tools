@@ -1,4 +1,4 @@
-import { AppStore } from '../stores/AppStore'
+import { AppStore } from '../../stores/AppStore'
 import { AllRooms, isColliding, Point, Room } from './utils'
 
 export class RoomsImageStore {
