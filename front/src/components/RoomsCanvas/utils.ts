@@ -9,6 +9,13 @@ export type Room = {
 
 export const AllRooms: Room[] = [
     {
+        name: '*',
+        rect: {
+            p1: { x: 0, y: 10 },
+            p2: { x: 0, y: 50 }, // p2.x is set with image width
+        }
+    },
+    {
         name: 'Salle de repos',
         rect: {
             p1: { x: 8, y: 166 },

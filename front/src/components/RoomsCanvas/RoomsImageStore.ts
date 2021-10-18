@@ -2,6 +2,7 @@ import { AppStore } from '../../stores/AppStore'
 import { AllRooms, isColliding, Point, Room } from './utils'
 
 export class RoomsImageStore {
+    private WILDCARD_ROOM_OFFSET = 140
     private ctx: CanvasRenderingContext2D
     private image: HTMLImageElement
     constructor(private canvas: HTMLCanvasElement, private imagePath: string) {
@@ -9,6 +10,7 @@ export class RoomsImageStore {
         this.image.onload = () => {
             this.canvas.width = this.image.width
             this.canvas.height = this.image.height
+            this.setWildcardRoomRect()
             this.draw()
         }
         this.image.src = imagePath
@@ -57,6 +59,24 @@ export class RoomsImageStore {
             const w = rect.p2.x - rect.p1.x
             const h = rect.p2.y - rect.p1.y
             this.ctx.strokeRect(rect.p1.x, rect.p1.y, w, h)
+
+            if (room.name === '*') this.drawWildcardRoom(room, w, h)
         }
+    }
+
+    drawWildcardRoom({ rect }: Room, w: number, h: number) {
+        this.ctx.fillStyle = 'rgba(240, 240, 240, 0.8)'
+        this.ctx.fillRect(rect.p1.x, rect.p1.y, w, h)
+        this.ctx.font = "20px Arial"
+        this.ctx.fillStyle = 'black'
+        this.ctx.textAlign = "center";
+        this.ctx.fillText('Voir toutes les salles', this.image.width / 2, 35)
+    }
+
+    setWildcardRoomRect() {
+        const wildcardRoom = AllRooms.find((room) => room.name === '*')
+        if (!wildcardRoom) return
+        wildcardRoom.rect.p1.x = this.WILDCARD_ROOM_OFFSET
+        wildcardRoom.rect.p2.x = this.image.width - this.WILDCARD_ROOM_OFFSET
     }
 }

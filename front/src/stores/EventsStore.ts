@@ -1,4 +1,4 @@
-import { computed, makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
 import { deleteEvent, fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
 import { AppStore } from './AppStore'
@@ -18,7 +18,7 @@ export class EventsStore {
     public roomName = ''
 
     constructor() {
-        makeAutoObservable(this, { roomEvents: computed })
+        makeAutoObservable(this)
     }
 
     async init() {
@@ -38,7 +38,7 @@ export class EventsStore {
             id: 0,
             title: 'nouvel évenement',
             start: new Date(new Date(new Date(date).setHours(0)).setMinutes(0)),
-            end: new Date(new Date(new Date(date).setHours(0)).setMinutes(15)),
+            end: new Date(new Date(new Date(date).setHours(0)).setMinutes(30)),
             room: '*',
             allDay: true
         }
@@ -75,6 +75,10 @@ export class EventsStore {
         this.moveEvent(event?.id, startDate, endDate)
     }
     async newEvent(start: Date, end: Date) {
+        if (this.roomName === '*') {
+            alert('impossible de créer un event depuis ici pour le moment')
+            return
+        }
         const event: RoomEvent = await postEvent({ start, end, title: AppStore.username, room: this.roomName })
         this.appendEvents([event])
     }
@@ -99,14 +103,20 @@ export class EventsStore {
         const event = events.find((event) => event.id === eventId)
         if (!event) return
         const updatedEvent = await putEvent({ id: event.id, start, end, room: event.room, title: event.title })
-        event.start = updatedEvent.start
-        event.end = updatedEvent.end
+        this.setEventDates(event, updatedEvent.start, updatedEvent.end)
         this.setEvents(events)
     }
 
-    getRoomEvents(roomName: string) {
-        return this.events.filter((event) => event.room === roomName || event.room === '*')
+    setEventDates(event: RoomEvent, start: Date, end: Date) {
+        event.start = start
+        event.end = end
+    }
 
+    getRoomEvents(roomName: string) {
+        if (roomName === '*') return this.events.map((event) => {
+            return { ...event, title: `${event.title} (${event.room})` }
+        })
+        return this.events.filter((event) => event.room === roomName || event.room === '*')
     }
 
     get roomEvents() {
