@@ -27,4 +27,8 @@ export default Env.rules({
     MYSQL_USER: Env.schema.string(),
     MYSQL_PASSWORD: Env.schema.string.optional(),
     MYSQL_DB_NAME: Env.schema.string(),
+    FOREST_HOST: Env.schema.string({ format: 'host' }),
+    FOREST_USERNAME: Env.schema.string(),
+    FOREST_PASSWORD: Env.schema.string.optional(),
+    FOREST_DB: Env.schema.string(),
 })

@@ -1,4 +1,5 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import { ForestConnection } from 'Database/forest/connection'
 
 export default class AppProvider {
     constructor(protected app: ApplicationContract) {}
@@ -9,6 +10,7 @@ export default class AppProvider {
 
     public async boot() {
         // IoC container is ready
+        ForestConnection.connect()
     }
 
     public async ready() {
@@ -17,5 +19,6 @@ export default class AppProvider {
 
     public async shutdown() {
         // Cleanup, since app is going down
+        ForestConnection.end()
     }
 }
