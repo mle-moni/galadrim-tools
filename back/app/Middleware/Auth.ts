@@ -1,6 +1,6 @@
+import { AuthenticationException } from '@adonisjs/auth/build/standalone'
 import { GuardsList } from '@ioc:Adonis/Addons/Auth'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { AuthenticationException } from '@adonisjs/auth/build/standalone'
 
 /**
  * Auth middleware is meant to restrict un-authenticated access to a given route
@@ -10,67 +10,67 @@ import { AuthenticationException } from '@adonisjs/auth/build/standalone'
  * of named middleware.
  */
 export default class AuthMiddleware {
-  /**
-   * The URL to redirect to when request is Unauthorized
-   */
-  protected redirectTo = '/login'
-
-  /**
-   * Authenticates the current HTTP request against a custom set of defined
-   * guards.
-   *
-   * The authentication loop stops as soon as the user is authenticated using any
-   * of the mentioned guards and that guard will be used by the rest of the code
-   * during the current request.
-   */
-  protected async authenticate(auth: HttpContextContract['auth'], guards: (keyof GuardsList)[]) {
     /**
-     * Hold reference to the guard last attempted within the for loop. We pass
-     * the reference of the guard to the "AuthenticationException", so that
-     * it can decide the correct response behavior based upon the guard
-     * driver
+     * The URL to redirect to when request is Unauthorized
      */
-    let guardLastAttempted: string | undefined
+    protected redirectTo = '/login'
 
-    for (let guard of guards) {
-      guardLastAttempted = guard
-
-      if (await auth.use(guard).check()) {
+    /**
+     * Authenticates the current HTTP request against a custom set of defined
+     * guards.
+     *
+     * The authentication loop stops as soon as the user is authenticated using any
+     * of the mentioned guards and that guard will be used by the rest of the code
+     * during the current request.
+     */
+    protected async authenticate(auth: HttpContextContract['auth'], guards: (keyof GuardsList)[]) {
         /**
-         * Instruct auth to use the given guard as the default guard for
-         * the rest of the request, since the user authenticated
-         * succeeded here
+         * Hold reference to the guard last attempted within the for loop. We pass
+         * the reference of the guard to the "AuthenticationException", so that
+         * it can decide the correct response behavior based upon the guard
+         * driver
          */
-        auth.defaultGuard = guard
-        return true
-      }
+        let guardLastAttempted: string | undefined
+
+        for (let guard of guards) {
+            guardLastAttempted = guard
+
+            if (await auth.use(guard).check()) {
+                /**
+                 * Instruct auth to use the given guard as the default guard for
+                 * the rest of the request, since the user authenticated
+                 * succeeded here
+                 */
+                auth.defaultGuard = guard
+                return true
+            }
+        }
+
+        /**
+         * Unable to authenticate using any guard
+         */
+        throw new AuthenticationException(
+            'Unauthorized access',
+            'E_UNAUTHORIZED_ACCESS',
+            guardLastAttempted,
+            this.redirectTo
+        )
     }
 
     /**
-     * Unable to authenticate using any guard
+     * Handle request
      */
-    throw new AuthenticationException(
-      'Unauthorized access',
-      'E_UNAUTHORIZED_ACCESS',
-      guardLastAttempted,
-      this.redirectTo,
-    )
-  }
-
-  /**
-   * Handle request
-   */
-  public async handle (
-    { auth }: HttpContextContract,
-    next: () => Promise<void>,
-    customGuards: (keyof GuardsList)[]
-  ) {
-    /**
-     * Uses the user defined guards or the default guard mentioned in
-     * the config file
-     */
-    const guards = customGuards.length ? customGuards : [auth.name]
-    await this.authenticate(auth, guards)
-    await next()
-  }
+    public async handle(
+        { auth }: HttpContextContract,
+        next: () => Promise<void>,
+        customGuards: (keyof GuardsList)[]
+    ) {
+        /**
+         * Uses the user defined guards or the default guard mentioned in
+         * the config file
+         */
+        const guards = customGuards.length ? customGuards : [auth.name]
+        await this.authenticate(auth, guards)
+        await next()
+    }
 }

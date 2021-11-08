@@ -27,4 +27,11 @@ export default class User extends BaseModel {
             user.password = await Hash.make(user.password)
         }
     }
+
+    public publicData() {
+        return {
+            id: this.id,
+            username: this.username,
+        }
+    }
 }

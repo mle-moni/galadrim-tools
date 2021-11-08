@@ -24,6 +24,11 @@ Route.get('/', async () => {
     return { hello: 'world' }
 })
 
-Route.resource('events', 'EventsController').apiOnly()
+Route.post('/login', 'AuthController.login')
+
+Route.group(() => {
+    Route.resource('events', 'EventsController').apiOnly()
+    Route.get('/me', 'AuthController.me')
+}).middleware('auth')
 
 Route.get('/galadrimeurs', 'GaladrimeursController.index')

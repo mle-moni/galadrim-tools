@@ -39,3 +39,20 @@ export const getForestUsers = (): Promise<ForestUser[]> => {
         )
     })
 }
+
+export const findForestUser = (username: string, password: string): Promise<ForestUser | null> => {
+    return new Promise((resolve, reject) => {
+        ForestConnection.query(
+            `SELECT * FROM Users WHERE Username = ? AND Password = ?;`,
+            [username, password],
+            function (error, results, _fieldsInfos) {
+                if (error) reject(error)
+                if (results.length === 0) {
+                    resolve(null)
+                    return
+                }
+                resolve(results[0])
+            }
+        )
+    })
+}

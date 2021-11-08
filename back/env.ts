@@ -31,4 +31,6 @@ export default Env.rules({
     FOREST_USERNAME: Env.schema.string(),
     FOREST_PASSWORD: Env.schema.string.optional(),
     FOREST_DB: Env.schema.string(),
+    COOKIE_DOMAIN: Env.schema.string(),
+    SESSION_DRIVER: Env.schema.string(),
 })
