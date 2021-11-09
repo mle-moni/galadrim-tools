@@ -6,6 +6,7 @@
  */
 
 import { CorsConfig } from '@ioc:Adonis/Core/Cors'
+import Env from '@ioc:Adonis/Core/Env'
 
 const corsConfig: CorsConfig = {
     /*
@@ -44,7 +45,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-    origin: '*',
+    origin: Env.get('CORS_ORIGINS'),
 
     /*
   |--------------------------------------------------------------------------

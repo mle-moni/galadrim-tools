@@ -1,7 +1,7 @@
-import { getApiUrl } from "./url";
+import { ApiError, fetchBackendJson } from './fetch'
 
 export const fetchGaladrimeurs = async () => {
-    const url = getApiUrl()
-    const res = await fetch(`${url}/galadrimeurs`)
-    return res.json()
+    const res = await fetchBackendJson<string[], ApiError>('/galadrimeurs')
+    if (res.ok) return res.json
+    return []
 }

@@ -25,6 +25,7 @@ Route.get('/', async () => {
 })
 
 Route.post('/login', 'AuthController.login')
+Route.post('/logout', 'AuthController.logout')
 
 Route.group(() => {
     Route.resource('events', 'EventsController').apiOnly()

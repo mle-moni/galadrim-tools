@@ -1,7 +1,8 @@
-import { makeAutoObservable } from "mobx"
-import { fetchGaladrimeurs } from "../api/galadrimeurs"
-import { EventsStore } from "./EventsStore"
-
+import { makeAutoObservable } from 'mobx'
+import { fetchGaladrimeurs } from '../api/galadrimeurs'
+import { AuthStore } from './AuthStore'
+import { EventsStore } from './EventsStore'
+import { NotificationStore } from './NotificationStore'
 
 export class MainStore {
     public appIsReady = false
@@ -10,12 +11,9 @@ export class MainStore {
 
     public eventsStore = new EventsStore()
 
-    public username = localStorage.getItem('username') || ''
+    public notification = new NotificationStore()
 
-    setUsername(username: string) {
-        this.username = username
-        localStorage.setItem('username', username)
-    }
+    public authStore = new AuthStore()
 
     constructor() {
         makeAutoObservable(this)
@@ -27,13 +25,10 @@ export class MainStore {
     }
 
     async init() {
-        const [galadrimeurs] = await Promise.all([fetchGaladrimeurs(), this.eventsStore.init()])
+        const [galadrimeurs] = await Promise.all([fetchGaladrimeurs(), this.authStore.init()])
         this.galadrimeurs = galadrimeurs
         this.setAppReady(true)
     }
 }
 
 export const AppStore = new MainStore()
-
-//@ts-ignore
-window.appStore = AppStore

@@ -1,14 +1,25 @@
 import { makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
-import { deleteEvent, fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
+import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
+import { ApiError, fetchBackendJson } from '../api/fetch'
+import { notifyError } from '../utils/notification'
 import { AppStore } from './AppStore'
 
-export type DateRange = Date[] | {
-    start: stringOrDate;
-    end: stringOrDate;
-}
+export type DateRange =
+    | Date[]
+    | {
+          start: stringOrDate
+          end: stringOrDate
+      }
 
-export type RoomEvent = { id: number, start: Date, end: Date, title: string, room: string, allDay?: boolean }
+export type RoomEvent = {
+    id: number
+    start: Date
+    end: Date
+    title: string
+    room: string
+    allDay?: boolean
+}
 
 export class EventsStore {
     public initialEvent = this.makeInitialEvent(new Date())
@@ -22,10 +33,15 @@ export class EventsStore {
     }
 
     async init() {
-        const events: RoomEvent[] = (await fetchEvents()).map(
-            (rawEvent: any) => getEventFromApi(rawEvent)
+        const events: RoomEvent[] = (await fetchEvents()).map((rawEvent: any) =>
+            getEventFromApi(rawEvent)
         )
         this.appendEvents(events)
+    }
+
+    resetEvents() {
+        this.events = [this.initialEvent]
+        this.init()
     }
 
     setRoomName(name: string) {
@@ -40,7 +56,7 @@ export class EventsStore {
             start: new Date(new Date(new Date(date).setHours(0)).setMinutes(0)),
             end: new Date(new Date(new Date(date).setHours(0)).setMinutes(30)),
             room: '*',
-            allDay: true
+            allDay: true,
         }
     }
 
@@ -76,10 +92,15 @@ export class EventsStore {
     }
     async newEvent(start: Date, end: Date) {
         if (this.roomName === '*') {
-            alert('impossible de créer un event depuis ici pour le moment')
+            notifyError('impossible de créer un event depuis ici pour le moment')
             return
         }
-        const event: RoomEvent = await postEvent({ start, end, title: AppStore.username, room: this.roomName })
+        const event: RoomEvent = await postEvent({
+            start,
+            end,
+            title: AppStore.authStore.user.username,
+            room: this.roomName,
+        })
         this.appendEvents([event])
     }
     onDoubleClickEvent(event: any) {
@@ -87,8 +108,11 @@ export class EventsStore {
         return this.removeEvent(event.id)
     }
     async removeEvent(id: number) {
-        const res = await deleteEvent(id)
-        if (!res.deleted) return
+        const res = await fetchBackendJson<{ id: number; deleted: boolean }, ApiError>(
+            `/events/${id}`,
+            'DELETE'
+        )
+        if (!res.ok || !res.json.deleted) return
         const events = this.events.filter((event) => event.id !== id)
         this.setEvents(events)
     }
@@ -102,7 +126,13 @@ export class EventsStore {
         const events = [...this.events]
         const event = events.find((event) => event.id === eventId)
         if (!event) return
-        const updatedEvent = await putEvent({ id: event.id, start, end, room: event.room, title: event.title })
+        const updatedEvent = await putEvent({
+            id: event.id,
+            start,
+            end,
+            room: event.room,
+            title: event.title,
+        })
         this.setEventDates(event, updatedEvent.start, updatedEvent.end)
         this.setEvents(events)
     }
@@ -113,9 +143,10 @@ export class EventsStore {
     }
 
     getRoomEvents(roomName: string) {
-        if (roomName === '*') return this.events.map((event) => {
-            return { ...event, title: `${event.title} (${event.room})` }
-        })
+        if (roomName === '*')
+            return this.events.map((event) => {
+                return { ...event, title: `${event.title} (${event.room})` }
+            })
         return this.events.filter((event) => event.room === roomName || event.room === '*')
     }
 
