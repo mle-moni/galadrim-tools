@@ -9,7 +9,9 @@ import { AppStore } from '../stores/AppStore'
 
 const AppPage = observer(() => {
     useEffect(() => {
-        AppStore.eventsStore.resetEvents()
+        if (AppStore.authStore.connected) {
+            AppStore.eventsStore.resetEvents()
+        }
     }, [AppStore.authStore.connected])
 
     return (
