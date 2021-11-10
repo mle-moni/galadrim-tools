@@ -32,6 +32,7 @@ export class AuthStore {
     async login() {
         this.setErrors('')
         const data = new FormData()
+        if (this.username === '' || this.password === '') return
         data.append('username', this.username)
         data.append('password', this.password)
         const res = await fetchBackendJson<ApiUser, ApiError>('/login', 'POST', { body: data })
