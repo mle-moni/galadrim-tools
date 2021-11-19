@@ -77,29 +77,27 @@ export class EventsStore {
         event,
         start,
         end,
+        resourceId: roomName,
     }: {
         event: any
         start: stringOrDate
         end: stringOrDate
         isAllDay: boolean
+        resourceId?: string
     }) {
         const [startDate, endDate] = [new Date(start), new Date(end)]
         if (event?.id === 0) {
             this.newEvent(startDate, endDate)
             return
         }
-        this.moveEvent(event?.id, startDate, endDate)
+        this.moveEvent(event?.id, startDate, endDate, roomName)
     }
-    async newEvent(start: Date, end: Date) {
-        if (this.roomName === '*') {
-            notifyError('impossible de créer un event depuis ici pour le moment')
-            return
-        }
+    async newEvent(start: Date, end: Date, roomName = null) {
         const event: RoomEvent = await postEvent({
             start,
             end,
             title: AppStore.authStore.user.username,
-            room: this.roomName,
+            room: roomName ?? this.roomName,
         })
         this.appendEvents([event])
     }
@@ -122,7 +120,7 @@ export class EventsStore {
     setEvents(events: RoomEvent[]) {
         this.events = events
     }
-    async moveEvent(eventId: number, start: Date, end: Date) {
+    async moveEvent(eventId: number, start: Date, end: Date, roomName?: string) {
         const events = [...this.events]
         const event = events.find((event) => event.id === eventId)
         if (!event) return
@@ -130,16 +128,21 @@ export class EventsStore {
             id: event.id,
             start,
             end,
-            room: event.room,
+            room: roomName ?? event.room,
             title: event.title,
         })
         this.setEventDates(event, updatedEvent.start, updatedEvent.end)
+        this.setEventRoom(event, updatedEvent.room)
         this.setEvents(events)
     }
 
     setEventDates(event: RoomEvent, start: Date, end: Date) {
         event.start = start
         event.end = end
+    }
+
+    setEventRoom(event: RoomEvent, room: string) {
+        event.room = room
     }
 
     getRoomEvents(roomName: string) {
@@ -155,8 +158,7 @@ export class EventsStore {
     }
 
     eventCollide(event: RoomEvent, date: Date): boolean {
-        if (date < event.start || date > event.end) return false
-        return true
+        return !(date < event.start || date > event.end)
     }
 
     roomIsAvailable(roomName: string, date: Date) {
