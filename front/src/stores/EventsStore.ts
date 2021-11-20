@@ -5,13 +5,6 @@ import { ApiError, fetchBackendJson } from '../api/fetch'
 import { notifyError } from '../utils/notification'
 import { AppStore } from './AppStore'
 
-export type DateRange =
-    | Date[]
-    | {
-          start: stringOrDate
-          end: stringOrDate
-      }
-
 export type RoomEvent = {
     id: number
     start: Date
@@ -22,9 +15,7 @@ export type RoomEvent = {
 }
 
 export class EventsStore {
-    public initialEvent = this.makeInitialEvent(new Date())
-
-    public events: RoomEvent[] = [this.initialEvent]
+    public events: RoomEvent[] = []
 
     public roomName = ''
 
@@ -40,37 +31,12 @@ export class EventsStore {
     }
 
     resetEvents() {
-        this.events = [this.initialEvent]
+        this.events = []
         this.init()
     }
 
     setRoomName(name: string) {
         this.roomName = name
-        this.onNavigate(new Date())
-    }
-
-    makeInitialEvent(date: Date): RoomEvent {
-        return {
-            id: 0,
-            title: 'nouvel évenement',
-            start: new Date(new Date(new Date(date).setHours(0)).setMinutes(0)),
-            end: new Date(new Date(new Date(date).setHours(0)).setMinutes(30)),
-            room: '*',
-            allDay: true,
-        }
-    }
-
-    onNavigate(date: Date) {
-        const initialDate = this.makeInitialEvent(date)
-        const events = this.events.filter((event) => event.id !== 0)
-        events.unshift(initialDate)
-        this.events = events
-    }
-
-    onRangeChange(range: DateRange) {
-        if (range instanceof Array) {
-            this.onNavigate(range[0])
-        }
     }
 
     onEventDrop({
@@ -86,10 +52,6 @@ export class EventsStore {
         resourceId?: string
     }) {
         const [startDate, endDate] = [new Date(start), new Date(end)]
-        if (event?.id === 0) {
-            this.newEvent(startDate, endDate)
-            return
-        }
         this.moveEvent(event?.id, startDate, endDate, roomName)
     }
     async newEvent(start: Date, end: Date, roomName = null) {

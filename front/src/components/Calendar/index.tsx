@@ -6,28 +6,17 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { AppStore } from '../../stores/AppStore'
 import { RoomEvent } from '../../stores/EventsStore'
+import { AllRooms, Room } from '../RoomsCanvas/utils'
 import { MomentFrLocales } from './setFrLocales'
 
 moment.locale('fr', MomentFrLocales)
 
 const localizer = momentLocalizer(moment)
 
-type ResourceId = {
-    resourceId: string
-}
-
-type Resource = {
-    room: RoomEvent['room']
-}
-
 type CalendarEvent = RoomEvent & { resourceId: string }
 
 // @ts-ignore
-const DragAndDropCalendar = withDragAndDrop<CalendarEvent, Resource>(Calendar)
-
-const getResourcesFromRoomEvent = (roomEvents: RoomEvent[]): Resource[] => {
-    return [...new Set(roomEvents.map((roomEvent) => roomEvent.room))].map((room) => ({ room }))
-}
+const DragAndDropCalendar = withDragAndDrop<CalendarEvent, Room>(Calendar)
 
 const getCalendarEventFromRoomEvent = (roomEvents: RoomEvent[]): CalendarEvent[] => {
     return roomEvents.map((event) => ({
@@ -68,7 +57,6 @@ export const RoomCalendar = observer(() => (
                     next: 'suivant',
                     previous: 'précédent',
                 }}
-                onNavigate={(date) => AppStore.eventsStore.onNavigate(date)}
                 onEventDrop={(args) => {
                     AppStore.eventsStore.onEventDrop(args)
                 }}
@@ -76,11 +64,10 @@ export const RoomCalendar = observer(() => (
                     AppStore.eventsStore.newEvent(new Date(start), new Date(end), resourceId)
                 }}
                 onDoubleClickEvent={(args) => AppStore.eventsStore.onDoubleClickEvent(args)}
-                onRangeChange={(range) => AppStore.eventsStore.onRangeChange(range)}
                 {...(AppStore.eventsStore.roomName === '*' && {
-                    resources: getResourcesFromRoomEvent(AppStore.eventsStore.roomEvents),
-                    resourceIdAccessor: 'room',
-                    resourceTitleAccessor: 'room',
+                    resources: AllRooms.filter(({ name }) => name !== '*'),
+                    resourceIdAccessor: 'name',
+                    resourceTitleAccessor: 'name',
                 })}
             />
         </div>
