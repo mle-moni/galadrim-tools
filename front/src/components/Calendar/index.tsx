@@ -60,6 +60,7 @@ export const RoomCalendar = observer(() => (
                 onEventDrop={(args) => {
                     AppStore.eventsStore.onEventDrop(args)
                 }}
+                // @ts-ignore
                 onSelectSlot={({ start, end, resourceId }) => {
                     AppStore.eventsStore.newEvent(new Date(start), new Date(end), resourceId)
                 }}
