@@ -5,14 +5,25 @@ import { Calendar, momentLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { AppStore } from '../../stores/AppStore'
+import { RoomEvent } from '../../stores/EventsStore'
+import { AllRooms, Room } from '../RoomsCanvas/utils'
 import { MomentFrLocales } from './setFrLocales'
 
 moment.locale('fr', MomentFrLocales)
 
 const localizer = momentLocalizer(moment)
 
+type CalendarEvent = RoomEvent & { resourceId: string }
+
 // @ts-ignore
-const DragAndDropCalendar = withDragAndDrop(Calendar)
+const DragAndDropCalendar = withDragAndDrop<CalendarEvent, Room>(Calendar)
+
+const getCalendarEventFromRoomEvent = (roomEvents: RoomEvent[]): CalendarEvent[] => {
+    return roomEvents.map((event) => ({
+        ...event,
+        resourceId: event.room,
+    }))
+}
 
 export const RoomCalendar = observer(() => (
     <div
@@ -29,12 +40,13 @@ export const RoomCalendar = observer(() => (
     >
         <div style={{ width: '80vw', backgroundColor: 'white' }}>
             <DragAndDropCalendar
+                selectable
                 min={new Date(0, 0, 0, 9, 0, 0)}
                 max={new Date(0, 0, 0, 19, 30, 0)}
                 step={15}
                 resizableAccessor={() => false}
                 localizer={localizer}
-                events={AppStore.eventsStore.roomEvents}
+                events={getCalendarEventFromRoomEvent(AppStore.eventsStore.roomEvents)}
                 defaultDate={new Date()}
                 defaultView="day"
                 views={['day', 'work_week']}
@@ -45,11 +57,18 @@ export const RoomCalendar = observer(() => (
                     next: 'suivant',
                     previous: 'précédent',
                 }}
-
-                onNavigate={(date) => AppStore.eventsStore.onNavigate(date)}
-                onEventDrop={(args) => AppStore.eventsStore.onEventDrop(args)}
+                onEventDrop={(args) => {
+                    AppStore.eventsStore.onEventDrop(args)
+                }}
+                onSelectSlot={({ start, end, resourceId }) => {
+                    AppStore.eventsStore.newEvent(new Date(start), new Date(end), resourceId)
+                }}
                 onDoubleClickEvent={(args) => AppStore.eventsStore.onDoubleClickEvent(args)}
-                onRangeChange={(range) => AppStore.eventsStore.onRangeChange(range)}
+                {...(AppStore.eventsStore.roomName === '*' && {
+                    resources: AllRooms.filter(({ name }) => name !== '*'),
+                    resourceIdAccessor: 'name',
+                    resourceTitleAccessor: 'name',
+                })}
             />
         </div>
     </div>
