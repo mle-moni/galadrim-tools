@@ -55,7 +55,9 @@ export class RoomsImageStore {
         this.ctx.drawImage(this.image, 0, 0)
         if (room) {
             const { rect, name } = room
-            this.ctx.strokeStyle = AppStore.eventsStore.roomIsAvailable(name, new Date()) ? 'green' : 'red'
+            this.ctx.strokeStyle = AppStore.eventsStore.roomIsAvailable(name, new Date())
+                ? 'green'
+                : 'red'
             const w = rect.p2.x - rect.p1.x
             const h = rect.p2.y - rect.p1.y
             this.ctx.strokeRect(rect.p1.x, rect.p1.y, w, h)
@@ -67,9 +69,9 @@ export class RoomsImageStore {
     drawWildcardRoom({ rect }: Room, w: number, h: number) {
         this.ctx.fillStyle = 'rgba(240, 240, 240, 0.8)'
         this.ctx.fillRect(rect.p1.x, rect.p1.y, w, h)
-        this.ctx.font = "20px Arial"
+        this.ctx.font = '20px Arial'
         this.ctx.fillStyle = 'black'
-        this.ctx.textAlign = "center";
+        this.ctx.textAlign = 'center'
         this.ctx.fillText('Voir toutes les salles', this.image.width / 2, 35)
     }
 

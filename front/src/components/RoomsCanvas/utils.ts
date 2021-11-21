@@ -13,41 +13,48 @@ export const AllRooms: Room[] = [
         rect: {
             p1: { x: 0, y: 10 },
             p2: { x: 0, y: 50 }, // p2.x is set with image width
-        }
-    },
-    {
-        name: 'Salle de repos',
-        rect: {
-            p1: { x: 8, y: 166 },
-            p2: { x: 97, y: 257 },
         },
     },
     {
-        name: 'Salle à manger',
+        name: 'Salle Vador',
         rect: {
-            p1: { x: 99, y: 152 },
-            p2: { x: 222, y: 248 },
+            p1: { x: 16, y: 426 },
+            p2: { x: 121, y: 629 },
         },
     },
     {
-        name: 'Salle réunion 1',
+        name: 'Salle à Dier',
         rect: {
-            p1: { x: 418, y: 131 },
-            p2: { x: 513, y: 215 },
+            p1: { x: 126, y: 418 },
+            p2: { x: 267, y: 546 },
         },
     },
     {
-        name: 'Salle réunion 2',
+        name: 'Salle Turing',
         rect: {
-            p1: { x: 520, y: 123 },
-            p2: { x: 587, y: 204 },
+            p1: { x: 539, y: 430 },
+            p2: { x: 654, y: 549 },
         },
     },
     {
-        name: 'Salle de jeux',
+        name: 'Salle manguier massif',
         rect: {
-            p1: { x: 609, y: 177 },
-            p2: { x: 732, y: 282 },
+            p1: { x: 667, y: 430 },
+            p2: { x: 764, y: 556 },
+        },
+    },
+    {
+        name: 'Salle babyfoot',
+        rect: {
+            p1: { x: 821, y: 550 },
+            p2: { x: 962, y: 648 },
+        },
+    },
+    {
+        name: 'Salle du coffre',
+        rect: {
+            p1: { x: 514, y: 672 },
+            p2: { x: 574, y: 827 },
         },
     },
 ]
