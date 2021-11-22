@@ -50,19 +50,21 @@ export class RoomsImageStore {
         this.canvas.removeEventListener('mousemove', this.mouseMove.bind(this))
         this.canvas.addEventListener('click', this.mouseClick.bind(this))
     }
-    draw(room?: Room) {
+    draw(_room?: Room) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.drawImage(this.image, 0, 0)
-        if (room) {
+        for (const room of AllRooms) {
             const { rect, name } = room
+            const w = rect.p2.x - rect.p1.x
+            const h = rect.p2.y - rect.p1.y
+            if (room.name === '*') {
+                this.drawWildcardRoom(room, w, h)
+                continue
+            }
             this.ctx.strokeStyle = AppStore.eventsStore.roomIsAvailable(name, new Date())
                 ? 'green'
                 : 'red'
-            const w = rect.p2.x - rect.p1.x
-            const h = rect.p2.y - rect.p1.y
             this.ctx.strokeRect(rect.p1.x, rect.p1.y, w, h)
-
-            if (room.name === '*') this.drawWildcardRoom(room, w, h)
         }
     }
 
