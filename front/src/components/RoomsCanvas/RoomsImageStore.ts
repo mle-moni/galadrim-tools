@@ -2,7 +2,7 @@ import { AppStore } from '../../stores/AppStore'
 import { AllRooms, isColliding, Point, Room } from './utils'
 
 export class RoomsImageStore {
-    private WILDCARD_ROOM_OFFSET = 140
+    private WILDCARD_ROOM_OFFSET = 400
     private ctx: CanvasRenderingContext2D
     private image: HTMLImageElement
     constructor(private canvas: HTMLCanvasElement, private imagePath: string) {

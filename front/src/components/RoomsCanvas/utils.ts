@@ -23,7 +23,7 @@ export const AllRooms: Room[] = [
         },
     },
     {
-        name: 'Salle à Dier',
+        name: 'Salle Adier',
         rect: {
             p1: { x: 126, y: 418 },
             p2: { x: 267, y: 546 },
@@ -55,6 +55,13 @@ export const AllRooms: Room[] = [
         rect: {
             p1: { x: 514, y: 672 },
             p2: { x: 574, y: 827 },
+        },
+    },
+    {
+        name: 'Cuisine',
+        rect: {
+            p1: { x: 220, y: 49 },
+            p2: { x: 354, y: 188 },
         },
     },
 ]
