@@ -3,7 +3,6 @@ import { stringOrDate } from 'react-big-calendar'
 import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
 import { ApiError, fetchBackendJson } from '../api/fetch'
 import { notifyError } from '../utils/notification'
-import { AppStore } from './AppStore'
 
 export type RoomEvent = {
     id: number
@@ -58,7 +57,6 @@ export class EventsStore {
         const event: RoomEvent = await postEvent({
             start,
             end,
-            title: AppStore.authStore.user.username,
             room: roomName ?? this.roomName,
         })
         this.appendEvents([event])
@@ -86,16 +84,19 @@ export class EventsStore {
         const events = [...this.events]
         const event = events.find((event) => event.id === eventId)
         if (!event) return
-        const updatedEvent = await putEvent({
-            id: event.id,
-            start,
-            end,
-            room: roomName ?? event.room,
-            title: event.title,
-        })
-        this.setEventDates(event, updatedEvent.start, updatedEvent.end)
-        this.setEventRoom(event, updatedEvent.room)
-        this.setEvents(events)
+        try {
+            const updatedEvent = await putEvent({
+                id: event.id,
+                start,
+                end,
+                room: roomName ?? event.room,
+            })
+            this.setEventDates(event, updatedEvent.start, updatedEvent.end)
+            this.setEventRoom(event, updatedEvent.room)
+            this.setEvents(events)
+        } catch (error) {
+            notifyError(`Erreur lors de la mise à jour de la réservation`)
+        }
     }
 
     setEventDates(event: RoomEvent, start: Date, end: Date) {

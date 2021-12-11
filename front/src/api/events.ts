@@ -8,14 +8,13 @@ export const fetchEvents = async () => {
 }
 
 const sendEvent = async (
-    { start, end, title, room }: Omit<RoomEvent, 'id'>,
+    { start, end, room }: Omit<RoomEvent, 'id' | 'title'>,
     method: 'POST' | 'PUT',
     id?: number
 ): Promise<RoomEvent> => {
     const form = new FormData()
     form.append('start', start.toISOString())
     form.append('end', end.toISOString())
-    form.append('title', title)
     form.append('room', room)
     const eventId = id ? `/${id}` : ''
     const res = await fetchBackend(`/events${eventId}`, method, { body: form })
@@ -24,11 +23,11 @@ const sendEvent = async (
     return getEventFromApi(rawEvent)
 }
 
-export const postEvent = async (params: Omit<RoomEvent, 'id'>): Promise<RoomEvent> => {
+export const postEvent = async (params: Omit<RoomEvent, 'id' | 'title'>): Promise<RoomEvent> => {
     return sendEvent(params, 'POST')
 }
 
-export const putEvent = async (params: RoomEvent): Promise<RoomEvent> => {
+export const putEvent = async (params: Omit<RoomEvent, 'title'>): Promise<RoomEvent> => {
     return sendEvent(params, 'PUT', params.id)
 }
 

@@ -4,8 +4,7 @@ import { validateEventsParams } from './store'
 
 export const updateRoute = async ({ params, request }: HttpContextContract) => {
     const event = await Event.findOrFail(params.id)
-    const { title, start, end, room } = await validateEventsParams(request)
-    event.title = title
+    const { start, end, room } = await validateEventsParams(request)
     event.start = start
     event.end = end
     event.room = room
