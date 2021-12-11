@@ -2,7 +2,7 @@ import test from 'japa'
 import { Assert } from 'tests/japaTypes'
 import { ObjectValidationSchema, validateInput, validateInputs } from './validateInput'
 
-test.group('Socket input validation', () => {
+test.group('Object input validation', () => {
     const tests: TestValue<InputValidationTest, boolean>[] = [
         {
             input: {
