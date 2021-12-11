@@ -1,65 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <script src="https://cdn.socket.io/4.4.0/socket.io.min.js"></script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="icon" type="image/png" href="https://galadrim.fr/img/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Galadrim Rooms</title>
+        <style>
+            :root {
+                --main-color: #fee9d7;
+            }
 
-<head>
-    <meta charset="UTF-8" />
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="icon" type="image/png" href="https://galadrim.fr/img/favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Galadrim Rooms</title>
-    <style>
-        :root {
-            --main-color: #fee9d7;
-        }
+            body,
+            html {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+            }
 
-        body,
-        html {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-        }
+            .flex {
+                display: flex;
+            }
 
-        .flex {
-            display: flex;
-        }
+            .justify-center {
+                justify-content: center;
+            }
 
-        .justify-center {
-            justify-content: center;
-        }
+            .align-center {
+                align-items: center;
+            }
 
-        .align-center {
-            align-items: center;
-        }
+            .wrap {
+                flex-wrap: wrap;
+            }
 
-        .wrap {
-            flex-wrap: wrap;
-        }
+            .w-100 {
+                width: 100%;
+            }
 
-        .w-100 {
-            width: 100%;
-        }
+            .h-100 {
+                height: 100%;
+            }
 
-        .h-100 {
-            height: 100%;
-        }
+            .h-100vh {
+                height: 100vh;
+            }
 
-        .h-100vh {
-            height: 100vh;
-        }
+            .main-bg {
+                background-color: var(--main-color);
+            }
 
-        .main-bg {
-            background-color: var(--main-color);
-        }
+            .pointer {
+                cursor: pointer;
+            }
+        </style>
+    </head>
 
-        .pointer {
-            cursor: pointer;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-</body>
-
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
 </html>
