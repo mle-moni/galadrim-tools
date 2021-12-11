@@ -5,6 +5,7 @@ import { notifySuccess } from '../utils/notification'
 export interface ApiUser {
     id: number
     username: string
+    socketToken: string
 }
 
 export class AuthStore {

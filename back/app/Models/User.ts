@@ -1,6 +1,7 @@
 import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
+import { nanoid } from 'nanoid'
 
 export default class User extends BaseModel {
     @column({ isPrimary: true })
@@ -14,6 +15,9 @@ export default class User extends BaseModel {
 
     @column()
     public rememberMeToken?: string
+
+    @column()
+    public socketToken: string
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
@@ -29,9 +33,12 @@ export default class User extends BaseModel {
     }
 
     public publicData() {
+        this.socketToken = nanoid()
+        this.save()
         return {
             id: this.id,
             username: this.username,
+            socketToken: this.socketToken,
         }
     }
 }
