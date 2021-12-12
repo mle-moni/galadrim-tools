@@ -1,4 +1,4 @@
-import { RoomEvent } from '../stores/EventsStore'
+import { RawRoomEvent, RoomEvent } from '../stores/EventsStore'
 import { fetchBackend } from './fetch'
 
 export const fetchEvents = async () => {
@@ -31,7 +31,7 @@ export const putEvent = async (params: Omit<RoomEvent, 'title'>): Promise<RoomEv
     return sendEvent(params, 'PUT', params.id)
 }
 
-export const getEventFromApi = (rawEvent: any): RoomEvent => {
+export const getEventFromApi = (rawEvent: RawRoomEvent): RoomEvent => {
     return {
         id: rawEvent.id,
         start: new Date(rawEvent.start),

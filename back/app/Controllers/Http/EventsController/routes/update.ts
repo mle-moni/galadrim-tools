@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from 'App/Models/Event'
+import Ws from 'App/Services/Ws'
 import { validateEventsParams } from './store'
 
 export const updateRoute = async ({ params, request, auth, response }: HttpContextContract) => {
@@ -13,5 +14,6 @@ export const updateRoute = async ({ params, request, auth, response }: HttpConte
     event.end = end
     event.room = room
     await event.save()
+    Ws.io.to('connectedSockets').emit('updateEvent', event)
     return event
 }

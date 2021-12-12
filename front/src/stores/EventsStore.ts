@@ -13,6 +13,11 @@ export type RoomEvent = {
     allDay?: boolean
 }
 
+export type RawRoomEvent = Omit<RoomEvent, 'start' | 'end'> & {
+    start: string
+    end: string
+}
+
 export class EventsStore {
     public events: RoomEvent[] = []
 
@@ -54,12 +59,11 @@ export class EventsStore {
         this.moveEvent(event?.id, startDate, endDate, roomName)
     }
     async newEvent(start: Date, end: Date, roomName = null) {
-        const event: RoomEvent = await postEvent({
+        return postEvent({
             start,
             end,
             room: roomName ?? this.roomName,
         })
-        this.appendEvents([event])
     }
     onDoubleClickEvent(event: any) {
         if (event.id === 0) return
@@ -73,8 +77,6 @@ export class EventsStore {
         if (!res.ok || !res.json.deleted) {
             return notifyError(`Erreur lors de la suprression de la réservation`)
         }
-        const events = this.events.filter((event) => event.id !== id)
-        this.setEvents(events)
     }
     appendEvents(events: RoomEvent[]) {
         this.events = [...this.events, ...events]
@@ -83,31 +85,25 @@ export class EventsStore {
         this.events = events
     }
     async moveEvent(eventId: number, start: Date, end: Date, roomName?: string) {
-        const events = [...this.events]
-        const event = events.find((event) => event.id === eventId)
+        const event = this.events.find((event) => event.id === eventId)
         if (!event) return
         try {
-            const updatedEvent = await putEvent({
+            await putEvent({
                 id: event.id,
                 start,
                 end,
                 room: roomName ?? event.room,
             })
-            this.setEventDates(event, updatedEvent.start, updatedEvent.end)
-            this.setEventRoom(event, updatedEvent.room)
-            this.setEvents(events)
         } catch (error) {
             notifyError(`Erreur lors de la mise à jour de la réservation`)
         }
     }
 
-    setEventDates(event: RoomEvent, start: Date, end: Date) {
-        event.start = start
-        event.end = end
-    }
-
-    setEventRoom(event: RoomEvent, room: string) {
-        event.room = room
+    updateEvent(event: RoomEvent, updateData: RoomEvent) {
+        event.start = updateData.start
+        event.end = updateData.end
+        event.room = updateData.room
+        event.title = updateData.title
     }
 
     getRoomEvents(roomName: string) {

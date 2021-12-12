@@ -1,7 +1,9 @@
 import { io, Socket } from 'socket.io-client'
+import { getEventFromApi } from '../api/events'
 import { getApiUrl } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
+import { RawRoomEvent } from './EventsStore'
 
 export class SocketStore {
     private _socket: Socket | null = null
@@ -23,6 +25,9 @@ export class SocketStore {
         this.socket.on('auth', () => this.socketAuth())
         this.socket.on('error', (msg) => this.error(msg))
         this.socket.on('success', (msg) => this.success(msg))
+        this.socket.on('createEvent', (event) => this.createEvent(event))
+        this.socket.on('updateEvent', (event) => this.updateEvent(event))
+        this.socket.on('deleteEvent', (event) => this.deleteEvent(event))
     }
 
     socketAuth() {
@@ -38,5 +43,22 @@ export class SocketStore {
 
     success(msg: string) {
         notifySuccess(msg)
+    }
+
+    createEvent(eventRaw: RawRoomEvent) {
+        AppStore.eventsStore.appendEvents([getEventFromApi(eventRaw)])
+    }
+
+    updateEvent(eventRaw: RawRoomEvent) {
+        const events = [...AppStore.eventsStore.events]
+        const event = events.find((event) => event.id === eventRaw.id)
+        if (!event) return
+        AppStore.eventsStore.updateEvent(event, getEventFromApi(eventRaw))
+        AppStore.eventsStore.setEvents(events)
+    }
+
+    deleteEvent({ id }: RawRoomEvent) {
+        const events = AppStore.eventsStore.events.filter((event) => event.id !== id)
+        AppStore.eventsStore.setEvents(events)
     }
 }
