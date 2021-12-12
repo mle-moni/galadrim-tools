@@ -1,6 +1,10 @@
+import { TypeofTypes, validateInputType } from './validateInputType'
+
+type CaseTypeofTypes = `#${TypeofTypes}`
+
 export type ObjectValidationEntry = {
     key: string
-    cases: Array<any>
+    cases: Array<string | number | boolean | CaseTypeofTypes>
 }
 
 export type ObjectValidationSchema = {
@@ -26,6 +30,26 @@ function checkPossibleValues(value: unknown, possibleValues: ObjectValidationEnt
     if (value === undefined) return false
     for (const possibleValue of possibleValues) {
         if (value === possibleValue) return true
+        const typeToCheck = getType(possibleValue)
+        if (typeToCheck && !validateInputType(value, typeToCheck).error) return true
     }
     return false
+}
+
+function getType(possibleValue: ObjectValidationEntry['cases'][number]) {
+    const types: ObjectValidationEntry['cases'] = [
+        '#string',
+        '#number',
+        '#bigint',
+        '#boolean',
+        '#symbol',
+        '#undefined',
+        '#object',
+        '#function',
+    ]
+    if (types.includes(possibleValue)) {
+        const typeToParse = possibleValue as CaseTypeofTypes
+        return typeToParse.slice(1) as TypeofTypes
+    }
+    return undefined
 }

@@ -1,4 +1,4 @@
-type TypeofTypes =  // all types of typeof
+export type TypeofTypes =  // all types of typeof
     | 'string'
     | 'number'
     | 'bigint'

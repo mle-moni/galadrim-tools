@@ -77,4 +77,62 @@ test.group('Object input validation', () => {
         testValidateInputs(assert, tests, false)
         testValidateInputs(assert, goodTests, true)
     })
+
+    const typeTests: TestValue<InputValidationTest, boolean>[] = [
+        {
+            input: {
+                value: { pouet: true, tada: 'hehe' },
+                schema: {
+                    keys: [
+                        { key: 'pouet', cases: ['#boolean'] },
+                        { key: 'tada', cases: ['#string'] },
+                    ],
+                },
+            },
+            expected: true,
+        },
+        {
+            input: {
+                value: { pouet: true },
+                schema: {
+                    keys: [{ key: 'pouet', cases: ['#string'] }],
+                },
+            },
+            expected: false,
+        },
+        {
+            input: {
+                value: { pouet: true },
+                schema: {
+                    keys: [{ key: 'pouet', cases: ['#string', '#boolean'] }],
+                },
+            },
+            expected: true,
+        },
+        {
+            input: {
+                value: { pouet: ['test'] },
+                schema: {
+                    keys: [{ key: 'pouet', cases: ['#string', '#boolean'] }],
+                },
+            },
+            expected: false,
+        },
+        {
+            input: {
+                value: { pouet: ['test'] },
+                schema: {
+                    keys: [{ key: 'pouet', cases: ['#object'] }],
+                },
+            },
+            expected: true,
+        },
+    ]
+
+    test('validateInput types', (assert) => {
+        for (const test of typeTests) {
+            const result = validateInput(test.input.value, test.input.schema)
+            assert.equal(result, test.expected)
+        }
+    })
 })
