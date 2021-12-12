@@ -21,6 +21,13 @@ export class SocketStore {
         this.setupEvents()
     }
 
+    disconnect() {
+        this.socket.emit('logout')
+        this.socket.removeAllListeners()
+        this.socket.close()
+        this._socket = null
+    }
+
     setupEvents() {
         this.socket.on('auth', () => this.socketAuth())
         this.socket.on('error', (msg) => this.error(msg))

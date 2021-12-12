@@ -52,6 +52,7 @@ export class AuthStore {
     async logout() {
         await fetchBackendJson('/logout', 'POST')
         this.setUser(null)
+        AppStore.socketStore.disconnect()
         notifySuccess('Vous êtes bien déconnecté')
     }
 
