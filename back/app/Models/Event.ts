@@ -22,4 +22,7 @@ export default class Event extends BaseModel {
 
     @column()
     public room: string
+
+    @column()
+    public userId: number
 }

@@ -1,6 +1,6 @@
 {
     "name": "galadrim-rooms",
-    "version": "0.0.0",
+    "version": "1.1.0",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
@@ -19,7 +19,8 @@
         "react": "^17.0.0",
         "react-big-calendar": "^0.36.1",
         "react-dom": "^17.0.0",
-        "sass": "^1.43.2"
+        "sass": "^1.43.2",
+        "socket.io-client": "^4.4.0"
     },
     "devDependencies": {
         "@types/luxon": "^2.0.5",
