@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { ApiError, fetchBackendJson } from '../api/fetch'
 import { notifySuccess } from '../utils/notification'
+import { AppStore } from './AppStore'
 
 export interface ApiUser {
     id: number
@@ -27,6 +28,7 @@ export class AuthStore {
         const res = await fetchBackendJson<ApiUser, ApiError>('/me')
         if (res.ok) {
             this.setUser(res.json)
+            AppStore.socketStore.connect()
         }
     }
 
@@ -43,6 +45,7 @@ export class AuthStore {
         }
         this.setUser(res.json)
         this.setPassword('')
+        AppStore.socketStore.connect()
         notifySuccess(`Bienvenue ${res.json.username} !`)
     }
 

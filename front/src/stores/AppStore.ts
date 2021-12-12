@@ -3,6 +3,7 @@ import { fetchGaladrimeurs } from '../api/galadrimeurs'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
 import { NotificationStore } from './NotificationStore'
+import { SocketStore } from './SocketStore'
 
 export class MainStore {
     public appIsReady = false
@@ -14,6 +15,8 @@ export class MainStore {
     public notification = new NotificationStore()
 
     public authStore = new AuthStore()
+
+    public socketStore = new SocketStore()
 
     constructor() {
         makeAutoObservable(this)

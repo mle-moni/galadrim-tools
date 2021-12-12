@@ -25,4 +25,5 @@ export async function socketAuth(socket: Socket, dto: SocketAuthDto) {
     }
     socket.data.user = user.toJSON()
     socket.join('connectedSockets')
+    socket.emit('success', 'Mises à jour en temps réél activées')
 }
