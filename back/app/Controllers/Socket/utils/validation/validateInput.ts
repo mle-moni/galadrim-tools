@@ -20,20 +20,19 @@ export function validateInputs(inputs: unknown[], objectsSchemas: ObjectValidati
 
 export function validateInput(input: unknown, objSchema: ObjectValidationSchema) {
     if (!input) return false
-    for (const entry of objSchema.keys) {
-        if (!checkPossibleValues((input as any)[entry.key], entry.cases)) return false
-    }
-    return true
+    return objSchema.keys.every((entry) =>
+        checkPossibleValues((input as any)[entry.key], entry.cases)
+    )
 }
 
 function checkPossibleValues(value: unknown, possibleValues: ObjectValidationEntry['cases']) {
     if (value === undefined) return false
-    for (const possibleValue of possibleValues) {
+
+    return possibleValues.some((possibleValue) => {
         if (value === possibleValue) return true
         const typeToCheck = getType(possibleValue)
-        if (typeToCheck && !validateInputType(value, typeToCheck).error) return true
-    }
-    return false
+        return typeToCheck && !validateInputType(value, typeToCheck).error
+    })
 }
 
 function getType(possibleValue: ObjectValidationEntry['cases'][number]) {
