@@ -70,7 +70,9 @@ export class EventsStore {
             `/events/${id}`,
             'DELETE'
         )
-        if (!res.ok || !res.json.deleted) return
+        if (!res.ok || !res.json.deleted) {
+            return notifyError(`Erreur lors de la suprression de la réservation`)
+        }
         const events = this.events.filter((event) => event.id !== id)
         this.setEvents(events)
     }
