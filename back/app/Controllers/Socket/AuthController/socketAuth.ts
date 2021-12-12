@@ -7,7 +7,7 @@ export type SocketAuthDto = {
     socketToken: string
 }
 
-const BAD_AUTH_REQUEST = `Mauvaises données d'authification`
+const BAD_AUTH_REQUEST = `Mauvaises données d'authentification`
 
 export async function socketAuth(socket: Socket, dto: SocketAuthDto) {
     const isValid = validateInput(dto, {
