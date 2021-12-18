@@ -11,8 +11,8 @@ export const AllRooms: Room[] = [
     {
         name: '*',
         rect: {
-            p1: { x: 0, y: 10 },
-            p2: { x: 0, y: 50 }, // p2.x is set with image width
+            p1: { x: 0, y: 320 },
+            p2: { x: 0, y: 360 }, // p2.x is set with image width
         },
     },
     {

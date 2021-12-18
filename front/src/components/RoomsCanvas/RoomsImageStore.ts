@@ -74,7 +74,7 @@ export class RoomsImageStore {
         this.ctx.font = '20px Arial'
         this.ctx.fillStyle = 'black'
         this.ctx.textAlign = 'center'
-        this.ctx.fillText('Voir toutes les salles', this.image.width / 2, 35)
+        this.ctx.fillText('Voir toutes les salles', this.image.width / 2, 345)
     }
 
     setWildcardRoomRect() {
