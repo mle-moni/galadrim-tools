@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { autorun, makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
 import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
 import { ApiError, fetchBackendJson } from '../api/fetch'
@@ -23,8 +23,17 @@ export class EventsStore {
 
     public roomName = ''
 
+    public waiting = false
+
     constructor() {
         makeAutoObservable(this)
+        autorun(() => {
+            if (this.waiting) {
+                document.body.style.cursor = 'wait'
+            } else {
+                document.body.style.cursor = ''
+            }
+        })
     }
 
     async init() {
@@ -32,6 +41,10 @@ export class EventsStore {
             getEventFromApi(rawEvent)
         )
         this.appendEvents(events)
+    }
+
+    setWaiting(state: boolean) {
+        this.waiting = state
     }
 
     resetEvents() {
@@ -59,21 +72,28 @@ export class EventsStore {
         this.moveEvent(event?.id, startDate, endDate, roomName)
     }
     async newEvent(start: Date, end: Date, roomName = null) {
-        return postEvent({
+        if (this.waiting) return
+        this.setWaiting(true)
+        const res = postEvent({
             start,
             end,
             room: roomName ?? this.roomName,
         })
+        this.setWaiting(false)
+        return res
     }
     onDoubleClickEvent(event: any) {
         if (event.id === 0) return
         return this.removeEvent(event.id)
     }
     async removeEvent(id: number) {
+        if (this.waiting) return
+        this.setWaiting(true)
         const res = await fetchBackendJson<{ id: number; deleted: boolean }, ApiError>(
             `/events/${id}`,
             'DELETE'
         )
+        this.setWaiting(false)
         if (!res.ok || !res.json.deleted) {
             return notifyError(`Erreur lors de la suprression de la réservation`)
         }
@@ -87,6 +107,8 @@ export class EventsStore {
     async moveEvent(eventId: number, start: Date, end: Date, roomName?: string) {
         const event = this.events.find((event) => event.id === eventId)
         if (!event) return
+        if (this.waiting) return
+        this.setWaiting(true)
         try {
             await putEvent({
                 id: event.id,
@@ -97,6 +119,7 @@ export class EventsStore {
         } catch (error) {
             notifyError(`Erreur lors de la mise à jour de la réservation`)
         }
+        this.setWaiting(false)
     }
 
     updateEvent(event: RoomEvent, updateData: RoomEvent) {
