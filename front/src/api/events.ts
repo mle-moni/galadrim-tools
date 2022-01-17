@@ -1,5 +1,7 @@
+import { AppStore } from '../stores/AppStore'
 import { RawRoomEvent, RoomEvent } from '../stores/EventsStore'
 import { fetchBackend } from './fetch'
+import { UserData } from './galadrimeurs'
 
 export const fetchEvents = async () => {
     const res = await fetchBackend('/events')
@@ -8,7 +10,7 @@ export const fetchEvents = async () => {
 }
 
 const sendEvent = async (
-    { start, end, room }: Omit<RoomEvent, 'id' | 'title'>,
+    { start, end, room }: Omit<RoomEvent, 'id' | 'title' | 'userId'>,
     method: 'POST' | 'PUT',
     id?: number
 ): Promise<RoomEvent> => {
@@ -23,20 +25,31 @@ const sendEvent = async (
     return getEventFromApi(rawEvent)
 }
 
-export const postEvent = async (params: Omit<RoomEvent, 'id' | 'title'>): Promise<RoomEvent> => {
+export const postEvent = async (
+    params: Omit<RoomEvent, 'id' | 'title' | 'userId'>
+): Promise<RoomEvent> => {
     return sendEvent(params, 'POST')
 }
 
-export const putEvent = async (params: Omit<RoomEvent, 'title'>): Promise<RoomEvent> => {
+export const putEvent = async (params: Omit<RoomEvent, 'title' | 'userId'>): Promise<RoomEvent> => {
     return sendEvent(params, 'PUT', params.id)
 }
 
+const getEventTitle = (user: UserData | undefined, rawTitle: string) => {
+    if (user && user.username !== rawTitle) {
+        return `${user.username} : ${rawTitle}`
+    }
+    return rawTitle
+}
+
 export const getEventFromApi = (rawEvent: RawRoomEvent): RoomEvent => {
+    const user = AppStore.users.get(rawEvent.user_id)
     return {
         id: rawEvent.id,
         start: new Date(rawEvent.start),
         end: new Date(rawEvent.end),
-        title: rawEvent.title,
+        title: getEventTitle(user, rawEvent.title),
         room: rawEvent.room,
+        userId: rawEvent.user_id,
     }
 }

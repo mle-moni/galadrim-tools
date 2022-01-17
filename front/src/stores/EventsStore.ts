@@ -11,11 +11,13 @@ export type RoomEvent = {
     title: string
     room: string
     allDay?: boolean
+    userId: number
 }
 
-export type RawRoomEvent = Omit<RoomEvent, 'start' | 'end'> & {
+export type RawRoomEvent = Omit<RoomEvent, 'start' | 'end' | 'userId'> & {
     start: string
     end: string
+    user_id: number
 }
 
 export class EventsStore {

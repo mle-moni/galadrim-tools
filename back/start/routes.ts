@@ -26,11 +26,12 @@ Route.get('/', async () => {
 
 Route.post('/login', 'AuthController.login')
 Route.post('/logout', 'AuthController.logout')
-Route.post('/createApiToken', 'AuthController.createApiToken')
 
 Route.group(() => {
     Route.resource('events', 'EventsController').apiOnly()
     Route.get('/me', 'AuthController.me')
+    Route.post('/createApiToken', 'AuthController.createApiToken')
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'GaladrimeursController.index')
+Route.get('/users', 'GaladrimeursController.users')

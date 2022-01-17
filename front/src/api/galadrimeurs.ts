@@ -5,3 +5,14 @@ export const fetchGaladrimeurs = async () => {
     if (res.ok) return res.json
     return []
 }
+
+export interface UserData {
+    id: number
+    username: string
+}
+
+export const fetchUsers = async () => {
+    const res = await fetchBackendJson<UserData[], ApiError>('/users')
+    if (res.ok) return res.json
+    return []
+}
