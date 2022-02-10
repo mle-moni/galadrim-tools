@@ -5,13 +5,15 @@ export class RoomsImageStore {
     private WILDCARD_ROOM_OFFSET = 400
     private ctx: CanvasRenderingContext2D
     private image: HTMLImageElement
+    private animationFrameId = 0
+
     constructor(private canvas: HTMLCanvasElement, private imagePath: string) {
         this.image = new Image()
         this.image.onload = () => {
             this.canvas.width = this.image.width
             this.canvas.height = this.image.height
             this.setWildcardRoomRect()
-            this.draw()
+            this.animationFrameId = window.requestAnimationFrame(() => this.draw())
         }
         this.image.src = imagePath
         const ctx = canvas.getContext('2d')
@@ -19,6 +21,7 @@ export class RoomsImageStore {
         this.ctx = ctx
         this.setEvents()
     }
+
     getCollidingRoom(point: Point) {
         return AllRooms.find((room) => isColliding(point, room.rect))
     }
@@ -36,7 +39,6 @@ export class RoomsImageStore {
         } else {
             this.cursorPointer(false)
         }
-        this.draw(room)
     }
     cursorPointer(add: boolean) {
         if (add) this.canvas.classList.add('pointer')
@@ -47,10 +49,11 @@ export class RoomsImageStore {
         this.canvas.addEventListener('click', this.mouseClick.bind(this))
     }
     cleanup() {
+        window.cancelAnimationFrame(this.animationFrameId)
         this.canvas.removeEventListener('mousemove', this.mouseMove.bind(this))
         this.canvas.addEventListener('click', this.mouseClick.bind(this))
     }
-    draw(_room?: Room) {
+    draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.drawImage(this.image, 0, 0)
         for (const room of AllRooms) {
@@ -66,6 +69,7 @@ export class RoomsImageStore {
                 : 'red'
             this.ctx.strokeRect(rect.p1.x, rect.p1.y, w, h)
         }
+        window.requestAnimationFrame(() => this.draw())
     }
 
     drawWildcardRoom({ rect }: Room, w: number, h: number) {
