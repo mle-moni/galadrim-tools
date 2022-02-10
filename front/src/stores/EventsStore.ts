@@ -38,20 +38,15 @@ export class EventsStore {
         })
     }
 
-    async init() {
-        const events: RoomEvent[] = (await fetchEvents()).map((rawEvent: any) =>
-            getEventFromApi(rawEvent)
-        )
-        this.appendEvents(events)
-    }
-
     setWaiting(state: boolean) {
         this.waiting = state
     }
 
-    resetEvents() {
-        this.events = []
-        this.init()
+    async fetchEvents() {
+        const events: RoomEvent[] = (await fetchEvents()).map((rawEvent: any) =>
+            getEventFromApi(rawEvent)
+        )
+        this.setEvents(events)
     }
 
     setRoomName(name: string) {

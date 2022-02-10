@@ -1,19 +1,12 @@
 import { Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useSnackbar } from 'notistack'
-import { useEffect } from 'react'
 import { Whoami } from '../components/auth/Whoami'
 import { MainContent } from '../components/MainContent'
 import { RenouvArtWait } from '../components/RenouvArtWait'
 import { AppStore } from '../stores/AppStore'
 
 const AppPage = observer(() => {
-    useEffect(() => {
-        if (AppStore.authStore.connected) {
-            AppStore.eventsStore.resetEvents()
-        }
-    }, [AppStore.authStore.connected])
-
     return (
         <div
             className="flex h-100vh justify-center align-center main-bg"

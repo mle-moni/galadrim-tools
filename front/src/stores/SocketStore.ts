@@ -35,6 +35,7 @@ export class SocketStore {
         this.socket.on('createEvent', (event) => this.createEvent(event))
         this.socket.on('updateEvent', (event) => this.updateEvent(event))
         this.socket.on('deleteEvent', (event) => this.deleteEvent(event))
+        this.socket.on('fetchEvents', () => AppStore.eventsStore.fetchEvents())
     }
 
     socketAuth() {
