@@ -35,9 +35,11 @@ const AppPage = observer(() => {
     )
 })
 
-export const App = () => {
+const App = () => {
     const snackbarMethods = useSnackbar()
     AppStore.notification.setMethods(snackbarMethods)
 
     return <AppPage />
 }
+
+export default App
