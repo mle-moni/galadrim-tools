@@ -1,3 +1,4 @@
+import { roomColumns } from '../../pages/statistics/columns'
 import { AppStore } from '../../stores/AppStore'
 import { AllRooms, isColliding, Point, Room } from './utils'
 
@@ -30,6 +31,7 @@ export class RoomsImageStore {
         const room = this.getCollidingRoom(point)
         if (!room) return
         AppStore.eventsStore.setRoomName(room.name)
+        AppStore.navigate('/room/' + room.name)
     }
     mouseMove(event: MouseEvent) {
         const point = { x: event.offsetX, y: event.offsetY }

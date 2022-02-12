@@ -12,6 +12,7 @@
         "@emotion/react": "^11.5.0",
         "@emotion/styled": "^11.3.0",
         "@mui/material": "^5.1.0",
+        "@mui/x-data-grid": "^5.5.1",
         "mobx": "^6.3.5",
         "mobx-react": "^7.2.1",
         "moment": "^2.29.1",

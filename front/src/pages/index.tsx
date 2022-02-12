@@ -1,44 +1,24 @@
-import { Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useSnackbar } from 'notistack'
-import { Whoami } from '../components/auth/Whoami'
-import { MainContent } from '../components/MainContent'
-import { RenouvArtWait } from '../components/RenouvArtWait'
+import { useEffect } from 'react'
+import { RoomsCanvas } from '../components/RoomsCanvas'
+import MainLayout from '../layouts/MainLayout'
 import { AppStore } from '../stores/AppStore'
 
 const AppPage = observer(() => {
+    useEffect(() => {
+        AppStore.eventsStore.setRoomName('')
+    }, [])
+
     return (
-        <div
-            className="flex h-100vh justify-center align-center main-bg"
-            style={{ boxSizing: 'border-box' }}
-        >
-            {AppStore.appIsReady ? (
-                <div>
-                    <div style={{ position: 'absolute', right: '10px', top: '10px', zIndex: 10 }}>
-                        {AppStore.authStore.connected ? <Whoami /> : <></>}
-                    </div>
-                    <div style={{ position: 'absolute', left: '10px', top: '10px', zIndex: 10 }}>
-                        {AppStore.eventsStore.roomName !== '' ? (
-                            <Button onClick={() => AppStore.eventsStore.setRoomName('')}>
-                                Retour
-                            </Button>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
-                    <MainContent />
-                </div>
-            ) : (
-                <RenouvArtWait />
-            )}
-        </div>
+        <MainLayout>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <RoomsCanvas />
+            </div>
+        </MainLayout>
     )
 })
 
 const App = () => {
-    const snackbarMethods = useSnackbar()
-    AppStore.notification.setMethods(snackbarMethods)
-
     return <AppPage />
 }
 

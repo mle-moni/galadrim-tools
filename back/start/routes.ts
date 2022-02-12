@@ -35,3 +35,11 @@ Route.group(() => {
 
 Route.get('/galadrimeurs', 'GaladrimeursController.index')
 Route.get('/users', 'GaladrimeursController.users')
+
+Route.group(() => {
+    Route.get('/rooms', 'StatisticsController.favoriteRoom')
+    Route.get('/time', 'StatisticsController.time')
+    Route.get('/amount', 'StatisticsController.amount')
+})
+    .middleware('auth:web,api')
+    .prefix('statistics')

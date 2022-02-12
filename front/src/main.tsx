@@ -1,24 +1,22 @@
-import { SnackbarProvider } from 'notistack'
-import React from 'react'
+import { SnackbarProvider, useSnackbar } from 'notistack'
+import React, { FC } from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { RenouvArtWait } from './components/RenouvArtWait'
+import { useNavigate } from 'react-router-dom'
+import MainRouter from './routes/MainRouter'
+import { AppStore } from './stores/AppStore'
 
-const StatisticsPage = React.lazy(() => import('./pages/statistics'))
-const App = React.lazy(() => import('./pages/'))
+const SnackBarSetter: FC = ({ children }) => {
+    const snackbarMethods = useSnackbar()
+    AppStore.notification.setMethods(snackbarMethods)
+    return <>{children}</>
+}
 
 ReactDOM.render(
     <React.StrictMode>
         <SnackbarProvider>
-            <BrowserRouter>
-                <React.Suspense fallback={<RenouvArtWait />}>
-                    <Routes>
-                        <Route path="/" element={<App />} />
-                        <Route path="/statistics" element={<StatisticsPage />} />
-                        <Route path="*" element={<p>Page not found</p>} />
-                    </Routes>
-                </React.Suspense>
-            </BrowserRouter>
+            <SnackBarSetter>
+                <MainRouter />
+            </SnackBarSetter>
         </SnackbarProvider>
     </React.StrictMode>,
     document.getElementById('root')

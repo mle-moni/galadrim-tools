@@ -46,6 +46,7 @@ export class AuthStore {
         this.setUser(res.json)
         this.setPassword('')
         AppStore.socketStore.connect()
+        AppStore.navigate('/')
         notifySuccess(`Bienvenue ${res.json.username} !`)
     }
 
@@ -53,6 +54,7 @@ export class AuthStore {
         await fetchBackendJson('/logout', 'POST')
         this.setUser(null)
         AppStore.socketStore.disconnect()
+        AppStore.navigate('/login')
         notifySuccess('Vous êtes bien déconnecté')
     }
 
