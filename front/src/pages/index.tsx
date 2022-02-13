@@ -24,18 +24,7 @@ const HomePage = observer(() => {
     return (
         <MainLayout>
             <CenteredDiv>
-                <Button
-                    size="large"
-                    variant="outlined"
-                    sx={{
-                        position: 'relative',
-                        bottom: {
-                            sm: undefined,
-                            md: '40px',
-                        },
-                    }}
-                    onClick={() => AppStore.navigate('/room')}
-                >
+                <Button size="large" variant="outlined" onClick={() => AppStore.navigate('/room')}>
                     Voir toutes les salles
                 </Button>
             </CenteredDiv>
