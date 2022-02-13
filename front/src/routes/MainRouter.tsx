@@ -6,7 +6,7 @@ import LoadingPage from '../pages/loading'
 import { AppStore } from '../stores/AppStore'
 
 const StatisticsPage = React.lazy(() => import('../pages/statistics'))
-const App = React.lazy(() => import('../pages'))
+const HomePage = React.lazy(() => import('../pages'))
 const LoginPage = React.lazy(() => import('../pages/login'))
 const RoomPage = React.lazy(() => import('../pages/room'))
 
@@ -17,7 +17,7 @@ const MainRouter = () => {
                 <BrowserRouter>
                     <React.Suspense fallback={<LoadingPage />}>
                         <Routes>
-                            <Route path="/" element={<App />} />
+                            <Route path="/" element={<HomePage />} />
                             <Route path="/login" element={<LoginPage />} />
                             <Route path="room" element={<RoomPage />}>
                                 <Route path=":roomName" element={<RoomPage />} />

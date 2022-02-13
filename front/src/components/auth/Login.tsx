@@ -1,4 +1,4 @@
-import { Autocomplete, Button, TextField } from '@mui/material'
+import { Autocomplete, Button, Collapse, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -47,15 +47,16 @@ export const Login = observer(() => {
                     </Button>
                 </div>
                 <br />
-                <p
-                    style={{
-                        visibility: authStore.errors === '' ? 'hidden' : 'visible',
-                        color: 'red',
-                        textAlign: 'center',
-                    }}
-                >
-                    {authStore.errors || 'invisible but ok'}
-                </p>
+                <Collapse in={authStore.errors !== ''}>
+                    <p
+                        style={{
+                            color: 'red',
+                            textAlign: 'center',
+                        }}
+                    >
+                        {authStore.errors}
+                    </p>
+                </Collapse>
             </div>
         </form>
     )

@@ -4,7 +4,7 @@ import { RoomsCanvas } from '../components/RoomsCanvas'
 import MainLayout from '../layouts/MainLayout'
 import { AppStore } from '../stores/AppStore'
 
-const AppPage = observer(() => {
+const HomePage = observer(() => {
     useEffect(() => {
         AppStore.eventsStore.setRoomName('')
     }, [])
@@ -18,8 +18,4 @@ const AppPage = observer(() => {
     )
 })
 
-const App = () => {
-    return <AppPage />
-}
-
-export default App
+export default HomePage
