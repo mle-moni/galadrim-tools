@@ -28,14 +28,7 @@ const MainLayout: FC = ({ children }) => {
                         position: 'absolute',
                         right: '10px',
                         zIndex: 10,
-                        top: {
-                            xs: undefined,
-                            md: '10px',
-                        },
-                        bottom: {
-                            xs: '10px',
-                            md: undefined,
-                        },
+                        top: '10px',
                     }}
                 >
                     {authStore.connected ? <Whoami /> : <></>}
