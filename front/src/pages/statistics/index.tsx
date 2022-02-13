@@ -56,7 +56,8 @@ const StatisticsPage = () => {
                         columns={amountColumns}
                         pageSize={10}
                         rowsPerPageOptions={[5]}
-                    /> */}
+                    />
+                </div> */}
             </div>
         </MainLayout>
     )

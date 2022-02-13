@@ -20,6 +20,8 @@ const HomePage = observer(() => {
         <MainLayout>
             <CenteredDiv>
                 <Button
+                    size="large"
+                    variant="outlined"
                     sx={{
                         position: 'relative',
                         bottom: {

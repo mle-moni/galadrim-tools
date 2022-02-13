@@ -15,7 +15,9 @@ const RoomPage = () => {
         <MainLayout>
             <div>
                 <div style={{ position: 'absolute', left: '10px', top: '10px', zIndex: 10 }}>
-                    <Button onClick={() => AppStore.navigate('/')}>Retour</Button>
+                    <Button variant="outlined" onClick={() => AppStore.navigate('/')}>
+                        Retour
+                    </Button>
                 </div>
                 <RoomCalendar />
             </div>

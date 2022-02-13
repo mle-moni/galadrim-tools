@@ -5,14 +5,14 @@ export const themeColors = {
         main: '#4a453d',
     },
     secondary: {
-        main: '#94a3b8',
-        dark: '#64748b',
+        main: '#cbd5e1',
+        dark: '#94a3b8',
     },
     background: {
         default: '#fee9d7',
     },
     error: {
-        main: '#ef4444',
+        main: '#f87171',
     },
 } as const
 

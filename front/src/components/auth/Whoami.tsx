@@ -8,7 +8,9 @@ export const Whoami = () => {
 
     return (
         <>
-            <Button onClick={() => authStore.logout()}>Se déconnecter</Button>
+            <Button variant="outlined" color="error" onClick={() => authStore.logout()}>
+                Se déconnecter
+            </Button>
             <p onClick={() => store.onClick()} style={{ textAlign: 'center', userSelect: 'none' }}>
                 {authStore.user.username}
             </p>
