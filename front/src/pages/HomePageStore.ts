@@ -63,4 +63,11 @@ export class HomePageStore {
     get svgKey() {
         return `svg-key${this.keyId}`
     }
+
+    get focusedRoomName() {
+        if (this.lastHoveredRoom === undefined) {
+            return undefined
+        }
+        return getReservableRoomFullName(this.lastHoveredRoom) ?? undefined
+    }
 }
