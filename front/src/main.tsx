@@ -1,13 +1,28 @@
-import { SnackbarProvider } from 'notistack'
-import React from 'react'
+import { ThemeProvider } from '@mui/material'
+import { SnackbarProvider, useSnackbar } from 'notistack'
+import React, { FC } from 'react'
 import ReactDOM from 'react-dom'
-import { App } from './pages'
+import MainRouter from './routes/MainRouter'
+import { AppStore } from './stores/AppStore'
+import { getTheme } from './theme'
+
+const theme = getTheme()
+
+const SnackBarSetter: FC = ({ children }) => {
+    const snackbarMethods = useSnackbar()
+    AppStore.notification.setMethods(snackbarMethods)
+    return <>{children}</>
+}
 
 ReactDOM.render(
     <React.StrictMode>
-        <SnackbarProvider>
-            <App />
-        </SnackbarProvider>
+        <ThemeProvider theme={theme}>
+            <SnackbarProvider>
+                <SnackBarSetter>
+                    <MainRouter />
+                </SnackBarSetter>
+            </SnackbarProvider>
+        </ThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')
 )

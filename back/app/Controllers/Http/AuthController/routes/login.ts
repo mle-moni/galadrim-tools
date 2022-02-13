@@ -20,7 +20,7 @@ const checkErrors = async (
         return null
     }
     if (forestUser.Password !== password) {
-        response.unauthorized({ error: 'identifiants incorrects' })
+        response.unauthorized({ error: 'Identifiants incorrects' })
         return null
     }
     return forestUser

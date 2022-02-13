@@ -1,43 +1,50 @@
 import { Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useSnackbar } from 'notistack'
-import { Whoami } from '../components/auth/Whoami'
-import { MainContent } from '../components/MainContent'
-import { RenouvArtWait } from '../components/RenouvArtWait'
+import { useEffect, useMemo } from 'react'
+import { CenteredDiv } from '../components/cssHelpers/CenteredDiv'
+import MainLayout from '../components/layouts/MainLayout'
+import { WorkplaceSvg } from '../components/WorkplaceSvg/WorkplaceSvg'
 import { AppStore } from '../stores/AppStore'
+import { HomePageStore } from './HomePageStore'
 
-const AppPage = observer(() => {
+const HomePage = observer(() => {
+    const homePageStore = useMemo(() => new HomePageStore(), [])
+
+    useEffect(() => {
+        AppStore.eventsStore.setRoomName('')
+
+        return () => homePageStore.cleanup()
+    }, [])
+
     return (
-        <div
-            className="flex h-100vh justify-center align-center main-bg"
-            style={{ boxSizing: 'border-box' }}
-        >
-            {AppStore.appIsReady ? (
-                <div>
-                    <div style={{ position: 'absolute', right: '10px', top: '10px', zIndex: 10 }}>
-                        {AppStore.authStore.connected ? <Whoami /> : <></>}
-                    </div>
-                    <div style={{ position: 'absolute', left: '10px', top: '10px', zIndex: 10 }}>
-                        {AppStore.eventsStore.roomName !== '' ? (
-                            <Button onClick={() => AppStore.eventsStore.setRoomName('')}>
-                                Retour
-                            </Button>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
-                    <MainContent />
-                </div>
-            ) : (
-                <RenouvArtWait />
-            )}
-        </div>
+        <MainLayout>
+            <CenteredDiv>
+                <Button
+                    size="large"
+                    variant="outlined"
+                    sx={{
+                        position: 'relative',
+                        bottom: {
+                            sm: undefined,
+                            md: '40px',
+                        },
+                    }}
+                    onClick={() => AppStore.navigate('/room')}
+                >
+                    Voir toutes les salles
+                </Button>
+            </CenteredDiv>
+            <CenteredDiv>
+                <WorkplaceSvg
+                    onClick={(room) => homePageStore.onClick(room)}
+                    backgroundColor={(room) => homePageStore.getRoomColor(room)}
+                    backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
+                    onMouseOut={() => homePageStore.onMouseOut()}
+                    key={homePageStore.svgKey}
+                />
+            </CenteredDiv>
+        </MainLayout>
     )
 })
 
-export const App = () => {
-    const snackbarMethods = useSnackbar()
-    AppStore.notification.setMethods(snackbarMethods)
-
-    return <AppPage />
-}
+export default HomePage

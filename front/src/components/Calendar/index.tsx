@@ -6,7 +6,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { AppStore } from '../../stores/AppStore'
 import { RoomEvent } from '../../stores/EventsStore'
-import { AllRooms, Room } from '../RoomsCanvas/utils'
+import { AllRooms } from '../../utils/rooms'
 import { MomentFrLocales } from './setFrLocales'
 
 moment.locale('fr', MomentFrLocales)
@@ -15,8 +15,13 @@ const localizer = momentLocalizer(moment)
 
 type CalendarEvent = RoomEvent & { resourceId: string }
 
-// @ts-ignore
-const DragAndDropCalendar = withDragAndDrop<CalendarEvent, Room>(Calendar)
+const DragAndDropCalendar = withDragAndDrop<
+    CalendarEvent,
+    {
+        name: typeof AllRooms[number]['name']
+    }
+    // @ts-ignore
+>(Calendar)
 
 const getCalendarEventFromRoomEvent = (roomEvents: RoomEvent[]): CalendarEvent[] => {
     return roomEvents.map((event) => ({

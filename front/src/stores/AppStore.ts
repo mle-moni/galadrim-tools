@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx'
+import { NavigateFunction } from 'react-router-dom'
 import { fetchGaladrimeurs, fetchUsers, UserData } from '../api/galadrimeurs'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
@@ -6,6 +7,8 @@ import { NotificationStore } from './NotificationStore'
 import { SocketStore } from './SocketStore'
 
 export class MainStore {
+    private _navigate: NavigateFunction | null = null
+
     public appIsReady = false
 
     public galadrimeurs: string[] = []
@@ -27,6 +30,15 @@ export class MainStore {
 
     public setAppReady(state: boolean) {
         this.appIsReady = state
+    }
+
+    public setNavigation(navigate: NavigateFunction) {
+        this._navigate = navigate
+    }
+
+    public navigate(path: string) {
+        if (!this._navigate) throw new Error('You must set navigation first')
+        this._navigate(path)
     }
 
     async init() {
