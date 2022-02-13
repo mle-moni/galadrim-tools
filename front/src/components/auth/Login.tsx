@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Collapse, TextField } from '@mui/material'
+import { Autocomplete, Button, Collapse, TextField, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -48,14 +48,14 @@ export const Login = observer(() => {
                 </div>
                 <br />
                 <Collapse in={authStore.errors !== ''}>
-                    <p
-                        style={{
-                            color: 'red',
+                    <Typography
+                        sx={{
+                            color: 'error.main',
                             textAlign: 'center',
                         }}
                     >
                         {authStore.errors}
-                    </p>
+                    </Typography>
                 </Collapse>
             </div>
         </form>

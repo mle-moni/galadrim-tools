@@ -1,8 +1,9 @@
+import { Box } from '@mui/material'
 import { observer } from 'mobx-react'
 import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Whoami } from '../components/auth/Whoami'
-import { AppStore } from '../stores/AppStore'
+import { AppStore } from '../../stores/AppStore'
+import { Whoami } from '../auth/Whoami'
 
 const MainLayout: FC = ({ children }) => {
     const navigate = useNavigate()
@@ -22,9 +23,23 @@ const MainLayout: FC = ({ children }) => {
             style={{ boxSizing: 'border-box', padding: '0px 50px 10px' }}
         >
             <div style={{ width: '100%' }}>
-                <div style={{ position: 'absolute', right: '10px', top: '10px', zIndex: 10 }}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        right: '10px',
+                        zIndex: 10,
+                        top: {
+                            xs: undefined,
+                            md: '10px',
+                        },
+                        bottom: {
+                            xs: '10px',
+                            md: undefined,
+                        },
+                    }}
+                >
                     {authStore.connected ? <Whoami /> : <></>}
-                </div>
+                </Box>
                 {children}
             </div>
         </div>

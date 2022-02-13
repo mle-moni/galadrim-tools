@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { RoomCalendar } from '../../components/Calendar'
-import MainLayout from '../../layouts/MainLayout'
+import MainLayout from '../../components/layouts/MainLayout'
 import { AppStore } from '../../stores/AppStore'
 
 const RoomPage = () => {

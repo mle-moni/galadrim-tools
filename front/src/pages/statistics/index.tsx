@@ -1,9 +1,9 @@
 import { DataGrid } from '@mui/x-data-grid'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { useEffect, useMemo } from 'react'
-import MainLayout from '../../layouts/MainLayout'
-import { amountColumns, roomColumns, timeColumns } from './columns'
+import { useMemo } from 'react'
+import MainLayout from '../../components/layouts/MainLayout'
+import { roomColumns, timeColumns } from './columns'
 import { StatisticsStore } from './StatisticsStore'
 
 const StatisticsPage = () => {

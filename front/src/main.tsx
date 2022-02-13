@@ -1,9 +1,12 @@
+import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider, useSnackbar } from 'notistack'
 import React, { FC } from 'react'
 import ReactDOM from 'react-dom'
-import { useNavigate } from 'react-router-dom'
 import MainRouter from './routes/MainRouter'
 import { AppStore } from './stores/AppStore'
+import { getTheme } from './theme'
+
+const theme = getTheme()
 
 const SnackBarSetter: FC = ({ children }) => {
     const snackbarMethods = useSnackbar()
@@ -13,11 +16,13 @@ const SnackBarSetter: FC = ({ children }) => {
 
 ReactDOM.render(
     <React.StrictMode>
-        <SnackbarProvider>
-            <SnackBarSetter>
-                <MainRouter />
-            </SnackBarSetter>
-        </SnackbarProvider>
+        <ThemeProvider theme={theme}>
+            <SnackbarProvider>
+                <SnackBarSetter>
+                    <MainRouter />
+                </SnackBarSetter>
+            </SnackbarProvider>
+        </ThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')
 )
