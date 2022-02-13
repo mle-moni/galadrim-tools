@@ -11,6 +11,8 @@ export class HomePageStore {
 
     intervalId: number
 
+    lastHoveredRoom?: WorkplaceSvgRoom
+
     constructor() {
         makeAutoObservable(this)
 
@@ -35,21 +37,23 @@ export class HomePageStore {
         if (roomFullName === null) {
             return themeColors.secondary.dark
         }
-        if (AppStore.eventsStore.roomIsAvailable(roomFullName, new Date())) {
-            return themeColors.secondary.main
-        }
-        return themeColors.error.main
-    }
-
-    getRoomMouseOverColor(room: WorkplaceSvgRoom) {
-        const roomFullName = getReservableRoomFullName(room)
-        if (roomFullName === null) {
-            return themeColors.secondary.dark
-        }
         if (!AppStore.eventsStore.roomIsAvailable(roomFullName, new Date())) {
             return themeColors.error.main
         }
-        return themeColors.secondary.dark
+        if (this.lastHoveredRoom === room) {
+            return themeColors.secondary.dark
+        }
+        return themeColors.secondary.main
+    }
+
+    getRoomMouseOverColor(room: WorkplaceSvgRoom) {
+        this.lastHoveredRoom = room
+        return this.getRoomColor(room)
+    }
+
+    onMouseOut() {
+        this.lastHoveredRoom = undefined
+        this.incrementKey()
     }
 
     incrementKey() {

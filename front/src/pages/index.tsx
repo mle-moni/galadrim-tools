@@ -39,6 +39,7 @@ const HomePage = observer(() => {
                     onClick={(room) => homePageStore.onClick(room)}
                     backgroundColor={(room) => homePageStore.getRoomColor(room)}
                     backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
+                    onMouseOut={() => homePageStore.onMouseOut()}
                     key={homePageStore.svgKey}
                 />
             </CenteredDiv>
