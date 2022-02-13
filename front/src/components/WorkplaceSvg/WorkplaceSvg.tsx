@@ -28,6 +28,7 @@ export interface WorkplaceSvgProps {
     onMouseOut: (room: WorkplaceSvgRoom) => void
     onMouseOver: (room: WorkplaceSvgRoom) => void
     style: (room: WorkplaceSvgRoom) => React.CSSProperties
+    key: string | undefined
 }
 
 const defaultProps: Required<WorkplaceSvgProps> = {
@@ -40,6 +41,7 @@ const defaultProps: Required<WorkplaceSvgProps> = {
     onMouseOut: () => ({}),
     onMouseOver: () => ({}),
     style: () => ({}),
+    key: undefined,
 }
 
 export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
@@ -53,6 +55,7 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
         onMouseOut,
         onMouseOver,
         style,
+        key,
     } = {
         ...defaultProps,
         ...props,
@@ -109,6 +112,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
 
     const Work23Walls = () => (
         <path
+            // this key could be set on any path but why not here
+            key={key}
             fillRule="evenodd"
             clipRule="evenodd"
             d="M3.05176e-05 609L0 808V812H502.001V808H339V794H338V793H336V794H335V808H133V785H132V784H130V785H129V808H4.00003V609H3.05176e-05ZM129 757L129.007 609L133.007 609L133 757L132 757V758H130V757H129ZM329 764V614H345V764H339V778H338V779H336V778H335V764H329ZM336 783H338V781H336V783ZM336 785V787H338V785H336ZM336 789V791H338V789H336ZM130 762V760H132V762H130ZM130 766V764H132V766H130ZM130 770V768H132V770H130ZM130 774V772H132V774H130ZM130 778V776H132V778H130ZM130 782V780H132V782H130ZM503 772V773H505V772H503ZM505 775H503V777H505V775ZM505 779H503V781H505V779ZM505 783H503V785H505V783ZM503 787V788H505V787H503Z"

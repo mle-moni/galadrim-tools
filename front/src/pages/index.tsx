@@ -12,6 +12,8 @@ const HomePage = observer(() => {
 
     useEffect(() => {
         AppStore.eventsStore.setRoomName('')
+
+        return () => homePageStore.cleanup()
     }, [])
 
     return (
@@ -35,6 +37,7 @@ const HomePage = observer(() => {
                     onClick={(room) => homePageStore.onClick(room)}
                     backgroundColor={(room) => homePageStore.getRoomColor(room)}
                     backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
+                    key={homePageStore.svgKey}
                 />
             </CenteredDiv>
         </MainLayout>
