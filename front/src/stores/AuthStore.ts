@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { ApiError, fetchBackendJson } from '../api/fetch'
-import { notifySuccess } from '../utils/notification'
+import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
 
 export interface ApiUser {
@@ -18,8 +18,6 @@ export class AuthStore {
 
     public password = ''
 
-    public errors = ''
-
     constructor() {
         makeAutoObservable(this)
     }
@@ -33,14 +31,13 @@ export class AuthStore {
     }
 
     async login() {
-        this.setErrors('')
         const data = new FormData()
         if (this.username === '' || this.password === '') return
         data.append('username', this.username)
         data.append('password', this.password)
         const res = await fetchBackendJson<ApiUser, ApiError>('/login', 'POST', { body: data })
         if (!res.ok) {
-            this.setErrors(res.json.error)
+            notifyError(res.json.error)
             return
         }
         this.setUser(res.json)
@@ -66,7 +63,6 @@ export class AuthStore {
         }
         this._user = user
         this.connected = true
-        this.setErrors('')
     }
 
     setUsername(username: string) {
@@ -76,10 +72,6 @@ export class AuthStore {
 
     setPassword(password: string) {
         this.password = password
-    }
-
-    setErrors(errors: string) {
-        this.errors = errors
     }
 
     get user() {
