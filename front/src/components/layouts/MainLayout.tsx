@@ -20,7 +20,7 @@ const MainLayout: FC = ({ children }) => {
     return (
         <div
             className="flex h-100 flex-column justify-center align-center"
-            style={{ boxSizing: 'border-box', padding: '0px 50px 10px' }}
+            style={{ boxSizing: 'border-box' }}
         >
             <div style={{ width: '100%' }}>
                 <Box
