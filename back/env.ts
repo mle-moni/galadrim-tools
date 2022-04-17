@@ -29,9 +29,4 @@ export default Env.rules({
     MYSQL_DB_NAME: Env.schema.string(),
     COOKIE_DOMAIN: Env.schema.string(),
     SESSION_DRIVER: Env.schema.string(),
-    // optionnal forest things (can be used in scripts)
-    FOREST_HOST: Env.schema.string.optional({ format: 'host' }),
-    FOREST_USERNAME: Env.schema.string.optional(),
-    FOREST_PASSWORD: Env.schema.string.optional(),
-    FOREST_DB: Env.schema.string.optional(),
 })
