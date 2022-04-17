@@ -17,10 +17,13 @@ export default class User extends BaseModel {
     public email: string
 
     @column()
-    public imageUrl: string
+    public imageUrl: string | null
 
     @column()
-    public rememberMeToken?: string
+    public otpToken: string | null
+
+    @column()
+    public rememberMeToken: string | null
 
     @column()
     public socketToken: string
@@ -38,13 +41,14 @@ export default class User extends BaseModel {
         }
     }
 
-    public publicData() {
+    public userData() {
         this.socketToken = nanoid()
         this.save()
         return {
             id: this.id,
             username: this.username,
             socketToken: this.socketToken,
+            imageUrl: this.imageUrl,
         }
     }
 }

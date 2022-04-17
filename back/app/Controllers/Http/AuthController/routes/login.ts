@@ -3,32 +3,22 @@ import { schema } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
 
 const loginSchema = schema.create({
-    username: schema.string({ trim: true }),
+    email: schema.string({ trim: true }),
     password: schema.string({ trim: true }),
 })
 
-const checkErrors = async (
-    response: HttpContextContract['response'],
-    _username: string,
-    _password: string
-) => {
-    // TODO
-    response.unauthorized({ error: 'Identifiants incorrects' })
-    return null
-}
-
-export const loginRoute = async ({ request, auth, response }: HttpContextContract) => {
-    const { username, password } = await request.validate({
+export const loginRoute = async ({ request, auth }: HttpContextContract) => {
+    const { email, password } = await request.validate({
         schema: loginSchema,
     })
-    const forestUser = await checkErrors(response, username, password)
-    if (!forestUser) return
-    const user = await User.findBy('username', username)
-    if (user) {
+    const user = await User.findBy('email', email)
+
+    if (user?.otpToken === password) {
         await auth.login(user, true)
-        return user.publicData()
+        user.otpToken = null
+        await user.save()
+    } else {
+        await auth.attempt(email, password, true)
     }
-    const newUser = await User.create({ username, password })
-    await auth.login(newUser, true)
-    return newUser.publicData()
+    return auth.user?.userData()
 }
