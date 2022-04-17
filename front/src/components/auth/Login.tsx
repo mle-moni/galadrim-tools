@@ -66,7 +66,6 @@ export const Login = observer(() => {
                             />
                         )}
                     />
-                    <br />
                     <OutlinedInput
                     fullWidth
                         type={showPassword ? 'text' : 'password'}
@@ -90,6 +89,7 @@ export const Login = observer(() => {
                               </IconButton>
                             </InputAdornment>
                           }
+                          sx={{mt:2}}
                     />
                         <Button fullWidth variant="contained" type="submit" size='large' sx={{mt: 2}}>
                             Se connecter
