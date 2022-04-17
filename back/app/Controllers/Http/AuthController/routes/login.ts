@@ -1,7 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
-import { getForestUsers } from 'Database/forest/requests/users'
 
 const loginSchema = schema.create({
     username: schema.string({ trim: true }),
@@ -10,20 +9,12 @@ const loginSchema = schema.create({
 
 const checkErrors = async (
     response: HttpContextContract['response'],
-    username: string,
-    password: string
+    _username: string,
+    _password: string
 ) => {
-    const allUsers = await getForestUsers()
-    const forestUser = allUsers.find((user) => user.Username === username)
-    if (!forestUser) {
-        response.badRequest({ error: 'utilisateur inconnu' })
-        return null
-    }
-    if (forestUser.Password !== password) {
-        response.unauthorized({ error: 'Identifiants incorrects' })
-        return null
-    }
-    return forestUser
+    // TODO
+    response.unauthorized({ error: 'Identifiants incorrects' })
+    return null
 }
 
 export const loginRoute = async ({ request, auth, response }: HttpContextContract) => {
