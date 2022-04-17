@@ -9,7 +9,7 @@ export const themeColors = {
         dark: '#94a3b8',
     },
     background: {
-        default: '#fee9d7',
+        default: '#f9efe6',
     },
     error: {
         main: '#f87171',
