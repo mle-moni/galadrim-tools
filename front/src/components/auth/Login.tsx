@@ -48,9 +48,9 @@ export const Login = observer(() => {
             >
                     <Autocomplete
                         freeSolo
-                        inputValue={authStore.username}
+                        inputValue={authStore.email}
                         onInputChange={(_, newValue) => {
-                            authStore.setUsername(newValue || '')
+                            authStore.setEmail(newValue || '')
                         }}
                         options={AppStore.galadrimeurs}
                         renderInput={(params) => (
