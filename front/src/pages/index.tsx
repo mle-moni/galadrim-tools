@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material'
+import { Box, Button, Fab, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { CenteredDiv } from '../components/cssHelpers/CenteredDiv'
@@ -7,6 +7,7 @@ import { WorkplaceSvg } from '../components/WorkplaceSvg/WorkplaceSvg'
 import { useWindowDimensions } from '../hooks/useWindowDimensions'
 import { AppStore } from '../stores/AppStore'
 import { HomePageStore } from './HomePageStore'
+import StatsIcon from '@mui/icons-material/QueryStats'
 
 const HomePage = observer(() => {
     const homePageStore = useMemo(() => new HomePageStore(), [])
@@ -22,12 +23,36 @@ const HomePage = observer(() => {
     const svgSize = Math.round(shortestEdge * 0.8)
 
     return (
-        <MainLayout>
-            <CenteredDiv>
-                <Button size="large" variant="outlined" onClick={() => AppStore.navigate('/room')}>
+        <MainLayout fullscreen>
+            <Fab
+                size="medium"
+                variant="circular"
+                color="primary"
+                onClick={() => AppStore.navigate('/statistics')}
+                sx={{
+                    position: 'absolute',
+                    top: 32,
+                    left: 32,
+                }}
+            >
+                <StatsIcon />
+            </Fab>
+            <Box sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center'
+            }}>
+                <Button
+                    size="large"
+                    variant="contained"
+                    onClick={() => AppStore.navigate('/room')}
+                    sx={{
+                        mt: -3.5,
+                    }}
+                >
                     Voir toutes les salles
                 </Button>
-            </CenteredDiv>
+            </Box>
             <CenteredDiv>
                 <WorkplaceSvg
                     width={svgSize}
