@@ -1,3 +1,5 @@
+import Mail from '@ioc:Adonis/Addons/Mail'
+import Env from '@ioc:Adonis/Core/Env'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
@@ -18,6 +20,15 @@ export const getOtpRoute = async ({ request, response }: HttpContextContract) =>
     }
     user.otpToken = nanoid()
     await user.save()
-    // TODO send email
+    await Mail.use('mailgun').send((message) => {
+        message
+            .from(`<noreply@${Env.get('MAILGUN_DOMAIN')}>`)
+            .to(user.email)
+            .subject('Mot de passe oublié')
+            .htmlView('emails/get_otp', {
+                username: user.username,
+                otp: user.otpToken,
+            })
+    })
     return { notification: 'Un email vous a été envoyé' }
 }

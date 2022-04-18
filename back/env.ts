@@ -29,4 +29,7 @@ export default Env.rules({
     MYSQL_DB_NAME: Env.schema.string(),
     COOKIE_DOMAIN: Env.schema.string(),
     SESSION_DRIVER: Env.schema.string(),
+    MAILGUN_API_KEY: Env.schema.string(),
+    MAILGUN_DOMAIN: Env.schema.string(),
+    CACHE_VIEWS: Env.schema.boolean(),
 })
