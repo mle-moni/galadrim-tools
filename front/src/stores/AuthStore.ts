@@ -1,12 +1,13 @@
 import { makeAutoObservable } from 'mobx'
 import { ApiError, fetchBackendJson } from '../api/fetch'
-import { notifySuccess } from '../utils/notification'
+import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
 
 export interface ApiUser {
     id: number
     username: string
     socketToken: string
+    imageUrl: string
 }
 
 export class AuthStore {
@@ -14,11 +15,9 @@ export class AuthStore {
 
     private _user: ApiUser | null = null
 
-    public username = localStorage.getItem('username') || ''
+    public email = localStorage.getItem('email') || ''
 
     public password = ''
-
-    public errors = ''
 
     constructor() {
         makeAutoObservable(this)
@@ -33,14 +32,13 @@ export class AuthStore {
     }
 
     async login() {
-        this.setErrors('')
         const data = new FormData()
-        if (this.username === '' || this.password === '') return
-        data.append('username', this.username)
+        if (this.email === '' || this.password === '') return
+        data.append('email', this.email)
         data.append('password', this.password)
         const res = await fetchBackendJson<ApiUser, ApiError>('/login', 'POST', { body: data })
         if (!res.ok) {
-            this.setErrors(res.json.error)
+            notifyError('Adresse mail ou mot de passe incorrect')
             return
         }
         this.setUser(res.json)
@@ -66,20 +64,15 @@ export class AuthStore {
         }
         this._user = user
         this.connected = true
-        this.setErrors('')
     }
 
-    setUsername(username: string) {
-        this.username = username
-        localStorage.setItem('username', username)
+    setEmail(email: string) {
+        this.email = email
+        localStorage.setItem('email', email)
     }
 
     setPassword(password: string) {
         this.password = password
-    }
-
-    setErrors(errors: string) {
-        this.errors = errors
     }
 
     get user() {

@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Avatar, Button, Stack, Typography } from '@mui/material'
 import { AppStore } from '../../stores/AppStore'
 import { WhoamiStore } from './WhoamiStore'
 
@@ -7,13 +7,18 @@ export const Whoami = () => {
     const store = new WhoamiStore()
 
     return (
-        <>
-            <Button variant="outlined" color="error" onClick={() => authStore.logout()}>
-                Se déconnecter
-            </Button>
-            <p onClick={() => store.onClick()} style={{ textAlign: 'center', userSelect: 'none' }}>
+        <Stack display='flex' direction='column' alignItems='center'>
+            <Avatar
+                alt={authStore.user.username}
+                src={authStore.user.imageUrl}
+                sx={{ width: 56, height: 56 }}
+            />
+            <Typography variant="caption" fontSize={16} onClick={() => store.onClick()}>
                 {authStore.user.username}
-            </p>
-        </>
+            </Typography>
+            <Button size='small' variant="outlined" color="error" onClick={() => authStore.logout()}>
+                Déconnexion
+            </Button>
+        </Stack>
     )
 }
