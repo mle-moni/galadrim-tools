@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import MainRouter from './routes/MainRouter'
 import { AppStore } from './stores/AppStore'
 import { getTheme } from './theme'
+import './theme/react-big-calendar.css'
 
 const theme = getTheme()
 
