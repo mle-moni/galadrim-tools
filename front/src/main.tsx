@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider, useSnackbar } from 'notistack'
-import React, { FC } from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import ReactDOM from 'react-dom'
 import MainRouter from './routes/MainRouter'
 import { AppStore } from './stores/AppStore'
@@ -9,7 +9,7 @@ import './theme/react-big-calendar.css'
 
 const theme = getTheme()
 
-const SnackBarSetter: FC = ({ children }) => {
+const SnackBarSetter: FC<PropsWithChildren<{}>> = ({ children }) => {
     const snackbarMethods = useSnackbar()
     AppStore.notification.setMethods(snackbarMethods)
     return <>{children}</>

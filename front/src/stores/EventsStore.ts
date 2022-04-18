@@ -68,7 +68,7 @@ export class EventsStore {
         const [startDate, endDate] = [new Date(start), new Date(end)]
         this.moveEvent(event?.id, startDate, endDate, roomName)
     }
-    async newEvent(start: Date, end: Date, roomName = null) {
+    async newEvent(start: Date, end: Date, roomName: string | null = null) {
         if (this.waiting) return
         this.setWaiting(true)
         const res = postEvent({

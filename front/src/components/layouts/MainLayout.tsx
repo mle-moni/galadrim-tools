@@ -1,6 +1,6 @@
 import { Box, styled, experimental_sx as sx } from '@mui/material'
 import { observer } from 'mobx-react'
-import { FC, useEffect } from 'react'
+import { FC, PropsWithChildren, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
 import { getTheme } from '../../theme'
@@ -8,9 +8,9 @@ import { Whoami } from '../auth/Whoami'
 
 const whiteListedRoutes = ['/login', '/getOtp']
 
-interface MainLayoutProps {
+type MainLayoutProps = PropsWithChildren<{
     fullscreen?: boolean;
-}
+}>
 
 const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
     sx({
