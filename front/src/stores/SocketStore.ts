@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
-import { getApiUrl } from '../api/fetch'
+import { getSocketApiUrl } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
 import { RawRoomEvent } from './EventsStore'
@@ -17,7 +17,7 @@ export class SocketStore {
 
     connect() {
         if (this._socket) return
-        this._socket = io(getApiUrl())
+        this._socket = io(getSocketApiUrl())
         this.setupEvents()
     }
 

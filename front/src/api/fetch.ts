@@ -15,6 +15,12 @@ export interface ApiError {
     error: string
 }
 
+export const getSocketApiUrl = () => {
+    const url = import.meta.env.VITE_SOCKET_API_URL
+    if (typeof url !== 'string') throw new Error(`VITE_SOCKET_API_URL should be a valid string`)
+    return url
+}
+
 export const getApiUrl = () => {
     const url = import.meta.env.VITE_API_URL
     if (typeof url !== 'string') throw new Error(`VITE_API_URL should be a valid string`)
