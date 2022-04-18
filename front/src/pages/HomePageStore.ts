@@ -16,7 +16,7 @@ export class HomePageStore {
     constructor() {
         makeAutoObservable(this)
 
-        this.intervalId = setInterval(() => {
+        this.intervalId = window.setInterval(() => {
             this.incrementKey()
         }, SVG_RENDER_LOOP_TIME)
     }
