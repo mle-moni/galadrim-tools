@@ -1,7 +1,9 @@
 import { makeAutoObservable } from 'mobx'
-import { ApiError, fetchBackendJson } from '../api/fetch'
+import { ApiError, ApiNotification, fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
+
+const CHANGE_PASSWORD_INTENT = 'changePassword' as const
 
 export interface ApiUser {
     id: number
@@ -31,9 +33,17 @@ export class AuthStore {
         }
     }
 
+    get canAuthenticate() {
+        return this.email !== '' && this.password !== ''
+    }
+
+    get canChangePassword() {
+        return this.password !== ''
+    }
+
     async login() {
         const data = new FormData()
-        if (this.email === '' || this.password === '') return
+        if (!this.canAuthenticate) return
         data.append('email', this.email)
         data.append('password', this.password)
         const res = await fetchBackendJson<ApiUser, ApiError>('/login', 'POST', { body: data })
@@ -44,8 +54,13 @@ export class AuthStore {
         this.setUser(res.json)
         this.setPassword('')
         AppStore.socketStore.connect()
-        AppStore.navigate('/')
+        const params = new URLSearchParams(location.search)
         notifySuccess(`Bienvenue ${res.json.username} !`)
+        if (params.get('intent') === CHANGE_PASSWORD_INTENT) {
+            AppStore.navigate('/changePassword')
+        } else {
+            AppStore.navigate('/')
+        }
     }
 
     async logout() {
@@ -78,5 +93,36 @@ export class AuthStore {
     get user() {
         if (!this._user) throw new Error('use this computed only after login')
         return this._user
+    }
+
+    async getOtp() {
+        const data = new FormData()
+        data.append('email', this.email)
+        const res = await fetchBackendJson<ApiNotification, unknown>('/getOtp', 'POST', {
+            body: data,
+        })
+        if (!res.ok) {
+            return notifyError(
+                getErrorMessage(res.json, `Impossible d'envoyer un mail a cette adresse, bizarre`)
+            )
+        }
+        notifySuccess(res.json.notification)
+        AppStore.navigate(`/login?intent=${CHANGE_PASSWORD_INTENT}`)
+    }
+
+    async changePassword() {
+        const data = new FormData()
+        data.append('password', this.password)
+        const res = await fetchBackendJson<ApiNotification, unknown>('/changePassword', 'POST', {
+            body: data,
+        })
+        if (!res.ok) {
+            return notifyError(
+                getErrorMessage(res.json, `Impossible de mettre à jour le mot de passe, bizarre`)
+            )
+        }
+        notifySuccess(res.json.notification)
+        this.setPassword('')
+        AppStore.navigate(`/`)
     }
 }

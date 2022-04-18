@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
 import { Whoami } from '../auth/Whoami'
 
+const whiteListedRoutes = ['/login', '/getOtp']
+
 const MainLayout: FC = ({ children }) => {
     const navigate = useNavigate()
     const { authStore } = AppStore
@@ -14,7 +16,9 @@ const MainLayout: FC = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        if (!authStore.connected) navigate('/login')
+        if (!authStore.connected && !whiteListedRoutes.includes(location.pathname)) {
+            navigate('/login')
+        }
     }, [authStore.connected])
 
     return (

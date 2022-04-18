@@ -1,26 +1,17 @@
-import MailIcon from '@mui/icons-material/AlternateEmail'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import PasswordIcon from '@mui/icons-material/VpnKey'
 import { Button, IconButton, InputAdornment, Link as MuiLink, OutlinedInput } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
 import { GaladrimLogo } from '../Branding/GaladrimLogo'
 import { Card } from '../Core/Card'
 
-export const Login = observer(() => {
+export const ChangePassword = observer(() => {
     const { authStore } = AppStore
-
-    const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false)
-
-    useEffect(() => {
-        if (authStore.connected) {
-            navigate('/')
-        }
-    }, [])
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
@@ -36,22 +27,9 @@ export const Login = observer(() => {
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    authStore.login()
+                    authStore.changePassword()
                 }}
             >
-                <OutlinedInput
-                    value={authStore.email}
-                    onChange={(e) => {
-                        authStore.setEmail(e.target.value)
-                    }}
-                    fullWidth
-                    placeholder="Adresse e-mail"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <MailIcon />
-                        </InputAdornment>
-                    }
-                />
                 <OutlinedInput
                     fullWidth
                     type={showPassword ? 'text' : 'password'}
@@ -80,15 +58,15 @@ export const Login = observer(() => {
                 <Button
                     fullWidth
                     variant="contained"
-                    disabled={!authStore.canAuthenticate}
+                    disabled={!authStore.canChangePassword}
                     type="submit"
                     size="large"
                     sx={{ my: 2 }}
                 >
-                    Se connecter
+                    Changer le mot de passe
                 </Button>
-                <MuiLink component={Link} to="/getOtp">
-                    Mot de passe oublié ?
+                <MuiLink component={Link} to="/">
+                    Retour à l'accueil
                 </MuiLink>
             </form>
         </Card>
