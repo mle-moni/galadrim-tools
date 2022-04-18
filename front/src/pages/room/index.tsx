@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { RoomCalendar } from '../../components/Calendar'
@@ -14,11 +14,11 @@ const RoomPage = () => {
     return (
         <MainLayout>
             <div>
-                <div style={{ position: 'absolute', left: '10px', top: '10px', zIndex: 10 }}>
+                <Box sx={{ position: 'absolute', top: 16, left: 16, zIndex: 10 }}>
                     <Button variant="outlined" onClick={() => AppStore.navigate('/')}>
                         Retour
                     </Button>
-                </div>
+                </Box>
                 <RoomCalendar />
             </div>
         </MainLayout>

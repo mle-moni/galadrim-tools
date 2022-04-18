@@ -26,9 +26,9 @@ const MainLayout: FC = ({ children }) => {
                 <Box
                     sx={{
                         position: 'absolute',
-                        right: '10px',
+                        top: 16,
+                        right: 16,
                         zIndex: 10,
-                        top: '10px',
                     }}
                 >
                     {authStore.connected ? <Whoami /> : <></>}

@@ -43,7 +43,7 @@ export const RoomCalendar = observer(() => (
             backgroundColor: 'var(--main-color)',
         }}
     >
-        <div style={{ width: '80vw', backgroundColor: 'white' }}>
+        <div style={{ width: '75vw', backgroundColor: 'white' }}>
             <DragAndDropCalendar
                 selectable
                 min={new Date(0, 0, 0, 9, 0, 0)}
