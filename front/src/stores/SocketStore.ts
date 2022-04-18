@@ -1,4 +1,3 @@
-import { toJS } from 'mobx'
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getApiUrl } from '../api/fetch'
@@ -18,7 +17,7 @@ export class SocketStore {
 
     connect() {
         if (this._socket) return
-        this._socket = io('http://localhost:3333')
+        this._socket = io(getApiUrl())
         this.setupEvents()
     }
 
