@@ -1,4 +1,5 @@
 #!/bin/sh
 
 git pull # ...
-npm run build
+yarn
+yarn build
