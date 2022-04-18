@@ -3,7 +3,7 @@ import MainLayout from '../../components/layouts/MainLayout'
 
 const LoginPage = () => {
     return (
-        <MainLayout>
+        <MainLayout fullscreen>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Login />
             </div>

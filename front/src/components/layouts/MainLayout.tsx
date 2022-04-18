@@ -1,13 +1,30 @@
-import { Box } from '@mui/material'
+import { Box, styled, experimental_sx as sx } from '@mui/material'
 import { observer } from 'mobx-react'
 import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
+import { getTheme } from '../../theme'
 import { Whoami } from '../auth/Whoami'
 
 const whiteListedRoutes = ['/login', '/getOtp']
 
-const MainLayout: FC = ({ children }) => {
+interface MainLayoutProps {
+    fullscreen?: boolean;
+}
+
+const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
+    sx({
+        display: 'flex',
+        height: fullscreen ? '100vh' : 'auto',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxSizing: 'border-box',
+        backgroundColor: fullscreen ? 'inherit' : getTheme().palette.background.default
+    })
+)
+
+const MainLayout: FC<MainLayoutProps> = ({ fullscreen, children }) => {
     const navigate = useNavigate()
     const { authStore } = AppStore
 
@@ -22,16 +39,13 @@ const MainLayout: FC = ({ children }) => {
     }, [authStore.connected])
 
     return (
-        <div
-            className="flex h-100 flex-column justify-center align-center"
-            style={{ boxSizing: 'border-box' }}
-        >
+        <Root fullscreen={fullscreen}>
             <div style={{ width: '100%' }}>
                 <Box
                     sx={{
                         position: 'absolute',
-                        top: 16,
-                        right: 16,
+                        top: 32,
+                        right: 32,
                         zIndex: 10,
                     }}
                 >
@@ -39,7 +53,7 @@ const MainLayout: FC = ({ children }) => {
                 </Box>
                 {children}
             </div>
-        </div>
+        </Root>
     )
 }
 

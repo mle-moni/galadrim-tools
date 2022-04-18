@@ -11,9 +11,9 @@ export const Whoami = () => {
             <Avatar
                 alt={authStore.user.username}
                 src={authStore.user.imageUrl}
-                sx={{ width: 56, height: 56 }}
+                sx={{ width: 56, height: 56, mb: 1 }}
             />
-            <Typography variant="caption" fontSize={16} onClick={() => store.onClick()}>
+            <Typography variant="caption" fontSize={16} onClick={() => store.onClick()} gutterBottom>
                 {authStore.user.username}
             </Typography>
             <Button size='small' variant="outlined" color="error" onClick={() => authStore.logout()}>
