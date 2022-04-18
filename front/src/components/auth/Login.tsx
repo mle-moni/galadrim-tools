@@ -5,10 +5,11 @@ import PasswordIcon from '@mui/icons-material/VpnKey'
 import { Button, IconButton, InputAdornment, Link as MuiLink, OutlinedInput } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
 import { GaladrimLogo } from '../Branding/GaladrimLogo'
 import { Card } from '../Core/Card'
+import { CustomLink } from '../Core/CustomLink'
 
 export const Login = observer(() => {
     const { authStore } = AppStore
@@ -87,9 +88,9 @@ export const Login = observer(() => {
                 >
                     Se connecter
                 </Button>
-                <MuiLink component={Link} to="/getOtp">
+                <CustomLink to="/getOtp">
                     Mot de passe oublié ?
-                </MuiLink>
+                </CustomLink>
             </form>
         </Card>
     )

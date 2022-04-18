@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
 import { GaladrimLogo } from '../Branding/GaladrimLogo'
 import { Card } from '../Core/Card'
+import { CustomLink } from '../Core/CustomLink'
+import BackIcon from '@mui/icons-material/ChevronLeft'
 
 export const GetOtp = observer(() => {
     const { authStore } = AppStore
@@ -34,9 +36,9 @@ export const GetOtp = observer(() => {
                 <Button fullWidth variant="contained" type="submit" size="large" sx={{ my: 2 }}>
                     Réinitialiser mon mot de passe
                 </Button>
-                <MuiLink component={Link} to="/login">
-                    Revenir à la page de connexion
-                </MuiLink>
+                <CustomLink to='/login'>
+                    <BackIcon /> Revenir à la page de connexion
+                </CustomLink>
             </form>
         </Card>
     )
