@@ -48,7 +48,7 @@ const StatisticsPage = () => {
                 </Typography>
                 <div
                     style={{
-                        height: 200,
+                        height: 400,
                         width: '100%',
                         backgroundColor: 'rgba(255,255,255,0.5)',
                     }}
