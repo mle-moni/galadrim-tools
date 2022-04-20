@@ -9,7 +9,7 @@ export const fetchGaladrimeurs = async () => {
 export interface UserData {
     id: number
     username: string
-    imageUrl: string
+    imageUrl: string | null
 }
 
 export const fetchUsers = async () => {
