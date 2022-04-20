@@ -146,4 +146,15 @@ export class EventsStore {
         const events = this.getRoomEvents(roomName)
         return events.every((event) => !this.eventCollide(event, date))
     }
+
+    roomUser(roomName: string, date: Date) {
+        const events = this.getRoomEvents(roomName)
+        const conflictEvent = events.find((event) => this.eventCollide(event, date))
+        
+        if(conflictEvent !== undefined) {
+            return conflictEvent.userId;
+        }
+
+        return null;
+    }
 }
