@@ -8,6 +8,7 @@ import { useWindowDimensions } from '../hooks/useWindowDimensions'
 import { AppStore } from '../stores/AppStore'
 import { HomePageStore } from './HomePageStore'
 import StatsIcon from '@mui/icons-material/QueryStats'
+import { WorkplaceWorkersSvg } from '../components/WorkplaceSvg/WorkplaceWorkersSvg'
 
 const HomePage = observer(() => {
     const homePageStore = useMemo(() => new HomePageStore(), [])
@@ -37,11 +38,13 @@ const HomePage = observer(() => {
             >
                 <StatsIcon />
             </Fab>
-            <Box sx={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center'
-            }}>
+            <Box
+                sx={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
                 <Button
                     size="large"
                     variant="contained"
@@ -62,6 +65,11 @@ const HomePage = observer(() => {
                     backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
                     onMouseOut={() => homePageStore.onMouseOut()}
                     key={homePageStore.svgKey}
+                />
+                <WorkplaceWorkersSvg
+                    width={svgSize}
+                    height={svgSize}
+                    getUserPictureUrl={(room) => homePageStore.getRoomUser(room)}
                 />
             </CenteredDiv>
             <Typography

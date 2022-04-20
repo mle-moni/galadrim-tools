@@ -1,13 +1,14 @@
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import PasswordIcon from '@mui/icons-material/VpnKey'
-import { Button, IconButton, InputAdornment, Link as MuiLink, OutlinedInput } from '@mui/material'
+import { Button, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { AppStore } from '../../stores/AppStore'
 import { GaladrimLogo } from '../Branding/GaladrimLogo'
 import { Card } from '../Core/Card'
+import { CustomLink } from '../Core/CustomLink'
+import BackIcon from '@mui/icons-material/ChevronLeft'
 
 export const ChangePassword = observer(() => {
     const { authStore } = AppStore
@@ -65,9 +66,9 @@ export const ChangePassword = observer(() => {
                 >
                     Changer le mot de passe
                 </Button>
-                <MuiLink component={Link} to="/">
-                    Retour à l'accueil
-                </MuiLink>
+                <CustomLink to='/'>
+                    <BackIcon /> Retour à l'accueil
+                </CustomLink>
             </form>
         </Card>
     )

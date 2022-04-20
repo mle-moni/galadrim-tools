@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
 import { WorkplaceSvgRoom } from '../components/WorkplaceSvg/WorkplaceSvg'
 import { AppStore } from '../stores/AppStore'
 import { themeColors } from '../theme'
@@ -49,6 +49,28 @@ export class HomePageStore {
     getRoomMouseOverColor(room: WorkplaceSvgRoom) {
         this.lastHoveredRoom = room
         return this.getRoomColor(room)
+    }
+
+    getRoomUser(room: WorkplaceSvgRoom) {
+        const roomFullName = getReservableRoomFullName(room)
+
+        if (roomFullName === null) {
+            return null
+        }
+
+        const userId = AppStore.eventsStore.roomUser(roomFullName, new Date())
+
+        if (userId === null) {
+            return null
+        }
+
+        const user = AppStore.users.get(userId);
+
+        if(user === undefined) {
+            return null;
+        }
+
+        return user.imageUrl
     }
 
     onMouseOut() {
