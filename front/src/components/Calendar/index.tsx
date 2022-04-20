@@ -67,7 +67,11 @@ export const RoomCalendar = observer(() => (
                 }}
                 // @ts-ignore
                 onSelectSlot={({ start, end, resourceId }) => {
-                    AppStore.eventsStore.newEvent(new Date(start), new Date(end), resourceId)
+                    AppStore.eventsStore.newEvent(
+                        new Date(start),
+                        new Date(end),
+                        resourceId?.toString() ?? null
+                    )
                 }}
                 onDoubleClickEvent={(args) => AppStore.eventsStore.onDoubleClickEvent(args)}
                 {...(AppStore.eventsStore.roomName === '*' && {
