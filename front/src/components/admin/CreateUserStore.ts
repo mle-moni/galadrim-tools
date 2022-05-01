@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { fetchBackendJson } from '../../api/fetch'
+import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { notifyError, notifySuccess } from '../../utils/notification'
 
 export class CreateUserStore {
@@ -24,13 +24,18 @@ export class CreateUserStore {
     }
 
     async createUser() {
-        const res = await fetchBackendJson('/admin/createUser')
+        const data = new FormData()
+        data.append('email', this.email)
+        data.append('username', this.username)
+        const res = await fetchBackendJson('/admin/createUser', 'POST', { body: data })
         if (res.ok) {
             notifySuccess(`L'utilisateur ${this.username} a été créé !`)
             this.setEmail('')
             this.setUsername('')
         } else {
-            notifyError(`Impossible de créer l'utilisateur ${this.username}`)
+            notifyError(
+                getErrorMessage(res.json, `Impossible de créer l'utilisateur ${this.username}`)
+            )
         }
     }
 }
