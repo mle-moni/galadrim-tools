@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { RIGHTS } from '../../../../Models/User/Controllers/Socket/utils/permission/rights'
+import { RIGHTS } from '../../app/Controllers/Socket/utils/permission/rights'
 
 export default class Users extends BaseSchema {
     protected tableName = 'users'

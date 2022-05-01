@@ -4,7 +4,7 @@ import {
     ObjectValidationSchema,
     validateInput,
     validateInputs,
-} from '../../../../Models/User/Controllers/Socket/utils/validation/validateInput'
+} from '../../../app/Controllers/Socket/utils/validation/validateInput'
 
 test.group('Object input validation', () => {
     const tests: TestValue<InputValidationTest, boolean>[] = [
