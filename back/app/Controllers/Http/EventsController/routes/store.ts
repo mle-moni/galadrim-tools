@@ -6,8 +6,8 @@ import Ws from 'App/Services/Ws'
 const StoreValidationSchema = schema.create({
     start: schema.date({}, [rules.beforeField('end')]),
     end: schema.date(),
-    room: schema.string({ trim: true }, [rules.maxLength(40), rules.minLength(2)]),
-    title: schema.string.optional({ trim: true }, [rules.maxLength(40), rules.minLength(2)]),
+    room: schema.string([rules.trim(), rules.maxLength(40), rules.minLength(2)]),
+    title: schema.string.optional([rules.trim(), rules.maxLength(40), rules.minLength(2)]),
 })
 
 export const validateEventsParams = async (request: HttpContextContract['request']) => {

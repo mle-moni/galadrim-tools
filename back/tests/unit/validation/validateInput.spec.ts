@@ -1,6 +1,10 @@
-import test from 'japa'
-import { Assert } from 'tests/japaTypes'
-import { ObjectValidationSchema, validateInput, validateInputs } from './validateInput'
+import { Assert } from '@japa/assert'
+import { test } from '@japa/runner'
+import {
+    ObjectValidationSchema,
+    validateInput,
+    validateInputs,
+} from 'App/Controllers/Socket/utils/validation/validateInput'
 
 test.group('Object input validation', () => {
     const tests: TestValue<InputValidationTest, boolean>[] = [
@@ -54,7 +58,7 @@ test.group('Object input validation', () => {
         schema: ObjectValidationSchema
     }
 
-    test('validateInput', (assert) => {
+    test('validateInput', ({ assert }) => {
         for (const test of tests) {
             const result = validateInput(test.input.value, test.input.schema)
             assert.equal(result, test.expected)
@@ -73,7 +77,7 @@ test.group('Object input validation', () => {
 
     const goodTests = tests.filter((test) => test.expected === true)
 
-    test('validateInputs', (assert) => {
+    test('validateInputs', ({ assert }) => {
         testValidateInputs(assert, tests, false)
         testValidateInputs(assert, goodTests, true)
     })
@@ -129,7 +133,7 @@ test.group('Object input validation', () => {
         },
     ]
 
-    test('validateInput types', (assert) => {
+    test('validateInput types', ({ assert }) => {
         for (const test of typeTests) {
             const result = validateInput(test.input.value, test.input.schema)
             assert.equal(result, test.expected)

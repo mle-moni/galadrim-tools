@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@mui/material'
 import { SnackbarProvider, useSnackbar } from 'notistack'
 import React, { FC, PropsWithChildren } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import MainRouter from './routes/MainRouter'
 import { AppStore } from './stores/AppStore'
 import { getTheme } from './theme'
@@ -15,7 +15,11 @@ const SnackBarSetter: FC<PropsWithChildren<{}>> = ({ children }) => {
     return <>{children}</>
 }
 
-ReactDOM.render(
+const container = document.getElementById('root')
+
+const root = createRoot(container!)
+
+root.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
             <SnackbarProvider>
@@ -24,6 +28,5 @@ ReactDOM.render(
                 </SnackBarSetter>
             </SnackbarProvider>
         </ThemeProvider>
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
 )

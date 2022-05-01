@@ -21,7 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
-    return { hello: 'world' }
+    return { service: 'galadrim rooms backend' }
 })
 
 Route.post('/login', 'AuthController.login')
@@ -45,3 +45,9 @@ Route.group(() => {
 })
     .middleware('auth:web,api')
     .prefix('statistics')
+
+Route.group(() => {
+    Route.post('/createUser', 'AdminController.createUser')
+})
+    .middleware('auth:web,api')
+    .prefix('admin')
