@@ -1,5 +1,6 @@
 import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import { AllRights, hasRights, hasSomeRights } from 'App/Controllers/Socket/utils/permission/rights'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
 
@@ -28,6 +29,9 @@ export default class User extends BaseModel {
     @column()
     public socketToken: string
 
+    @column()
+    public rights: number
+
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
@@ -50,5 +54,13 @@ export default class User extends BaseModel {
             socketToken: this.socketToken,
             imageUrl: this.imageUrl,
         }
+    }
+
+    public hasRights(rightsWanted: AllRights[]) {
+        return hasRights(this.rights, rightsWanted)
+    }
+
+    public hasSomeRights(rightsWanted: AllRights[]) {
+        return hasSomeRights(this.rights, rightsWanted)
     }
 }
