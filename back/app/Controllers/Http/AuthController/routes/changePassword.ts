@@ -1,8 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
 
 const changePasswordSchema = schema.create({
-    password: schema.string({ trim: true }),
+    password: schema.string([rules.trim()]),
 })
 
 export const changePasswordRoute = async ({ request, auth }: HttpContextContract) => {

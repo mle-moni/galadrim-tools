@@ -1,12 +1,12 @@
 import Mail from '@ioc:Adonis/Addons/Mail'
 import Env from '@ioc:Adonis/Core/Env'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
 import { nanoid } from 'nanoid'
 
 const loginSchema = schema.create({
-    email: schema.string({ trim: true }),
+    email: schema.string([rules.trim()]),
 })
 
 // generate one time password for user and send it in email
