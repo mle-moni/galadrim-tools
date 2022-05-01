@@ -1,0 +1,10 @@
+{
+  "name": "frontend",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "lint": "eslint . --ext=.ts",
+    "format": "prettier --write ."
+  }
+}

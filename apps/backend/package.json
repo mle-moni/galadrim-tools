@@ -1,0 +1,12 @@
+{
+    "name": "backend",
+    "scripts": {
+        "dev": "node ace serve --watch",
+        "build": "node ace build --production",
+        "start": "node server.js",
+        "lint": "eslint . --ext=.ts",
+        "format": "prettier --write .",
+        "test": "node ace test",
+        "test:unit": "node ace test unit"
+    }
+}
