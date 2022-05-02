@@ -1,5 +1,5 @@
+import { RIGHTS } from '@galadrim-rooms/shared/src'
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { RIGHTS } from '../../app/Controllers/Socket/utils/permission/rights'
 
 export default class Users extends BaseSchema {
     protected tableName = 'users'
