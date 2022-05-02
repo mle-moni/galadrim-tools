@@ -34,8 +34,9 @@ export class WhoamiStore {
 }
 
 async function clipboardCopy(text: string) {
-    // @ts-ignore
     const permissions = await navigator.permissions.query({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         name: 'clipboard-write',
     })
     if (permissions.state === 'granted' || permissions.state === 'prompt') {

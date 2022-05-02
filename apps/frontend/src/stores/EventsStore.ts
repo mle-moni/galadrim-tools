@@ -43,7 +43,7 @@ export class EventsStore {
     }
 
     async fetchEvents() {
-        const events: RoomEvent[] = (await fetchEvents()).map((rawEvent: any) =>
+        const events: RoomEvent[] = (await fetchEvents()).map((rawEvent: RawRoomEvent) =>
             getEventFromApi(rawEvent)
         )
         this.setEvents(events)
@@ -59,7 +59,7 @@ export class EventsStore {
         end,
         resourceId: roomName,
     }: {
-        event: any
+        event: RoomEvent
         start: stringOrDate
         end: stringOrDate
         isAllDay: boolean
@@ -79,7 +79,7 @@ export class EventsStore {
         this.setWaiting(false)
         return res
     }
-    onDoubleClickEvent(event: any) {
+    onDoubleClickEvent(event: RoomEvent) {
         if (event.id === 0) return
         return this.removeEvent(event.id)
     }

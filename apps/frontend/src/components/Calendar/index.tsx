@@ -20,7 +20,6 @@ const DragAndDropCalendar = withDragAndDrop<
     {
         name: typeof AllRooms[number]['name']
     }
-    // @ts-ignore
 >(Calendar)
 
 const getCalendarEventFromRoomEvent = (roomEvents: RoomEvent[]): CalendarEvent[] => {
@@ -65,7 +64,6 @@ export const RoomCalendar = observer(() => (
                 onEventDrop={(args) => {
                     AppStore.eventsStore.onEventDrop(args)
                 }}
-                // @ts-ignore
                 onSelectSlot={({ start, end, resourceId }) => {
                     AppStore.eventsStore.newEvent(
                         new Date(start),
