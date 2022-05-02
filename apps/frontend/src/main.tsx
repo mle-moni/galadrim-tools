@@ -9,7 +9,7 @@ import './theme/react-big-calendar.css'
 
 const theme = getTheme()
 
-const SnackBarSetter: FC<PropsWithChildren<{}>> = ({ children }) => {
+const SnackBarSetter: FC<PropsWithChildren<unknown>> = ({ children }) => {
     const snackbarMethods = useSnackbar()
     AppStore.notification.setMethods(snackbarMethods)
     return <>{children}</>
