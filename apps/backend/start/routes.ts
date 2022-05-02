@@ -49,5 +49,5 @@ Route.group(() => {
 Route.group(() => {
     Route.post('/createUser', 'AdminController.createUser')
 })
-    .middleware('auth:web,api')
+    .middleware(['auth:web,api', 'rights:USER_ADMIN'])
     .prefix('admin')
