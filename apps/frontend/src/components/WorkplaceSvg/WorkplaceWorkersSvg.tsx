@@ -1,9 +1,9 @@
-import type { WorkplaceSvgRoom } from './WorkplaceSvg'
+import type { WorkplaceSvgRoom } from './WorkplaceSvg';
 
 interface WorkplaceWorkersSvgProps {
-    width?: number
-    height?: number
-    getUserPictureUrl: (room: WorkplaceSvgRoom) => string | null
+    width?: number;
+    height?: number;
+    getUserPictureUrl: (room: WorkplaceSvgRoom) => string | null;
 }
 
 export const WorkplaceWorkersSvg = ({
@@ -11,13 +11,12 @@ export const WorkplaceWorkersSvg = ({
     height = 812,
     width = 991,
 }: WorkplaceWorkersSvgProps) => {
-    const userPictureTuring = getUserPictureUrl('Turing')
-    const userPictureAdier = getUserPictureUrl('Adier')
-    const userPictureVador = getUserPictureUrl('Vador')
-    const userPictureKitchen = getUserPictureUrl('Kitchen')
-    const userPictureCoffre = getUserPictureUrl('Coffre')
-    const userPictureBabyfoot = getUserPictureUrl('Babyfoot')
-    const userPictureManguier = getUserPictureUrl('Manguier')
+    const userPictureTuring = getUserPictureUrl('Turing');
+    const userPictureAdier = getUserPictureUrl('Adier');
+    const userPictureVador = getUserPictureUrl('Vador');
+    const userPictureKitchen = getUserPictureUrl('Kitchen');
+    const userPictureCoffre = getUserPictureUrl('Coffre');
+    const userPictureManguier = getUserPictureUrl('Manguier');
 
     return (
         <svg
@@ -81,16 +80,6 @@ export const WorkplaceWorkersSvg = ({
                     />
                 </foreignObject>
             )}
-            {userPictureBabyfoot && (
-                <foreignObject x="860" y="540" width="56px" height="56px">
-                    <img
-                        width="48px"
-                        height="48px"
-                        src={userPictureBabyfoot}
-                        style={{ borderRadius: '50%' }}
-                    />
-                </foreignObject>
-            )}
             {userPictureManguier && (
                 <foreignObject x="690" y="438" width="56px" height="56px">
                     <img
@@ -102,5 +91,5 @@ export const WorkplaceWorkersSvg = ({
                 </foreignObject>
             )}
         </svg>
-    )
-}
+    );
+};
