@@ -1,0 +1,28 @@
+{
+    // "extends": "../../node_modules/adonis-preset-ts/tsconfig",
+    "extends": "../../tsconfig.base.json",
+    "include": ["**/*"],
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "commonjs",
+        "lib": ["ES2020"],
+        "noUnusedLocals": true,
+        "incremental": true,
+        "noUnusedParameters": true,
+        "removeComments": true,
+        "outDir": "../../dist/apps/backend",
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "types": [
+            "@adonisjs/core",
+            "@adonisjs/repl",
+            "@adonisjs/lucid",
+            "@adonisjs/auth",
+            "@adonisjs/session",
+            "@adonisjs/mail",
+            "@adonisjs/view",
+            "@japa/preset-adonis/build/adonis-typings"
+        ]
+    }
+}

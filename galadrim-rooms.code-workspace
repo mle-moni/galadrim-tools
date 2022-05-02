@@ -1,10 +1,20 @@
 {
 	"folders": [
 		{
-			"path": "back"
+			"name": "✨ root",
+			"path": "."
 		},
 		{
-			"path": "front"
+			"name": "🚀 apps/backend",
+			"path": "apps/backend"
+		},
+		{
+			"name": "🚀 apps/frontend",
+			"path": "apps/frontend"
+		},
+		{
+			"name": "📦 libs/shared",
+			"path": "libs/shared"
 		}
 	]
 }

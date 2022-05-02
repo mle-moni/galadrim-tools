@@ -1,0 +1,49 @@
+{
+    "typescript": true,
+    "commands": [
+        "./apps/backend/commands",
+        "@adonisjs/core/build/commands/index.js",
+        "@adonisjs/repl/build/commands",
+        "@adonisjs/lucid/build/commands",
+        "@adonisjs/mail/build/commands"
+    ],
+    "exceptionHandlerNamespace": "App/Exceptions/Handler",
+    "aliases": {
+        "App": "app",
+        "Config": "config",
+        "Database": "database",
+        "Contracts": "contracts"
+    },
+    "preloads": ["./start/routes", "./start/kernel"],
+    "providers": [
+        "./providers/AppProvider",
+        "@adonisjs/core",
+        "@adonisjs/lucid",
+        "@adonisjs/auth",
+        "@adonisjs/session",
+        "@adonisjs/mail",
+        "@adonisjs/view"
+    ],
+    "aceProviders": ["@adonisjs/repl"],
+    "metaFiles": [
+        {
+            "pattern": "resources/views/**/*.edge",
+            "reloadServer": false
+        }
+    ],
+    "tests": {
+        "suites": [
+            {
+                "name": "functional",
+                "files": ["tests/functional/**/*.spec(.ts|.js)"],
+                "timeout": 60000
+            },
+            {
+                "name": "unit",
+                "files": ["tests/unit/**/*.spec(.ts|.js)"],
+                "timeout": 60000
+            }
+        ]
+    },
+    "testProviders": ["@japa/preset-adonis/TestsProvider"]
+}
