@@ -10,7 +10,8 @@
     "private": true,
     "workspaces": [
         "apps/backend",
-        "apps/frontend"
+        "apps/frontend",
+        "libs/shared"
     ],
     "dependencies": {
         "tslib": "^2.3.0",
