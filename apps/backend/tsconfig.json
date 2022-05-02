@@ -10,7 +10,7 @@
         "incremental": true,
         "noUnusedParameters": true,
         "removeComments": true,
-        "outDir": "build",
+        "outDir": "../../dist/apps/backend",
         "strictNullChecks": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
