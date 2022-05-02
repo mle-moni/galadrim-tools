@@ -1,12 +1,7 @@
-import { test } from '@japa/runner'
-import {
-    AllRights,
-    hasRights,
-    RIGHTS,
-} from '../../../app/Controllers/Socket/utils/permission/rights'
+import { AllRights, hasRights, RIGHTS } from '../rights'
 
-test.group('rights', () => {
-    test('hasRights', ({ assert }) => {
+describe('rights', () => {
+    it('hasRights', () => {
         type SampleType = { rights: number; rightsWanted: AllRights[]; expected: boolean }
         const samples = [
             { rights: RIGHTS.DEFAULT, rightsWanted: ['DEFAULT'], expected: true },
@@ -40,7 +35,7 @@ test.group('rights', () => {
         ] as SampleType[]
 
         for (const { rights, rightsWanted, expected } of samples) {
-            assert.equal(hasRights(rights, rightsWanted), expected)
+            expect(hasRights(rights, rightsWanted)).toEqual(expected)
         }
     })
 })
