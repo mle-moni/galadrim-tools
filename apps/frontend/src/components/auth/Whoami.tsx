@@ -7,16 +7,26 @@ export const Whoami = () => {
     const store = new WhoamiStore()
 
     return (
-        <Stack display='flex' direction='column' alignItems='center'>
+        <Stack display="flex" direction="column" alignItems="center">
             <Avatar
                 alt={authStore.user.username}
                 src={authStore.user.imageUrl}
                 sx={{ width: 56, height: 56, mb: 1 }}
             />
-            <Typography variant="caption" fontSize={16} onClick={() => store.onClick()} gutterBottom>
+            <Typography
+                variant="caption"
+                fontSize={16}
+                onClick={() => store.onClick()}
+                gutterBottom
+            >
                 {authStore.user.username}
             </Typography>
-            <Button size='small' variant="outlined" color="error" onClick={() => authStore.logout()}>
+            <Button
+                size="small"
+                variant="outlined"
+                color="error"
+                onClick={() => authStore.logout()}
+            >
                 Déconnexion
             </Button>
         </Stack>

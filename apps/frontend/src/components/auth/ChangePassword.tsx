@@ -66,7 +66,7 @@ export const ChangePassword = observer(() => {
                 >
                     Changer le mot de passe
                 </Button>
-                <CustomLink to='/'>
+                <CustomLink to="/">
                     <BackIcon /> Retour à l'accueil
                 </CustomLink>
             </form>

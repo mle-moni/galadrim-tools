@@ -27,7 +27,9 @@ export class CreateUserStore {
         const data = new FormData()
         data.append('email', this.email)
         data.append('username', this.username)
-        const res = await fetchBackendJson('/admin/createUser', 'POST', { body: data })
+        const res = await fetchBackendJson('/admin/createUser', 'POST', {
+            body: data,
+        })
         if (res.ok) {
             notifySuccess(`L'utilisateur ${this.username} a été créé !`)
             this.setEmail('')

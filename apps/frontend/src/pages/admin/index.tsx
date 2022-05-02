@@ -12,7 +12,11 @@ interface LinkFormat {
 }
 
 const allLinks: LinkFormat[] = [
-    { to: '/admin/createUser', text: 'Créer un utilisateur', icon: PersonAddAlt },
+    {
+        to: '/admin/createUser',
+        text: 'Créer un utilisateur',
+        icon: PersonAddAlt,
+    },
     { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft },
 ]
 

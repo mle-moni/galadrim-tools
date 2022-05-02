@@ -1,5 +1,5 @@
 {
-  "root": "apps/backend",
-  "projectType": "application",
-  "tags": []
+    "root": "apps/backend",
+    "projectType": "application",
+    "tags": []
 }

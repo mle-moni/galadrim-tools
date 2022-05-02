@@ -1,6 +1,6 @@
 {
-  "root": "apps/frontend",
-  "sourceRoot": "apps/frontend/src",
-  "projectType": "application",
-  "tags": []
+    "root": "apps/frontend",
+    "sourceRoot": "apps/frontend/src",
+    "projectType": "application",
+    "tags": []
 }

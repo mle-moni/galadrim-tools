@@ -1,4 +1,4 @@
-import { WorkplaceSvgRoom } from '../components/WorkplaceSvg/WorkplaceSvg';
+import { WorkplaceSvgRoom } from '../components/WorkplaceSvg/WorkplaceSvg'
 
 export const RESERVABLE_ROOMS = [
     'Adier',
@@ -7,11 +7,11 @@ export const RESERVABLE_ROOMS = [
     'Manguier',
     'Turing',
     'Vador',
-] as const;
+] as const
 
-export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number];
+export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
 
-export type RoomFullName = typeof AllRooms[number]['name'];
+export type RoomFullName = typeof AllRooms[number]['name']
 
 export const AllRooms = [
     {
@@ -35,10 +35,10 @@ export const AllRooms = [
     {
         name: 'Cuisine',
     },
-] as const;
+] as const
 
 const WorkplaceSvgRoomToFullRoomName: {
-    [K in ReservableWorkplaceSvgRoom]: RoomFullName;
+    [K in ReservableWorkplaceSvgRoom]: RoomFullName
 } = {
     Adier: 'Salle Adier',
     Coffre: 'Salle du coffre',
@@ -46,17 +46,15 @@ const WorkplaceSvgRoomToFullRoomName: {
     Manguier: 'Salle manguier massif',
     Vador: 'Salle Vador',
     Turing: 'Salle Turing',
-};
+}
 
-export function isReservableRoom(
-    room: WorkplaceSvgRoom
-): room is ReservableWorkplaceSvgRoom {
-    return RESERVABLE_ROOMS.includes(room as ReservableWorkplaceSvgRoom);
+export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {
+    return RESERVABLE_ROOMS.includes(room as ReservableWorkplaceSvgRoom)
 }
 
 export function getReservableRoomFullName(room: WorkplaceSvgRoom) {
     if (!isReservableRoom(room)) {
-        return null;
+        return null
     }
-    return WorkplaceSvgRoomToFullRoomName[room];
+    return WorkplaceSvgRoomToFullRoomName[room]
 }

@@ -1,8 +1,8 @@
 {
-  "version": 2,
-  "projects": {
-    "backend": "apps/backend",
-    "frontend": "apps/frontend",
-    "shared": "libs/shared"
-  }
+    "version": 2,
+    "projects": {
+        "backend": "apps/backend",
+        "frontend": "apps/frontend",
+        "shared": "libs/shared"
+    }
 }

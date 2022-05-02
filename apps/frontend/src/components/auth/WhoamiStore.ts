@@ -35,7 +35,9 @@ export class WhoamiStore {
 
 async function clipboardCopy(text: string) {
     // @ts-ignore
-    const permissions = await navigator.permissions.query({ name: 'clipboard-write' })
+    const permissions = await navigator.permissions.query({
+        name: 'clipboard-write',
+    })
     if (permissions.state === 'granted' || permissions.state === 'prompt') {
         await navigator.clipboard.writeText(text)
         notifySuccess('API token copié dans le presse papier')

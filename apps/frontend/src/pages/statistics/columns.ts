@@ -20,7 +20,11 @@ const time = {
     sortComparator: timeComparator,
     sortingOrder: ['desc', 'asc'],
 }
-const amount = { field: 'amount', headerName: 'Nombre de réservations', width: 200 }
+const amount = {
+    field: 'amount',
+    headerName: 'Nombre de réservations',
+    width: 200,
+}
 const room = {
     field: 'room',
     headerName: 'Salle',

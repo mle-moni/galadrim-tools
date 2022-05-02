@@ -150,11 +150,11 @@ export class EventsStore {
     roomUser(roomName: string, date: Date) {
         const events = this.getRoomEvents(roomName)
         const conflictEvent = events.find((event) => this.eventCollide(event, date))
-        
-        if(conflictEvent !== undefined) {
-            return conflictEvent.userId;
+
+        if (conflictEvent !== undefined) {
+            return conflictEvent.userId
         }
 
-        return null;
+        return null
     }
 }

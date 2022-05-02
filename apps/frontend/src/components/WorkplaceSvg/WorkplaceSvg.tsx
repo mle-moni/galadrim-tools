@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 export type WorkplaceSvgRoom =
     | 'Work1'
@@ -16,19 +16,19 @@ export type WorkplaceSvgRoom =
     | 'PetitCouloir'
     | 'Manguier'
     | 'Babyfoot'
-    | 'Other';
+    | 'Other'
 
 export interface WorkplaceSvgProps {
-    width: number;
-    height: number;
-    wallsColor: string;
-    backgroundColor: (room: WorkplaceSvgRoom) => string;
-    backgroundColorHover: (room: WorkplaceSvgRoom) => string;
-    onClick: (room: WorkplaceSvgRoom) => void;
-    onMouseOut: (room: WorkplaceSvgRoom) => void;
-    onMouseOver: (room: WorkplaceSvgRoom) => void;
-    style: (room: WorkplaceSvgRoom) => React.CSSProperties;
-    key: string | undefined;
+    width: number
+    height: number
+    wallsColor: string
+    backgroundColor: (room: WorkplaceSvgRoom) => string
+    backgroundColorHover: (room: WorkplaceSvgRoom) => string
+    onClick: (room: WorkplaceSvgRoom) => void
+    onMouseOut: (room: WorkplaceSvgRoom) => void
+    onMouseOver: (room: WorkplaceSvgRoom) => void
+    style: (room: WorkplaceSvgRoom) => React.CSSProperties
+    key: string | undefined
 }
 
 const defaultProps: Required<WorkplaceSvgProps> = {
@@ -42,7 +42,7 @@ const defaultProps: Required<WorkplaceSvgProps> = {
     onMouseOver: () => ({}),
     style: () => ({}),
     key: undefined,
-};
+}
 
 export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
     const {
@@ -59,20 +59,20 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
     } = {
         ...defaultProps,
         ...props,
-    };
+    }
 
     const useRoom = (room: WorkplaceSvgRoom) => {
-        const [color, setColor] = useState(backgroundColor(room));
+        const [color, setColor] = useState(backgroundColor(room))
 
         return {
             fill: color,
             onMouseOver: () => {
-                setColor(backgroundColorHover(room));
-                onMouseOver(room);
+                setColor(backgroundColorHover(room))
+                onMouseOver(room)
             },
             onMouseOut: () => {
-                setColor(backgroundColor(room));
-                onMouseOut(room);
+                setColor(backgroundColor(room))
+                onMouseOut(room)
             },
             cursor: 'pointer',
             onClick: () => onClick(room),
@@ -80,167 +80,35 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                 transition: 'all 0.2s',
                 ...style(room),
             },
-        };
-    };
+        }
+    }
 
     const Doors = () => (
         <>
-            <rect
-                x="202"
-                y="348"
-                width="4"
-                height="12"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="259"
-                y="385"
-                width="4"
-                height="13"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="329"
-                y="395"
-                width="4"
-                height="26"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="112"
-                y="391"
-                width="2"
-                height="22"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="97"
-                y="520"
-                width="12"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="129"
-                y="520"
-                width="21"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="87"
-                y="569"
-                width="4"
-                height="25"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="106"
-                y="605"
-                width="13"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="129"
-                y="757"
-                width="4"
-                height="28"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="335"
-                y="778"
-                width="4"
-                height="16"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="502"
-                y="772"
-                width="4"
-                height="16"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="414"
-                y="610"
-                width="38"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="335"
-                y="574"
-                width="4"
-                height="19"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="535"
-                y="610"
-                width="11"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="523"
-                y="532"
-                width="4"
-                height="21"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="532"
-                y="565"
-                width="14"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="544"
-                y="522"
-                width="19"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="771"
-                y="524"
-                width="11"
-                height="34"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="686"
-                y="522"
-                width="19"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="603"
-                y="578"
-                width="4"
-                height="11"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="506"
-                y="401"
-                width="4"
-                height="24"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                x="286"
-                y="555"
-                width="26"
-                height="4"
-                fill={backgroundColor('Other')}
-            />
+            <rect x="202" y="348" width="4" height="12" fill={backgroundColor('Other')} />
+            <rect x="259" y="385" width="4" height="13" fill={backgroundColor('Other')} />
+            <rect x="329" y="395" width="4" height="26" fill={backgroundColor('Other')} />
+            <rect x="112" y="391" width="2" height="22" fill={backgroundColor('Other')} />
+            <rect x="97" y="520" width="12" height="4" fill={backgroundColor('Other')} />
+            <rect x="129" y="520" width="21" height="4" fill={backgroundColor('Other')} />
+            <rect x="87" y="569" width="4" height="25" fill={backgroundColor('Other')} />
+            <rect x="106" y="605" width="13" height="4" fill={backgroundColor('Other')} />
+            <rect x="129" y="757" width="4" height="28" fill={backgroundColor('Other')} />
+            <rect x="335" y="778" width="4" height="16" fill={backgroundColor('Other')} />
+            <rect x="502" y="772" width="4" height="16" fill={backgroundColor('Other')} />
+            <rect x="414" y="610" width="38" height="4" fill={backgroundColor('Other')} />
+            <rect x="335" y="574" width="4" height="19" fill={backgroundColor('Other')} />
+            <rect x="535" y="610" width="11" height="4" fill={backgroundColor('Other')} />
+            <rect x="523" y="532" width="4" height="21" fill={backgroundColor('Other')} />
+            <rect x="532" y="565" width="14" height="4" fill={backgroundColor('Other')} />
+            <rect x="544" y="522" width="19" height="4" fill={backgroundColor('Other')} />
+            <rect x="771" y="524" width="11" height="34" fill={backgroundColor('Other')} />
+            <rect x="686" y="522" width="19" height="4" fill={backgroundColor('Other')} />
+            <rect x="603" y="578" width="4" height="11" fill={backgroundColor('Other')} />
+            <rect x="506" y="401" width="4" height="24" fill={backgroundColor('Other')} />
+            <rect x="286" y="555" width="26" height="4" fill={backgroundColor('Other')} />
         </>
-    );
+    )
 
     const Work23Walls = () => (
         <path
@@ -251,7 +119,7 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             d="M3.05176e-05 609L0 808V812H502.001V808H339V794H338V793H336V794H335V808H133V785H132V784H130V785H129V808H4.00003V609H3.05176e-05ZM129 757L129.007 609L133.007 609L133 757L132 757V758H130V757H129ZM329 764V614H345V764H339V778H338V779H336V778H335V764H329ZM336 783H338V781H336V783ZM336 785V787H338V785H336ZM336 789V791H338V789H336ZM130 762V760H132V762H130ZM130 766V764H132V766H130ZM130 770V768H132V770H130ZM130 774V772H132V774H130ZM130 778V776H132V778H130ZM130 782V780H132V782H130ZM503 772V773H505V772H503ZM505 775H503V777H505V775ZM505 779H503V781H505V779ZM505 783H503V785H505V783ZM503 787V788H505V787H503Z"
             fill={wallsColor}
         />
-    );
+    )
 
     const KitchenDoor = () => (
         <line
@@ -263,15 +131,15 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             strokeWidth="2"
             strokeDasharray="2 2"
         />
-    );
+    )
 
     const Work2 = () => {
-        const svgProps = useRoom('Work2');
-        return <rect x="4" y="609" width="125" height="199" {...svgProps} />;
-    };
+        const svgProps = useRoom('Work2')
+        return <rect x="4" y="609" width="125" height="199" {...svgProps} />
+    }
 
     const Work3 = () => {
-        const svgProps = useRoom('Work3');
+        const svgProps = useRoom('Work3')
         return (
             <path
                 fillRule="evenodd"
@@ -279,16 +147,16 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                 d="M133 558H286V559H335V606V808H286H133V558Z"
                 {...svgProps}
             />
-        );
-    };
+        )
+    }
 
     const Work4 = () => {
-        const svgProps = useRoom('Work4');
-        return <rect x="339" y="614" width="163" height="194" {...svgProps} />;
-    };
+        const svgProps = useRoom('Work4')
+        return <rect x="339" y="614" width="163" height="194" {...svgProps} />
+    }
 
     const Toilets = () => {
-        const svgProps = useRoom('Toilets');
+        const svgProps = useRoom('Toilets')
         return (
             <>
                 <path d="M170 312H202V375H170V312Z" {...svgProps} />
@@ -299,11 +167,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Kitchen = () => {
-        const svgProps = useRoom('Kitchen');
+        const svgProps = useRoom('Kitchen')
         return (
             <>
                 <path d="M205 6H349V158H205V6Z" {...svgProps} />
@@ -314,11 +182,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Adier = () => {
-        const svgProps = useRoom('Adier');
+        const svgProps = useRoom('Adier')
         return (
             <>
                 <path
@@ -334,11 +202,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Corridor = () => {
-        const svgProps = useRoom('Corridor');
+        const svgProps = useRoom('Corridor')
         return (
             <>
                 <path
@@ -354,11 +222,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Vador = () => {
-        const svgProps = useRoom('Vador');
+        const svgProps = useRoom('Vador')
         return (
             <>
                 <path
@@ -374,11 +242,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     {...svgProps}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Work1 = () => {
-        const svgProps = useRoom('Work1');
+        const svgProps = useRoom('Work1')
         return (
             <>
                 <path
@@ -394,11 +262,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     {...svgProps}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Turing = () => {
-        const svgProps = useRoom('Turing');
+        const svgProps = useRoom('Turing')
         return (
             <>
                 <path
@@ -414,11 +282,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Coffre = () => {
-        const svgProps = useRoom('Coffre');
+        const svgProps = useRoom('Coffre')
         return (
             <>
                 <path
@@ -434,11 +302,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Debarras = () => {
-        const svgProps = useRoom('Debarras');
+        const svgProps = useRoom('Debarras')
         return (
             <>
                 <path
@@ -454,11 +322,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     {...svgProps}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const PetitCouloir = () => {
-        const svgProps = useRoom('PetitCouloir');
+        const svgProps = useRoom('PetitCouloir')
         return (
             <>
                 <path
@@ -474,11 +342,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Manguier = () => {
-        const svgProps = useRoom('Manguier');
+        const svgProps = useRoom('Manguier')
         return (
             <>
                 <path
@@ -494,11 +362,11 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     const Babyfoot = () => {
-        const svgProps = useRoom('Babyfoot');
+        const svgProps = useRoom('Babyfoot')
         return (
             <>
                 <path
@@ -514,8 +382,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     fill={wallsColor}
                 />
             </>
-        );
-    };
+        )
+    }
 
     return (
         <svg
@@ -544,5 +412,5 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             <Work23Walls />
             <KitchenDoor />
         </svg>
-    );
-};
+    )
+}

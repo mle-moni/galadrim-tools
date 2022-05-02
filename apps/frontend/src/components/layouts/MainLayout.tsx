@@ -9,7 +9,7 @@ import { Whoami } from '../auth/Whoami'
 const whiteListedRoutes = ['/login', '/getOtp']
 
 type MainLayoutProps = PropsWithChildren<{
-    fullscreen?: boolean;
+    fullscreen?: boolean
 }>
 
 const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
@@ -20,7 +20,7 @@ const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
         justifyContent: 'center',
         alignItems: 'center',
         boxSizing: 'border-box',
-        backgroundColor: fullscreen ? 'inherit' : getTheme().palette.background.default
+        backgroundColor: fullscreen ? 'inherit' : getTheme().palette.background.default,
     })
 )
 

@@ -1,9 +1,9 @@
-import type { WorkplaceSvgRoom } from './WorkplaceSvg';
+import type { WorkplaceSvgRoom } from './WorkplaceSvg'
 
 interface WorkplaceWorkersSvgProps {
-    width?: number;
-    height?: number;
-    getUserPictureUrl: (room: WorkplaceSvgRoom) => string | null;
+    width?: number
+    height?: number
+    getUserPictureUrl: (room: WorkplaceSvgRoom) => string | null
 }
 
 export const WorkplaceWorkersSvg = ({
@@ -11,12 +11,12 @@ export const WorkplaceWorkersSvg = ({
     height = 812,
     width = 991,
 }: WorkplaceWorkersSvgProps) => {
-    const userPictureTuring = getUserPictureUrl('Turing');
-    const userPictureAdier = getUserPictureUrl('Adier');
-    const userPictureVador = getUserPictureUrl('Vador');
-    const userPictureKitchen = getUserPictureUrl('Kitchen');
-    const userPictureCoffre = getUserPictureUrl('Coffre');
-    const userPictureManguier = getUserPictureUrl('Manguier');
+    const userPictureTuring = getUserPictureUrl('Turing')
+    const userPictureAdier = getUserPictureUrl('Adier')
+    const userPictureVador = getUserPictureUrl('Vador')
+    const userPictureKitchen = getUserPictureUrl('Kitchen')
+    const userPictureCoffre = getUserPictureUrl('Coffre')
+    const userPictureManguier = getUserPictureUrl('Manguier')
 
     return (
         <svg
@@ -91,5 +91,5 @@ export const WorkplaceWorkersSvg = ({
                 </foreignObject>
             )}
         </svg>
-    );
-};
+    )
+}
