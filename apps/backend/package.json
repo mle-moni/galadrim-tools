@@ -4,6 +4,8 @@
     "scripts": {
         "dev": "node ace serve --watch",
         "build": "node ace build --production && ./scripts/finalizeBuild.sh",
+        "migrate-prod": "node ace migration:run --force",
+        "deploy": "./scripts/deploy.sh",
         "start": "node server.js",
         "lint": "eslint . --ext=.ts",
         "format": "prettier --write .",

@@ -4,6 +4,7 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build --emptyOutDir",
+        "deploy": "./deploy.sh",
         "serve": "vite preview",
         "lint": "eslint . --ext=.ts"
     },
