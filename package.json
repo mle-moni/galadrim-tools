@@ -3,9 +3,7 @@
     "version": "2.0.0",
     "license": "MIT",
     "scripts": {
-        "start": "nx serve",
-        "build": "nx build",
-        "test": "nx test"
+        "deploy": "git pull && ./deployAll.sh"
     },
     "private": true,
     "workspaces": [
