@@ -10,6 +10,7 @@ export interface ApiUser {
     username: string
     socketToken: string
     imageUrl: string
+    rights: number
 }
 
 export class AuthStore {
