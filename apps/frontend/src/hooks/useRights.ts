@@ -38,8 +38,8 @@ export const useRights = (
     useEffect(() => {
         if (!canAccess && message.current === null) {
             message.current = "Vous n'avez pas les droits requis pour voir cette page"
-            notifyError(message.current)
             if (redirectPath !== undefined) {
+                notifyError(message.current)
                 navigate(redirectPath)
             }
         }

@@ -1,14 +1,16 @@
+import { AdminPanelSettings } from '@mui/icons-material'
+import StatsIcon from '@mui/icons-material/QueryStats'
 import { Box, Button, Fab, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { CenteredDiv } from '../components/cssHelpers/CenteredDiv'
 import MainLayout from '../components/layouts/MainLayout'
 import { WorkplaceSvg } from '../components/WorkplaceSvg/WorkplaceSvg'
+import { WorkplaceWorkersSvg } from '../components/WorkplaceSvg/WorkplaceWorkersSvg'
+import { useRights } from '../hooks/useRights'
 import { useWindowDimensions } from '../hooks/useWindowDimensions'
 import { AppStore } from '../stores/AppStore'
 import { HomePageStore } from './HomePageStore'
-import StatsIcon from '@mui/icons-material/QueryStats'
-import { WorkplaceWorkersSvg } from '../components/WorkplaceSvg/WorkplaceWorkersSvg'
 
 const HomePage = observer(() => {
     const homePageStore = useMemo(() => new HomePageStore(), [])
@@ -22,6 +24,8 @@ const HomePage = observer(() => {
     const { width, height } = useWindowDimensions()
     const shortestEdge = width < height ? width : height
     const svgSize = Math.round(shortestEdge * 0.8)
+
+    const canSeeAdminPage = useRights('some', ['EVENT_ADMIN', 'RIGHTS_ADMIN', 'USER_ADMIN'])
 
     return (
         <MainLayout fullscreen>
@@ -38,6 +42,21 @@ const HomePage = observer(() => {
             >
                 <StatsIcon />
             </Fab>
+            {canSeeAdminPage && (
+                <Fab
+                    size="medium"
+                    variant="circular"
+                    color="primary"
+                    onClick={() => AppStore.navigate('/admin')}
+                    sx={{
+                        position: 'absolute',
+                        top: 96,
+                        left: 32,
+                    }}
+                >
+                    <AdminPanelSettings />
+                </Fab>
+            )}
             <Box
                 sx={{
                     width: '100%',
