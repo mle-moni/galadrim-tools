@@ -30,8 +30,6 @@ export const useRights = (
     const { authStore } = AppStore
     const message = useRef<string | null>(null)
 
-    console.log(authStore.user.rights)
-
     const canAccess = checkAccess(authStore.connected, authStore, mode, rightsWanted)
     const navigate = useNavigate()
 
