@@ -1,3 +1,4 @@
+import { hasRights } from '@galadrim-rooms/shared/'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from '../../../../Models/Event'
 import Ws from '../../../../Services/Ws'
@@ -5,7 +6,7 @@ import Ws from '../../../../Services/Ws'
 export const destroyRoute = async ({ params, auth, response }: HttpContextContract) => {
     const event = await Event.findOrFail(params.id)
     const user = auth.user!
-    if (event.userId !== user.id) {
+    if (event.userId !== user.id && !hasRights(user.rights, ['EVENT_ADMIN'])) {
         return response.forbidden({ error: `Vous n'avez pas les droits nécessaires` })
     }
     const eventJson = event.toJSON()

@@ -1,4 +1,4 @@
-import { AllRights, hasRights, hasSomeRights } from '@galadrim-rooms/shared/src'
+import { AllRights, hasRights, hasSomeRights } from '@galadrim-rooms/shared'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
