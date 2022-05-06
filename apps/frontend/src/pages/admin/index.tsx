@@ -1,4 +1,4 @@
-import { ChevronLeft, PersonAddAlt } from '@mui/icons-material'
+import { ChevronLeft, PersonAddAlt, Settings } from '@mui/icons-material'
 import { SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { Card } from '../../components/Core/Card'
@@ -17,6 +17,11 @@ const allLinks: LinkFormat[] = [
         to: '/admin/createUser',
         text: 'Créer un utilisateur',
         icon: PersonAddAlt,
+    },
+    {
+        to: '/admin/rights',
+        text: 'Gerer les droits des utilisateurs',
+        icon: Settings,
     },
     { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft },
 ]
