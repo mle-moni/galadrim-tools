@@ -4,6 +4,7 @@ PM2_NAME="galadrim-rooms"
 
 yarn install &&
 nx test backend &&
+nx test frontend &&
 nx test shared &&
 nx build frontend &&
 TIME_DOWN=`date +%s`
