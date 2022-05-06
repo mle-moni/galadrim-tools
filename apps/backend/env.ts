@@ -27,6 +27,7 @@ export default Env.rules({
     MYSQL_USER: Env.schema.string(),
     MYSQL_PASSWORD: Env.schema.string.optional(),
     MYSQL_DB_NAME: Env.schema.string(),
+    CORS_ORIGINS: Env.schema.string(),
     COOKIE_DOMAIN: Env.schema.string(),
     SESSION_DRIVER: Env.schema.string(),
     MAILGUN_API_KEY: Env.schema.string(),
