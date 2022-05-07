@@ -64,4 +64,8 @@ export default class User extends BaseModel {
     public hasSomeRights(rightsWanted: AllRights[]) {
         return hasSomeRights(this.rights, rightsWanted)
     }
+
+    public getRightsData() {
+        return { id: this.id, username: this.username, rights: this.rights }
+    }
 }
