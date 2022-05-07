@@ -11,6 +11,7 @@ const LoginPage = React.lazy(() => import('../pages/login'))
 const GetOtpPage = React.lazy(() => import('../pages/getOtp'))
 const ChangePasswordPage = React.lazy(() => import('../pages/changePassword'))
 const CreateUserPage = React.lazy(() => import('../pages/admin/createUser'))
+const AdminRightsPage = React.lazy(() => import('../pages/admin/rights'))
 const AdminPage = React.lazy(() => import('../pages/admin'))
 const RoomPage = React.lazy(() => import('../pages/room'))
 const NotFoundPage = React.lazy(() => import('../pages/errors/404'))
@@ -27,6 +28,7 @@ const MainRouter = () => {
                             <Route path="/getOtp" element={<GetOtpPage />} />
                             <Route path="/changePassword" element={<ChangePasswordPage />} />
                             <Route path="/admin/createUser" element={<CreateUserPage />} />
+                            <Route path="/admin/rights" element={<AdminRightsPage />} />
                             <Route path="/admin" element={<AdminPage />} />
                             <Route path="room" element={<RoomPage />}>
                                 <Route path=":roomName" element={<RoomPage />} />
