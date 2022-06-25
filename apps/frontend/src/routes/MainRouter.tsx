@@ -6,6 +6,7 @@ import LoadingPage from '../pages/loading'
 import { AppStore } from '../stores/AppStore'
 
 const StatisticsPage = React.lazy(() => import('../pages/statistics'))
+const SaveurPage = React.lazy(() => import('../pages/saveur'))
 const HomePage = React.lazy(() => import('../pages'))
 const LoginPage = React.lazy(() => import('../pages/login'))
 const GetOtpPage = React.lazy(() => import('../pages/getOtp'))
@@ -34,6 +35,7 @@ const MainRouter = () => {
                                 <Route path=":roomName" element={<RoomPage />} />
                             </Route>
                             <Route path="/statistics" element={<StatisticsPage />} />
+                            <Route path="/saveur" element={<SaveurPage />} />
                             <Route path="*" element={<NotFoundPage />} />
                         </Routes>
                     </React.Suspense>
