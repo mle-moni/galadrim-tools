@@ -1,13 +1,16 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Tags extends BaseSchema {
-    protected tableName = 'tags'
+export default class Places extends BaseSchema {
+    protected tableName = 'restaurants'
 
     public async up() {
         this.schema.createTable(this.tableName, (table) => {
             table.increments('id')
 
             table.string('name')
+            table.text('description')
+            table.float('lat')
+            table.float('lng')
 
             /**
              * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
