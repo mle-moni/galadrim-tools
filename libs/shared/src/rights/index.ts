@@ -3,6 +3,7 @@ export const RIGHTS = {
     USER_ADMIN: 0b1,
     EVENT_ADMIN: 0b10,
     RIGHTS_ADMIN: 0b100,
+    MIAM_ADMIN: 0b1000,
 } as const
 
 export type AllRights = keyof typeof RIGHTS
