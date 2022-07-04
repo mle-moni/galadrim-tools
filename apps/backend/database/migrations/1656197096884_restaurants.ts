@@ -9,8 +9,8 @@ export default class Places extends BaseSchema {
 
             table.string('name')
             table.text('description')
-            table.float('lat')
-            table.float('lng')
+            table.decimal('lat', 10, 8)
+            table.decimal('lng', 11, 8)
 
             /**
              * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
