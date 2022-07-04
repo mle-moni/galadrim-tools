@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Restaurant from '../../../../Models/Restaurant'
+import RestaurantTag from '../../../../Models/RestaurantTag'
 import Ws from '../../../../Services/Ws'
 
 const StoreValidationSchema = schema.create({
@@ -26,7 +27,7 @@ export const storeRoute = async ({ request }: HttpContextContract) => {
         lng,
     })
 
-    await restaurant.related('tags').createMany(tags.map((id) => ({ id })))
+    await RestaurantTag.createMany(tags.map((tagId) => ({ restaurantId: restaurant.id, tagId })))
 
     Ws.io.to('connectedSockets').emit('createRestaurant', restaurant)
 

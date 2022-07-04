@@ -1,6 +1,7 @@
 import { hasRights } from '@galadrim-rooms/shared'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Restaurant from '../../../../Models/Restaurant'
+import RestaurantTag from '../../../../Models/RestaurantTag'
 import Ws from '../../../../Services/Ws'
 import { validateRestaurantsParams } from './store'
 
@@ -26,11 +27,9 @@ const updateRestaurantTags = async (restaurant: Restaurant, newTags: number[]) =
     const tagsSet = new Set(restaurant.tags.map((tag) => tag.id))
     const tagsToCreate = newTags
         .filter((tagId) => !tagsSet.has(tagId))
-        .map((id) => ({
-            id,
-        }))
+        .map((tagId) => ({ restaurantId: restaurant.id, tagId }))
 
-    await restaurant.related('tags').createMany(tagsToCreate)
+    await RestaurantTag.createMany(tagsToCreate)
 }
 
 export const updateRoute = async ({ params, request, auth, response }: HttpContextContract) => {
