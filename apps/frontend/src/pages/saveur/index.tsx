@@ -1,8 +1,8 @@
-import { Home } from '@mui/icons-material'
+import { Close, Home, Search } from '@mui/icons-material'
+import { Fab } from '@mui/material'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { RoundedLinks } from '../../components/Link/RoundedLinks'
 import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
@@ -14,6 +14,11 @@ const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.34923]
 
 const SaveurPage = () => {
     const saveurStore = useMemo(() => new SaveurStore(), [])
+
+    const [isOpen, setIsOpen] = useState(true)
+    const toggleIsOpen = () => {
+        setIsOpen(!isOpen)
+    }
 
     useEffect(() => {
         notifyUser('Work in progress', 'info', 2000)
@@ -47,6 +52,89 @@ const SaveurPage = () => {
                 </Marker>
                 <RestaurantMarkers restaurantStore={saveurStore.restaurantsStore} />
             </MapContainer>
+            {isOpen ? (
+                <header
+                    style={{
+                        color: 'red',
+                        zIndex: 2,
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        backgroundColor: 'white',
+                        width: '400px',
+                        position: 'absolute',
+                    }}
+                >
+                    <Fab
+                        onClick={toggleIsOpen}
+                        size="medium"
+                        variant="circular"
+                        color="primary"
+                        sx={{
+                            position: 'absolute',
+                            top: 25,
+                            left: 425,
+                        }}
+                    >
+                        <Close />
+                    </Fab>
+                    <input
+                        type="text"
+                        name="name"
+                        style={{
+                            marginBottom: '50px',
+                            marginRight: '10px',
+                            marginTop: '20px',
+                            height: '50px',
+                            width: '90%',
+                            fontSize: '20px',
+                            borderRadius: '10px',
+                            backgroundColor: 'lightgrey',
+                            boxShadow: '5px 3px 3px grey',
+                        }}
+                    />
+                    <div>
+                        <div
+                            style={{
+                                height: '150px',
+                                width: '90%',
+                                backgroundColor: 'red',
+                                marginBottom: '15px',
+                            }}
+                        ></div>
+                        <div
+                            style={{
+                                height: '150px',
+                                width: '90%',
+                                backgroundColor: 'blue',
+                                marginBottom: '15px',
+                            }}
+                        ></div>
+                        <div
+                            style={{
+                                height: '150px',
+                                width: '90%',
+                                backgroundColor: 'red',
+                                marginBottom: '15px',
+                            }}
+                        ></div>
+                    </div>
+                </header>
+            ) : (
+                <Fab
+                    onClick={toggleIsOpen}
+                    size="medium"
+                    variant="circular"
+                    color="primary"
+                    sx={{
+                        position: 'absolute',
+                        top: 20,
+                        left: 60,
+                    }}
+                >
+                    <Search />
+                </Fab>
+            )}
         </>
     )
 }
