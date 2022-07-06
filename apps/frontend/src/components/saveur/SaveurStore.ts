@@ -2,6 +2,8 @@ import { makeAutoObservable } from 'mobx'
 import { RestaurantsStore } from './RestaurantsStore'
 
 export class SaveurStore {
+    leftMenuIsOpen = false
+
     isReady = false
 
     restaurantsStore = new RestaurantsStore()
@@ -18,5 +20,13 @@ export class SaveurStore {
 
     async setIsReady(state: boolean) {
         this.isReady = state
+    }
+
+    setLeftMenuIsOpen(state: boolean) {
+        this.leftMenuIsOpen = state
+    }
+
+    toggeleftMenu() {
+        this.setLeftMenuIsOpen(!this.leftMenuIsOpen)
     }
 }

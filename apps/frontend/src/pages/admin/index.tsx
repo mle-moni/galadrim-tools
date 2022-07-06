@@ -1,5 +1,5 @@
 import { ChevronLeft, PersonAddAlt, Settings } from '@mui/icons-material'
-import { SvgIconTypeMap } from '@mui/material'
+import { styled, SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { Card } from '../../components/Core/Card'
 import { CustomLink } from '../../components/Core/CustomLink'
@@ -26,12 +26,17 @@ const allLinks: LinkFormat[] = [
     { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft },
 ]
 
+const StyledDiv = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+})
+
 export const AdminPage = () => {
     useRights('some', ['EVENT_ADMIN', 'RIGHTS_ADMIN', 'USER_ADMIN'], '/')
 
     return (
         <MainLayout fullscreen>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <StyledDiv>
                 <Card size="large" sx={{ width: '100%', maxWidth: 600 }}>
                     <h1 style={{ textAlign: 'center' }}>Administration</h1>
                     {allLinks.map((link) => (
@@ -41,7 +46,7 @@ export const AdminPage = () => {
                         </CustomLink>
                     ))}
                 </Card>
-            </div>
+            </StyledDiv>
         </MainLayout>
     )
 }

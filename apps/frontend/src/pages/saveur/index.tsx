@@ -1,10 +1,12 @@
-import { Close, Home, Search } from '@mui/icons-material'
+import { Close, Home, Menu } from '@mui/icons-material'
 import { Fab } from '@mui/material'
 import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react'
 import { useEffect, useMemo, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { RoundedLinks } from '../../components/Link/RoundedLinks'
+import RestaurantCard from '../../components/RestaurantCard'
 import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
 import { RestaurantMarkers } from '../../components/saveur/RestaurantMarkers'
 import { SaveurStore } from '../../components/saveur/SaveurStore'
@@ -23,6 +25,8 @@ const SaveurPage = () => {
     useEffect(() => {
         notifyUser('Work in progress', 'info', 2000)
     }, [])
+
+    const [searchTerm, setSearchTerm] = useState('')
 
     return (
         <>
@@ -81,11 +85,15 @@ const SaveurPage = () => {
                     <input
                         type="text"
                         name="name"
+                        placeholder="Rechercher"
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value)
+                        }}
                         style={{
-                            marginBottom: '50px',
+                            marginBottom: '45px',
                             marginRight: '10px',
-                            marginTop: '20px',
-                            height: '50px',
+                            marginTop: '25px',
+                            height: '40px',
                             width: '90%',
                             fontSize: '20px',
                             borderRadius: '10px',
@@ -94,30 +102,7 @@ const SaveurPage = () => {
                         }}
                     />
                     <div>
-                        <div
-                            style={{
-                                height: '150px',
-                                width: '90%',
-                                backgroundColor: 'red',
-                                marginBottom: '15px',
-                            }}
-                        ></div>
-                        <div
-                            style={{
-                                height: '150px',
-                                width: '90%',
-                                backgroundColor: 'blue',
-                                marginBottom: '15px',
-                            }}
-                        ></div>
-                        <div
-                            style={{
-                                height: '150px',
-                                width: '90%',
-                                backgroundColor: 'red',
-                                marginBottom: '15px',
-                            }}
-                        ></div>
+                        <RestaurantCard searchTerm={searchTerm} />
                     </div>
                 </header>
             ) : (
@@ -132,7 +117,7 @@ const SaveurPage = () => {
                         left: 60,
                     }}
                 >
-                    <Search />
+                    <Menu />
                 </Fab>
             )}
         </>
