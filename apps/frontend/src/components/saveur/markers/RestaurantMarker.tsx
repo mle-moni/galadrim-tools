@@ -1,7 +1,7 @@
 import L from 'leaflet'
 import { getApiUrl } from '../../../api/fetch'
 
-const MARKER_SIZE = 42
+const MARKER_SIZE = 32
 
 export const RestaurantMarkerIcon = L.icon({
     iconUrl: getApiUrl() + '/maps/restaurant_marker.png',
