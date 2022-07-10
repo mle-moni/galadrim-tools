@@ -39,7 +39,7 @@ const SaveurPage = () => {
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url="https://osm.mle-moni.fr/tile/{z}/{x}/{y}.png"
                 />
                 <Marker position={POSITION_LOCAUX_BONNE_NOUVELLE}>
                     <Popup ref={ref}>Les locaux</Popup>
