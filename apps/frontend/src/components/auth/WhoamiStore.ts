@@ -28,12 +28,27 @@ export class WhoamiStore {
     async createApiToken() {
         const res = await fetchBackendJson<ApiToken, ApiError>('/createApiToken', 'POST')
         if (res.ok) {
-            clipboardCopy(res.json.token)
+            clipboardCopy(res.json.token, {
+                success: () => {
+                    notifySuccess('API token copié dans le presse papier')
+                },
+                error: () => {
+                    console.log('%c*********** API TOKEN ***********', 'color: #4287f5')
+                    console.log(`%c${res.json.token}`, 'color: #a442f5')
+                    console.log('%c*********************************', 'color: #4287f5')
+                    notifyError(
+                        'impossible de copier dans le presse papier, ouvrez la console pour récuperer le token'
+                    )
+                },
+            })
         }
     }
 }
 
-async function clipboardCopy(text: string) {
+export async function clipboardCopy(
+    text: string,
+    { success, error }: { success: () => void; error: () => void }
+) {
     const permissions = await navigator.permissions.query({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -41,13 +56,8 @@ async function clipboardCopy(text: string) {
     })
     if (permissions.state === 'granted' || permissions.state === 'prompt') {
         await navigator.clipboard.writeText(text)
-        notifySuccess('API token copié dans le presse papier')
+        success()
         return
     }
-    console.log('%c*********** API TOKEN ***********', 'color: #4287f5')
-    console.log(`%c${text}`, 'color: #a442f5')
-    console.log('%c*********************************', 'color: #4287f5')
-    notifyError(
-        'impossible de copier dans le presse papier, ouvrez la console pour récuperer le token'
-    )
+    error()
 }

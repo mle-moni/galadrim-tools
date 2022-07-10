@@ -1,16 +1,21 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
 import { RestaurantMarkers } from '../../components/saveur/RestaurantMarkers'
 import { SaveurStore } from '../../components/saveur/SaveurStore'
+import { notifyUser } from '../../utils/notification'
 
 const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.34923]
 
 const SaveurPage = () => {
     const saveurStore = useMemo(() => new SaveurStore(), [])
+
+    useEffect(() => {
+        notifyUser('Work in progress', 'info', 2000)
+    }, [])
 
     return (
         <>
@@ -26,6 +31,7 @@ const SaveurPage = () => {
                 center={POSITION_LOCAUX_BONNE_NOUVELLE}
                 zoom={17}
                 scrollWheelZoom
+                doubleClickZoom={false}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
