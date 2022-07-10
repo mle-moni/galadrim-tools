@@ -1,26 +1,16 @@
-import { Popup as Popupt } from 'leaflet'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
 import { RestaurantMarkers } from '../../components/saveur/RestaurantMarkers'
 import { SaveurStore } from '../../components/saveur/SaveurStore'
 
-const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87025, 2.349225]
+const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.34923]
 
 const SaveurPage = () => {
     const saveurStore = useMemo(() => new SaveurStore(), [])
-
-    const ref = useRef<Popupt | null>(null)
-
-    useEffect(() => {
-        if (ref.current) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const test = ref.current as any
-            const image = test._source._icon
-            image.style.filter = 'hue-rotate(165deg)'
-        }
-    }, [ref.current])
 
     return (
         <>
@@ -41,8 +31,8 @@ const SaveurPage = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://osm.mle-moni.fr/tile/{z}/{x}/{y}.png"
                 />
-                <Marker position={POSITION_LOCAUX_BONNE_NOUVELLE}>
-                    <Popup ref={ref}>Les locaux</Popup>
+                <Marker position={POSITION_LOCAUX_BONNE_NOUVELLE} icon={HouseMarkerIcon}>
+                    <Popup offset={new L.Point(0, -20)}>Les locaux</Popup>
                 </Marker>
                 <RestaurantMarkers restaurantStore={saveurStore.restaurantsStore} />
             </MapContainer>
