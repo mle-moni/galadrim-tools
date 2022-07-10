@@ -1,4 +1,4 @@
-import { AdminPanelSettings } from '@mui/icons-material'
+import { AdminPanelSettings, Fastfood } from '@mui/icons-material'
 import StatsIcon from '@mui/icons-material/QueryStats'
 import { Box, Button, Fab, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -42,6 +42,19 @@ const HomePage = observer(() => {
             >
                 <StatsIcon />
             </Fab>
+            <Fab
+                size="medium"
+                variant="circular"
+                color="primary"
+                onClick={() => AppStore.navigate('/saveur')}
+                sx={{
+                    position: 'absolute',
+                    top: 96,
+                    left: 32,
+                }}
+            >
+                <Fastfood />
+            </Fab>
             {canSeeAdminPage && (
                 <Fab
                     size="medium"
@@ -50,7 +63,7 @@ const HomePage = observer(() => {
                     onClick={() => AppStore.navigate('/admin')}
                     sx={{
                         position: 'absolute',
-                        top: 96,
+                        top: 160,
                         left: 32,
                     }}
                 >
