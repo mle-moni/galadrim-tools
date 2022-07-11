@@ -1,4 +1,4 @@
-import { Box, styled, experimental_sx as sx } from '@mui/material'
+import { Box, experimental_sx as sx, styled } from '@mui/material'
 import { observer } from 'mobx-react'
 import { FC, PropsWithChildren, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -27,10 +27,6 @@ const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
 const MainLayout: FC<MainLayoutProps> = ({ fullscreen, children }) => {
     const navigate = useNavigate()
     const { authStore } = AppStore
-
-    useEffect(() => {
-        AppStore.setNavigation(navigate)
-    }, [])
 
     useEffect(() => {
         if (!authStore.connected && !whiteListedRoutes.includes(location.pathname)) {

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import { RenouvArtWait } from '../components/RenouvArtWait'
 import LoadingPage from '../pages/loading'
 import { AppStore } from '../stores/AppStore'
@@ -23,21 +23,7 @@ const MainRouter = () => {
             {AppStore.appIsReady ? (
                 <BrowserRouter>
                     <React.Suspense fallback={<LoadingPage />}>
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route path="/getOtp" element={<GetOtpPage />} />
-                            <Route path="/changePassword" element={<ChangePasswordPage />} />
-                            <Route path="/admin/createUser" element={<CreateUserPage />} />
-                            <Route path="/admin/rights" element={<AdminRightsPage />} />
-                            <Route path="/admin" element={<AdminPage />} />
-                            <Route path="room" element={<RoomPage />}>
-                                <Route path=":roomName" element={<RoomPage />} />
-                            </Route>
-                            <Route path="/statistics" element={<StatisticsPage />} />
-                            <Route path="/saveur" element={<SaveurPage />} />
-                            <Route path="*" element={<NotFoundPage />} />
-                        </Routes>
+                        <AppRoutes />
                     </React.Suspense>
                 </BrowserRouter>
             ) : (
@@ -49,6 +35,32 @@ const MainRouter = () => {
                 </div>
             )}
         </>
+    )
+}
+
+const AppRoutes = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        AppStore.setNavigation(navigate)
+    }, [])
+
+    return (
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/getOtp" element={<GetOtpPage />} />
+            <Route path="/changePassword" element={<ChangePasswordPage />} />
+            <Route path="/admin/createUser" element={<CreateUserPage />} />
+            <Route path="/admin/rights" element={<AdminRightsPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="room" element={<RoomPage />}>
+                <Route path=":roomName" element={<RoomPage />} />
+            </Route>
+            <Route path="/statistics" element={<StatisticsPage />} />
+            <Route path="/saveur" element={<SaveurPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+        </Routes>
     )
 }
 

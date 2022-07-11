@@ -1,8 +1,10 @@
+import { Home } from '@mui/icons-material'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react'
 import { useEffect, useMemo } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { RoundedLinks } from '../../components/Link/RoundedLinks'
 import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
 import { RestaurantMarkers } from '../../components/saveur/RestaurantMarkers'
 import { SaveurStore } from '../../components/saveur/SaveurStore'
@@ -19,19 +21,22 @@ const SaveurPage = () => {
 
     return (
         <>
+            <RoundedLinks linkInfos={[{ Icon: Home, link: '/' }]} />
             <MapContainer
                 style={{
                     width: '100%',
                     height: '100%',
-                    zIndex: 1,
+                    zIndex: 5,
                     position: 'absolute',
                     left: '0px',
                     top: '0px',
                 }}
                 center={POSITION_LOCAUX_BONNE_NOUVELLE}
                 zoom={17}
+                maxZoom={18}
                 scrollWheelZoom
                 doubleClickZoom={false}
+                zoomControl={false}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
