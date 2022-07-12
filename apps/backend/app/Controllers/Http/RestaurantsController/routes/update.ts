@@ -1,4 +1,5 @@
 import { hasRights } from '@galadrim-rooms/shared'
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Restaurant from '../../../../Models/Restaurant'
 import RestaurantTag from '../../../../Models/RestaurantTag'
@@ -7,16 +8,19 @@ import { validateRestaurantsParams } from './store'
 
 type PromiseType<T> = T extends Promise<infer U> ? U : never
 
-const updateRestaurantScalars = async (
-    restaurant: Restaurant,
-    input: PromiseType<ReturnType<typeof validateRestaurantsParams>>
-) => {
-    const { name, description, lat, lng } = input
+type RestaurantValidatedInput = PromiseType<ReturnType<typeof validateRestaurantsParams>>
+
+const updateRestaurantScalars = async (restaurant: Restaurant, input: RestaurantValidatedInput) => {
+    const { name, description, lat, lng, image } = input
 
     restaurant.name = name
     restaurant.description = description
     restaurant.lat = lat
     restaurant.lng = lng
+
+    if (image) {
+        restaurant.image = Attachment.fromFile(image)
+    }
 
     await restaurant.save()
 }

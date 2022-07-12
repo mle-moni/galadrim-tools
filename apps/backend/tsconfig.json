@@ -1,11 +1,15 @@
 {
     // "extends": "../../node_modules/adonis-preset-ts/tsconfig",
     "extends": "../../tsconfig.base.json",
-    "include": ["**/*"],
+    "include": [
+        "**/*"
+    ],
     "compilerOptions": {
         "target": "ES2020",
         "module": "commonjs",
-        "lib": ["ES2020"],
+        "lib": [
+            "ES2020"
+        ],
         "noUnusedLocals": true,
         "incremental": true,
         "noUnusedParameters": true,
@@ -22,7 +26,8 @@
             "@adonisjs/session",
             "@adonisjs/mail",
             "@adonisjs/view",
-            "@japa/preset-adonis/build/adonis-typings"
+            "@japa/preset-adonis/build/adonis-typings",
+            "@adonisjs/attachment-lite"
         ]
     }
 }

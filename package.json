@@ -11,6 +11,7 @@
         "libs/*"
     ],
     "dependencies": {
+        "@adonisjs/attachment-lite": "^1.0.7",
         "@adonisjs/auth": "^8.1.0",
         "@adonisjs/core": "^5.7.5",
         "@adonisjs/lucid": "^17.2.0",

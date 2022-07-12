@@ -1,3 +1,4 @@
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column, ManyToMany, manyToMany, ModelObject } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import Tag from './Tag'
@@ -18,8 +19,8 @@ export default class Restaurant extends BaseModel {
     @column()
     public lng: number
 
-    @column()
-    public image: string
+    @attachment({ folder: 'restaurant', preComputeUrl: true })
+    public image: AttachmentContract | null
 
     @manyToMany(() => Tag)
     public tags: ManyToMany<typeof Tag>
