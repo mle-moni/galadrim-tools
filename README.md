@@ -43,13 +43,18 @@ it will launch a mysql server on the port 3310 you can edit this in [docker-comp
 
 -   `cd ./apps/backend`
 -   `node ace migration:run`
+-   `node ace db:seed`
 
 ## Start project
 
-you need to be at the root of the project, then you can run:
-`nx dev backend`
-and
-`nx dev frontend`
+-   at the root of the project run:
+    `nx dev backend`
+    and
+    `nx dev frontend`
+
+-   go to http://localhost:3000
+
+-   login with the login / password of any of the users defined in this [seeder file](./apps/backend/database/seeders/001_UserSeeder.ts)
 
 ## Adonis CLI tool
 
