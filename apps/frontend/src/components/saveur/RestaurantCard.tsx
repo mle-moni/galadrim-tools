@@ -1,4 +1,4 @@
-import { IRestaurant } from '@galadrim-rooms/shared'
+import { IImage, IRestaurant } from '@galadrim-rooms/shared'
 import { Close, Room } from '@mui/icons-material'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import Button from '@mui/material/Button'
@@ -12,11 +12,13 @@ import { getApiUrl } from '../../api/fetch'
 import { MAX_ZOOM } from '../../pages/saveur'
 import { SaveurStore } from './SaveurStore'
 
-const getImageUrl = (url: string) => {
-    if (url.startsWith('http')) {
-        return url
+export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
+
+const getImageUrl = (image: IImage | null) => {
+    if (image === null) {
+        return `${getApiUrl()}${DEFAULT_RESTAURANT_IMAGE_PATH}`
     }
-    return `${getApiUrl()}${url}`
+    return `${getApiUrl()}${image.url}`
 }
 
 interface RestaurantCardProps {

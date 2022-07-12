@@ -3,6 +3,14 @@ export interface ITag {
     name: string
 }
 
+export interface IImage {
+    url: string
+    name: string
+    extname: 'png' | 'jpg' | 'jpeg'
+    size: number
+    mimeType: 'image/png' | 'image/jpeg'
+}
+
 export interface IRestaurant {
     id: number
     name: string
@@ -10,5 +18,5 @@ export interface IRestaurant {
     lat: number
     lng: number
     tags: ITag[]
-    image: string
+    image: IImage | null
 }

@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react'
 import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { fetchBackendJson } from '../api/fetch'
 import { RenouvArtWait } from '../components/RenouvArtWait'
 import LoadingPage from '../pages/loading'
 import { AppStore } from '../stores/AppStore'
@@ -38,6 +39,35 @@ const MainRouter = () => {
     )
 }
 
+const Test = () => {
+    return (
+        <>
+            <form
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    const form = new FormData(e.target as ConstructorParameters<typeof FormData>[0])
+                    const tagIds = [1]
+                    tagIds.forEach((id) => form.append('tags[]', id.toString()))
+                    fetchBackendJson('/restaurants', 'POST', {
+                        body: form,
+                    })
+                }}
+            >
+                <input type="text" name="name" defaultValue={'testname'} />
+                <input type="text" name="description" defaultValue={'description'} />
+                <input type="text" name="lat" defaultValue={'1.1'} />
+                <input type="text" name="lng" defaultValue={'1.1'} />
+                <input type="file" accept="image/png" name="image" />
+                <button>send</button>
+            </form>
+        </>
+    )
+}
+
 const AppRoutes = () => {
     const navigate = useNavigate()
 
@@ -59,6 +89,7 @@ const AppRoutes = () => {
             </Route>
             <Route path="/statistics" element={<StatisticsPage />} />
             <Route path="/saveur" element={<SaveurPage />} />
+            <Route path="/test" element={<Test />} />
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
     )
