@@ -1,5 +1,7 @@
 import { ITag } from '@galadrim-rooms/shared'
+import { AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material'
 import { makeAutoObservable } from 'mobx'
+import { SyntheticEvent } from 'react'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { notifyError, notifySuccess } from '../../utils/notification'
 
@@ -11,7 +13,7 @@ export class CreateRestaurantStore {
     public coordinates = ''
     public lat = 0
     public lng = 0
-    public tags = []
+    public tags: ITag[] = []
     public image = ''
 
     constructor() {
@@ -32,9 +34,9 @@ export class CreateRestaurantStore {
         this.coordinates = coord
     }
 
-    // setTags(tags: ITag[]) {
-    //     this.tags = tags
-    // }
+    setTags(tags: ITag[]) {
+        this.tags = tags
+    }
 
     setImage(image: string) {
         this.image = image
@@ -52,29 +54,41 @@ export class CreateRestaurantStore {
     }
 
     async createRestaurant() {
-        // const data = new FormData()
-        // data.append('name', this.name)
-        // data.append('description', this.description)
-        // data.append('lat', String(this.lat))
-        // data.append('lng', String(this.lng))
+
+        const data = new FormData()
+        data.append('name', this.name)
+        data.append('description', this.description)
+        data.append('lat', String(this.lat))
+        data.append('lng', String(this.lng))
+        this.tags.forEach((tag: ITag) => data.append('tags[]', tag.id.toString()))
+        
+
         // data.append('tags', JSON.stringify(this.tags))
         // data.append('image', this.image)
+        
+
+        
+        // const res = await fetchBackendJson('/restaurants', 'POST', {
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({
+        //         name: this.name,
+        //         description: this.description,
+        //         lat: this.lat,
+        //         lng: this.lng,
+        //         tags: this.tags,
+        //         image: this.image,
+        //     }),
+        // })
+
         const res = await fetchBackendJson('/restaurants', 'POST', {
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name: this.name,
-                description: this.description,
-                lat: this.lat,
-                lng: this.lng,
-                tags: this.tags,
-                image: this.image,
-            }),
+            body: data,
         })
         if (res.ok) {
             notifySuccess(`Le restaurant ${this.name} a été créé !`)
             this.setName('')
             this.setDescription('')
             this.setCoordinates('')
+            // this.setTags([])
             this.setImage('')
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}`))

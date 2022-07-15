@@ -1,4 +1,4 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, ModelObject } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 
 export default class Tag extends BaseModel {
@@ -13,4 +13,19 @@ export default class Tag extends BaseModel {
 
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
+
+    toJSON(): ModelObject {
+        return this.serialize({
+            fields: {
+                omit: ['created_at', 'updated_at'],
+            },
+            relations: {
+                tags: {
+                    fields: {
+                        omit: ['created_at', 'updated_at'],
+                    },
+                },
+            },
+        })
+    }
 }
