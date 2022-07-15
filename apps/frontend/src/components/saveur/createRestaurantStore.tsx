@@ -2,10 +2,11 @@ import { ITag } from '@galadrim-rooms/shared'
 import { AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material'
 import { makeAutoObservable } from 'mobx'
 import { SyntheticEvent } from 'react'
+import { File } from 'vitest'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { notifyError, notifySuccess } from '../../utils/notification'
 
-// TODO: add setTags
+// TODO: handle image upload
 
 export class CreateRestaurantStore {
     public name = ''
@@ -14,7 +15,7 @@ export class CreateRestaurantStore {
     public lat = 0
     public lng = 0
     public tags: ITag[] = []
-    public image = ''
+    public image: Blob | null = null
 
     constructor() {
         makeAutoObservable(this)
@@ -38,8 +39,8 @@ export class CreateRestaurantStore {
         this.tags = tags
     }
 
-    setImage(image: string) {
-        this.image = image
+    setImage(image: Blob  | null) {
+        this.image = image;
     }
 
     get canCreateRestaurant() {
@@ -49,7 +50,8 @@ export class CreateRestaurantStore {
             this.lat !== 0 &&
             !Number.isNaN(this.lat) &&
             this.lng !== 0 &&
-            !Number.isNaN(this.lng)
+            !Number.isNaN(this.lng) &&
+            this.tags.length
         )
     }
 
@@ -61,12 +63,8 @@ export class CreateRestaurantStore {
         data.append('lat', String(this.lat))
         data.append('lng', String(this.lng))
         this.tags.forEach((tag: ITag) => data.append('tags[]', tag.id.toString()))
-        
-
-        // data.append('tags', JSON.stringify(this.tags))
-        // data.append('image', this.image)
-        
-
+        if (this.image)
+            data.append('image', this.image)
         
         // const res = await fetchBackendJson('/restaurants', 'POST', {
         //     headers: {'Content-Type': 'application/json'},
@@ -88,8 +86,8 @@ export class CreateRestaurantStore {
             this.setName('')
             this.setDescription('')
             this.setCoordinates('')
-            // this.setTags([])
-            this.setImage('')
+            this.setTags([])
+            this.setImage(null)
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}`))
         }
