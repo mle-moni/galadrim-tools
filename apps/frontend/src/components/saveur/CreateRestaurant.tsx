@@ -80,7 +80,7 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                             {...params}
                             label={
                                 <Fragment>
-                                    <Style /> Tags
+                                    <Style />
                                 </Fragment>
                             }
                             placeholder="Ajouter des tags"
@@ -88,20 +88,10 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                     )}
                     sx={{ mt: 2 }}
                 />
-                <OutlinedInput
-                    value={createRestaurantStore.image}
-                    onChange={(e) => {
-                        createRestaurantStore.setImage(e.target.value)
-                    }}
-                    fullWidth
-                    placeholder="Image URL (optionnel)"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <Image />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
-                />
+                <Button variant="contained" component="label" sx={{ my: 2 }}>
+                    Upload Image
+                    <input type="file" hidden accept='image/jpg, image/png'/>
+                </Button>
                 <Button
                     fullWidth
                     variant="contained"
