@@ -47,7 +47,7 @@ const SaveurPage = () => {
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://osm.mle-moni.fr/tile/{z}/{x}/{y}.png"
+                    url="https://worldtiles3.waze.com/tiles/{z}/{x}/{y}.png"
                 />
                 <Marker position={POSITION_LOCAUX_BONNE_NOUVELLE} icon={HouseMarkerIcon}>
                     <Popup offset={new L.Point(0, -20)}>Les locaux</Popup>

@@ -1,14 +1,17 @@
-import { Message, Person, Storefront, LocationOn, Style, Image } from '@mui/icons-material'
+import { IRestaurant, ITag } from '@galadrim-rooms/shared'
+import { Message, Storefront, LocationOn, Style, Image, BarChartTwoTone } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button, InputAdornment, OutlinedInput } from '@mui/material'
+import { Autocomplete, Button, InputAdornment, OutlinedInput, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
+import { fetchTags } from '../../api/tags'
 import { GaladrimLogo } from '../Branding/GaladrimLogo'
 import { Card } from '../Core/Card'
 import { CustomLink } from '../Core/CustomLink'
 import { CreateRestaurantStore } from './createRestaurantStore'
+import { SaveurStore } from './SaveurStore'
 
-export const CreateRestaurant = observer(() => {
+export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const createRestaurantStore = useMemo(() => new CreateRestaurantStore(), [])
 
     return (
@@ -62,14 +65,27 @@ export const CreateRestaurant = observer(() => {
                     }
                     sx={{ mt: 2 }}
                 />
-                <OutlinedInput
-                    fullWidth
-                    placeholder="Tags (optionnel)"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <Style />
-                        </InputAdornment>
-                    }
+                <Autocomplete
+                    multiple
+                    id="tags"
+                    value={createRestaurantStore.tags}
+                    onChange={(event, newValue) => {
+                        createRestaurantStore.setTags(newValue)
+                    }}
+                    options={saveurStore.tagsStore.tags}
+                    getOptionLabel={(option) => option.name}
+                    filterSelectedOptions
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label={
+                                <Fragment>
+                                    <Style /> Tags
+                                </Fragment>
+                            }
+                            placeholder="Ajouter des tags"
+                        />
+                    )}
                     sx={{ mt: 2 }}
                 />
                 <OutlinedInput
