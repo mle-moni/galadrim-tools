@@ -39,8 +39,9 @@ export class CreateRestaurantStore {
         this.tags = tags
     }
 
-    setImage(image: Blob  | null) {
-        this.image = image;
+    setImage() {
+        const tmp = document.getElementById('image') as HTMLInputElement
+        if (tmp) this.image = tmp.files ? tmp.files[0] : null
     }
 
     get canCreateRestaurant() {
@@ -56,16 +57,14 @@ export class CreateRestaurantStore {
     }
 
     async createRestaurant() {
-
         const data = new FormData()
         data.append('name', this.name)
         data.append('description', this.description)
         data.append('lat', String(this.lat))
         data.append('lng', String(this.lng))
         this.tags.forEach((tag: ITag) => data.append('tags[]', tag.id.toString()))
-        if (this.image)
-            data.append('image', this.image)
-        
+        if (this.image) data.append('image', this.image)
+
         // const res = await fetchBackendJson('/restaurants', 'POST', {
         //     headers: {'Content-Type': 'application/json'},
         //     body: JSON.stringify({
@@ -87,7 +86,6 @@ export class CreateRestaurantStore {
             this.setDescription('')
             this.setCoordinates('')
             this.setTags([])
-            this.setImage(null)
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}`))
         }

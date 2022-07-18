@@ -21,9 +21,7 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
 }
 
 export const storeRoute = async ({ request }: HttpContextContract) => {
-    console.log(request)
     const { name, description, lat, lng, tags, image } = await validateRestaurantsParams(request)
-    if (image) console.log('IMAGE Is real')
     const restaurant = await Restaurant.create({
         name,
         description,
