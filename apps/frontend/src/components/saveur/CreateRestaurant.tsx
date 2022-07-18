@@ -89,8 +89,15 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                     sx={{ mt: 2 }}
                 />
                 <Button variant="contained" component="label" sx={{ my: 2 }}>
-                    Upload Image
-                    <input type="file" hidden accept='image/jpg, image/png'/>
+                    Upload image
+                    <input
+                        type="file"
+                        hidden
+                        accept="image/jpg, image/png"
+                        id="image"
+                        multiple
+                        onChange={(e) => createRestaurantStore.setImage()}
+                    />
                 </Button>
                 <Button
                     fullWidth
