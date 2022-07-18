@@ -96,7 +96,7 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                         accept="image/jpg, image/png"
                         id="image"
                         multiple
-                        onChange={(e) => createRestaurantStore.setImage()}
+                        onChange={(e) => createRestaurantStore.setUploadedImage()}
                     />
                 </Button>
                 <Button

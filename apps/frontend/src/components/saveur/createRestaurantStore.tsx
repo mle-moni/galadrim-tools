@@ -39,9 +39,15 @@ export class CreateRestaurantStore {
         this.tags = tags
     }
 
-    setImage() {
+    setUploadedImage() {
         const tmp = document.getElementById('image') as HTMLInputElement
-        if (tmp) this.image = tmp.files ? tmp.files[0] : null
+        var image: Blob | null = null
+        if (tmp) image  = tmp.files ? tmp.files[0] : null
+        this.setImage(image)
+    }
+
+    setImage(image: Blob | null) {
+        this.image = image;
     }
 
     get canCreateRestaurant() {
@@ -86,6 +92,7 @@ export class CreateRestaurantStore {
             this.setDescription('')
             this.setCoordinates('')
             this.setTags([])
+            this.setImage(null)
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}`))
         }
