@@ -1,3 +1,4 @@
+import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Restaurant from '../../../../Models/Restaurant'
@@ -10,6 +11,7 @@ const StoreValidationSchema = schema.create({
     lat: schema.number(),
     lng: schema.number(),
     tags: schema.array().members(schema.number([rules.exists({ table: 'tags', column: 'id' })])),
+    image: schema.file.optional({ extnames: ['jpg', 'png'], size: '1mb' }),
 })
 
 export const validateRestaurantsParams = async (request: HttpContextContract['request']) => {
@@ -19,12 +21,13 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
 }
 
 export const storeRoute = async ({ request }: HttpContextContract) => {
-    const { name, description, lat, lng, tags } = await validateRestaurantsParams(request)
+    const { name, description, lat, lng, tags, image } = await validateRestaurantsParams(request)
     const restaurant = await Restaurant.create({
         name,
         description,
         lat,
         lng,
+        image: image ? Attachment.fromFile(image) : undefined,
     })
 
     await RestaurantTag.createMany(tags.map((tagId) => ({ restaurantId: restaurant.id, tagId })))

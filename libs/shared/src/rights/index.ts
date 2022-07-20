@@ -15,3 +15,9 @@ export const hasRights = (rights: number, rightsWanted: AllRights[]) => {
 export const hasSomeRights = (rights: number, rightsWanted: AllRights[]) => {
     return rightsWanted.some((right) => hasRights(rights, [right]))
 }
+
+export const generateRights = (rightsWanted: AllRights[]) => {
+    const rightsSet = new Set(rightsWanted)
+    const rights = Array.from(rightsSet)
+    return rights.reduce<number>((acc, curr) => acc + RIGHTS[curr], RIGHTS.DEFAULT)
+}

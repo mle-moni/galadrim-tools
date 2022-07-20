@@ -1,4 +1,4 @@
-import { AllRights, hasRights, RIGHTS } from '../rights'
+import { AllRights, generateRights, hasRights, RIGHTS } from '../rights'
 
 describe('rights', () => {
     it('hasRights', () => {
@@ -36,6 +36,33 @@ describe('rights', () => {
 
         for (const { rights, rightsWanted, expected } of samples) {
             expect(hasRights(rights, rightsWanted)).toEqual(expected)
+        }
+    })
+
+    it('generateRights', () => {
+        const samples: { rightsWanted: AllRights[]; rightsExpected: number }[] = [
+            {
+                rightsWanted: [],
+                rightsExpected: RIGHTS.DEFAULT,
+            },
+            {
+                rightsWanted: ['EVENT_ADMIN', 'USER_ADMIN'],
+                rightsExpected: RIGHTS.EVENT_ADMIN + RIGHTS.USER_ADMIN,
+            },
+            {
+                rightsWanted: [
+                    'EVENT_ADMIN',
+                    'USER_ADMIN',
+                    'MIAM_ADMIN',
+                    'USER_ADMIN',
+                    'EVENT_ADMIN',
+                ],
+                rightsExpected: RIGHTS.EVENT_ADMIN + RIGHTS.USER_ADMIN + RIGHTS.MIAM_ADMIN,
+            },
+        ]
+
+        for (const { rightsWanted, rightsExpected } of samples) {
+            expect(generateRights(rightsWanted)).toEqual(rightsExpected)
         }
     })
 })
