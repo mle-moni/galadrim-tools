@@ -1,12 +1,7 @@
 import { ITag } from '@galadrim-rooms/shared'
-import { AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material'
 import { makeAutoObservable } from 'mobx'
-import { SyntheticEvent } from 'react'
-import { File } from 'vitest'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { notifyError, notifySuccess } from '../../utils/notification'
-
-// TODO: handle image upload
 
 export class CreateRestaurantStore {
     public name = ''
@@ -15,7 +10,7 @@ export class CreateRestaurantStore {
     public lat = 0
     public lng = 0
     public tags: ITag[] = []
-    public image: Blob | null = null
+    public image: File | null = null
 
     constructor() {
         makeAutoObservable(this)
@@ -39,15 +34,13 @@ export class CreateRestaurantStore {
         this.tags = tags
     }
 
-    setUploadedImage() {
-        const tmp = document.getElementById('image') as HTMLInputElement
-        var image: Blob | null = null
-        if (tmp) image  = tmp.files ? tmp.files[0] : null
+    setUploadedImage(input: HTMLInputElement) {
+        const image: File | null = input.files && input.files.length >= 1 ? input.files[0] : null
         this.setImage(image)
     }
 
-    setImage(image: Blob | null) {
-        this.image = image;
+    setImage(image: File | null) {
+        this.image = image
     }
 
     get canCreateRestaurant() {
@@ -69,23 +62,15 @@ export class CreateRestaurantStore {
         data.append('lat', String(this.lat))
         data.append('lng', String(this.lng))
         this.tags.forEach((tag: ITag) => data.append('tags[]', tag.id.toString()))
-        if (this.image) data.append('image', this.image)
 
-        // const res = await fetchBackendJson('/restaurants', 'POST', {
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({
-        //         name: this.name,
-        //         description: this.description,
-        //         lat: this.lat,
-        //         lng: this.lng,
-        //         tags: this.tags,
-        //         image: this.image,
-        //     }),
-        // })
+        if (this.image) {
+            data.append('image', this.image)
+        }
 
         const res = await fetchBackendJson('/restaurants', 'POST', {
             body: data,
         })
+
         if (res.ok) {
             notifySuccess(`Le restaurant ${this.name} a été créé !`)
             this.setName('')

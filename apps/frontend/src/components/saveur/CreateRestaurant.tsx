@@ -1,10 +1,8 @@
-import { IRestaurant, ITag } from '@galadrim-rooms/shared'
-import { Message, Storefront, LocationOn, Style, Image, BarChartTwoTone } from '@mui/icons-material'
+import { LocationOn, Message, Storefront, Style } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Autocomplete, Button, InputAdornment, OutlinedInput, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { Fragment, useMemo } from 'react'
-import { fetchTags } from '../../api/tags'
 import { GaladrimLogo } from '../Branding/GaladrimLogo'
 import { Card } from '../Core/Card'
 import { CustomLink } from '../Core/CustomLink'
@@ -69,11 +67,12 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                     multiple
                     id="tags"
                     value={createRestaurantStore.tags}
-                    onChange={(event, newValue) => {
+                    onChange={(_, newValue) => {
                         createRestaurantStore.setTags(newValue)
                     }}
                     options={saveurStore.tagsStore.tags}
                     getOptionLabel={(option) => option.name}
+                    noOptionsText="Pas de tags trouvés"
                     filterSelectedOptions
                     renderInput={(params) => (
                         <TextField
@@ -89,16 +88,19 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                     sx={{ mt: 2 }}
                 />
                 <Button variant="contained" component="label" sx={{ my: 2 }}>
-                    Upload image
+                    Ajouter une image
                     <input
                         type="file"
                         hidden
                         accept="image/jpg, image/png"
                         id="image"
                         multiple
-                        onChange={(e) => createRestaurantStore.setUploadedImage()}
+                        onChange={(e) => createRestaurantStore.setUploadedImage(e.target)}
                     />
                 </Button>
+                {createRestaurantStore.image !== null && (
+                    <span style={{ marginLeft: '12px' }}>({createRestaurantStore.image.name})</span>
+                )}
                 <Button
                     fullWidth
                     variant="contained"

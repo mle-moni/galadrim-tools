@@ -1,22 +1,15 @@
+import { ApiError, ApiNotification, IUserData } from '@galadrim-rooms/shared'
 import { makeAutoObservable } from 'mobx'
-import { ApiError, ApiNotification, fetchBackendJson, getErrorMessage } from '../api/fetch'
+import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
 
 const CHANGE_PASSWORD_INTENT = 'changePassword' as const
 
-export interface ApiUser {
-    id: number
-    username: string
-    socketToken: string
-    imageUrl: string
-    rights: number
-}
-
 export class AuthStore {
     public connected = false
 
-    private _user: ApiUser | null = null
+    private _user: IUserData | null = null
 
     public email = localStorage.getItem('email') || ''
 
@@ -27,7 +20,7 @@ export class AuthStore {
     }
 
     async init() {
-        const res = await fetchBackendJson<ApiUser, ApiError>('/me')
+        const res = await fetchBackendJson<IUserData, ApiError>('/me')
         if (res.ok) {
             this.setUser(res.json)
             AppStore.socketStore.connect()
@@ -47,7 +40,7 @@ export class AuthStore {
         if (!this.canAuthenticate) return
         data.append('email', this.email)
         data.append('password', this.password)
-        const res = await fetchBackendJson<ApiUser, ApiError>('/login', 'POST', { body: data })
+        const res = await fetchBackendJson<IUserData, ApiError>('/login', 'POST', { body: data })
         if (!res.ok) {
             notifyError('Adresse mail ou mot de passe incorrect')
             return
@@ -72,7 +65,7 @@ export class AuthStore {
         notifySuccess('Vous êtes bien déconnecté')
     }
 
-    setUser(user: ApiUser | null) {
+    setUser(user: IUserData | null) {
         if (!user) {
             this._user = null
             this.connected = false
