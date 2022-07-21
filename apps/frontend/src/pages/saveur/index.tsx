@@ -1,19 +1,19 @@
+import { Home } from '@mui/icons-material'
+import AddIcon from '@mui/icons-material/Add'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Box } from '@mui/material'
-import { Home } from '@mui/icons-material'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { CustomLink } from '../../components/Core/CustomLink'
+import { RoundedLinks } from '../../components/Link/RoundedLinks'
 import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
 import { RestaurantMarkers } from '../../components/saveur/RestaurantMarkers'
 import { SaveurLeftMenu } from '../../components/saveur/SaveurLeftMenu'
 import { SaveurStore } from '../../components/saveur/SaveurStore'
 import { notifyUser } from '../../utils/notification'
-import AddIcon from '@mui/icons-material/Add'
-import { RoundedLinks } from '../../components/Link/RoundedLinks'
 
 export const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.34923]
 
@@ -28,7 +28,13 @@ const SaveurPage = () => {
 
     return (
         <>
-            <RoundedLinks linkInfos={[{ Icon: Home, link: '/' },  { Icon: AddIcon, link: '/saveur/createRestaurant' }]} />
+            <RoundedLinks
+                linkInfos={[
+                    { Icon: Home, link: '/' },
+                    { Icon: AddIcon, link: '/saveur/createRestaurant' },
+                ]}
+                horizontalPosition="right"
+            />
             <MapContainer
                 style={{
                     width: '100%',

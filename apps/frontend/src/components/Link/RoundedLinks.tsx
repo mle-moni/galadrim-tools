@@ -11,11 +11,14 @@ interface LinkInfo {
     hidden?: boolean
 }
 
-const POS_TOP = 32
-const POS_LEFT = 32
+const POS_OFFSET = 32
 const POS_INCREMENT = 64
 
-export const RoundedLinks: FC<{ linkInfos: LinkInfo[] }> = ({ linkInfos }) => {
+export const RoundedLinks: FC<{
+    linkInfos: LinkInfo[]
+    horizontalPosition?: 'left' | 'right'
+    verticalPosition?: 'top' | 'bottom'
+}> = ({ linkInfos, horizontalPosition = 'left', verticalPosition = 'top' }) => {
     const visibleLinks = linkInfos.filter(({ hidden }) => hidden !== true)
 
     return (
@@ -29,8 +32,8 @@ export const RoundedLinks: FC<{ linkInfos: LinkInfo[] }> = ({ linkInfos }) => {
                     onClick={() => AppStore.navigate(link)}
                     sx={{
                         position: 'absolute',
-                        top: POS_TOP + POS_INCREMENT * index,
-                        left: POS_LEFT,
+                        [verticalPosition]: POS_OFFSET + POS_INCREMENT * index,
+                        [horizontalPosition]: POS_OFFSET,
                     }}
                 >
                     <Icon />
