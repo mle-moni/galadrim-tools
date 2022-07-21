@@ -1,5 +1,6 @@
+import { ApiError } from '@galadrim-rooms/shared'
 import { makeAutoObservable } from 'mobx'
-import { ApiError, fetchBackendJson } from '../../api/fetch'
+import { fetchBackendJson } from '../../api/fetch'
 import { notifyError, notifySuccess } from '../../utils/notification'
 
 export type ApiToken = {

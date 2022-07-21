@@ -1,7 +1,8 @@
+import { ApiError } from '@galadrim-rooms/shared'
 import { autorun, makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
 import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
-import { ApiError, fetchBackendJson } from '../api/fetch'
+import { fetchBackendJson } from '../api/fetch'
 import { notifyError } from '../utils/notification'
 
 export type RoomEvent = {
