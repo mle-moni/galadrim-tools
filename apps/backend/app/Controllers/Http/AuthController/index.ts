@@ -4,6 +4,7 @@ import { createApiTokenRoute } from './routes/getApiToken'
 import { getOtpRoute } from './routes/getOtp'
 import { loginRoute } from './routes/login'
 import { logoutRoute } from './routes/logout'
+import { meRoute } from './routes/me'
 
 export default class EventsController {
     public async login(params: HttpContextContract) {
@@ -15,7 +16,7 @@ export default class EventsController {
     }
 
     public async me(params: HttpContextContract) {
-        return params.auth.user!.userData()
+        return meRoute(params)
     }
 
     public async createApiToken(params: HttpContextContract) {

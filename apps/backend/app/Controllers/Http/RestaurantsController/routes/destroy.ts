@@ -5,6 +5,7 @@ import Ws from '../../../../Services/Ws'
 
 export const destroyRoute = async ({ params, auth, response }: HttpContextContract) => {
     const restaurant = await Restaurant.findOrFail(params.id)
+
     const user = auth.user!
     if (!hasRights(user.rights, ['MIAM_ADMIN'])) {
         return response.forbidden({ error: `Vous n'avez pas les droits nécessaires` })

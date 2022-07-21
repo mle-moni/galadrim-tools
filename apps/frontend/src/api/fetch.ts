@@ -1,19 +1,4 @@
-export type ApiFormError = {
-    rule: string
-    field: string
-    message: string
-}
-export interface ApiErrors {
-    errors: ApiFormError[]
-}
-
-export interface ApiNotification {
-    notification: string
-}
-
-export interface ApiError {
-    error: string
-}
+import { ApiError, ApiErrors } from '@galadrim-rooms/shared'
 
 export const getSocketApiUrl = () => {
     const url = import.meta.env.VITE_SOCKET_API_URL

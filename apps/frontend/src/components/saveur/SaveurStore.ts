@@ -2,6 +2,7 @@ import { _assert } from '@galadrim-rooms/shared'
 import L from 'leaflet'
 import { makeAutoObservable } from 'mobx'
 import { RestaurantsStore } from './RestaurantsStore'
+import { TagsStore } from './TagsStore'
 
 export class SaveurStore {
     private _leafletMap?: L.Map = undefined
@@ -11,6 +12,7 @@ export class SaveurStore {
     isReady = false
 
     restaurantsStore = new RestaurantsStore()
+    tagsStore = new TagsStore()
 
     constructor() {
         makeAutoObservable(this)
@@ -19,6 +21,7 @@ export class SaveurStore {
 
     async init() {
         await this.restaurantsStore.fetch()
+        await this.tagsStore.fetch()
         this.setIsReady(true)
     }
 
