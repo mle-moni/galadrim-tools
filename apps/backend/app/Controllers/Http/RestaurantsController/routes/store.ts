@@ -34,5 +34,7 @@ export const storeRoute = async ({ request }: HttpContextContract) => {
 
     Ws.io.to('connectedSockets').emit('createRestaurant', restaurant)
 
+    await restaurant.load('tags')
+
     return restaurant
 }

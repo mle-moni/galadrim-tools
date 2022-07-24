@@ -23,7 +23,11 @@ export class RestaurantsStore {
 
     setRestaurants(restaurants: IRestaurant[]) {
         this.restaurants = restaurants
-        this._fuseInstance = new Fuse(restaurants, fuseSettings)
+        this.refreshFuse()
+    }
+
+    refreshFuse() {
+        this._fuseInstance = new Fuse(this.restaurants, fuseSettings)
     }
 
     async fetch() {
@@ -48,5 +52,29 @@ export class RestaurantsStore {
         if (resto) {
             this.setSearch('')
         }
+    }
+
+    addRestaurant(restaurant: IRestaurant) {
+        this.restaurants.push(restaurant)
+        this.refreshFuse()
+    }
+
+    editRestaurant(restaurant: IRestaurant) {
+        const restaurantFound = this.restaurants.find(({ id }) => restaurant.id === id)
+        if (!restaurantFound) {
+            this.addRestaurant(restaurant)
+            return
+        }
+        restaurantFound.name = restaurant.name
+        restaurantFound.description = restaurant.description
+        restaurantFound.lat = restaurant.lat
+        restaurantFound.lng = restaurant.lng
+        restaurantFound.tags = restaurant.tags.map(({ id, name }) => ({ id, name }))
+        if (restaurant.image === null) {
+            restaurantFound.image = null
+            return
+        }
+        restaurantFound.image = { ...restaurant.image }
+        this.refreshFuse()
     }
 }

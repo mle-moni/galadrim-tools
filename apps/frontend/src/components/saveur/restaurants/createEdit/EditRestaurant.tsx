@@ -26,7 +26,9 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
 
     const createRestaurantStore = useMemo(
         () =>
-            props.mode === 'edit' ? new RestaurantStore(props.restaurant) : new RestaurantStore(),
+            props.mode === 'edit'
+                ? new RestaurantStore(saveurStore.restaurantsStore, props.restaurant)
+                : new RestaurantStore(saveurStore.restaurantsStore),
         []
     )
 
@@ -95,6 +97,7 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     options={saveurStore.tagsStore.tags}
                     getOptionLabel={(option) => option.name}
                     noOptionsText="Pas de tags trouvés"
+                    isOptionEqualToValue={(option, value) => option.name === value.name}
                     filterSelectedOptions
                     renderInput={(params) => (
                         <TextField
@@ -114,7 +117,7 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     <input
                         type="file"
                         hidden
-                        accept="image/jpg, image/png"
+                        accept="image/*"
                         id="image"
                         multiple
                         onChange={(e) => createRestaurantStore.setUploadedImage(e.target)}
