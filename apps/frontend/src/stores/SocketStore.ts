@@ -39,7 +39,7 @@ export class SocketStore {
         this.socket.on('createRestaurant', (restaurant) => this.createRestaurant(restaurant))
         this.socket.on('updateRestaurant', (restaurant) => this.updateRestaurant(restaurant))
         this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
-        this.socket.on('fetchEvents', () => AppStore.eventsStore.fetchEvents())
+        this.socket.on('fetchAll', () => AppStore.fetchAll())
     }
 
     socketAuth() {

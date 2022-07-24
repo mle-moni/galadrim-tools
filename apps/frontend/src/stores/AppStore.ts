@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { NavigateFunction } from 'react-router-dom'
-import { fetchGaladrimeurs, fetchUsers, UserData } from '../api/galadrimeurs'
+import { fetchUsers, UserData } from '../api/galadrimeurs'
 import { SaveurStore } from '../components/saveur/SaveurStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
@@ -11,8 +11,6 @@ export class MainStore {
     private _navigate: NavigateFunction | null = null
 
     public appIsReady = false
-
-    public galadrimeurs: string[] = []
 
     public users = new Map<number, UserData>()
 
@@ -45,14 +43,16 @@ export class MainStore {
     }
 
     async init() {
-        const [galadrimeurs, users] = await Promise.all([
-            fetchGaladrimeurs(),
-            fetchUsers(),
-            this.authStore.init(),
-        ])
-        this.galadrimeurs = galadrimeurs
+        const [users] = await Promise.all([fetchUsers(), this.authStore.init()])
         this.users = new Map<number, UserData>(users.map((user) => [user.id, user]))
         this.setAppReady(true)
+    }
+
+    async fetchAll() {
+        this.saveurStore.init()
+        this.eventsStore.fetchEvents()
+        const users = await fetchUsers()
+        this.users = new Map<number, UserData>(users.map((user) => [user.id, user]))
     }
 }
 
