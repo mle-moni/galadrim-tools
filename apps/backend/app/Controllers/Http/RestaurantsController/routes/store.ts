@@ -7,7 +7,7 @@ import Ws from '../../../../Services/Ws'
 
 const StoreValidationSchema = schema.create({
     name: schema.string([rules.trim(), rules.maxLength(20), rules.minLength(2)]),
-    description: schema.string([rules.trim(), rules.maxLength(40), rules.minLength(2)]),
+    description: schema.string([rules.trim(), rules.maxLength(100), rules.minLength(2)]),
     lat: schema.number(),
     lng: schema.number(),
     tags: schema.array().members(schema.number([rules.exists({ table: 'tags', column: 'id' })])),
