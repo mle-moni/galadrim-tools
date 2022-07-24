@@ -1,3 +1,4 @@
+import { IRestaurant } from '@galadrim-rooms/shared'
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getSocketApiUrl } from '../api/fetch'
@@ -35,6 +36,9 @@ export class SocketStore {
         this.socket.on('createEvent', (event) => this.createEvent(event))
         this.socket.on('updateEvent', (event) => this.updateEvent(event))
         this.socket.on('deleteEvent', (event) => this.deleteEvent(event))
+        this.socket.on('createRestaurant', (restaurant) => this.createRestaurant(restaurant))
+        this.socket.on('updateRestaurant', (restaurant) => this.updateRestaurant(restaurant))
+        this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
         this.socket.on('fetchEvents', () => AppStore.eventsStore.fetchEvents())
     }
 
@@ -68,5 +72,17 @@ export class SocketStore {
     deleteEvent({ id }: RawRoomEvent) {
         const events = AppStore.eventsStore.events.filter((event) => event.id !== id)
         AppStore.eventsStore.setEvents(events)
+    }
+
+    createRestaurant(restaurant: IRestaurant) {
+        AppStore.saveurStore.restaurantsStore.addRestaurant(restaurant)
+    }
+
+    updateRestaurant(restaurant: IRestaurant) {
+        AppStore.saveurStore.restaurantsStore.editRestaurant(restaurant)
+    }
+
+    deleteRestaurant(id: number) {
+        AppStore.saveurStore.restaurantsStore.deleteRestaurant(id)
     }
 }

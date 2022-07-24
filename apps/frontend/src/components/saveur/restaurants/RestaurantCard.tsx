@@ -43,10 +43,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                     {restaurant.description}
                 </Typography>
             </CardContent>
-            <CardActions>
-                <Button disabled size="small">
-                    Avis
-                </Button>
+            <CardActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Button disabled size="small">
                     <FavoriteIcon />
                 </Button>

@@ -12,6 +12,7 @@ export const destroyRoute = async ({ params, auth, response }: HttpContextContra
     }
     const eventJson = restaurant.toJSON()
     await restaurant.delete()
-    Ws.io.to('connectedSockets').emit('deleteTag', eventJson)
+
+    Ws.io.to('connectedSockets').emit('deleteRestaurant', eventJson)
     return { id: restaurant.id, deleted: true }
 }

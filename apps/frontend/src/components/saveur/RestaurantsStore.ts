@@ -77,4 +77,8 @@ export class RestaurantsStore {
         restaurantFound.image = { ...restaurant.image }
         this.refreshFuse()
     }
+
+    deleteRestaurant(id: number) {
+        this.restaurants = this.restaurants.filter((resto) => id !== resto.id)
+    }
 }

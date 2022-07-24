@@ -32,9 +32,9 @@ export const storeRoute = async ({ request }: HttpContextContract) => {
 
     await RestaurantTag.createMany(tags.map((tagId) => ({ restaurantId: restaurant.id, tagId })))
 
-    Ws.io.to('connectedSockets').emit('createRestaurant', restaurant)
-
     await restaurant.load('tags')
+
+    Ws.io.to('connectedSockets').emit('createRestaurant', restaurant)
 
     return restaurant
 }

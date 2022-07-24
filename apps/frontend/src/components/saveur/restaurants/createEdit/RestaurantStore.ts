@@ -2,7 +2,6 @@ import { IRestaurant, ITag, _assert } from '@galadrim-rooms/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../../../api/fetch'
 import { notifyError, notifySuccess } from '../../../../utils/notification'
-import { RestaurantsStore } from '../../RestaurantsStore'
 
 export class RestaurantStore {
     public name = ''
@@ -16,7 +15,7 @@ export class RestaurantStore {
     // used when editing restaurant
     public imageSrc: string | null = null
 
-    constructor(private restaurantsStore: RestaurantsStore, private restaurant?: IRestaurant) {
+    constructor(private restaurant?: IRestaurant) {
         if (restaurant) {
             this.name = restaurant.name
             this.description = restaurant.description
@@ -92,7 +91,6 @@ export class RestaurantStore {
         })
 
         if (res.ok) {
-            this.restaurantsStore.addRestaurant(res.json)
             notifySuccess(`Le restaurant ${this.name} a été créé !`)
             this.reset()
         } else {
@@ -117,7 +115,6 @@ export class RestaurantStore {
         )
 
         if (res.ok) {
-            this.restaurantsStore.editRestaurant(res.json)
             notifySuccess(`Le restaurant ${this.name} a été modifié !`)
         } else {
             notifyError(

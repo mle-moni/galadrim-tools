@@ -26,9 +26,7 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
 
     const createRestaurantStore = useMemo(
         () =>
-            props.mode === 'edit'
-                ? new RestaurantStore(saveurStore.restaurantsStore, props.restaurant)
-                : new RestaurantStore(saveurStore.restaurantsStore),
+            props.mode === 'edit' ? new RestaurantStore(props.restaurant) : new RestaurantStore(),
         []
     )
 
