@@ -13,6 +13,8 @@ nx build backend &&
 nx migrate-prod backend &&
 nx deploy backend &&
 nx deploy frontend &&
+rm -f /home/ubuntu/galadrim-rooms/dist/apps/backend/tmp &&
+ln -s /home/ubuntu/galadrim-rooms/apps/backend/tmp /home/ubuntu/galadrim-rooms/dist/apps/backend/tmp &&
 TIME_UP=`date +%s`
 echo "Deployment success"
 echo "down time -->" `expr $TIME_UP - $TIME_DOWN` seconds
