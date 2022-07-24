@@ -1,5 +1,5 @@
 import { IImage, IRestaurant } from '@galadrim-rooms/shared'
-import { Close, Room } from '@mui/icons-material'
+import { Close, Edit, Room } from '@mui/icons-material'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
@@ -8,9 +8,10 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import { observer } from 'mobx-react-lite'
-import { getApiUrl } from '../../api/fetch'
-import { MAX_ZOOM } from '../../pages/saveur'
-import { SaveurStore } from './SaveurStore'
+import { getApiUrl } from '../../../api/fetch'
+import { MAX_ZOOM } from '../../../pages/saveur'
+import { CustomLink } from '../../Core/CustomLink'
+import { SaveurStore } from '../SaveurStore'
 
 export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
 
@@ -44,14 +45,14 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
             </CardContent>
             <CardActions>
                 <Button disabled size="small">
-                    Note
-                </Button>
-                <Button disabled size="small">
                     Avis
                 </Button>
                 <Button disabled size="small">
                     <FavoriteIcon />
                 </Button>
+                <CustomLink to={`/saveur/restaurants/${restaurant.id}`}>
+                    <Edit />
+                </CustomLink>
                 <Button
                     size="small"
                     onClick={() => {

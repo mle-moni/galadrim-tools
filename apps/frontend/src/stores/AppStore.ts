@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { NavigateFunction } from 'react-router-dom'
 import { fetchGaladrimeurs, fetchUsers, UserData } from '../api/galadrimeurs'
+import { SaveurStore } from '../components/saveur/SaveurStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
 import { NotificationStore } from './NotificationStore'
@@ -16,6 +17,8 @@ export class MainStore {
     public users = new Map<number, UserData>()
 
     public eventsStore = new EventsStore()
+
+    public saveurStore = new SaveurStore()
 
     public notification = new NotificationStore()
 

@@ -2,10 +2,10 @@ import L from 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
-import { notifyError, notifySuccess } from '../../utils/notification'
-import { clipboardCopy } from '../auth/WhoamiStore'
-import { RestaurantMarkerIcon } from './markers/RestaurantMarker'
-import { SaveurStore } from './SaveurStore'
+import { notifyError, notifySuccess } from '../../../utils/notification'
+import { clipboardCopy } from '../../auth/WhoamiStore'
+import { RestaurantMarkerIcon } from '../markers/RestaurantMarker'
+import { SaveurStore } from '../SaveurStore'
 
 export const RestaurantMarkers = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const map = useMapEvents({

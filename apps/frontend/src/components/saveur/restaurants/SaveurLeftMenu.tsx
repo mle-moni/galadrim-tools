@@ -1,8 +1,8 @@
 import { Box, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
+import { SaveurStore } from '../SaveurStore'
 import { RestaurantDisplay } from './RestaurantDisplay'
 import { RestaurantResults } from './RestaurantResults'
-import { SaveurStore } from './SaveurStore'
 
 export const SaveurLeftMenu = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     return (
@@ -21,7 +21,6 @@ export const SaveurLeftMenu = observer<{ saveurStore: SaveurStore }>(({ saveurSt
             <Box className="flex justify-center align-center" sx={{ pb: 1 }}>
                 <TextField
                     sx={{ backgroundColor: 'white' }}
-                    className="m-auto"
                     placeholder="Rechercher un restaurant"
                     value={saveurStore.restaurantsStore.search}
                     onChange={(e) => {

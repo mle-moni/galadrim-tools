@@ -1,9 +1,9 @@
-import { ITag } from '@galadrim-rooms/shared'
+import { IRestaurant, ITag, _assert } from '@galadrim-rooms/shared'
 import { makeAutoObservable } from 'mobx'
-import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
-import { notifyError, notifySuccess } from '../../utils/notification'
+import { fetchBackendJson, getErrorMessage } from '../../../../api/fetch'
+import { notifyError, notifySuccess } from '../../../../utils/notification'
 
-export class CreateRestaurantStore {
+export class RestaurantStore {
     public name = ''
     public description = ''
     public coordinates = ''
@@ -12,7 +12,19 @@ export class CreateRestaurantStore {
     public tags: ITag[] = []
     public image: File | null = null
 
-    constructor() {
+    // used when editing restaurant
+    public imageSrc: string | null = null
+
+    constructor(private restaurant?: IRestaurant) {
+        if (restaurant) {
+            this.name = restaurant.name
+            this.description = restaurant.description
+            this.coordinates = `${restaurant.lat}, ${restaurant.lng}`
+            this.lat = restaurant.lat
+            this.lng = restaurant.lng
+            this.tags = restaurant.tags
+            this.imageSrc = restaurant.image?.url ?? null
+        }
         makeAutoObservable(this)
     }
 
@@ -55,8 +67,9 @@ export class CreateRestaurantStore {
         )
     }
 
-    async createRestaurant() {
+    getPayload() {
         const data = new FormData()
+
         data.append('name', this.name)
         data.append('description', this.description)
         data.append('lat', String(this.lat))
@@ -67,19 +80,51 @@ export class CreateRestaurantStore {
             data.append('image', this.image)
         }
 
+        return data
+    }
+
+    async createRestaurant() {
+        const data = this.getPayload()
+
         const res = await fetchBackendJson('/restaurants', 'POST', {
             body: data,
         })
 
         if (res.ok) {
             notifySuccess(`Le restaurant ${this.name} a été créé !`)
-            this.setName('')
-            this.setDescription('')
-            this.setCoordinates('')
-            this.setTags([])
-            this.setImage(null)
+            this.reset()
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}`))
         }
+    }
+
+    async editRestaurant() {
+        const data = this.getPayload()
+
+        _assert(
+            this.restaurant?.id,
+            'this function should only be called if a restaurant was passed onto the constructor'
+        )
+
+        const res = await fetchBackendJson(`/restaurants/${this.restaurant.id}`, 'PUT', {
+            body: data,
+        })
+
+        if (res.ok) {
+            notifySuccess(`Le restaurant ${this.name} a été modifié !`)
+            this.reset()
+        } else {
+            notifyError(
+                getErrorMessage(res.json, `Impossible de modifier le restaurant ${this.name}`)
+            )
+        }
+    }
+
+    reset() {
+        this.setName('')
+        this.setDescription('')
+        this.setCoordinates('')
+        this.setTags([])
+        this.setImage(null)
     }
 }

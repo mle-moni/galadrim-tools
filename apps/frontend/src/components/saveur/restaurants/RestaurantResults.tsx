@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { MAX_ZOOM } from '../../pages/saveur'
-import { SaveurStore } from './SaveurStore'
+import { MAX_ZOOM } from '../../../pages/saveur'
+import { SaveurStore } from '../SaveurStore'
 
 export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const pattern = saveurStore.restaurantsStore.search

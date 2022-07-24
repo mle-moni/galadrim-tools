@@ -5,14 +5,14 @@ import { Box } from '@mui/material'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { CustomLink } from '../../components/Core/CustomLink'
 import { RoundedLinks } from '../../components/Link/RoundedLinks'
 import { HouseMarkerIcon } from '../../components/saveur/markers/HouseMarker'
-import { RestaurantMarkers } from '../../components/saveur/RestaurantMarkers'
-import { SaveurLeftMenu } from '../../components/saveur/SaveurLeftMenu'
-import { SaveurStore } from '../../components/saveur/SaveurStore'
+import { RestaurantMarkers } from '../../components/saveur/restaurants/RestaurantMarkers'
+import { SaveurLeftMenu } from '../../components/saveur/restaurants/SaveurLeftMenu'
+import { AppStore } from '../../stores/AppStore'
 import { notifyUser } from '../../utils/notification'
 
 export const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.34923]
@@ -20,7 +20,7 @@ export const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.349
 export const MAX_ZOOM = 18
 
 const SaveurPage = () => {
-    const saveurStore = useMemo(() => new SaveurStore(), [])
+    const saveurStore = AppStore.saveurStore
 
     useEffect(() => {
         notifyUser('Work in progress', 'info', 2000)

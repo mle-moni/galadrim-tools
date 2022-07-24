@@ -7,6 +7,7 @@ import { AppStore } from '../stores/AppStore'
 
 const StatisticsPage = React.lazy(() => import('../pages/statistics'))
 const CreateRestaurantPage = React.lazy(() => import('../pages/saveur/createRestaurant'))
+const EditRestaurantPage = React.lazy(() => import('../pages/saveur/editRestaurant'))
 const SaveurPage = React.lazy(() => import('../pages/saveur'))
 const HomePage = React.lazy(() => import('../pages'))
 const LoginPage = React.lazy(() => import('../pages/login'))
@@ -59,6 +60,7 @@ const AppRoutes = () => {
                 <Route path=":roomName" element={<RoomPage />} />
             </Route>
             <Route path="/statistics" element={<StatisticsPage />} />
+            <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
             <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />
             <Route path="/saveur" element={<SaveurPage />} />
             <Route path="*" element={<NotFoundPage />} />

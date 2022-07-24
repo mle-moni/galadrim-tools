@@ -1,16 +1,34 @@
+import { IRestaurant } from '@galadrim-rooms/shared'
 import { LocationOn, Message, Storefront, Style } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Autocomplete, Button, InputAdornment, OutlinedInput, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { Fragment, useMemo } from 'react'
-import { GaladrimLogo } from '../Branding/GaladrimLogo'
-import { Card } from '../Core/Card'
-import { CustomLink } from '../Core/CustomLink'
-import { CreateRestaurantStore } from './createRestaurantStore'
-import { SaveurStore } from './SaveurStore'
+import { getApiUrl } from '../../../../api/fetch'
+import { GaladrimLogo } from '../../../Branding/GaladrimLogo'
+import { Card } from '../../../Core/Card'
+import { CustomLink } from '../../../Core/CustomLink'
+import { SaveurStore } from '../../SaveurStore'
+import { RestaurantStore } from './RestaurantStore'
 
-export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
-    const createRestaurantStore = useMemo(() => new CreateRestaurantStore(), [])
+export type EditRestaurantProps = { saveurStore: SaveurStore } & (
+    | {
+          mode: 'create'
+      }
+    | {
+          mode: 'edit'
+          restaurant: IRestaurant
+      }
+)
+
+export const EditRestaurant = observer<EditRestaurantProps>((props) => {
+    const { saveurStore, mode } = props
+
+    const createRestaurantStore = useMemo(
+        () =>
+            props.mode === 'edit' ? new RestaurantStore(props.restaurant) : new RestaurantStore(),
+        []
+    )
 
     return (
         <Card size="large" sx={{ width: '100%', maxWidth: 600 }}>
@@ -18,7 +36,11 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    createRestaurantStore.createRestaurant()
+                    if (mode === 'create') {
+                        createRestaurantStore.createRestaurant()
+                    } else {
+                        createRestaurantStore.editRestaurant()
+                    }
                 }}
             >
                 <OutlinedInput
@@ -88,7 +110,7 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                     sx={{ mt: 2 }}
                 />
                 <Button variant="contained" component="label" sx={{ my: 2 }}>
-                    Ajouter une image
+                    {mode === 'create' ? 'Ajouter une image' : `Changer l'image`}
                     <input
                         type="file"
                         hidden
@@ -101,6 +123,16 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                 {createRestaurantStore.image !== null && (
                     <span style={{ marginLeft: '12px' }}>({createRestaurantStore.image.name})</span>
                 )}
+                <br />
+                {createRestaurantStore.imageSrc !== null && createRestaurantStore.image === null && (
+                    <div className="flex justify-center">
+                        <img
+                            src={getApiUrl() + createRestaurantStore.imageSrc}
+                            alt={createRestaurantStore.description}
+                            style={{ maxWidth: 300, maxHeight: 300 }}
+                        />
+                    </div>
+                )}
                 <Button
                     fullWidth
                     variant="contained"
@@ -109,7 +141,7 @@ export const CreateRestaurant = observer<{ saveurStore: SaveurStore }>(({ saveur
                     size="large"
                     sx={{ my: 2 }}
                 >
-                    Ajouter le restaurant
+                    {mode === 'create' ? 'Ajouter' : 'Editer'} le restaurant
                 </Button>
                 <CustomLink to="/saveur">
                     <BackIcon /> Retour au plan
