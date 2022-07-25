@@ -1,2 +1,2 @@
-export * from './likes'
+export * from './notes'
 export * from './saveurTypes'

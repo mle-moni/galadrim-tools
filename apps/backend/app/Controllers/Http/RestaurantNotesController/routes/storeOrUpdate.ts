@@ -1,4 +1,4 @@
-import { LikeOptions } from '@galadrim-rooms/shared'
+import { NotesOption } from '@galadrim-rooms/shared'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Restaurant from '../../../../Models/Restaurant'
@@ -28,7 +28,7 @@ export const storeOrUpdateRoute = async ({ request, auth }: HttpContextContract)
         {
             userId,
             restaurantId,
-            note: note as LikeOptions,
+            note: note as NotesOption,
         }
     )
 

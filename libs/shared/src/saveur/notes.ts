@@ -1,4 +1,4 @@
-export const LIKES_VALUES = {
+export const NOTES_VALUES = {
     1: '🤮',
     2: '😕',
     3: '😶',
@@ -6,4 +6,4 @@ export const LIKES_VALUES = {
     5: '😍',
 } as const
 
-export type LikeOptions = keyof typeof LIKES_VALUES
+export type NotesOption = keyof typeof NOTES_VALUES

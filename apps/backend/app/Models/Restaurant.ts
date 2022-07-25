@@ -47,17 +47,17 @@ export default class Restaurant extends BaseModel {
     toJSON(): ModelObject {
         return this.serialize({
             fields: {
-                omit: ['created_at', 'updated_at'],
+                omit: ['createdAt', 'updatedAt'],
             },
             relations: {
                 notes: {
                     fields: {
-                        omit: ['created_at', 'updated_at'],
+                        omit: ['createdAt', 'updatedAt'],
                     },
                 },
                 tags: {
                     fields: {
-                        omit: ['created_at', 'updated_at'],
+                        omit: ['createdAt', 'updatedAt'],
                     },
                 },
             },

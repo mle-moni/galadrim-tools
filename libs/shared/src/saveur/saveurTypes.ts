@@ -1,3 +1,5 @@
+import { NotesOption } from './notes'
+
 export interface ITag {
     id: number
     name: string
@@ -18,5 +20,13 @@ export interface IRestaurant {
     lat: number
     lng: number
     tags: ITag[]
+    notes: INotes[]
     image: IImage | null
+}
+
+export interface INotes {
+    id: number
+    restaurantId: number
+    userId: number
+    note: NotesOption
 }
