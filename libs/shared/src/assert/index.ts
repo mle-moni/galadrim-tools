@@ -6,7 +6,7 @@ export function _assert<T>(value: T, message?: string): asserts value is NonNull
     throw new Error(message ?? defaultMessage)
 }
 
-export const _assertTrue = (value: boolean, message?: string): asserts value => {
+export function _assertTrue(value: boolean, message?: string): asserts value {
     if (!value) {
         throw new Error(message ?? `assertion failed for value '${value}' : it should not be false`)
     }
