@@ -40,7 +40,7 @@ export const updateRoute = async ({ params, request, auth, response }: HttpConte
     const restaurant = await Restaurant.findOrFail(params.id)
     const user = auth.user!
 
-    if (!hasRights(user.rights, ['EVENT_ADMIN'])) {
+    if (!hasRights(user.rights, ['MIAM_ADMIN'])) {
         return response.forbidden({ error: `Vous n'avez pas les droits nécessaires` })
     }
 
