@@ -5,7 +5,9 @@ import { SaveurStore } from '../SaveurStore'
 
 export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const pattern = saveurStore.restaurantsStore.search
-    const searchResults = saveurStore.restaurantsStore.fuseInstance.search(pattern).slice(0, 5)
+    const searchResults = saveurStore.restaurantsStore.fuseInstance
+        .search(pattern, { limit: 5 })
+        .filter(({ score }) => score && score < 0.5)
 
     if (searchResults.length === 0) {
         return null
