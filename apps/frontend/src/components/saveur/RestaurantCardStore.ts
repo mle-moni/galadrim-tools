@@ -11,9 +11,10 @@ export class RestaurantCardStore {
     constructor(private restaurant: IRestaurant) {
         makeAutoObservable(this)
 
-        this.rating =
-            restaurant.notes.find((item) => item.userId === AppStore.authStore.user.id)?.note ||
-            null
+        const itemFound = restaurant.notes.find(
+            (item) => item.userId === AppStore.authStore.user.id
+        )
+        this.rating = itemFound?.note ?? null
     }
 
     toggleIsRatingDevelopped() {
@@ -27,7 +28,7 @@ export class RestaurantCardStore {
     async saveRating(rating: NotesOption) {
         const data = new FormData()
         data.append('restaurant_id', this.restaurant.id.toString())
-        data.append('note', rating.toString())
+        data.append('note', rating)
 
         const req = await fetchBackendJson<INotes, unknown>(`/notes`, 'POST', {
             body: data,
