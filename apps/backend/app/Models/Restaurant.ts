@@ -1,6 +1,16 @@
+import { _assertTrue } from '@galadrim-rooms/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { BaseModel, column, ManyToMany, manyToMany, ModelObject } from '@ioc:Adonis/Lucid/Orm'
+import {
+    BaseModel,
+    column,
+    HasMany,
+    hasMany,
+    ManyToMany,
+    manyToMany,
+    ModelObject,
+} from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
+import RestaurantNote from './RestaurantNote'
 import Tag from './Tag'
 
 export default class Restaurant extends BaseModel {
@@ -25,6 +35,9 @@ export default class Restaurant extends BaseModel {
     @manyToMany(() => Tag)
     public tags: ManyToMany<typeof Tag>
 
+    @hasMany(() => RestaurantNote)
+    public notes: HasMany<typeof RestaurantNote>
+
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
@@ -34,15 +47,36 @@ export default class Restaurant extends BaseModel {
     toJSON(): ModelObject {
         return this.serialize({
             fields: {
-                omit: ['created_at', 'updated_at'],
+                omit: ['createdAt', 'updatedAt'],
             },
             relations: {
+                notes: {
+                    fields: {
+                        omit: ['createdAt', 'updatedAt'],
+                    },
+                },
                 tags: {
                     fields: {
-                        omit: ['created_at', 'updated_at'],
+                        omit: ['createdAt', 'updatedAt'],
                     },
                 },
             },
         })
+    }
+
+    static async fetchById(id: number) {
+        const restaurants = await Restaurant.query()
+            .where('id', id)
+            .preload('tags')
+            .preload('notes')
+
+        _assertTrue(
+            restaurants.length === 1,
+            `expected restaurants.length to be '1' but got '${restaurants.length}'`
+        )
+
+        const restaurant = restaurants[0]
+
+        return restaurant
     }
 }

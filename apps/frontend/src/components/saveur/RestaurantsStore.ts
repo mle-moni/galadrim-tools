@@ -70,6 +70,12 @@ export class RestaurantsStore {
         restaurantFound.lat = restaurant.lat
         restaurantFound.lng = restaurant.lng
         restaurantFound.tags = restaurant.tags.map(({ id, name }) => ({ id, name }))
+        restaurantFound.notes = restaurant.notes.map(({ id, note, restaurantId, userId }) => ({
+            id,
+            note,
+            restaurantId,
+            userId,
+        }))
         if (restaurant.image === null) {
             restaurantFound.image = null
             return

@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Restaurant from '../../../../Models/Restaurant'
+import RestaurantNote from '../../../../Models/RestaurantNote'
 
 export const indexRoute = async (_params: HttpContextContract) => {
-    return Restaurant.query().preload('tags').preload('notes')
+    return RestaurantNote.all()
 }

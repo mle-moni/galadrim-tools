@@ -32,6 +32,7 @@ Route.group(() => {
     Route.resource('events', 'EventsController').apiOnly()
     Route.resource('tags', 'TagsController').apiOnly()
     Route.resource('restaurants', 'RestaurantsController').apiOnly()
+    Route.resource('notes', 'RestaurantNotesController').apiOnly()
     Route.get('/me', 'AuthController.me')
     Route.post('/createApiToken', 'AuthController.createApiToken')
     Route.post('/changePassword', 'AuthController.changePassword')
