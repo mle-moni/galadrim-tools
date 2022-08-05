@@ -15,10 +15,9 @@ export type RoomEvent = {
     userId: number
 }
 
-export type RawRoomEvent = Omit<RoomEvent, 'start' | 'end' | 'userId'> & {
+export type RawRoomEvent = Omit<RoomEvent, 'start' | 'end'> & {
     start: string
     end: string
-    user_id: number
 }
 
 export class EventsStore {
