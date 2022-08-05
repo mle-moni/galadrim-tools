@@ -43,13 +43,13 @@ const getEventTitle = (user: UserData | undefined, rawTitle: string) => {
 }
 
 export const getEventFromApi = (rawEvent: RawRoomEvent): RoomEvent => {
-    const user = AppStore.users.get(rawEvent.user_id)
+    const user = AppStore.users.get(rawEvent.userId)
     return {
         id: rawEvent.id,
         start: new Date(rawEvent.start),
         end: new Date(rawEvent.end),
         title: getEventTitle(user, rawEvent.title),
         room: rawEvent.room,
-        userId: rawEvent.user_id,
+        userId: rawEvent.userId,
     }
 }
