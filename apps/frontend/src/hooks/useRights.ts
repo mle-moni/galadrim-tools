@@ -1,8 +1,8 @@
 import { AllRights, hasRights, hasSomeRights } from '@galadrim-rooms/shared'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AppStore } from '../stores/AppStore'
-import { AuthStore } from '../stores/AuthStore'
+import { AppStore } from '../globalStores/AppStore'
+import { AuthStore } from '../globalStores/AuthStore'
 import { notifyError } from '../utils/notification'
 
 export type RightsMode = 'some' | 'all'

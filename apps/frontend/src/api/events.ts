@@ -1,5 +1,5 @@
-import { AppStore } from '../stores/AppStore'
-import { RawRoomEvent, RoomEvent } from '../stores/EventsStore'
+import { AppStore } from '../globalStores/AppStore'
+import { RawRoomEvent, RoomEvent } from '../globalStores/EventsStore'
 import { fetchBackend } from './fetch'
 import { UserData } from './galadrimeurs'
 

@@ -1,23 +1,27 @@
 import { observer } from 'mobx-react'
 import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
-import { RenouvArtWait } from '../components/RenouvArtWait'
-import LoadingPage from '../pages/loading'
-import { AppStore } from '../stores/AppStore'
+import { AppStore } from '../globalStores/AppStore'
+import LoadingPage from '../pages/loading/LoadingPage'
+import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 
-const StatisticsPage = React.lazy(() => import('../pages/statistics'))
-const CreateRestaurantPage = React.lazy(() => import('../pages/saveur/createRestaurant'))
-const EditRestaurantPage = React.lazy(() => import('../pages/saveur/editRestaurant'))
-const SaveurPage = React.lazy(() => import('../pages/saveur'))
-const HomePage = React.lazy(() => import('../pages'))
-const LoginPage = React.lazy(() => import('../pages/login'))
-const GetOtpPage = React.lazy(() => import('../pages/getOtp'))
-const ChangePasswordPage = React.lazy(() => import('../pages/changePassword'))
-const CreateUserPage = React.lazy(() => import('../pages/admin/createUser'))
-const AdminRightsPage = React.lazy(() => import('../pages/admin/rights'))
-const AdminPage = React.lazy(() => import('../pages/admin'))
-const RoomPage = React.lazy(() => import('../pages/room'))
-const NotFoundPage = React.lazy(() => import('../pages/errors/404'))
+const StatisticsPage = React.lazy(() => import('../pages/statistics/StatisticsPage'))
+const CreateRestaurantPage = React.lazy(
+    () => import('../pages/saveur/createRestaurant/CreateRestaurantPage')
+)
+const EditRestaurantPage = React.lazy(
+    () => import('../pages/saveur/editRestaurant/EditRestaurantPage')
+)
+const SaveurPage = React.lazy(() => import('../pages/saveur/SaveurPage'))
+const HomePage = React.lazy(() => import('../pages/HomePage'))
+const LoginPage = React.lazy(() => import('../pages/login/LoginPage'))
+const GetOtpPage = React.lazy(() => import('../pages/getOtp/GetOtpPage'))
+const ChangePasswordPage = React.lazy(() => import('../pages/changePassword/ChangePasswordPage'))
+const CreateUserPage = React.lazy(() => import('../pages/admin/createUser/CreateUserPage'))
+const AdminRightsPage = React.lazy(() => import('../pages/admin/rights/AdminRightsPage'))
+const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'))
+const RoomPage = React.lazy(() => import('../pages/room/RoomPage'))
+const NotFoundPage = React.lazy(() => import('../pages/errors/404/NotFoundPage'))
 
 const MainRouter = () => {
     return (

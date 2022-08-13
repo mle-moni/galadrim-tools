@@ -5,6 +5,7 @@
         "dev": "vite",
         "test": "vitest run",
         "test:watch": "vitest",
+        "tsc": "tsc",
         "build": "tsc && vite build --emptyOutDir",
         "deploy": "./deploy.sh",
         "serve": "vite preview",

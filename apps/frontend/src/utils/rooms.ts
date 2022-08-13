@@ -1,4 +1,4 @@
-import { WorkplaceSvgRoom } from '../components/WorkplaceSvg/WorkplaceSvg'
+import { WorkplaceSvgRoom } from '../reusableComponents/WorkplaceSvg/WorkplaceSvg'
 
 export const RESERVABLE_ROOMS = [
     'Adier',

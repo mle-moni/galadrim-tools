@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { WorkplaceSvgRoom } from '../components/WorkplaceSvg/WorkplaceSvg'
+import { WorkplaceSvgRoom } from '../reusableComponents/WorkplaceSvg/WorkplaceSvg'
 import { isReservableRoom } from './rooms'
 
 describe('rooms', () => {

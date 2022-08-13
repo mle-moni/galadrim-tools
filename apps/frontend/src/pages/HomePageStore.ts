@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
-import { WorkplaceSvgRoom } from '../components/WorkplaceSvg/WorkplaceSvg'
-import { AppStore } from '../stores/AppStore'
+import { AppStore } from '../globalStores/AppStore'
+import { WorkplaceSvgRoom } from '../reusableComponents/WorkplaceSvg/WorkplaceSvg'
 import { themeColors } from '../theme'
 import { getReservableRoomFullName } from '../utils/rooms'
 

@@ -1,5 +1,5 @@
 import { VariantType } from 'notistack'
-import { AppStore } from '../stores/AppStore'
+import { AppStore } from '../globalStores/AppStore'
 
 export const notifySuccess = (text: string, autoHideDuration = 3000) => {
     AppStore.notification.push(text, {
