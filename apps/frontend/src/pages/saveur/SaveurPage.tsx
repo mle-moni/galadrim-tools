@@ -68,7 +68,7 @@ const SaveurPage = observer(() => {
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://worldtiles3.waze.com/tiles/{z}/{x}/{y}.png"
+                    url="https://osm.mle-moni.fr/tile/{z}/{x}/{y}.png"
                 />
                 {POS_ALL_LOCAUX.map(({ name, position }) => (
                     <Marker key={name} position={position} icon={HouseMarkerIcon}>
