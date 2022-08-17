@@ -11,7 +11,7 @@ interface LinkInfo {
     hidden?: boolean
 }
 
-const POS_OFFSET = 32
+export const POS_OFFSET = 32
 const POS_INCREMENT = 64
 
 export const RoundedLinks: FC<{

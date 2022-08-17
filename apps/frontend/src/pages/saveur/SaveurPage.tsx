@@ -12,10 +12,25 @@ import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { RoundedLinks } from '../../reusableComponents/cssHelpers/RoundedLinks'
 import { HouseMarkerIcon } from '../../reusableComponents/saveur/markers/HouseMarker'
 import { notifyUser } from '../../utils/notification'
+import { LocauxSwitch } from './LocauxSwitch'
 import { RestaurantMarkers } from './restaurants/RestaurantMarkers'
 import { SaveurLeftMenu } from './restaurants/SaveurLeftMenu'
 
-export const POSITION_LOCAUX_BONNE_NOUVELLE: [number, number] = [48.87012, 2.34923]
+export interface Locaux {
+    name: string
+    position: [number, number]
+}
+
+export const POS_ALL_LOCAUX: Locaux[] = [
+    {
+        name: 'Locaux Paris, Bonne Nouvelle',
+        position: [48.87012, 2.34923],
+    },
+    {
+        name: 'Locaux Nantes',
+        position: [47.212274232959295, -1.5560218495098455],
+    },
+]
 
 export const MAX_ZOOM = 18
 
@@ -44,7 +59,7 @@ const SaveurPage = observer(() => {
                     left: '0px',
                     top: '0px',
                 }}
-                center={POSITION_LOCAUX_BONNE_NOUVELLE}
+                center={POS_ALL_LOCAUX[0].position}
                 zoom={17}
                 maxZoom={MAX_ZOOM}
                 scrollWheelZoom
@@ -55,9 +70,12 @@ const SaveurPage = observer(() => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://worldtiles3.waze.com/tiles/{z}/{x}/{y}.png"
                 />
-                <Marker position={POSITION_LOCAUX_BONNE_NOUVELLE} icon={HouseMarkerIcon}>
-                    <Popup offset={new L.Point(0, -20)}>Les locaux</Popup>
-                </Marker>
+                {POS_ALL_LOCAUX.map(({ name, position }) => (
+                    <Marker key={name} position={position} icon={HouseMarkerIcon}>
+                        <Popup offset={new L.Point(0, -20)}>{name}</Popup>
+                    </Marker>
+                ))}
+
                 <RestaurantMarkers saveurStore={saveurStore} />
             </MapContainer>
             <SaveurLeftMenu saveurStore={saveurStore} />
@@ -76,6 +94,7 @@ const SaveurPage = observer(() => {
                     <BackIcon /> Retour à l'accueil
                 </CustomLink>
             </Box>
+            <LocauxSwitch saveurStore={saveurStore} />
         </>
     )
 })
