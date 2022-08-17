@@ -1,6 +1,6 @@
 import { NotesOption, NOTES_VALUES } from '@galadrim-rooms/shared'
-import { IconButton, CardContent, styled } from '@mui/material'
-import { observer } from 'mobx-react'
+import { CardContent, IconButton, styled } from '@mui/material'
+import { observer } from 'mobx-react-lite'
 
 const StyledCardContent = styled(CardContent)({
     display: 'flex',

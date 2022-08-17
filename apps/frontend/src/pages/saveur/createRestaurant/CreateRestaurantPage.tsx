@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { AppStore } from '../../../globalStores/AppStore'
 import MainLayout from '../../../reusableComponents/layouts/MainLayout'
 import { EditRestaurant } from '../restaurants/createEdit/EditRestaurant'

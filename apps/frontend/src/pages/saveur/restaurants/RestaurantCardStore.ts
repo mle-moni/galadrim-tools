@@ -1,8 +1,15 @@
-import { INotes, IRestaurant, NotesOption } from '@galadrim-rooms/shared'
+import { INotes, IRestaurant, NotesOption, NOTES_VALUES } from '@galadrim-rooms/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../../api/fetch'
 import { AppStore } from '../../../globalStores/AppStore'
 import { notifyError } from '../../../utils/notification'
+
+export type Ratio = {
+    id: NotesOption
+    value: number
+    label: string
+    count: number
+}
 
 export class RestaurantCardStore {
     public isRatingDevelopped = false
@@ -38,5 +45,28 @@ export class RestaurantCardStore {
             return
         }
         notifyError('Impossible de sauvegarder la note')
+    }
+
+    get ratios() {
+        const ratingsNumber = this.restaurant.notes.length
+
+        const counts = new Map<NotesOption, number>()
+
+        this.restaurant.notes.forEach((note) => {
+            const count = counts.get(note.note)
+            counts.set(note.note, (count ?? 0) + 1)
+        })
+
+        return Object.entries(NOTES_VALUES)
+            .reverse()
+            .map(([key, value]) => {
+                const count = counts.get(key as NotesOption) || 0
+                return {
+                    id: key as NotesOption,
+                    label: value,
+                    value: (100 * count) / ratingsNumber,
+                    count,
+                }
+            })
     }
 }
