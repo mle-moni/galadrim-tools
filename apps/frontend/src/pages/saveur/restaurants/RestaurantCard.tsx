@@ -15,6 +15,7 @@ import { SaveurStore } from '../../../globalStores/SaveurStore'
 import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
 import { MAX_ZOOM } from '../SaveurPage'
 import RatingComponent from './RatingComponent'
+import Ratings from './Ratings'
 import { RestaurantCardStore } from './RestaurantCardStore'
 
 export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
@@ -48,6 +49,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 <Typography variant="body2" color="text.secondary">
                     {restaurant.description}
                 </Typography>
+                <Ratings ratios={store.ratios} />
             </CardContent>
             <Collapse in={store.isRatingDevelopped}>
                 <RatingComponent
