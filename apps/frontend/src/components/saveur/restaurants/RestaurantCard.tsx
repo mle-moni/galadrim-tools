@@ -16,6 +16,7 @@ import { CustomLink } from '../../Core/CustomLink'
 import { RestaurantCardStore } from '../RestaurantCardStore'
 import { SaveurStore } from '../SaveurStore'
 import RatingComponent from './RatingComponent'
+import Ratings from './Ratings'
 
 export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
 
@@ -48,6 +49,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 <Typography variant="body2" color="text.secondary">
                     {restaurant.description}
                 </Typography>
+                <Ratings ratios={store.ratios} />
             </CardContent>
             <Collapse in={store.isRatingDevelopped}>
                 <RatingComponent
