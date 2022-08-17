@@ -1,5 +1,5 @@
 import { Box, experimental_sx as sx, styled } from '@mui/material'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { ComponentProps, FC, PropsWithChildren, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'

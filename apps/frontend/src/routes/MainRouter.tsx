@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import { AppStore } from '../globalStores/AppStore'

@@ -1,13 +1,13 @@
 import {
+    Box,
     CardContent,
-    styled,
     LinearProgress,
     linearProgressClasses,
-    Box,
+    styled,
     Typography,
 } from '@mui/material'
-import { observer } from 'mobx-react'
-import { Ratio } from '../RestaurantCardStore'
+import { observer } from 'mobx-react-lite'
+import { Ratio } from './RestaurantCardStore'
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
     width: '40%',
@@ -38,7 +38,7 @@ type RatingsProps = {
     ratios: Ratio[]
 }
 
-const Ratings = ({ ratios }: RatingsProps) => {
+const Ratings = observer<RatingsProps>(({ ratios }) => {
     return (
         <StyledCardContent>
             {ratios.map((ratio) => (
@@ -52,6 +52,6 @@ const Ratings = ({ ratios }: RatingsProps) => {
             ))}
         </StyledCardContent>
     )
-}
+})
 
-export default observer(Ratings)
+export default Ratings
