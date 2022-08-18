@@ -9,6 +9,7 @@ export type Ratio = {
     value: number
     label: string
     count: number
+    userIds: number[]
 }
 
 export class RestaurantCardStore {
@@ -50,22 +51,33 @@ export class RestaurantCardStore {
     get ratios() {
         const ratingsNumber = this.restaurant.notes.length
 
-        const counts = new Map<NotesOption, number>()
+        const notesCountMap = new Map<NotesOption, { count: number; userIds: number[] }>()
 
         this.restaurant.notes.forEach((note) => {
-            const count = counts.get(note.note)
-            counts.set(note.note, (count ?? 0) + 1)
+            const noteCount = notesCountMap.get(note.note)
+            if (noteCount) {
+                notesCountMap.set(note.note, {
+                    count: noteCount.count + 1,
+                    userIds: [...noteCount.userIds, note.userId],
+                })
+            } else {
+                notesCountMap.set(note.note, { count: 1, userIds: [note.userId] })
+            }
         })
 
         return Object.entries(NOTES_VALUES)
             .reverse()
             .map(([key, value]) => {
-                const count = counts.get(key as NotesOption) || 0
+                const noteCount = notesCountMap.get(key as NotesOption)
+
+                const count = noteCount?.count ?? 0
+
                 return {
                     id: key as NotesOption,
                     label: value,
                     value: (100 * count) / ratingsNumber,
                     count,
+                    userIds: noteCount?.userIds ?? [],
                 }
             })
     }

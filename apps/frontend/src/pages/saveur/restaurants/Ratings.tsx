@@ -4,9 +4,12 @@ import {
     LinearProgress,
     linearProgressClasses,
     styled,
+    Tooltip,
     Typography,
 } from '@mui/material'
 import { observer } from 'mobx-react-lite'
+import { AppStore } from '../../../globalStores/AppStore'
+import { getNameOfUsers } from './ratingsFunctions'
 import { Ratio } from './RestaurantCardStore'
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
@@ -45,7 +48,9 @@ const Ratings = observer<RatingsProps>(({ ratios }) => {
                 <RatioWrapper key={ratio.id}>
                     <Typography>{ratio.label}</Typography>
                     <ProgressWrapper>
-                        <BorderLinearProgress variant="determinate" value={ratio.value} />
+                        <Tooltip title={getNameOfUsers(ratio.userIds, AppStore.users)}>
+                            <BorderLinearProgress variant="determinate" value={ratio.value} />
+                        </Tooltip>
                     </ProgressWrapper>
                     <Typography sx={{ fontSize: 10 }}>{ratio.count}</Typography>
                 </RatioWrapper>
