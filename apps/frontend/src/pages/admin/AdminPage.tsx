@@ -1,4 +1,4 @@
-import { ChevronLeft, PersonAddAlt, Settings } from '@mui/icons-material'
+import { ChevronLeft, Dashboard, PersonAddAlt, Settings } from '@mui/icons-material'
 import { styled, SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { useRights } from '../../hooks/useRights'
@@ -22,6 +22,11 @@ const allLinks: LinkFormat[] = [
         to: '/admin/rights',
         text: 'Gerer les droits des utilisateurs',
         icon: Settings,
+    },
+    {
+        to: '/admin/dashboard',
+        text: 'Accéder au dashboard',
+        icon: Dashboard,
     },
     { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft },
 ]
