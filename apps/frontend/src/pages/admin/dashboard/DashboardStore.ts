@@ -62,7 +62,9 @@ export class DashboardStore {
     }
 
     cleanup() {
-        clearInterval(this.intervalId)
+        if (this.intervalId) {
+            clearInterval(this.intervalId)
+        }
     }
 
     setFetchInterval(fetchInterval: number) {
