@@ -14,3 +14,12 @@ export interface ApiNotification {
 export interface ApiError {
     error: string
 }
+
+export interface DashboardInfos {
+    memoryUsed: number
+    totalMemory: number
+    sysUptime: number
+    loadAverage1: number
+    loadAverage5: number
+    loadAverage15: number
+}
