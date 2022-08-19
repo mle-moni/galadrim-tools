@@ -30,7 +30,13 @@ export default class UserSeeder extends BaseSeeder {
                 email: 'admin@admin.fr',
                 imageUrl: 'https://forest.galadrim.fr/img/users/105.jpg',
                 password: 'admin',
-                rights: generateRights(['EVENT_ADMIN', 'MIAM_ADMIN', 'RIGHTS_ADMIN', 'USER_ADMIN']),
+                rights: generateRights([
+                    'EVENT_ADMIN',
+                    'MIAM_ADMIN',
+                    'RIGHTS_ADMIN',
+                    'USER_ADMIN',
+                    'DASHBOARD_ADMIN',
+                ]),
             },
         ])
     }

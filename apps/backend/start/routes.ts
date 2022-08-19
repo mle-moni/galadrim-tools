@@ -53,6 +53,7 @@ Route.group(() => {
     Route.post('/createUser', 'AdminController.createUser').middleware('rights:USER_ADMIN')
     Route.get('/userRights', 'AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
     Route.put('/userRights', 'AdminController.editUserRights').middleware('rights:RIGHTS_ADMIN')
+    Route.get('/dashboard', 'DashboardController.index')
 })
     .middleware('auth:web,api')
     .prefix('admin')
