@@ -1,14 +1,16 @@
 import { IRestaurant } from '@galadrim-rooms/shared'
-import { LocationOn, Message, Storefront, Style } from '@mui/icons-material'
+import { LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Autocomplete, Button, InputAdornment, OutlinedInput, TextField } from '@mui/material'
+import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { Fragment, useMemo } from 'react'
 import { getApiUrl } from '../../../../api/fetch'
+import { AppStore } from '../../../../globalStores/AppStore'
 import { SaveurStore } from '../../../../globalStores/SaveurStore'
 import { GaladrimLogo } from '../../../../reusableComponents/Branding/GaladrimLogo'
 import { CustomLink } from '../../../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../../../reusableComponents/Core/GaladrimRoomsCard'
+import { TextInputWithIcon } from '../../../../reusableComponents/form/TextInputWithIcon'
 import { RestaurantStore } from './RestaurantStore'
 
 export type EditRestaurantProps = { saveurStore: SaveurStore } & (
@@ -30,6 +32,8 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
         []
     )
 
+    const tagsStore = AppStore.saveurStore.tagsStore
+
     return (
         <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
@@ -43,48 +47,60 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     }
                 }}
             >
-                <OutlinedInput
+                <TextInputWithIcon
                     value={createRestaurantStore.name}
-                    onChange={(e) => {
-                        createRestaurantStore.setName(e.target.value)
-                    }}
-                    fullWidth
                     placeholder="Nom du restaurant"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <Storefront />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
+                    onChange={(value) => createRestaurantStore.setName(value)}
+                    Icon={Storefront}
                 />
-                <OutlinedInput
+                <TextInputWithIcon
                     value={createRestaurantStore.description}
-                    onChange={(e) => {
-                        createRestaurantStore.setDescription(e.target.value)
-                    }}
-                    fullWidth
                     placeholder="Description"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <Message />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
+                    onChange={(value) => createRestaurantStore.setDescription(value)}
+                    Icon={Message}
                 />
-                <OutlinedInput
+                <TextInputWithIcon
                     value={createRestaurantStore.coordinates}
-                    onChange={(e) => {
-                        createRestaurantStore.setCoordinates(e.target.value)
-                    }}
-                    fullWidth
                     placeholder="Latitude, Longitude"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <LocationOn />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
+                    onChange={(value) => createRestaurantStore.setCoordinates(value)}
+                    Icon={LocationOn}
                 />
+                <Button
+                    sx={{ mt: 2 }}
+                    variant="contained"
+                    onClick={() => tagsStore.setCreationModalVisible(true)}
+                >
+                    Ajouter un tag
+                </Button>
+                <Modal
+                    open={tagsStore.creationModalVisible}
+                    onClose={() => tagsStore.setCreationModalVisible(false)}
+                    sx={{
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Paper variant="outlined" sx={{ p: 6 }}>
+                        <TextInputWithIcon
+                            value={tagsStore.newTagName}
+                            placeholder="Nom du tag"
+                            onChange={(value) => tagsStore.setNewTagName(value)}
+                            Icon={Tag}
+                        />
+                        <Button
+                            onClick={() => tagsStore.createTag()}
+                            fullWidth
+                            disabled={!tagsStore.canSave}
+                            variant="contained"
+                            size="large"
+                            sx={{ mt: 2 }}
+                        >
+                            Ajouter le tag
+                        </Button>
+                    </Paper>
+                </Modal>
                 <Autocomplete
                     multiple
                     id="tags"

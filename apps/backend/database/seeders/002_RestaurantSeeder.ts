@@ -5,6 +5,6 @@ export default class RestaurantSeeder extends BaseSeeder {
     public static developmentOnly = true
 
     public async run() {
-        await RestaurantFactory.createMany(10)
+        await RestaurantFactory.createMany(7)
     }
 }

@@ -1,11 +1,12 @@
 import MailIcon from '@mui/icons-material/AlternateEmail'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button, InputAdornment, OutlinedInput } from '@mui/material'
+import { Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { AppStore } from '../../globalStores/AppStore'
 import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
+import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
 
 export const GetOtp = observer(() => {
     const { authStore } = AppStore
@@ -19,18 +20,11 @@ export const GetOtp = observer(() => {
                     authStore.getOtp()
                 }}
             >
-                <OutlinedInput
+                <TextInputWithIcon
                     value={authStore.email}
-                    onChange={(e) => {
-                        authStore.setEmail(e.target.value)
-                    }}
-                    fullWidth
+                    onChange={(value) => authStore.setEmail(value)}
                     placeholder="Adresse e-mail"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <MailIcon />
-                        </InputAdornment>
-                    }
+                    Icon={MailIcon}
                 />
                 <Button fullWidth variant="contained" type="submit" size="large" sx={{ my: 2 }}>
                     Réinitialiser mon mot de passe

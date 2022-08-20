@@ -1,4 +1,4 @@
-import { IRestaurant } from '@galadrim-rooms/shared'
+import { IRestaurant, ITag } from '@galadrim-rooms/shared'
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getSocketApiUrl } from '../api/fetch'
@@ -36,6 +36,7 @@ export class SocketStore {
         this.socket.on('createEvent', (event) => this.createEvent(event))
         this.socket.on('updateEvent', (event) => this.updateEvent(event))
         this.socket.on('deleteEvent', (event) => this.deleteEvent(event))
+        this.socket.on('createTag', (restaurant) => this.createRestaurant(restaurant))
         this.socket.on('createRestaurant', (restaurant) => this.createRestaurant(restaurant))
         this.socket.on('updateRestaurant', (restaurant) => this.updateRestaurant(restaurant))
         this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
@@ -76,6 +77,10 @@ export class SocketStore {
 
     createRestaurant(restaurant: IRestaurant) {
         AppStore.saveurStore.restaurantsStore.addRestaurant(restaurant)
+    }
+
+    createTag(tag: ITag) {
+        AppStore.saveurStore.tagsStore.pushTag(tag)
     }
 
     updateRestaurant(restaurant: IRestaurant) {

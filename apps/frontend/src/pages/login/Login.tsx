@@ -1,35 +1,25 @@
 import MailIcon from '@mui/icons-material/AlternateEmail'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import PasswordIcon from '@mui/icons-material/VpnKey'
-import { Button, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
+import { Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
+import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
+import { PasswordInput } from './PasswordInput'
 
 export const Login = observer(() => {
     const { authStore } = AppStore
 
     const navigate = useNavigate()
-    const [showPassword, setShowPassword] = useState(false)
 
     useEffect(() => {
         if (authStore.connected) {
             navigate('/')
         }
     }, [])
-
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword)
-    }
-
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-    }
 
     return (
         <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
@@ -40,44 +30,13 @@ export const Login = observer(() => {
                     authStore.login()
                 }}
             >
-                <OutlinedInput
+                <TextInputWithIcon
                     value={authStore.email}
-                    onChange={(e) => {
-                        authStore.setEmail(e.target.value)
-                    }}
-                    fullWidth
+                    onChange={(value) => authStore.setEmail(value)}
                     placeholder="Adresse e-mail"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <MailIcon />
-                        </InputAdornment>
-                    }
+                    Icon={MailIcon}
                 />
-                <OutlinedInput
-                    fullWidth
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Mot de passe"
-                    value={authStore.password}
-                    onChange={(e) => authStore.setPassword(e.target.value)}
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ mr: 1.8 }}>
-                            <PasswordIcon />
-                        </InputAdornment>
-                    }
-                    endAdornment={
-                        <InputAdornment position="end" sx={{ mr: 0.5 }}>
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                            >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
-                />
+                <PasswordInput />
                 <Button
                     fullWidth
                     variant="contained"
