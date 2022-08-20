@@ -8,7 +8,7 @@ export type IconLinkProps = LinkInfo & { title: string }
 export const IconLink = observer<IconLinkProps>(({ Icon, link, title, hidden }) => {
     const handleClick = (link: string) => {
         if (link.includes('http')) {
-            location.replace(link)
+            window.open(link)
             return
         }
         AppStore.navigate(link)

@@ -23,7 +23,7 @@ export const RoundedLinks: FC<{
 
     const handleClick = (link: string) => {
         if (link.includes('http')) {
-            location.replace(link)
+            window.open(link)
             return
         }
         AppStore.navigate(link)
