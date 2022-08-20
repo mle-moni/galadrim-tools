@@ -39,7 +39,7 @@ export class TagsStore {
         this.setCreationModalVisible(false)
     }
 
-    private pushTag(tag: ITag) {
+    pushTag(tag: ITag) {
         this.tags.push(tag)
     }
 
