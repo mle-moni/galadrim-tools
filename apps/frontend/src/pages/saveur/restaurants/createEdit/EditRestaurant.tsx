@@ -1,15 +1,7 @@
 import { IRestaurant } from '@galadrim-rooms/shared'
 import { LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import {
-    Autocomplete,
-    Button,
-    InputAdornment,
-    Modal,
-    OutlinedInput,
-    Paper,
-    TextField,
-} from '@mui/material'
+import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { Fragment, useMemo } from 'react'
 import { getApiUrl } from '../../../../api/fetch'
@@ -18,6 +10,7 @@ import { SaveurStore } from '../../../../globalStores/SaveurStore'
 import { GaladrimLogo } from '../../../../reusableComponents/Branding/GaladrimLogo'
 import { CustomLink } from '../../../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../../../reusableComponents/Core/GaladrimRoomsCard'
+import { TextInputWithIcon } from '../../../../reusableComponents/form/TextInputWithIcon'
 import { RestaurantStore } from './RestaurantStore'
 
 export type EditRestaurantProps = { saveurStore: SaveurStore } & (
@@ -54,47 +47,23 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     }
                 }}
             >
-                <OutlinedInput
+                <TextInputWithIcon
                     value={createRestaurantStore.name}
-                    onChange={(e) => {
-                        createRestaurantStore.setName(e.target.value)
-                    }}
-                    fullWidth
                     placeholder="Nom du restaurant"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <Storefront />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
+                    onChange={(value) => createRestaurantStore.setName(value)}
+                    Icon={Storefront}
                 />
-                <OutlinedInput
+                <TextInputWithIcon
                     value={createRestaurantStore.description}
-                    onChange={(e) => {
-                        createRestaurantStore.setDescription(e.target.value)
-                    }}
-                    fullWidth
                     placeholder="Description"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <Message />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
+                    onChange={(value) => createRestaurantStore.setDescription(value)}
+                    Icon={Message}
                 />
-                <OutlinedInput
+                <TextInputWithIcon
                     value={createRestaurantStore.coordinates}
-                    onChange={(e) => {
-                        createRestaurantStore.setCoordinates(e.target.value)
-                    }}
-                    fullWidth
                     placeholder="Latitude, Longitude"
-                    startAdornment={
-                        <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                            <LocationOn />
-                        </InputAdornment>
-                    }
-                    sx={{ mt: 2 }}
+                    onChange={(value) => createRestaurantStore.setCoordinates(value)}
+                    Icon={LocationOn}
                 />
                 <Button
                     sx={{ mt: 2 }}
@@ -114,19 +83,11 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     }}
                 >
                     <Paper variant="outlined" sx={{ p: 6 }}>
-                        <OutlinedInput
+                        <TextInputWithIcon
                             value={tagsStore.newTagName}
-                            onChange={(e) => {
-                                tagsStore.setNewTagName(e.target.value)
-                            }}
-                            fullWidth
                             placeholder="Nom du tag"
-                            startAdornment={
-                                <InputAdornment position="start" sx={{ ml: 0.5, mr: 1 }}>
-                                    <Tag />
-                                </InputAdornment>
-                            }
-                            sx={{ mt: 2 }}
+                            onChange={(value) => tagsStore.setNewTagName(value)}
+                            Icon={Tag}
                         />
                         <Button
                             onClick={() => tagsStore.createTag()}

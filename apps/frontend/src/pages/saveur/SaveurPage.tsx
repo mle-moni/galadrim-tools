@@ -5,13 +5,11 @@ import { Box } from '@mui/material'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AppStore } from '../../globalStores/AppStore'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { RoundedLinks } from '../../reusableComponents/cssHelpers/RoundedLinks'
 import { HouseMarkerIcon } from '../../reusableComponents/saveur/markers/HouseMarker'
-import { notifyUser } from '../../utils/notification'
 import { LocauxSwitch } from './LocauxSwitch'
 import { RestaurantMarkers } from './restaurants/RestaurantMarkers'
 import { SaveurLeftMenu } from './restaurants/SaveurLeftMenu'
@@ -36,10 +34,6 @@ export const MAX_ZOOM = 18
 
 const SaveurPage = observer(() => {
     const saveurStore = AppStore.saveurStore
-
-    useEffect(() => {
-        notifyUser('Work in progress', 'info', 2000)
-    }, [])
 
     return (
         <>
