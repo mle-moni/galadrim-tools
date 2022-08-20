@@ -14,6 +14,7 @@ const EditRestaurantPage = React.lazy(
 )
 const SaveurPage = React.lazy(() => import('../pages/saveur/SaveurPage'))
 const HomePage = React.lazy(() => import('../pages/HomePage'))
+const RoomsHomePage = React.lazy(() => import('../pages/room/RoomsHomePage'))
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'))
 const GetOtpPage = React.lazy(() => import('../pages/getOtp/GetOtpPage'))
 const ChangePasswordPage = React.lazy(() => import('../pages/changePassword/ChangePasswordPage'))
@@ -62,10 +63,11 @@ const AppRoutes = () => {
             <Route path="/admin/rights" element={<AdminRightsPage />} />
             <Route path="/admin/dashboard" element={<DashboardPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/rooms" element={<RoomsHomePage />} />
+            <Route path="/rooms/statistics" element={<StatisticsPage />} />
             <Route path="room" element={<RoomPage />}>
                 <Route path=":roomName" element={<RoomPage />} />
             </Route>
-            <Route path="/statistics" element={<StatisticsPage />} />
             <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
             <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />
             <Route path="/saveur" element={<SaveurPage />} />

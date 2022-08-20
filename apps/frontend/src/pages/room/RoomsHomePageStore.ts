@@ -1,12 +1,12 @@
 import { makeAutoObservable } from 'mobx'
-import { AppStore } from '../globalStores/AppStore'
-import { WorkplaceSvgRoom } from '../reusableComponents/WorkplaceSvg/WorkplaceSvg'
-import { themeColors } from '../theme'
-import { getReservableRoomFullName } from '../utils/rooms'
+import { AppStore } from '../../globalStores/AppStore'
+import { WorkplaceSvgRoom } from '../../reusableComponents/WorkplaceSvg/WorkplaceSvg'
+import { themeColors } from '../../theme'
+import { getReservableRoomFullName } from '../../utils/rooms'
 
 const SVG_RENDER_LOOP_TIME = 1000
 
-export class HomePageStore {
+export class RoomsHomePageStore {
     public keyId = 0
 
     intervalId: number

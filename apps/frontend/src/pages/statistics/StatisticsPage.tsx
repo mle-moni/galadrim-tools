@@ -18,7 +18,7 @@ const StatisticsPage = () => {
                 <Button
                     startIcon={<BackIcon />}
                     variant="contained"
-                    onClick={() => AppStore.navigate('/')}
+                    onClick={() => AppStore.navigate('/rooms')}
                     sx={{ mb: 2, mr: 'auto' }}
                 >
                     Retour
