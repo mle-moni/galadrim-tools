@@ -1,9 +1,9 @@
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Typography } from '@mui/material'
 import { GaladrimLogo } from '../../../reusableComponents/Branding/GaladrimLogo'
+import { CenteredDiv } from '../../../reusableComponents/common/CenteredDiv'
 import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../../reusableComponents/Core/GaladrimRoomsCard'
-import { CenteredDiv } from '../../../reusableComponents/cssHelpers/CenteredDiv'
 import MainLayout from '../../../reusableComponents/layouts/MainLayout'
 
 const NotFoundPage = () => {

@@ -1,6 +1,6 @@
 import { AdminPanelSettings, Home } from '@mui/icons-material'
 import { useRights } from '../../../hooks/useRights'
-import { RoundedLinks } from '../../../reusableComponents/cssHelpers/RoundedLinks'
+import { RoundedLinks } from '../../../reusableComponents/common/RoundedLinks'
 import MainLayout from '../../../reusableComponents/layouts/MainLayout'
 import { Dashboard } from './Dashboard'
 

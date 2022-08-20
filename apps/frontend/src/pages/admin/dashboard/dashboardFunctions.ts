@@ -34,32 +34,41 @@ export const getLoadInfos = (load: number, minutes: number): DashboardElementPro
     }
 }
 
+const getColorFromUptime = (uptimeHours: number): DashboardElementProps['options']['color'] => {
+    const DAYS_7 = 24 * 7
+    const DAYS_40 = 24 * 40
+
+    if (uptimeHours > DAYS_40) {
+        return 'warning'
+    }
+
+    if (uptimeHours > DAYS_7) {
+        return 'info'
+    }
+
+    return 'success'
+}
+
 export const getUptimeInfos = (uptime: number): DashboardElementProps['options'] => {
     const SEC_TO_MIN_RATIO = 60
     const MIN_TO_HOUR_RATIO = 60
-    const DEFAULT_COLOR = 'info'
     const value = Math.round(uptime / SEC_TO_MIN_RATIO)
-
-    const basicInfos = {
-        color: DEFAULT_COLOR,
-        label: 'OS Uptime',
-    } as const
 
     if (value > 1000) {
         const hourValue = Math.round(value / MIN_TO_HOUR_RATIO)
-        const DAYS_70 = 24 * 70
 
         return {
-            ...basicInfos,
+            label: 'OS Uptime',
+            color: getColorFromUptime(hourValue),
             value: hourValue,
             maxValue: hourValue,
             unit: 'h',
-            color: hourValue > DAYS_70 ? 'warning' : DEFAULT_COLOR,
         }
     }
 
     return {
-        ...basicInfos,
+        label: 'OS Uptime',
+        color: 'success',
         value,
         maxValue: value,
         unit: 'min',

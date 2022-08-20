@@ -20,7 +20,7 @@ const RoomPage = () => {
                     <Button
                         startIcon={<BackIcon />}
                         variant="contained"
-                        onClick={() => AppStore.navigate('/')}
+                        onClick={() => AppStore.navigate('/rooms')}
                     >
                         Retour
                     </Button>

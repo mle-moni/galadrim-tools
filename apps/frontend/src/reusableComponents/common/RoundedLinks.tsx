@@ -3,7 +3,7 @@ import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { FC } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 
-interface LinkInfo {
+export interface LinkInfo {
     Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
         muiName: string
     }
@@ -21,6 +21,14 @@ export const RoundedLinks: FC<{
 }> = ({ linkInfos, horizontalPosition = 'left', verticalPosition = 'top' }) => {
     const visibleLinks = linkInfos.filter(({ hidden }) => hidden !== true)
 
+    const handleClick = (link: string) => {
+        if (link.includes('http')) {
+            window.open(link)
+            return
+        }
+        AppStore.navigate(link)
+    }
+
     return (
         <>
             {visibleLinks.map(({ link, Icon }, index) => (
@@ -29,7 +37,7 @@ export const RoundedLinks: FC<{
                     size="medium"
                     variant="circular"
                     color="primary"
-                    onClick={() => AppStore.navigate(link)}
+                    onClick={() => handleClick(link)}
                     sx={{
                         position: 'absolute',
                         [verticalPosition]: POS_OFFSET + POS_INCREMENT * index,
