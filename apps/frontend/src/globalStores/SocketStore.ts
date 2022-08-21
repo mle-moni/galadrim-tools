@@ -1,4 +1,4 @@
-import { IRestaurant, ITag } from '@galadrim-rooms/shared'
+import { IRestaurant, ITag } from '@galadrim-tools/shared'
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getSocketApiUrl } from '../api/fetch'

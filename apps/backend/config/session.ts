@@ -45,7 +45,7 @@ const sessionConfig: SessionConfig = {
   | The name of the cookie that will hold the session id.
   |
   */
-    cookieName: 'galadrim-rooms-session',
+    cookieName: 'galadrim-tools-session',
 
     /*
   |--------------------------------------------------------------------------

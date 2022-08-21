@@ -1,4 +1,4 @@
-import { INotes, IRestaurant, NotesOption, NOTES_VALUES } from '@galadrim-rooms/shared'
+import { INotes, IRestaurant, NotesOption, NOTES_VALUES } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../../api/fetch'
 import { AppStore } from '../../../globalStores/AppStore'

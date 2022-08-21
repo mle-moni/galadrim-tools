@@ -1,4 +1,4 @@
-import { hasRights } from '@galadrim-rooms/shared/'
+import { hasRights } from '@galadrim-tools/shared/'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Restaurant from '../../../../Models/Restaurant'
 import Ws from '../../../../Services/Ws'

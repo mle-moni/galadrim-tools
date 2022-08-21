@@ -1,4 +1,4 @@
-import { ApiError } from '@galadrim-rooms/shared'
+import { ApiError } from '@galadrim-tools/shared'
 import { fetchBackendJson } from './fetch'
 
 export interface UserData {

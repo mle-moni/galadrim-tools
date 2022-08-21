@@ -1,4 +1,4 @@
-import { IImage, IRestaurant, NOTES_VALUES } from '@galadrim-rooms/shared'
+import { IImage, IRestaurant, NOTES_VALUES } from '@galadrim-tools/shared'
 import { Close, Edit, Room } from '@mui/icons-material'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { Collapse } from '@mui/material'

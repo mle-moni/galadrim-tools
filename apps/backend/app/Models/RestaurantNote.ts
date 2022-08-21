@@ -1,4 +1,4 @@
-import { NotesOption } from '@galadrim-rooms/shared'
+import { NotesOption } from '@galadrim-tools/shared'
 import { BaseModel, column, ModelObject } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 

@@ -1,4 +1,4 @@
-import { AllRights, ApiNotification, hasRights, RIGHTS, _assert } from '@galadrim-rooms/shared'
+import { AllRights, ApiNotification, hasRights, RIGHTS, _assert } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../../api/fetch'
 import { notifyError, notifySuccess } from '../../../utils/notification'

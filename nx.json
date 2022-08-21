@@ -1,5 +1,5 @@
 {
-    "npmScope": "galadrim-rooms",
+    "npmScope": "galadrim-tools",
     "affected": {
         "defaultBase": "main"
     },

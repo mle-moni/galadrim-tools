@@ -1,4 +1,4 @@
-import { ApiError, ApiErrors } from '@galadrim-rooms/shared'
+import { ApiError, ApiErrors } from '@galadrim-tools/shared'
 
 export const getSocketApiUrl = () => {
     const url = import.meta.env.VITE_SOCKET_API_URL

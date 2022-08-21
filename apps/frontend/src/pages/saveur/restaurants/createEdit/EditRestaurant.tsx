@@ -1,4 +1,4 @@
-import { IRestaurant } from '@galadrim-rooms/shared'
+import { IRestaurant } from '@galadrim-tools/shared'
 import { LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'

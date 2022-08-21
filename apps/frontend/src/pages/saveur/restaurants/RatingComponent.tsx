@@ -1,4 +1,4 @@
-import { NotesOption, NOTES_VALUES } from '@galadrim-rooms/shared'
+import { NotesOption, NOTES_VALUES } from '@galadrim-tools/shared'
 import { CardContent, IconButton, styled } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 

@@ -7,7 +7,7 @@ services:
             - SYS_NICE
         restart: always
         environment:
-            - MYSQL_DATABASE=galadrim_rooms
+            - MYSQL_DATABASE=galadrim_tools
             - MYSQL_ROOT_PASSWORD=root
         ports:
             - '3310:3306'

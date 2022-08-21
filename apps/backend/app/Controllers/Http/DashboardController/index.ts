@@ -1,4 +1,4 @@
-import { hasRights } from '@galadrim-rooms/shared'
+import { hasRights } from '@galadrim-tools/shared'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { getDashboardInfos } from './getDashboardInfos'
 

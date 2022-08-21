@@ -1,4 +1,4 @@
-import { DashboardInfos } from '@galadrim-rooms/shared'
+import { DashboardInfos } from '@galadrim-tools/shared'
 import os from 'os'
 
 export const getDashboardInfos = (): DashboardInfos => {

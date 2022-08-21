@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BUILD_PATH="../../dist/apps/backend"
-PM2_NAME="galadrim-rooms"
+PM2_NAME="galadrim-tools"
 
 stat $BUILD_PATH &> /dev/null  || (echo "backend should be built before" && exit 1) &&
 cd $BUILD_PATH &&
