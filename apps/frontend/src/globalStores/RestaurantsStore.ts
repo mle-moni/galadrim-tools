@@ -2,6 +2,7 @@ import { IRestaurant } from '@galadrim-tools/shared'
 import Fuse from 'fuse.js'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../api/fetch'
+import { getRestaurantsScore } from '../pages/saveur/bestRestaurants/getRestaurantScore'
 import { notifyError } from '../utils/notification'
 
 const fuseSettings: Fuse.IFuseOptions<IRestaurant> = {
@@ -86,5 +87,15 @@ export class RestaurantsStore {
 
     deleteRestaurant(id: number) {
         this.restaurants = this.restaurants.filter((resto) => id !== resto.id)
+    }
+
+    get bestRestaurants() {
+        const scores = getRestaurantsScore(this.restaurants)
+        const sortedScores = scores.sort(
+            (restaurantA, restaurantB) => restaurantB.score - restaurantA.score
+        )
+        const bestFive = sortedScores.slice(0, 5)
+
+        return bestFive.map(({ restaurant }) => restaurant)
     }
 }

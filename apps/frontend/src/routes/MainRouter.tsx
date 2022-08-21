@@ -13,6 +13,9 @@ const EditRestaurantPage = React.lazy(
     () => import('../pages/saveur/editRestaurant/EditRestaurantPage')
 )
 const SaveurPage = React.lazy(() => import('../pages/saveur/SaveurPage'))
+const BestRestaurantsPage = React.lazy(
+    () => import('../pages/saveur/bestRestaurants/BestRestaurantsPage')
+)
 const HomePage = React.lazy(() => import('../pages/HomePage'))
 const RoomsHomePage = React.lazy(() => import('../pages/room/RoomsHomePage'))
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'))
@@ -70,6 +73,7 @@ const AppRoutes = () => {
             </Route>
             <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
             <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />
+            <Route path="/saveur/bestRestaurants" element={<BestRestaurantsPage />} />
             <Route path="/saveur" element={<SaveurPage />} />
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
