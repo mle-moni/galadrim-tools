@@ -50,7 +50,7 @@ export const updateRoute = async ({ params, request, auth, response }: HttpConte
 
     await updateRestaurantTags(restaurant, input.tags)
 
-    const restaurantToSend = Restaurant.fetchById(restaurant.id)
+    const restaurantToSend = await Restaurant.fetchById(restaurant.id)
 
     Ws.io.to('connectedSockets').emit('updateRestaurant', restaurantToSend)
 
