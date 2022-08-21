@@ -1,7 +1,7 @@
 import { INotes, IRestaurant } from '@galadrim-tools/shared'
 
 // ? https://stringfixer.com/fr/Bayesian_estimator
-const WEIGHT = 4
+const WEIGHT = 10
 
 const getAverage = (list: number[]) => {
     if (list.length === 0) {
@@ -26,10 +26,10 @@ const getRestaurantScore = (
     allRestaurantsNotesAverage: number
 ) => {
     const numberOfVotes = restaurant.notes.length
-    const dividende = average * numberOfVotes + allRestaurantsNotesAverage * WEIGHT
-    const diviseur = numberOfVotes + WEIGHT
+    const part1 = (numberOfVotes / (numberOfVotes + WEIGHT)) * average
+    const part2 = WEIGHT / (numberOfVotes + WEIGHT) / allRestaurantsNotesAverage
 
-    return dividende / diviseur
+    return part1 + part2
 }
 
 export const getRestaurantsScore = (restaurants: IRestaurant[]) => {
