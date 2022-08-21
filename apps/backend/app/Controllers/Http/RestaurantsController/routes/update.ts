@@ -28,12 +28,21 @@ const updateRestaurantScalars = async (restaurant: Restaurant, input: Restaurant
 const updateRestaurantTags = async (restaurant: Restaurant, newTags: number[]) => {
     await restaurant.load('tags')
 
-    const tagsSet = new Set(restaurant.tags.map((tag) => tag.id))
+    const tagsIdsArray = restaurant.tags.map((tag) => tag.id)
+    const tagsSet = new Set(tagsIdsArray)
     const tagsToCreate = newTags
         .filter((tagId) => !tagsSet.has(tagId))
         .map((tagId) => ({ restaurantId: restaurant.id, tagId }))
 
     await RestaurantTag.createMany(tagsToCreate)
+
+    const newTagsSet = new Set(newTags)
+    const tagsToDelete = tagsIdsArray.filter((tagId) => !newTagsSet.has(tagId))
+
+    await RestaurantTag.query()
+        .where('restaurantId', restaurant.id)
+        .andWhereIn('tagId', tagsToDelete)
+        .delete()
 }
 
 export const updateRoute = async ({ params, request, auth, response }: HttpContextContract) => {

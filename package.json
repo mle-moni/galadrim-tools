@@ -3,7 +3,8 @@
     "version": "3.0.0",
     "license": "MIT",
     "scripts": {
-        "deploy": "git pull && ./deployAll.sh"
+        "deploy": "git pull && ./deployAll.sh",
+        "deploy:frontend": "git pull && nx build frontend && nx deploy frontend"
     },
     "private": true,
     "workspaces": [
