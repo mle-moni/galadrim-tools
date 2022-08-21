@@ -1,4 +1,4 @@
-import { generateRights, RIGHTS } from '@galadrim-rooms/shared'
+import { generateRights, RIGHTS } from '@galadrim-tools/shared'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import User from '../../app/Models/User'
 

@@ -1,4 +1,4 @@
-import { ApiError, ITag } from '@galadrim-rooms/shared'
+import { ApiError, ITag } from '@galadrim-tools/shared'
 import { fetchBackendJson } from './fetch'
 
 export const fetchTags = async () => {

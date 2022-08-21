@@ -1,4 +1,4 @@
-import { ITag } from '@galadrim-rooms/shared'
+import { ITag } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'

@@ -1,4 +1,4 @@
-import { ApiError } from '@galadrim-rooms/shared'
+import { ApiError } from '@galadrim-tools/shared'
 import { autorun, makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
 import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'

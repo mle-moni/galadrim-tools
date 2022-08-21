@@ -1,5 +1,5 @@
 {
-    "name": "@galadrim-rooms/shared",
-    "version": "0.0.1",
+    "name": "@galadrim-tools/shared",
+    "version": "1.0.0",
     "main": "src/index"
 }

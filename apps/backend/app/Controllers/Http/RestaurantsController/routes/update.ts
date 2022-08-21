@@ -1,4 +1,4 @@
-import { hasRights } from '@galadrim-rooms/shared'
+import { hasRights } from '@galadrim-tools/shared'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Restaurant from '../../../../Models/Restaurant'

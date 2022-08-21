@@ -1,4 +1,4 @@
-import { ApiError } from '@galadrim-rooms/shared'
+import { ApiError } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../api/fetch'
 import { notifyError, notifySuccess } from '../../utils/notification'

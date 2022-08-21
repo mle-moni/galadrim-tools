@@ -1,4 +1,4 @@
-import { ApiError, DashboardInfos, _assert } from '@galadrim-rooms/shared'
+import { ApiError, DashboardInfos, _assert } from '@galadrim-tools/shared'
 import { action, makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../../api/fetch'
 import { notifyError } from '../../../utils/notification'

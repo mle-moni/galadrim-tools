@@ -1,4 +1,4 @@
-import { IRestaurant } from '@galadrim-rooms/shared'
+import { IRestaurant } from '@galadrim-tools/shared'
 import Fuse from 'fuse.js'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../api/fetch'

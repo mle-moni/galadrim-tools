@@ -1,6 +1,6 @@
 {
-    "name": "galadrim-rooms",
-    "version": "2.0.0",
+    "name": "galadrim-tools",
+    "version": "3.0.0",
     "license": "MIT",
     "scripts": {
         "deploy": "git pull && ./deployAll.sh"

@@ -1,4 +1,4 @@
-import { _assert } from '@galadrim-rooms/shared'
+import { _assert } from '@galadrim-tools/shared'
 import L from 'leaflet'
 import { makeAutoObservable } from 'mobx'
 import { RestaurantsStore } from './RestaurantsStore'

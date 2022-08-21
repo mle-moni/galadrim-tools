@@ -5,6 +5,6 @@ test('test home page', async ({ client }) => {
 
     response.assertStatus(200)
     response.assertBody({
-        service: 'galadrim rooms backend',
+        service: 'galadrim tools backend',
     })
 })

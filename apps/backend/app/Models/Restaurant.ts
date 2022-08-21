@@ -1,4 +1,4 @@
-import { _assertTrue } from '@galadrim-rooms/shared'
+import { _assertTrue } from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import {
     BaseModel,

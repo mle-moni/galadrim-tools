@@ -21,7 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
-    return { service: 'galadrim rooms backend' }
+    return { service: 'galadrim tools backend' }
 })
 
 Route.post('/login', 'AuthController.login')
