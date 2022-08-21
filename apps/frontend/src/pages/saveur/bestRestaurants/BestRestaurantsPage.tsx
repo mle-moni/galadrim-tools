@@ -1,4 +1,4 @@
-import { Home, RestaurantMenu } from '@mui/icons-material'
+import { ArrowBack } from '@mui/icons-material'
 import { Box, CardMedia, List, ListItem, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { AppStore } from '../../../globalStores/AppStore'
@@ -11,15 +11,10 @@ const BestRestaurantsPage = observer(() => {
 
     return (
         <Box>
-            <RoundedLinks
-                linkInfos={[
-                    { Icon: Home, link: '/' },
-                    { Icon: RestaurantMenu, link: '/saveur' },
-                ]}
-            />
-            <CenteredDiv>
-                <Typography variant="h3">Les 5 meilleurs restaurants</Typography>
-            </CenteredDiv>
+            <RoundedLinks linkInfos={[{ Icon: ArrowBack, link: '/saveur' }]} />
+            <Typography variant="h3" sx={{ textAlign: 'center' }}>
+                Les 5 meilleurs restaurants
+            </Typography>
             <CenteredDiv style={{ backgroundColor: 'var(--main-color)' }}>
                 <List sx={{ width: '80vw' }}>
                     {restaurantsStore.bestRestaurants.map(
