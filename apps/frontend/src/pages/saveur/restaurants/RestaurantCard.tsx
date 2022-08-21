@@ -1,13 +1,16 @@
-import { IImage, IRestaurant, NOTES_VALUES } from '@galadrim-tools/shared'
-import { Close, Edit, Room } from '@mui/icons-material'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import { Collapse } from '@mui/material'
-import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Typography from '@mui/material/Typography'
+import { IImage, IRestaurant, ITag, NOTES_VALUES } from '@galadrim-tools/shared'
+import { Close, Edit, Favorite, Room } from '@mui/icons-material'
+import {
+    Box,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Chip,
+    Collapse,
+    Typography,
+} from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { getApiUrl } from '../../../api/fetch'
@@ -20,7 +23,15 @@ import { RestaurantCardStore } from './RestaurantCardStore'
 
 export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
 
-const getImageUrl = (image: IImage | null) => {
+export const RestaurantTags = observer<{ tags: ITag[] }>(({ tags }) => (
+    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+        {tags.map(({ id, name }) => (
+            <Chip key={id} label={name} variant="filled" sx={{ margin: 0.5 }} />
+        ))}
+    </Box>
+))
+
+export const getImageUrl = (image: IImage | null) => {
     if (image === null) {
         return `${getApiUrl()}${DEFAULT_RESTAURANT_IMAGE_PATH}`
     }
@@ -46,6 +57,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 <Typography gutterBottom variant="h5" component="div">
                     {restaurant.name}
                 </Typography>
+                <RestaurantTags tags={restaurant.tags} />
                 <Typography variant="body2" color="text.secondary">
                     {restaurant.description}
                 </Typography>
@@ -60,7 +72,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
             </Collapse>
             <CardActions sx={{ display: 'flex', justifyContent: 'space-around' }}>
                 <Button onClick={() => store.toggleIsRatingDevelopped()} size="small">
-                    {store.rating ? NOTES_VALUES[store.rating] : <FavoriteIcon />}
+                    {store.rating ? NOTES_VALUES[store.rating] : <Favorite />}
                 </Button>
                 <CustomLink to={`/saveur/restaurants/${restaurant.id}`}>
                     <Edit />

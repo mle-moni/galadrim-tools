@@ -1,4 +1,4 @@
-import { Home } from '@mui/icons-material'
+import { FormatListNumbered, Home } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Box } from '@mui/material'
@@ -40,6 +40,7 @@ const SaveurPage = observer(() => {
             <RoundedLinks
                 linkInfos={[
                     { Icon: Home, link: '/' },
+                    { Icon: FormatListNumbered, link: '/saveur/bestRestaurants' },
                     { Icon: AddIcon, link: '/saveur/createRestaurant' },
                 ]}
                 horizontalPosition="right"
