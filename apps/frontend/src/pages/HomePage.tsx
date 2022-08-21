@@ -34,7 +34,7 @@ const HomePage = observer(() => {
                 <IconLink
                     Icon={Lightbulb}
                     link="https://github.com/mle-moni/galadrim-tools/issues"
-                    title="Nouvelle idée"
+                    title="Proposer une idée"
                 />
                 <IconLink
                     Icon={AdminPanelSettings}
