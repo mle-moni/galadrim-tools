@@ -2,6 +2,7 @@ import { IRestaurant } from '@galadrim-tools/shared'
 import { LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { Fragment, useMemo } from 'react'
 import { getApiUrl } from '../../../../api/fetch'
@@ -104,11 +105,11 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                 <Autocomplete
                     multiple
                     id="tags"
-                    value={createRestaurantStore.tags}
+                    value={toJS(createRestaurantStore.tags)}
                     onChange={(_, newValue) => {
                         createRestaurantStore.setTags(newValue)
                     }}
-                    options={saveurStore.tagsStore.tags}
+                    options={toJS(saveurStore.tagsStore.tags)}
                     getOptionLabel={(option) => option.name}
                     noOptionsText="Pas de tags trouvés"
                     isOptionEqualToValue={(option, value) => option.name === value.name}

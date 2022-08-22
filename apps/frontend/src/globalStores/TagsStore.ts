@@ -40,7 +40,10 @@ export class TagsStore {
     }
 
     pushTag(tag: ITag) {
-        this.tags.push(tag)
+        const found = this.tags.find(({ id }) => tag.id === id)
+        if (found === undefined) {
+            this.tags.push(tag)
+        }
     }
 
     async createTag() {
@@ -56,7 +59,6 @@ export class TagsStore {
         if (res.ok) {
             notifySuccess(`Le tag ${tagName} a été créé !`)
             this.reset()
-            this.pushTag(res.json)
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer le tag ${tagName}`))
         }
