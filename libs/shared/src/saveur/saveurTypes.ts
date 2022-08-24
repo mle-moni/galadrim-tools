@@ -22,6 +22,7 @@ export interface IRestaurant {
     tags: ITag[]
     notes: INotes[]
     image: IImage | null
+    createdAt: string // parsable date
 }
 
 export interface INotes {

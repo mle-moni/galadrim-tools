@@ -2,7 +2,7 @@ import { IRestaurant } from '@galadrim-tools/shared'
 import Fuse from 'fuse.js'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../api/fetch'
-import { getRestaurantsScore } from '../pages/saveur/bestRestaurants/getRestaurantScore'
+import { getRestaurantsScore } from '../pages/saveur/restaurantsLists/getRestaurantScore'
 import { notifyError } from '../utils/notification'
 
 const fuseSettings: Fuse.IFuseOptions<IRestaurant> = {
@@ -89,13 +89,33 @@ export class RestaurantsStore {
         this.restaurants = this.restaurants.filter((resto) => id !== resto.id)
     }
 
+    get scores() {
+        return getRestaurantsScore(this.restaurants)
+    }
+
     get bestRestaurants() {
-        const scores = getRestaurantsScore(this.restaurants)
-        const sortedScores = scores.sort(
+        const sortedScores = this.scores.sort(
             (restaurantA, restaurantB) => restaurantB.score - restaurantA.score
         )
         const bestFive = sortedScores.slice(0, 5)
 
         return bestFive.map(({ restaurant }) => restaurant)
+    }
+
+    get worstRestaurants() {
+        const sortedScores = this.scores.sort(
+            (restaurantA, restaurantB) => restaurantA.score - restaurantB.score
+        )
+        const worstFive = sortedScores.slice(0, 5)
+
+        return worstFive.map(({ restaurant }) => restaurant)
+    }
+
+    get newRestaurants(): IRestaurant[] {
+        const restaurants = [...this.restaurants]
+        const sortedById = restaurants.sort((a, b) => b.id - a.id)
+        const newestRestaurants = sortedById.slice(0, 5)
+
+        return newestRestaurants
     }
 }
