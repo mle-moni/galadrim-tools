@@ -16,6 +16,7 @@ export const validateTagsParams = async (request: HttpContextContract['request']
     return request.validate({
         schema: StoreValidationSchema,
         messages: {
+            'name.required': "Le champ 'tag' est obligatoire",
             'name.maxLength': 'Le tag est trop long',
             'name.minLength': 'Le tag est trop court',
             'name.unique': 'Ce tag existe déjà',

@@ -11,12 +11,28 @@ const StoreValidationSchema = schema.create({
     lat: schema.number(),
     lng: schema.number(),
     tags: schema.array().members(schema.number([rules.exists({ table: 'tags', column: 'id' })])),
-    image: schema.file.optional({ extnames: ['jpg', 'png'], size: '1mb' }),
+    image: schema.file.optional({ extnames: ['jpg', 'png', 'jpeg'], size: '1mb' }),
 })
 
 export const validateRestaurantsParams = async (request: HttpContextContract['request']) => {
     return request.validate({
         schema: StoreValidationSchema,
+        messages: {
+            'name.required': 'Le nom est requis',
+            'name.maxLength': 'Le nom est trop grand',
+            'name.minLength': 'Le nom est trop court',
+            'description.required': 'La description est requise',
+            'description.maxLength': 'La description est trop grand',
+            'description.minLength': 'La description est trop court',
+            'lat.required': 'La latitude est requise',
+            'lat.number': 'La latitude doit être un nombre',
+            'lng.required': 'La latitude est requise',
+            'lng.number': 'La longitude doit être un nombre',
+            'tags.required': 'Il doit y avoir au moins 1 tag',
+            'tags.exists': 'Les tags doivent exister (tu nous fais quoi) !!?',
+            'file.size': 'Le fichier est trop grand (max 1mo)',
+            'file.extname': 'Le fichier doit être au format jpg ou png',
+        },
     })
 }
 

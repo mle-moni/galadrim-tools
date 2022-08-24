@@ -12,6 +12,10 @@ const noteValidationSchema = schema.create({
 export const validateNoteParams = async (request: HttpContextContract['request']) => {
     return request.validate({
         schema: noteValidationSchema,
+        messages: {
+            'restaurant_id.required': 'La référence du restaurant à noter est nécessaire',
+            'restaurant_id.number': "L'id du restaurant doit ếtre un nombre",
+        },
     })
 }
 
