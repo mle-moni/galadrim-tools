@@ -33,7 +33,7 @@ export const POS_ALL_LOCAUX: Locaux[] = [
 export const MAX_ZOOM = 18
 
 const SaveurPage = observer(() => {
-    const saveurStore = AppStore.saveurStore
+    const { saveurStore, authStore } = AppStore
 
     return (
         <>
@@ -72,7 +72,7 @@ const SaveurPage = observer(() => {
                     </Marker>
                 ))}
 
-                <RestaurantMarkers saveurStore={saveurStore} />
+                <RestaurantMarkers saveurStore={saveurStore} userId={authStore.user.id} />
             </MapContainer>
             <SaveurLeftMenu saveurStore={saveurStore} />
             <Box
