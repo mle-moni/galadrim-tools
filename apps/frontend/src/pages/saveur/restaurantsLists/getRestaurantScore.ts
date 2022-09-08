@@ -1,7 +1,7 @@
 import { INotes, IRestaurant } from '@galadrim-tools/shared'
 
 // ? https://stringfixer.com/fr/Bayesian_estimator
-const WEIGHT = 10
+const WEIGHT = 5
 
 const getAverage = (list: number[]) => {
     if (list.length === 0) {
