@@ -2,7 +2,10 @@ import { IRestaurant } from '@galadrim-tools/shared'
 import Fuse from 'fuse.js'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../api/fetch'
-import { getRestaurantsScore } from '../pages/saveur/restaurantsLists/getRestaurantScore'
+import {
+    getRestaurantsScore,
+    MINIMUM_VOTES_BEFORE_RELEVANT,
+} from '../pages/saveur/restaurantsLists/getRestaurantScore'
 import { notifyError } from '../utils/notification'
 
 const fuseSettings: Fuse.IFuseOptions<IRestaurant> = {
@@ -103,9 +106,9 @@ export class RestaurantsStore {
     }
 
     get worstRestaurants() {
-        const sortedScores = this.scores.sort(
-            (restaurantA, restaurantB) => restaurantA.score - restaurantB.score
-        )
+        const sortedScores = this.scores
+            .filter(({ restaurant: { notes } }) => notes.length >= MINIMUM_VOTES_BEFORE_RELEVANT)
+            .sort((restaurantA, restaurantB) => restaurantA.score - restaurantB.score)
         const worstFive = sortedScores.slice(0, 5)
 
         return worstFive.map(({ restaurant }) => restaurant)
