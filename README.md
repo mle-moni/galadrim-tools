@@ -1,6 +1,9 @@
-# Galadrim Rooms
+# Galadrim Tools
 
-![galadrim room home](./readme-images/home.png)
+-   real time room booking tool
+-   real time restaurant rating tool
+
+![galadrim tools home](./readme-images/home.png)
 
 see some other sample images [here](./readme-images/README.md)
 
