@@ -2,7 +2,23 @@
 
 ## Home
 
-![galadrim room home](./home.png)
+![galadrim tools home](./home.png)
+
+## Restaurant rating tool map
+
+![Restaurant rating tool](./restaurants_map.png)
+
+## Restaurant rating tool map with restaurant in focus
+
+![Restaurant rating tool map with restaurant in focus](./restaurants_map_focus.png)
+
+## Best restaurants page
+
+![Best restaurants page](./best_restaurants.png)
+
+## Room booking tool home
+
+![galadrim room home](./rooms.png)
 
 ## Calendar all rooms
 
