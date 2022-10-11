@@ -4,10 +4,11 @@ import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { SaveurStore } from '../../globalStores/SaveurStore'
 import { POS_OFFSET } from '../../reusableComponents/common/RoundedLinks'
+import { getFavouriteLocauxIndex, setFavouriteLocauxIndex } from './persistLocauxPreferences'
 import { MAX_ZOOM, POS_ALL_LOCAUX } from './SaveurPage'
 
 export const LocauxSwitch = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
-    const [locauxIndex, setLocauxIndex] = useState(0)
+    const [locauxIndex, setLocauxIndex] = useState(getFavouriteLocauxIndex())
 
     return (
         <Fab
@@ -19,6 +20,7 @@ export const LocauxSwitch = observer<{ saveurStore: SaveurStore }>(({ saveurStor
                 const [lat, lng] = POS_ALL_LOCAUX[index].position
                 saveurStore.leafletMap.flyTo({ lat, lng }, MAX_ZOOM)
                 setLocauxIndex(index)
+                setFavouriteLocauxIndex(index)
             }}
             sx={{
                 position: 'absolute',
