@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AppStore } from '../../globalStores/AppStore'
+import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { HouseMarkerIcon } from '../../reusableComponents/saveur/markers/HouseMarker'
@@ -34,6 +35,12 @@ export const MAX_ZOOM = 18
 
 const SaveurPage = observer(() => {
     const { saveurStore, authStore } = AppStore
+
+    useCheckConnection(authStore)
+
+    if (authStore.connected === false) {
+        return null
+    }
 
     return (
         <>
