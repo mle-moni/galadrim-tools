@@ -49,7 +49,10 @@ const Ratings = observer<RatingsProps>(({ ratios }) => {
                     <Typography>{ratio.label}</Typography>
                     <ProgressWrapper>
                         <Tooltip title={getNameOfUsers(ratio.userIds, AppStore.users)}>
-                            <BorderLinearProgress variant="determinate" value={ratio.value} />
+                            <BorderLinearProgress
+                                variant="determinate"
+                                value={isNaN(ratio.value) ? 0 : ratio.value}
+                            />
                         </Tooltip>
                     </ProgressWrapper>
                     <Typography sx={{ fontSize: 10 }}>{ratio.count}</Typography>
