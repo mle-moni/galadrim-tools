@@ -16,6 +16,7 @@ export type WorkplaceSvgRoom =
     | 'PetitCouloir'
     | 'Manguier'
     | 'Babyfoot'
+    | 'PhoneBox'
     | 'Other'
 
 export interface WorkplaceSvgProps {
@@ -107,6 +108,22 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             <rect x="603" y="578" width="4" height="11" fill={backgroundColor('Other')} />
             <rect x="506" y="401" width="4" height="24" fill={backgroundColor('Other')} />
             <rect x="286" y="555" width="26" height="4" fill={backgroundColor('Other')} />
+            <rect
+                id="Rectangle 103"
+                x="455"
+                y="567"
+                width="2"
+                height="43"
+                fill={backgroundColor('Other')}
+            />
+            <rect
+                id="Rectangle 104"
+                x="457"
+                y="567"
+                width="45"
+                height="2"
+                fill={backgroundColor('Other')}
+            />
         </>
     )
 
@@ -252,13 +269,13 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                 <path
                     fillRule="evenodd"
                     clipRule="evenodd"
-                    d="M345 387H506V401H507V402H509V401H510V383H508H506H345V387ZM339 559V574H338V574.95H336V574H335V559H339ZM339 593V606H345V610H414V611H414.95V613H414V614H345H329V606H335V593H336V592.05H338V593H339ZM452 614H502H506V576H527V562V560V553H526V551.95H524V553H523V560H502V564V576V610H452V611H451.05V613H452V614ZM506 425V438H510H523V532H524V533.05H526V532H527V434H526H523H510V425H509V424H507V425H506ZM524 537.25V535.15H526V537.25H524ZM524 541.45V539.35H526V541.45H524ZM524 545.65V543.55H526V545.65H524ZM524 549.85V547.75H526V549.85H524ZM507 404V406H509V404H507ZM507 408V410H509V408H507ZM507 412V414H509V412H507ZM507 416V418H509V416H507ZM507 420V422H509V420H507ZM336 578.75V576.85H338V578.75H336ZM336 582.55V580.65H338V582.55H336ZM336 586.35V584.45H338V586.35H336ZM336 590.15V588.25H338V590.15H336ZM416.85 613H418.75V611H416.85V613ZM420.65 613H422.55V611H420.65V613ZM424.45 613H426.35V611H424.45V613ZM428.25 613H430.15V611H428.25V613ZM432.05 613H433.95V611H432.05V613ZM435.85 613H437.75V611H435.85V613ZM439.65 613H441.55V611H439.65V613ZM443.45 613H445.35V611H443.45V613ZM447.25 613H449.15V611H447.25V613Z"
+                    d="M345 387H506V401H507V402H509V401H510V383H508H506H345V387ZM339 559V574H338V574.95H336V574H335V559H339ZM339 593V606H345V610H414V611H414.95V613H414V614H345H329V606H335V593H336V592.05H338V593H339ZM506 425V438H510H523V532H524V533.05H526V532H527V434H526H523H510V425H509V424H507V425H506ZM523 560V553H524V551.95H526V553H527V560V562V576H502V560H523ZM524 537.25V535.15H526V537.25H524ZM524 541.45V539.35H526V541.45H524ZM524 545.65V543.55H526V545.65H524ZM524 549.85V547.75H526V549.85H524ZM507 404V406H509V404H507ZM507 408V410H509V408H507ZM507 412V414H509V412H507ZM507 416V418H509V416H507ZM507 420V422H509V420H507ZM336 578.75V576.85H338V578.75H336ZM336 582.55V580.65H338V582.55H336ZM336 586.35V584.45H338V586.35H336ZM336 590.15V588.25H338V590.15H336ZM416.85 613H418.75V611H416.85V613ZM420.65 613H422.55V611H420.65V613ZM424.45 613H426.35V611H424.45V613ZM428.25 613H430.15V611H428.25V613ZM432.05 613H433.95V611H432.05V613ZM435.85 613H437.75V611H435.85V613ZM439.65 613H441.55V611H439.65V613ZM443.45 613H445.35V611H443.45V613ZM447.25 613H449.15V611H447.25V613ZM451.05 613H452V611H451.05V613Z"
                     fill={wallsColor}
                 />
                 <path
                     fillRule="evenodd"
                     clipRule="evenodd"
-                    d="M333 387H506V433V438H523V560H502V610H345V606H339V559H345V438V433H333V387Z"
+                    d="M506 387H333V433H345V438V559H339V606H345V610H455V567H502V560H523V438H506V433V387Z"
                     {...svgProps}
                 />
             </>
@@ -385,6 +402,53 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
         )
     }
 
+    const PhoneBox = () => {
+        const svgProps = useRoom('PhoneBox')
+        return (
+            <>
+                <line
+                    id="Line 130"
+                    x1="502"
+                    y1="612"
+                    x2="453"
+                    y2="612"
+                    stroke={wallsColor}
+                    stroke-width="4"
+                />
+                <line
+                    id="Line 131"
+                    x1="504"
+                    y1="576"
+                    x2="504"
+                    y2="611"
+                    stroke={wallsColor}
+                    stroke-width="4"
+                />
+                <line
+                    id="Line 128"
+                    x1="505"
+                    y1="568"
+                    x2="455"
+                    y2="568"
+                    stroke={wallsColor}
+                    stroke-width="2"
+                    stroke-dasharray="4 4"
+                />
+                <line
+                    id="Line 129"
+                    x1="456"
+                    y1="567"
+                    x2="456"
+                    y2="612"
+                    stroke={wallsColor}
+                    stroke-width="2"
+                    stroke-dasharray="4 4"
+                />
+                <rect id="Rectangle 102" x="457" y="569" width="45" height="41" {...svgProps} />
+            </>
+        )
+    }
+
     return (
         <svg
             width={width}
@@ -411,6 +475,7 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             <Babyfoot />
             <Work23Walls />
             <KitchenDoor />
+            <PhoneBox />
         </svg>
     )
 }
