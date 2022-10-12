@@ -1,12 +1,10 @@
 import { Box, experimental_sx as sx, styled } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { ComponentProps, FC, PropsWithChildren, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ComponentProps, FC, PropsWithChildren } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
+import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { getTheme } from '../../theme'
 import { Whoami } from '../auth/Whoami'
-
-const whiteListedRoutes = ['/login', '/getOtp']
 
 type MainLayoutProps = PropsWithChildren<{
     fullscreen?: boolean
@@ -26,14 +24,9 @@ const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
 
 export const MainLayout = observer(
     ({ fullscreen, children }: ComponentProps<FC<MainLayoutProps>>) => {
-        const navigate = useNavigate()
         const { authStore } = AppStore
 
-        useEffect(() => {
-            if (!authStore.connected && !whiteListedRoutes.includes(location.pathname)) {
-                navigate('/login')
-            }
-        }, [authStore.connected])
+        useCheckConnection(authStore)
 
         return (
             <Root fullscreen={fullscreen}>

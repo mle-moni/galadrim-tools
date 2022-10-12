@@ -7,10 +7,12 @@ import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AppStore } from '../../globalStores/AppStore'
+import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { HouseMarkerIcon } from '../../reusableComponents/saveur/markers/HouseMarker'
 import { LocauxSwitch } from './LocauxSwitch'
+import { getFavouriteLocauxIndex } from './persistLocauxPreferences'
 import { RestaurantMarkers } from './restaurants/RestaurantMarkers'
 import { SaveurLeftMenu } from './restaurants/SaveurLeftMenu'
 
@@ -35,6 +37,14 @@ export const MAX_ZOOM = 18
 const SaveurPage = observer(() => {
     const { saveurStore, authStore } = AppStore
 
+    useCheckConnection(authStore)
+
+    if (authStore.connected === false) {
+        return null
+    }
+
+    const favouriteLocauxIndex = getFavouriteLocauxIndex()
+
     return (
         <>
             <RoundedLinks
@@ -55,7 +65,7 @@ const SaveurPage = observer(() => {
                     left: '0px',
                     top: '0px',
                 }}
-                center={POS_ALL_LOCAUX[0].position}
+                center={POS_ALL_LOCAUX[favouriteLocauxIndex].position}
                 zoom={17}
                 maxZoom={MAX_ZOOM}
                 scrollWheelZoom
