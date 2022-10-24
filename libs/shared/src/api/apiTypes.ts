@@ -7,6 +7,11 @@ export interface ApiErrors {
     errors: ApiFormError[]
 }
 
+export interface AdonisApiError {
+    code: string
+    message: string
+}
+
 export interface ApiNotification {
     notification: string
 }

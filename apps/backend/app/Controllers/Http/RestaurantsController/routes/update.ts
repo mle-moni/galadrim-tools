@@ -16,7 +16,8 @@ const updateRestaurantScalars = async (restaurant: Restaurant, input: Restaurant
     restaurant.description = description
     restaurant.lat = lat
     restaurant.lng = lng
-    restaurant.averagePrice = averagePrice
+
+    restaurant.averagePrice = averagePrice ?? null
 
     if (image) {
         restaurant.image = Attachment.fromFile(image)

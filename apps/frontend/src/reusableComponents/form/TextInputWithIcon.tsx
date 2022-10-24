@@ -9,10 +9,11 @@ export interface TextInputWithIconProps {
         muiName: string
     }
     onChange: (value: string) => void
+    error?: boolean
 }
 
 export const TextInputWithIcon = observer<TextInputWithIconProps>(
-    ({ value, onChange, placeholder, Icon }) => {
+    ({ value, onChange, placeholder, Icon, error }) => {
         return (
             <OutlinedInput
                 value={value}
@@ -25,6 +26,7 @@ export const TextInputWithIcon = observer<TextInputWithIconProps>(
                     </InputAdornment>
                 }
                 sx={{ mt: 2 }}
+                error={error}
             />
         )
     }

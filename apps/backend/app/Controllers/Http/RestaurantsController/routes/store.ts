@@ -12,7 +12,7 @@ const StoreValidationSchema = schema.create({
     lng: schema.number(),
     tags: schema.array().members(schema.number([rules.exists({ table: 'tags', column: 'id' })])),
     image: schema.file.optional({ extnames: ['jpg', 'png', 'jpeg'], size: '1mb' }),
-    averagePrice: schema.number.nullable(),
+    averagePrice: schema.number.optional(),
 })
 
 export const validateRestaurantsParams = async (request: HttpContextContract['request']) => {
