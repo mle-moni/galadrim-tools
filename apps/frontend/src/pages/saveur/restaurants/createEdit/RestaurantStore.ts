@@ -79,7 +79,7 @@ export class RestaurantStore {
     }
 
     get averagePrice() {
-        const price = parseInt(this.averagePriceText)
+        const price = parseFloat(this.averagePriceText)
         if (this.averagePriceText === '' || isNaN(price)) {
             return null
         }
