@@ -29,6 +29,12 @@ export default class Restaurant extends BaseModel {
     @column()
     public lng: number
 
+    @column()
+    public averagePrice: number | null
+
+    @column()
+    public userId: number
+
     @attachment({ folder: 'restaurant', preComputeUrl: true })
     public image: AttachmentContract | null
 
