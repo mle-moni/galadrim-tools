@@ -1,4 +1,3 @@
-import { hasRights } from '@galadrim-tools/shared'
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Restaurant from '../../../../Models/Restaurant'
@@ -11,12 +10,14 @@ type PromiseType<T> = T extends Promise<infer U> ? U : never
 type RestaurantValidatedInput = PromiseType<ReturnType<typeof validateRestaurantsParams>>
 
 const updateRestaurantScalars = async (restaurant: Restaurant, input: RestaurantValidatedInput) => {
-    const { name, description, lat, lng, image } = input
+    const { name, description, lat, lng, image, averagePrice } = input
 
     restaurant.name = name
     restaurant.description = description
     restaurant.lat = lat
     restaurant.lng = lng
+
+    restaurant.averagePrice = averagePrice ?? null
 
     if (image) {
         restaurant.image = Attachment.fromFile(image)
@@ -45,13 +46,10 @@ const updateRestaurantTags = async (restaurant: Restaurant, newTags: number[]) =
         .delete()
 }
 
-export const updateRoute = async ({ params, request, auth, response }: HttpContextContract) => {
+export const updateRoute = async ({ params, request, bouncer }: HttpContextContract) => {
     const restaurant = await Restaurant.findOrFail(params.id)
-    const user = auth.user!
 
-    if (!hasRights(user.rights, ['MIAM_ADMIN'])) {
-        return response.forbidden({ error: `Vous n'avez pas les droits nécessaires` })
-    }
+    await bouncer.with('RestaurantsPolicy').authorize('viewUpdateOrDelete', restaurant)
 
     const input = await validateRestaurantsParams(request)
 

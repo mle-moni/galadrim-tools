@@ -12,6 +12,7 @@ const StoreValidationSchema = schema.create({
     lng: schema.number(),
     tags: schema.array().members(schema.number([rules.exists({ table: 'tags', column: 'id' })])),
     image: schema.file.optional({ extnames: ['jpg', 'png', 'jpeg'], size: '1mb' }),
+    averagePrice: schema.number.optional(),
 })
 
 export const validateRestaurantsParams = async (request: HttpContextContract['request']) => {
@@ -36,13 +37,17 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
     })
 }
 
-export const storeRoute = async ({ request }: HttpContextContract) => {
-    const { name, description, lat, lng, tags, image } = await validateRestaurantsParams(request)
+export const storeRoute = async ({ request, auth }: HttpContextContract) => {
+    const user = auth.user!
+    const { name, description, lat, lng, tags, image, averagePrice } =
+        await validateRestaurantsParams(request)
     const restaurant = await Restaurant.create({
         name,
         description,
         lat,
         lng,
+        averagePrice,
+        userId: user.id,
         image: image ? Attachment.fromFile(image) : undefined,
     })
 

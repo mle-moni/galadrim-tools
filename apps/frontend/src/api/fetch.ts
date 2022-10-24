@@ -1,4 +1,4 @@
-import { ApiError, ApiErrors } from '@galadrim-tools/shared'
+import { AdonisApiError, ApiError, ApiErrors } from '@galadrim-tools/shared'
 
 export const getSocketApiUrl = () => {
     const url = import.meta.env.VITE_SOCKET_API_URL
@@ -46,6 +46,11 @@ export function isApiSchemaError(error: unknown): error is ApiErrors {
     return typeof (error as ApiErrors)?.errors === 'object'
 }
 
+export const isAdonisApiError = (error: unknown): error is AdonisApiError => {
+    const errorCast = error as AdonisApiError
+    return typeof errorCast?.code === 'string' && typeof errorCast?.message === 'string'
+}
+
 export const getErrorMessage = (
     error: unknown,
     backupMessage = 'Une erreur imprévue est survenue'
@@ -55,6 +60,12 @@ export const getErrorMessage = (
     }
     if (isApiSchemaError(error)) {
         return error.errors[0].message
+    }
+    if (isAdonisApiError(error)) {
+        const errorMessageArr = error.message.split(': ')
+        if (errorMessageArr.length === 2) {
+            return errorMessageArr[1]
+        }
     }
     console.error(error)
     return backupMessage

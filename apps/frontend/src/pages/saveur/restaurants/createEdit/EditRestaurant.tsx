@@ -1,5 +1,5 @@
 import { IRestaurant } from '@galadrim-tools/shared'
-import { LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
+import { Euro, LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'
 import { toJS } from 'mobx'
@@ -59,6 +59,13 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     placeholder="Description"
                     onChange={(value) => createRestaurantStore.setDescription(value)}
                     Icon={Message}
+                />
+                <TextInputWithIcon
+                    value={createRestaurantStore.averagePriceText}
+                    placeholder="Prix moyen, ex: 11.5 (au pire mets le prix que tu as payé)"
+                    onChange={(value) => createRestaurantStore.setAveragePrice(value)}
+                    Icon={Euro}
+                    error={createRestaurantStore.averagePriceError}
                 />
                 <TextInputWithIcon
                     value={createRestaurantStore.coordinates}

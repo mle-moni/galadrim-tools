@@ -23,6 +23,8 @@ export interface IRestaurant {
     notes: INotes[]
     image: IImage | null
     createdAt: string // parsable date
+    averagePrice: number | null
+    userId: number
 }
 
 export interface INotes {

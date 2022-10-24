@@ -14,6 +14,7 @@ export class RestaurantStore {
 
     // used when editing restaurant
     public imageSrc: string | null = null
+    public averagePriceText = ''
 
     constructor(private restaurant?: IRestaurant) {
         if (restaurant) {
@@ -24,8 +25,14 @@ export class RestaurantStore {
             this.lng = restaurant.lng
             this.tags = restaurant.tags
             this.imageSrc = restaurant.image?.url ?? null
+            const avgPriceText = restaurant.averagePrice ?? ''
+            this.averagePriceText = avgPriceText.toString()
         }
         makeAutoObservable(this)
+    }
+
+    setAveragePrice(state: string) {
+        this.averagePriceText = state
     }
 
     setName(name: string) {
@@ -67,6 +74,18 @@ export class RestaurantStore {
         )
     }
 
+    get averagePriceError() {
+        return this.averagePriceText.length !== 0 && this.averagePrice === null
+    }
+
+    get averagePrice() {
+        const price = parseInt(this.averagePriceText)
+        if (this.averagePriceText === '' || isNaN(price)) {
+            return null
+        }
+        return price
+    }
+
     getPayload() {
         const data = new FormData()
 
@@ -74,6 +93,9 @@ export class RestaurantStore {
         data.append('description', this.description)
         data.append('lat', String(this.lat))
         data.append('lng', String(this.lng))
+        if (this.averagePrice !== null) {
+            data.append('averagePrice', String(this.averagePrice))
+        }
         this.tags.forEach((tag: ITag) => data.append('tags[]', tag.id.toString()))
 
         if (this.image) {

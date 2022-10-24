@@ -27,7 +27,8 @@
             "@adonisjs/mail",
             "@adonisjs/view",
             "@japa/preset-adonis/build/adonis-typings",
-            "@adonisjs/attachment-lite"
+            "@adonisjs/attachment-lite",
+            "@adonisjs/bouncer"
         ]
     }
 }
