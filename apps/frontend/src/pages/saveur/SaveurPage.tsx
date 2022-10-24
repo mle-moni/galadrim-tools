@@ -1,4 +1,4 @@
-import { FormatListNumbered, Home, Schedule } from '@mui/icons-material'
+import { Euro, FormatListNumbered, Home, Schedule } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Box } from '@mui/material'
@@ -52,6 +52,7 @@ const SaveurPage = observer(() => {
                     { Icon: Home, link: '/' },
                     { Icon: FormatListNumbered, link: '/saveur/restaurantsList/best' },
                     { Icon: Schedule, link: 'saveur/restaurantsList/new' },
+                    { Icon: Euro, link: 'saveur/restaurantsList/leastExpensive' },
                     { Icon: AddIcon, link: '/saveur/createRestaurant' },
                 ]}
                 horizontalPosition="right"

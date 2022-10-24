@@ -32,6 +32,18 @@ const getRestaurantList = (
             pageName: 'Les 5 derniers restaurants à être ajoutés',
         }
     }
+    if (listName === 'leastExpensive') {
+        return {
+            list: restaurantsStore.leastExpensiveRestaurants,
+            pageName: 'Les restaurants les moins chers',
+        }
+    }
+    if (listName === 'mostExpensive') {
+        return {
+            list: restaurantsStore.mostExpensiveRestaurants,
+            pageName: 'Les restaurants les plus chers',
+        }
+    }
     return null
 }
 
@@ -53,38 +65,46 @@ const RestaurantsListPage = observer(() => {
             </Typography>
             <CenteredDiv style={{ backgroundColor: 'var(--main-color)' }}>
                 <List sx={{ width: '80vw' }}>
-                    {params.list.map(({ id, name, image, description, tags }, index) => {
-                        return (
-                            <Box
-                                key={id}
-                                sx={{
-                                    padding: 4,
-                                }}
-                            >
-                                <ListItem
+                    {params.list.map(
+                        ({ id, name, image, description, tags, averagePrice }, index) => {
+                            return (
+                                <Box
+                                    key={id}
                                     sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        backgroundColor: 'white',
-                                        borderRadius: '4px',
+                                        padding: 4,
                                     }}
                                 >
-                                    <Typography sx={{ fontSize: 'x-large' }}>
-                                        {`${index + 1} ➝ ${name}`}
-                                    </Typography>
-                                    <RestaurantTags tags={tags} />
-                                    <Typography>{description}</Typography>
-                                    <br />
-                                    <CardMedia
-                                        component="img"
-                                        height={300}
-                                        src={getImageUrl(image)}
-                                        sx={{ borderRadius: '4px' }}
-                                    />
-                                </ListItem>
-                            </Box>
-                        )
-                    })}
+                                    <ListItem
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            backgroundColor: 'white',
+                                            borderRadius: '4px',
+                                        }}
+                                    >
+                                        <Typography sx={{ fontSize: 'x-large' }}>
+                                            {`${index + 1} ➝ ${name}`}
+                                        </Typography>
+                                        <RestaurantTags tags={tags} />
+                                        <Typography>{description}</Typography>
+
+                                        {averagePrice !== null && (
+                                            <Typography>
+                                                prix moyen ➝ {`${averagePrice} €`}
+                                            </Typography>
+                                        )}
+                                        <br />
+                                        <CardMedia
+                                            component="img"
+                                            height={300}
+                                            src={getImageUrl(image)}
+                                            sx={{ borderRadius: '4px' }}
+                                        />
+                                    </ListItem>
+                                </Box>
+                            )
+                        }
+                    )}
                 </List>
             </CenteredDiv>
         </Box>

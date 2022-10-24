@@ -73,6 +73,8 @@ export class RestaurantsStore {
         restaurantFound.description = restaurant.description
         restaurantFound.lat = restaurant.lat
         restaurantFound.lng = restaurant.lng
+        restaurantFound.averagePrice = restaurant.averagePrice
+        restaurantFound.userId = restaurant.userId
         restaurantFound.tags = restaurant.tags.map(({ id, name }) => ({ id, name }))
         restaurantFound.notes = restaurant.notes.map(({ id, note, restaurantId, userId }) => ({
             id,
@@ -120,5 +122,23 @@ export class RestaurantsStore {
         const newestRestaurants = sortedById.slice(0, 5)
 
         return newestRestaurants
+    }
+
+    get leastExpensiveRestaurants(): IRestaurant[] {
+        const restaurants = [
+            ...this.restaurants.filter(({ averagePrice }) => averagePrice !== null),
+        ]
+        const sortedRestaurants = restaurants.sort((a, b) => a.averagePrice! - b.averagePrice!)
+
+        return sortedRestaurants
+    }
+
+    get mostExpensiveRestaurants(): IRestaurant[] {
+        const restaurants = [
+            ...this.restaurants.filter(({ averagePrice }) => averagePrice !== null),
+        ]
+        const sortedRestaurants = restaurants.sort((a, b) => b.averagePrice! - a.averagePrice!)
+
+        return sortedRestaurants
     }
 }
