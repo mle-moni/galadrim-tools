@@ -36,6 +36,7 @@ Route.group(() => {
     Route.get('/me', 'AuthController.me')
     Route.post('/createApiToken', 'AuthController.createApiToken')
     Route.post('/changePassword', 'AuthController.changePassword')
+    Route.post('/updateProfile', 'AuthController.updateProfile')
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'GaladrimeursController.index')

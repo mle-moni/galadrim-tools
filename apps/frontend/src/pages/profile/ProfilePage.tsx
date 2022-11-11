@@ -49,36 +49,42 @@ export const ProfilePage = observer(() => {
                                 Icon={AlternateEmail}
                             />
                         </CenteredDiv>
-                    </form>
 
-                    <div className="flex justify-center">
-                        <Avatar
-                            alt={authStore.user.username}
-                            src={authStore.imageSrc ?? authStore.user.imageUrl}
-                            sx={{ width: 256, height: 256, mb: 1 }}
-                        />
-                    </div>
-                    <CenteredDiv>
-                        <Button variant="contained" component="label" sx={{ my: 2 }}>
-                            Changer l'image de profil
-                            <input
-                                type="file"
-                                hidden
-                                accept="image/*"
-                                id="image"
-                                multiple
-                                onChange={(e) => authStore.setUploadedImage(e.target)}
+                        <div className="flex justify-center">
+                            <Avatar
+                                alt={authStore.user.username}
+                                src={authStore.imageSrc ?? authStore.user.imageUrl}
+                                sx={{ width: 256, height: 256, mb: 1 }}
                             />
-                        </Button>
-                        {authStore.image !== null && (
-                            <span style={{ marginLeft: '12px' }}>({authStore.image.name})</span>
-                        )}
-                    </CenteredDiv>
-                    <br />
+                        </div>
+                        <CenteredDiv>
+                            <Button variant="contained" component="label" sx={{ my: 2 }}>
+                                Changer l'image de profil
+                                <input
+                                    type="file"
+                                    hidden
+                                    accept="image/*"
+                                    id="image"
+                                    multiple
+                                    onChange={(e) => authStore.setUploadedImage(e.target)}
+                                />
+                            </Button>
+                            {authStore.image !== null && (
+                                <span style={{ marginLeft: '12px' }}>({authStore.image.name})</span>
+                            )}
+                        </CenteredDiv>
+                        <br />
 
-                    <Button fullWidth variant="contained" type="submit" size="large" sx={{ my: 2 }}>
-                        Mettre à jour le profil
-                    </Button>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            type="submit"
+                            size="large"
+                            sx={{ my: 2 }}
+                        >
+                            Mettre à jour le profil
+                        </Button>
+                    </form>
 
                     <CustomLink
                         to="/changePassword"

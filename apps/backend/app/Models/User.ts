@@ -1,4 +1,5 @@
 import { AllRights, hasRights, hasSomeRights, IUserData } from '@galadrim-tools/shared'
+import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
@@ -31,6 +32,9 @@ export default class User extends BaseModel {
 
     @column()
     public rights: number
+
+    @attachment({ folder: 'avatar', preComputeUrl: true })
+    public image: AttachmentContract | null
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
