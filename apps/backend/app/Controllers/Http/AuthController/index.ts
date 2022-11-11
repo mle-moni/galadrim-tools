@@ -5,6 +5,7 @@ import { getOtpRoute } from './routes/getOtp'
 import { loginRoute } from './routes/login'
 import { logoutRoute } from './routes/logout'
 import { meRoute } from './routes/me'
+import { updateProfileRoute } from './routes/updateProfile'
 
 export default class EventsController {
     public async login(params: HttpContextContract) {
@@ -29,5 +30,9 @@ export default class EventsController {
 
     public async changePassword(params: HttpContextContract) {
         return changePasswordRoute(params)
+    }
+
+    public async updateProfile(params: HttpContextContract) {
+        return updateProfileRoute(params)
     }
 }

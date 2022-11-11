@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
+import Ws from '../../../../../app/Services/Ws'
 import User from '../../../../Models/User'
 
 const editUserRightsSchema = schema.create({
@@ -23,5 +24,8 @@ export const editUserRightsRoute = async ({ request, response }: HttpContextCont
     }
     user.rights = rights
     await user.save()
+
+    Ws.io.to(user.personalSocket).emit('updateRights', rights)
+
     return { notification: 'Les droits ont été mis à jour' }
 }

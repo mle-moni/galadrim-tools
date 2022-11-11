@@ -33,4 +33,5 @@ export default Env.rules({
     MAILGUN_API_KEY: Env.schema.string(),
     MAILGUN_DOMAIN: Env.schema.string(),
     CACHE_VIEWS: Env.schema.boolean(),
+    BACKEND_URL: Env.schema.string({ format: 'url', tld: false }),
 })

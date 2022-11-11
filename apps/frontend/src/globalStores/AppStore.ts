@@ -54,6 +54,20 @@ export class MainStore {
         const users = await fetchUsers()
         this.users = new Map<number, UserData>(users.map((user) => [user.id, user]))
     }
+
+    addUser(user: UserData) {
+        this.users.set(user.id, user)
+    }
+
+    updateUser(user: UserData) {
+        const userFound = this.users.get(user.id)
+        if (!userFound) {
+            this.addUser(user)
+            return
+        }
+        userFound.username = user.username
+        userFound.imageUrl = user.imageUrl
+    }
 }
 
 export const AppStore = new MainStore()

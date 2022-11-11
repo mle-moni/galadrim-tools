@@ -1,10 +1,11 @@
 import { Link as MuiLink } from '@mui/material'
-import { PropsWithChildren } from 'react'
+import { CSSProperties, PropsWithChildren } from 'react'
 import { Link } from 'react-router-dom'
 
 type CustomLinkProps = PropsWithChildren<{
     to: string
     p?: string | number
+    style?: CSSProperties
 }>
 
 export const CustomLink = ({ children, p, ...rest }: CustomLinkProps) => {
