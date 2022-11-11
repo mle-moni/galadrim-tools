@@ -13,6 +13,7 @@ export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => 
     })
 
     const createdIdea = await Idea.create({ userId: user.id, text })
+    await createdIdea.load('ideaVotes')
 
-    return { message: "L'idée à été créé !", idea: createdIdea }
+    return { message: "L'idée à été créé !", idea: createdIdea.frontendData }
 }

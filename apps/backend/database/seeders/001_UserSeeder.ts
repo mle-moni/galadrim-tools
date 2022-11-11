@@ -38,6 +38,14 @@ export default class UserSeeder extends BaseSeeder {
                     'DASHBOARD_ADMIN',
                 ]),
             },
+            {
+                id: 4,
+                username: 'peon',
+                email: 'peon@peon.fr',
+                imageUrl: 'https://forest.galadrim.fr/img/users/default.png',
+                password: 'peon',
+                rights: RIGHTS.DEFAULT,
+            },
         ])
     }
 }

@@ -27,7 +27,7 @@ export default class IdeaVote extends BaseModel {
     get frontendData(): IIdeaNote {
         return {
             ideaId: this.ideaId,
-            isUpvote: this.isUpvote,
+            isUpvote: Boolean(this.isUpvote),
             userId: this.userId,
         }
     }

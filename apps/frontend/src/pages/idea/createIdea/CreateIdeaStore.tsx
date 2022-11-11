@@ -1,10 +1,13 @@
 import { LoadingStateStore } from '../../../reusableComponents/form/LoadingStateStore'
 import { makeAutoObservable } from 'mobx'
 import { TextFieldStore } from '../../../reusableComponents/form/TextFieldStore'
-import { fetchBackendJson } from 'apps/frontend/src/api/fetch'
+import { fetchBackendJson, getErrorMessage } from '../../../api/fetch'
+import { IIdea } from '@galadrim-tools/shared'
+import { notifyError } from '../../../utils/notification'
 
 export type CreateIdeaCallback = Parameters<CreateIdeaStore['createIdea']>[0]
 
+export const APPLICATION_JSON_HEADERS = [['Content-Type', 'application/json']] as [string, string][]
 export class CreateIdeaStore {
     text = new TextFieldStore()
 
@@ -19,9 +22,19 @@ export class CreateIdeaStore {
     }
 
     async createIdea(onPublish: (idea: IIdea) => void) {
-        const formData = new FormData()
-        formData.append('text', this.text.text)
+        const result = await fetchBackendJson<{ message: string; idea: IIdea }, unknown>(
+            '/ideas',
+            'POST',
+            {
+                body: JSON.stringify({ text: this.text.text }),
+                headers: APPLICATION_JSON_HEADERS,
+            }
+        )
 
-        // todo put json in the backend
+        if (result.ok) {
+            onPublish(result.json.idea)
+        } else {
+            notifyError(getErrorMessage(result.json))
+        }
     }
 }

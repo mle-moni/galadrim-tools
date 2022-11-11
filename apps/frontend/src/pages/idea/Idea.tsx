@@ -24,11 +24,14 @@ const getReactions = (idea: IIdea, userId: IUserData['id']) => {
 
     const currentUserReaction = findUserReaction(idea, userId)?.isUpvote ?? null
 
-    return {
+    const result = {
         numberOfUpvote,
         numberOfDownvote,
         currentUserReaction,
     }
+
+    console.log('result :>> ', result)
+    return result
 }
 
 const IconReactionWrapper = styled(Box)<BoxProps>(() => ({

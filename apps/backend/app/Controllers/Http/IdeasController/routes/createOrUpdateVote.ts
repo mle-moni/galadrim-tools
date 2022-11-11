@@ -3,16 +3,27 @@ import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import IdeaVote from '../../../../Models/IdeaVote'
 
 const ideaSchema = schema.create({
-    isUpvote: schema.boolean(),
+    isUpvote: schema.boolean.optional(),
     ideaId: schema.number([rules.exists({ table: 'ideas', column: 'id' })]),
 })
 
-export const createOrUpdateVoteRoute = async ({ auth, request }: HttpContextContract) => {
+export const createOrUpdateVoteRoute = async ({ auth, request, response }: HttpContextContract) => {
     const user = auth.user!
     const userId = user.id
     const { isUpvote, ideaId } = await request.validate({
         schema: ideaSchema,
     })
+
+    if (isUpvote === undefined) {
+        const [numberOfDeletedItems] = await IdeaVote.query()
+            .where('ideaId', ideaId)
+            .andWhere('userId', userId)
+            .delete()
+        if (numberOfDeletedItems === 1) {
+            return { message: 'La reaction a été supprimée' }
+        }
+        return response.badRequest({ error: 'Une erreur est servenue' })
+    }
 
     const ideaVote = await IdeaVote.updateOrCreate({ ideaId, userId }, { ideaId, userId, isUpvote })
 

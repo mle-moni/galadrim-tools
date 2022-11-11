@@ -2,7 +2,9 @@ import { makeAutoObservable, reaction } from 'mobx'
 import { IIdea, IIdeaNote, IUserData } from '@galadrim-tools/shared'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
 import { assert } from 'console'
-import { notifyError } from '../../utils/notification'
+import { notifyError, notifySuccess } from '../../utils/notification'
+import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
+import { APPLICATION_JSON_HEADERS } from './createIdea/CreateIdeaStore'
 
 const FAKE_IDEA: IIdea[] = [
     {
@@ -90,7 +92,7 @@ export class IdeasStore {
         makeAutoObservable(this)
     }
 
-    private _ideas: IIdea[] = FAKE_IDEA
+    private _ideas: IIdea[] = []
 
     setIdeas(ideas: IIdea[]) {
         this.ideas = ideas
@@ -104,17 +106,67 @@ export class IdeasStore {
         return this._ideas
     }
 
+    async fetchIdeaList() {
+        this.loadingState.setIsLoading(true)
+        const result = await fetchBackendJson<IIdea[], unknown>('/ideas')
+        this.loadingState.setIsLoading(false)
+        if (result.ok) {
+            this.ideas = result.json
+        }
+    }
+
     findIdea(ideaId: IIdea['id']) {
         return this._ideas.find((idea) => idea.id === ideaId)
     }
 
-    deleteReaction(idea: IIdea, reaction: IIdeaNote) {
-        console.log('on delete la reaction dans le backend')
-        idea.reactions = idea.reactions.filter((r) => r.userId !== reaction.userId)
+    async deleteReaction(idea: IIdea, userId: IIdeaNote['userId']) {
+        const result = await fetchBackendJson<{ message: string }, unknown>(
+            '/createOrUpdateIdeaVote',
+            'POST',
+            {
+                body: JSON.stringify({
+                    ideaId: idea.id,
+                }),
+                headers: APPLICATION_JSON_HEADERS,
+            }
+        )
+
+        if (result.ok) {
+            idea.reactions = idea.reactions.filter((r) => r.userId !== userId)
+        } else {
+            notifyError(getErrorMessage(result.json, "Votre note n'a pas pu être pris en compte"))
+        }
     }
 
-    saveReaction(reaction: IIdeaNote) {
-        console.log('on save la reaction danse le backend')
+    saveIdeaLocally(idea: IIdea) {
+        this.ideas.push(idea)
+    }
+
+    saveReactionLocally(idea: IIdea, reaction: IIdeaNote) {
+        const currentReaction = findUserReaction(idea, reaction.userId)
+        if (currentReaction) {
+            currentReaction.isUpvote = reaction.isUpvote
+        } else {
+            idea.reactions.push(reaction)
+        }
+    }
+
+    async saveReaction(idea: IIdea, reaction: IIdeaNote) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { userId, ...rest } = reaction
+        const result = await fetchBackendJson<{ message: string; ideaVote: IIdeaNote }, unknown>(
+            '/createOrUpdateIdeaVote',
+            'POST',
+            {
+                body: JSON.stringify(rest),
+                headers: APPLICATION_JSON_HEADERS,
+            }
+        )
+        if (result.ok) {
+            this.saveReactionLocally(idea, result.json.ideaVote)
+        } else if (!result.ok) {
+            notifyError(getErrorMessage(result.json, "Votre note n'a pas pu être pris en compte"))
+        }
     }
 
     setReaction(ideaId: IIdea['id'], userId: IUserData['id'], newReaction: boolean) {
@@ -130,7 +182,7 @@ export class IdeasStore {
         if (userReaction) {
             if (userReaction.isUpvote === newReaction) {
                 // same as previous, delete reaction
-                this.deleteReaction(matchingIdea, userReaction)
+                this.deleteReaction(matchingIdea, userId)
                 return
             } else {
                 userReaction.isUpvote = newReaction
@@ -142,9 +194,8 @@ export class IdeasStore {
                 ideaId: ideaId,
                 isUpvote: newReaction,
             }
-            matchingIdea.reactions.push(userReaction)
         }
 
-        this.saveReaction(userReaction)
+        this.saveReaction(matchingIdea, userReaction)
     }
 }
