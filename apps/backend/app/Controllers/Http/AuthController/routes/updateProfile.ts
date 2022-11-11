@@ -1,6 +1,7 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import Ws from '../../../../Services/Ws'
 
 const updateProfileSchema = schema.create({
     email: schema.string([rules.trim()]),
@@ -23,6 +24,8 @@ export const updateProfileRoute = async ({ request, auth }: HttpContextContract)
     }
 
     await user.save()
+
+    Ws.io.to('connectedSockets').emit('updateUser', user.shortData)
 
     return auth.user?.userData()
 }

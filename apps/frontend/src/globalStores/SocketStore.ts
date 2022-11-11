@@ -2,6 +2,7 @@ import { IRestaurant, ITag } from '@galadrim-tools/shared'
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getSocketApiUrl } from '../api/fetch'
+import { UserData } from '../api/galadrimeurs'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
 import { RawRoomEvent } from './EventsStore'
@@ -41,6 +42,7 @@ export class SocketStore {
         this.socket.on('updateRestaurant', (restaurant) => this.updateRestaurant(restaurant))
         this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
         this.socket.on('fetchAll', () => AppStore.fetchAll())
+        this.socket.on('updateUser', (userInfo) => this.updateUser(userInfo))
     }
 
     socketAuth() {
@@ -89,5 +91,9 @@ export class SocketStore {
 
     deleteRestaurant(id: number) {
         AppStore.saveurStore.restaurantsStore.deleteRestaurant(id)
+    }
+
+    updateUser(userInfo: UserData) {
+        AppStore.updateUser(userInfo)
     }
 }

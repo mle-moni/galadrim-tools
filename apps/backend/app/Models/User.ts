@@ -60,6 +60,14 @@ export default class User extends BaseModel {
         return this.imageUrl
     }
 
+    get shortData() {
+        return {
+            id: this.id,
+            username: this.username,
+            imageUrl: this.imageSrc,
+        }
+    }
+
     public userData(): IUserData {
         this.socketToken = nanoid()
         this.save()
