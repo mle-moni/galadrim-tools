@@ -1,17 +1,18 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Idea from '../../app/Models/Idea'
 import IdeaVote from '../../app/Models/IdeaVote'
+import { faker } from '@faker-js/faker'
 
 const ideas = [
-    { id: 1, userId: 1, text: 'Première idée' },
-    { id: 2, userId: 2, text: 'Idée du siècle' },
-    { id: 3, userId: 2, text: 'Idée saugrenue' },
-    { id: 4, userId: 3, text: 'Idée bizarre' },
-    { id: 5, userId: 4, text: 'Idée fourbe' },
-    { id: 6, userId: 1, text: 'Idée fragile' },
-    { id: 7, userId: 3, text: 'Idée de ouf' },
-    { id: 8, userId: 1, text: 'Superbe idée' },
-    { id: 9, userId: 4, text: 'Idée cringe' },
+    { id: 1, userId: 1, text: faker.commerce.productDescription() },
+    { id: 2, userId: 2, text: faker.commerce.productDescription() },
+    { id: 3, userId: 2, text: faker.commerce.productDescription() },
+    { id: 4, userId: 3, text: faker.commerce.productDescription() },
+    { id: 5, userId: 4, text: faker.commerce.productDescription() },
+    { id: 6, userId: 1, text: faker.commerce.productDescription() },
+    { id: 7, userId: 3, text: faker.commerce.productDescription() },
+    { id: 8, userId: 1, text: faker.commerce.productDescription() },
+    { id: 9, userId: 4, text: faker.commerce.productDescription() },
 ]
 
 const ideaVotes = [
