@@ -42,7 +42,7 @@ export class EditUserRightsStore {
             notifyError(
                 getErrorMessage(
                     res.json,
-                    `Impossible récuperrer les droits des utilisateurs, bizarre`
+                    `Impossible de récupérer les droits des utilisateurs, bizarre`
                 )
             )
             return

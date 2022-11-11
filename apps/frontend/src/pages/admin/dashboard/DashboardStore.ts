@@ -48,7 +48,7 @@ export class DashboardStore {
 
         if (!res.ok) {
             return notifyError(
-                getErrorMessage(res.json, `Impossible d'envoyer un mail a cette adresse, bizarre`)
+                getErrorMessage(res.json, `Impossible d'envoyer un mail à cette adresse, bizarre`)
             )
         }
 
