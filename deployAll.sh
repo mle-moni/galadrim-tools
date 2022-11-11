@@ -16,5 +16,8 @@ nx deploy frontend &&
 rm -f /home/ubuntu/galadrim-tools/dist/apps/backend/tmp &&
 ln -s /home/ubuntu/galadrim-tools/apps/backend/tmp /home/ubuntu/galadrim-tools/dist/apps/backend/tmp &&
 TIME_UP=`date +%s`
+
+if [[ "$?" != "0" ]]; then echo deployment failure && exit 1; fi;
+
 echo "Deployment success"
 echo "down time -->" `expr $TIME_UP - $TIME_DOWN` seconds
