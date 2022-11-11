@@ -50,7 +50,7 @@ export const ProfilePage = observer(() => {
                             />
                         </CenteredDiv>
 
-                        <div className="flex justify-center">
+                        <div className="flex justify-center" style={{ marginTop: '24px' }}>
                             <Avatar
                                 alt={authStore.user.username}
                                 src={authStore.imageSrc ?? authStore.user.imageUrl}
