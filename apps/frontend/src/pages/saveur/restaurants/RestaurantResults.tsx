@@ -1,7 +1,6 @@
 import { Box, Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { SaveurStore } from '../../../globalStores/SaveurStore'
-import { MAX_ZOOM } from '../SaveurPage'
+import { SaveurStore, MAX_ZOOM } from '../../../globalStores/SaveurStore'
 
 export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const pattern = saveurStore.restaurantsStore.search
@@ -27,8 +26,7 @@ export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveu
                     key={resto.id}
                     sx={{ display: 'block', textTransform: 'none' }}
                     onClick={() => {
-                        saveurStore.restaurantsStore.setRestaurantClicked(resto)
-                        saveurStore.leafletMap.flyTo({ lat: resto.lat, lng: resto.lng }, MAX_ZOOM)
+                        saveurStore.flyToRestaurant(resto)
                     }}
                 >
                     {resto.name}

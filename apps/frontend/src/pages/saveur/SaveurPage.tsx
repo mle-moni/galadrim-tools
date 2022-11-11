@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AppStore } from '../../globalStores/AppStore'
+import { MAX_ZOOM } from '../../globalStores/SaveurStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
@@ -31,8 +32,6 @@ export const POS_ALL_LOCAUX: Locaux[] = [
         position: [47.212274232959295, -1.5560218495098455],
     },
 ]
-
-export const MAX_ZOOM = 18
 
 const SaveurPage = observer(() => {
     const { saveurStore, authStore } = AppStore

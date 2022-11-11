@@ -2,10 +2,10 @@ import { SwapHoriz } from '@mui/icons-material'
 import { Fab } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
-import { SaveurStore } from '../../globalStores/SaveurStore'
+import { MAX_ZOOM, SaveurStore } from '../../globalStores/SaveurStore'
 import { POS_OFFSET } from '../../reusableComponents/common/RoundedLinks'
 import { getFavouriteLocauxIndex, setFavouriteLocauxIndex } from './persistLocauxPreferences'
-import { MAX_ZOOM, POS_ALL_LOCAUX } from './SaveurPage'
+import { POS_ALL_LOCAUX } from './SaveurPage'
 
 export const LocauxSwitch = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const [locauxIndex, setLocauxIndex] = useState(getFavouriteLocauxIndex())

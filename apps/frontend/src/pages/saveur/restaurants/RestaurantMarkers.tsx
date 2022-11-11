@@ -2,6 +2,7 @@ import L from 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
+import { useSearchParams } from 'react-router-dom'
 import { SaveurStore } from '../../../globalStores/SaveurStore'
 import { clipboardCopy } from '../../../reusableComponents/auth/WhoamiStore'
 import { NotedRestaurantMarkerIcon } from '../../../reusableComponents/saveur/markers/NotedRestaurantMarker'
@@ -33,6 +34,16 @@ export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: nu
         useEffect(() => {
             saveurStore.initLeafletMap(map)
         }, [map, saveurStore])
+
+        const [searchParams] = useSearchParams()
+        const restaurantIdRaw = searchParams.get('restaurant-id')
+
+        useEffect(() => {
+            if (restaurantIdRaw !== null) {
+                const restaurantId = parseInt(restaurantIdRaw)
+                saveurStore.flyToRestaurantId(restaurantId)
+            }
+        }, [restaurantIdRaw, saveurStore])
 
         return (
             <>

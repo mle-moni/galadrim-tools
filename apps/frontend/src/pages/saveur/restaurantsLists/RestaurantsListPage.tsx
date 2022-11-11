@@ -1,8 +1,9 @@
 import { IRestaurant } from '@galadrim-tools/shared'
 import { ArrowBack } from '@mui/icons-material'
 import { Box, CardMedia, List, ListItem, Typography } from '@mui/material'
+import { CustomLink } from 'apps/frontend/src/reusableComponents/Core/CustomLink'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { AppStore } from '../../../globalStores/AppStore'
 import { RestaurantsStore } from '../../../globalStores/RestaurantsStore'
 import { CenteredDiv } from '../../../reusableComponents/common/CenteredDiv'
@@ -72,6 +73,14 @@ const RestaurantsListPage = observer(() => {
                                     key={id}
                                     sx={{
                                         padding: 4,
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => {
+                                        const pathname = '/saveur'
+                                        const searchParams = new URLSearchParams({
+                                            'restaurant-id': id.toString(),
+                                        })
+                                        AppStore.navigate(`${pathname}?${searchParams}`)
                                     }}
                                 >
                                     <ListItem

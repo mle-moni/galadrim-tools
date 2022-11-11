@@ -90,6 +90,10 @@ export class RestaurantsStore {
         this.refreshFuse()
     }
 
+    getRestaurant(restaurantId: IRestaurant['id']) {
+        return this.restaurants.find((restaurant) => restaurant.id === restaurantId)
+    }
+
     deleteRestaurant(id: number) {
         this.restaurants = this.restaurants.filter((resto) => id !== resto.id)
     }
