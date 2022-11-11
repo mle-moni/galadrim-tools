@@ -1,6 +1,7 @@
 import { Box, Chip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
+import { useIsMobile } from '../../hooks/useIsMobile'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import { PATCH_NOTES, PATCH_VERSION } from '../../utils/patchNotesInfos'
@@ -9,6 +10,7 @@ const PATCH_VERSION_KEY = 'PATCH_VERSION'
 
 export const PatchNotes = observer(() => {
     const modalStore = useMemo(() => new SimpleModalStore(), [])
+    const isMobile = useIsMobile()
 
     useEffect(() => {
         const oldPatchVersion = localStorage.getItem(PATCH_VERSION_KEY)
@@ -20,7 +22,11 @@ export const PatchNotes = observer(() => {
     }, [])
 
     return (
-        <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
+        <SimpleModal
+            width={isMobile ? '80vw' : undefined}
+            open={modalStore.modalOpen}
+            onClose={() => modalStore.setModalOpen(false)}
+        >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography sx={{ fontSize: 18 }}>Changements pour la version</Typography>
                 <Chip sx={{ ml: 2 }} label={PATCH_VERSION} />
