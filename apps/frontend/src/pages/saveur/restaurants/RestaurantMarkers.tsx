@@ -3,11 +3,22 @@ import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { Marker, Popup, useMapEvents } from 'react-leaflet'
 import { useSearchParams } from 'react-router-dom'
-import { SaveurStore } from '../../../globalStores/SaveurStore'
+import { MAX_ZOOM, SaveurStore } from '../../../globalStores/SaveurStore'
 import { clipboardCopy } from '../../../reusableComponents/auth/WhoamiStore'
 import { NotedRestaurantMarkerIcon } from '../../../reusableComponents/saveur/markers/NotedRestaurantMarker'
 import { RestaurantMarkerIcon } from '../../../reusableComponents/saveur/markers/RestaurantMarker'
 import { notifyError, notifySuccess } from '../../../utils/notification'
+
+const parseZoomLevel = (zoomRaw: string | null) => {
+    if (zoomRaw) {
+        const zoom = parseInt(zoomRaw)
+        if (Number.isNaN(zoomRaw)) {
+            return MAX_ZOOM
+        }
+        return zoom
+    }
+    return MAX_ZOOM
+}
 
 export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: number }>(
     ({ saveurStore, userId }) => {
@@ -35,15 +46,17 @@ export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: nu
             saveurStore.initLeafletMap(map)
         }, [map, saveurStore])
 
-        const [searchParams] = useSearchParams()
-        const restaurantIdRaw = searchParams.get('restaurant-id')
+        const [searchParams, setSearchParams] = useSearchParams()
 
         useEffect(() => {
+            const restaurantIdRaw = searchParams.get('restaurant-id')
+            const zoomRaw = searchParams.get('zoom')
             if (restaurantIdRaw !== null) {
                 const restaurantId = parseInt(restaurantIdRaw)
-                saveurStore.flyToRestaurantId(restaurantId)
+                const zoom = parseZoomLevel(zoomRaw)
+                saveurStore.flyToRestaurantId(restaurantId, zoom)
             }
-        }, [restaurantIdRaw, saveurStore])
+        }, [searchParams, saveurStore])
 
         return (
             <>
@@ -65,7 +78,12 @@ export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: nu
                             icon={icon}
                             eventHandlers={{
                                 click: () => {
-                                    saveurStore.restaurantsStore.setRestaurantClicked(restaurant)
+                                    // saveurStore.restaurantsStore.setRestaurantClicked(restaurant)
+                                    const searchParams = new URLSearchParams({
+                                        'restaurant-id': restaurant.id.toString(),
+                                        'zoom': '16',
+                                    })
+                                    setSearchParams(searchParams)
                                 },
                             }}
                         >

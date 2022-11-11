@@ -47,16 +47,16 @@ export class SaveurStore {
         return this._leafletMap
     }
 
-    flyToRestaurantId(restaurantId: IRestaurant['id']) {
+    flyToRestaurantId(restaurantId: IRestaurant['id'], zoom = MAX_ZOOM) {
         const matchingRestaurant = this.restaurantsStore.getRestaurant(restaurantId)
         if (matchingRestaurant) {
-            this.flyToRestaurant(matchingRestaurant)
+            this.flyToRestaurant(matchingRestaurant, zoom)
         }
     }
 
-    flyToRestaurant(restaurant: IRestaurant) {
+    flyToRestaurant(restaurant: IRestaurant, zoom = MAX_ZOOM) {
         const { lat, lng } = restaurant
         this.restaurantsStore.setRestaurantClicked(restaurant)
-        this.leafletMap.flyTo({ lat, lng }, MAX_ZOOM)
+        this.leafletMap.flyTo({ lat, lng }, zoom)
     }
 }
