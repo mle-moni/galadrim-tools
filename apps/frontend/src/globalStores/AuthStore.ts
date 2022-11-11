@@ -15,6 +15,10 @@ export class AuthStore {
 
     public password = ''
 
+    public image: File | null = null
+
+    public imageSrc: string | null = null
+
     constructor() {
         makeAutoObservable(this)
     }
@@ -118,5 +122,59 @@ export class AuthStore {
         notifySuccess(res.json.notification)
         this.setPassword('')
         AppStore.navigate(`/`)
+    }
+
+    setUploadedImage(input: HTMLInputElement) {
+        const image: File | null = input.files && input.files.length >= 1 ? input.files[0] : null
+        this.setImage(image)
+    }
+
+    setImage(image: File | null) {
+        this.image = image
+        if (image) {
+            const reader = new FileReader()
+            reader.addEventListener(
+                'load',
+                () => {
+                    if (reader.result) {
+                        this.setImageSrc(reader.result.toString())
+                    }
+                },
+                false
+            )
+            reader.readAsDataURL(image)
+        }
+    }
+
+    setImageSrc(state: string | null) {
+        this.imageSrc = state
+    }
+
+    async updateProfile(username: string, email: string) {
+        const data = new FormData()
+        data.append('email', email)
+        data.append('username', username)
+        if (this.image) {
+            data.append('image', this.image)
+        }
+
+        const res = await fetchBackendJson<unknown, unknown>('/updateProfile', 'POST', {
+            body: data,
+        })
+        if (!res.ok) {
+            return notifyError(
+                getErrorMessage(res.json, `Impossible de mettre à jour le profil, bizarre...`)
+            )
+        }
+        this.updateProfileData(username, email)
+        notifySuccess(`Profil mis à jour !`)
+    }
+
+    updateProfileData(username: string, email: string) {
+        this.user.username = username
+        this.setEmail(email)
+        if (this.imageSrc) {
+            this.user.imageUrl = this.imageSrc
+        }
     }
 }
