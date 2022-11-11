@@ -1,9 +1,11 @@
 import { Box, Button } from '@mui/material'
 import { observer } from 'mobx-react-lite'
+import { useSearchParams } from 'react-router-dom'
 import { SaveurStore } from '../../../globalStores/SaveurStore'
-import { MAX_ZOOM } from '../SaveurPage'
 
 export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
+    const [, setSearchParams] = useSearchParams()
+
     const pattern = saveurStore.restaurantsStore.search
     const searchResults = saveurStore.restaurantsStore.fuseInstance
         .search(pattern, { limit: 5 })
@@ -27,8 +29,11 @@ export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveu
                     key={resto.id}
                     sx={{ display: 'block', textTransform: 'none' }}
                     onClick={() => {
-                        saveurStore.restaurantsStore.setRestaurantClicked(resto)
-                        saveurStore.leafletMap.flyTo({ lat: resto.lat, lng: resto.lng }, MAX_ZOOM)
+                        setSearchParams(
+                            new URLSearchParams({
+                                'restaurant-id': resto.id.toString(),
+                            })
+                        )
                     }}
                 >
                     {resto.name}
