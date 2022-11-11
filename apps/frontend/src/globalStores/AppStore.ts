@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { NavigateFunction } from 'react-router-dom'
 import { fetchUsers, UserData } from '../api/galadrimeurs'
+import { IdeasStore } from '../pages/idea/IdeasStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
 import { NotificationStore } from './NotificationStore'
@@ -23,6 +24,8 @@ export class MainStore {
     public authStore = new AuthStore()
 
     public socketStore = new SocketStore()
+
+    public ideaStore = new IdeasStore()
 
     constructor() {
         makeAutoObservable(this)

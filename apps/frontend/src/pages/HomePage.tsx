@@ -4,6 +4,7 @@ import {
     GitHub,
     Lightbulb,
     RestaurantMenu,
+    Inventory,
 } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -36,6 +37,7 @@ const HomePage = observer(() => {
                     link="https://github.com/mle-moni/galadrim-tools/issues"
                     title="Proposer une idée"
                 />
+                <IconLink Icon={Inventory} link="/idee" title="Boîte à idée" />
                 <IconLink
                     Icon={AdminPanelSettings}
                     link="/admin"
