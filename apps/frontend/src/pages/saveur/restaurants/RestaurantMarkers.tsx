@@ -78,7 +78,6 @@ export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: nu
                             icon={icon}
                             eventHandlers={{
                                 click: () => {
-                                    // saveurStore.restaurantsStore.setRestaurantClicked(restaurant)
                                     const searchParams = new URLSearchParams({
                                         'restaurant-id': restaurant.id.toString(),
                                         'zoom': '16',
