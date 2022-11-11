@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { NavigateFunction } from 'react-router-dom'
 import { fetchUsers, UserData } from '../api/galadrimeurs'
+import Idea from '../pages/idea/Idea'
 import { IdeasStore } from '../pages/idea/IdeasStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'

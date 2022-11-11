@@ -6,6 +6,7 @@ import {
     CardActions,
     CardContent,
     IconButton,
+    Tooltip,
     Typography,
 } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -15,6 +16,8 @@ import { green, red } from '@mui/material/colors'
 import { styled } from '@mui/material/styles'
 import { AppStore } from '../../globalStores/AppStore'
 import { findUserReaction } from './IdeasStore'
+import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
+import { getUsersIdWithSpecificReaction } from './helper'
 
 const getReactions = (idea: IIdea, userId: IUserData['id']) => {
     const numberOfReaction = idea.reactions.length
@@ -30,7 +33,6 @@ const getReactions = (idea: IIdea, userId: IUserData['id']) => {
         currentUserReaction,
     }
 
-    console.log('result :>> ', result)
     return result
 }
 
@@ -40,7 +42,7 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
 }))
 
 const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId }) => {
-    const { ideaStore } = AppStore
+    const { ideaStore, users } = AppStore
     const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(idea, userId)
 
     return (
@@ -51,24 +53,28 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId 
                 </Typography>
             </CardContent>
             <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
-                <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
-                    <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, false)}>
-                        <ThumbDownIcon
-                            sx={{ color: currentUserReaction === false ? red[700] : undefined }}
-                        />
-                    </IconButton>
-                    {numberOfDownvote}
-                </IconReactionWrapper>
-                <IconReactionWrapper>
-                    <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, true)}>
-                        <ThumbUpIcon
-                            sx={{
-                                color: currentUserReaction === true ? green[500] : undefined,
-                            }}
-                        />
-                    </IconButton>
-                    {numberOfUpvote}
-                </IconReactionWrapper>
+                <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}>
+                    <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, false)}>
+                            <ThumbDownIcon
+                                sx={{ color: currentUserReaction === false ? red[700] : undefined }}
+                            />
+                        </IconButton>
+                        {numberOfDownvote}
+                    </IconReactionWrapper>
+                </Tooltip>
+                <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}>
+                    <IconReactionWrapper>
+                        <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, true)}>
+                            <ThumbUpIcon
+                                sx={{
+                                    color: currentUserReaction === true ? green[500] : undefined,
+                                }}
+                            />
+                        </IconButton>
+                        {numberOfUpvote}
+                    </IconReactionWrapper>
+                </Tooltip>
             </CardActions>
         </Card>
     )
