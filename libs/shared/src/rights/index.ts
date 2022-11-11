@@ -5,6 +5,7 @@ export const RIGHTS = {
     RIGHTS_ADMIN: 0b100,
     MIAM_ADMIN: 0b1000,
     DASHBOARD_ADMIN: 0b10000,
+    IDEAS_ADMIN: 0b100000,
 } as const
 
 export type AllRights = keyof typeof RIGHTS

@@ -39,11 +39,7 @@ export default class Idea extends BaseModel {
             id: this.id,
             createdBy: this.userId,
             text: this.text,
-            reactions: this.ideaVotes.map(({ id, isUpvote, userId }) => ({
-                ideaId: id,
-                isUpvote,
-                userId,
-            })),
+            reactions: this.ideaVotes.map((ideaVote) => ideaVote.frontendData),
         }
     }
 }

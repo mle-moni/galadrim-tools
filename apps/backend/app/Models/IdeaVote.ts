@@ -1,3 +1,4 @@
+import { IIdeaNote } from '@galadrim-tools/shared'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 
@@ -15,11 +16,19 @@ export default class IdeaVote extends BaseModel {
     public userId: number
 
     @column()
-    public ideadId: number
+    public ideaId: number
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
+
+    get frontendData(): IIdeaNote {
+        return {
+            ideaId: this.ideaId,
+            isUpvote: this.isUpvote,
+            userId: this.userId,
+        }
+    }
 }
