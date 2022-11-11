@@ -14,6 +14,7 @@ export default class IdeaVotes extends BaseSchema {
 
             table.unique(['user_id', 'idea_id'])
 
+            table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })
         })
     }

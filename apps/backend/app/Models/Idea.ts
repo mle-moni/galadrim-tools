@@ -1,7 +1,7 @@
 import { IIdea } from '@galadrim-tools/shared'
 import {
     BaseModel,
-    beforeFind,
+    beforeFetch,
     column,
     HasMany,
     hasMany,
@@ -29,7 +29,7 @@ export default class Idea extends BaseModel {
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
 
-    @beforeFind()
+    @beforeFetch()
     public static autoLoadParameters(query: ModelQueryBuilderContract<typeof Idea>) {
         query.preload('ideaVotes')
     }
