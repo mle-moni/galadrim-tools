@@ -6,4 +6,5 @@ export const PATCH_NOTES = [
     'Nouveau système de patch notes',
     "L'utilisateur peut désormais modifier son profil",
     'Les restaurants ont désormais un lien cliquable',
+    'Correction de nombreuses typos, merci Mickaël',
 ]
