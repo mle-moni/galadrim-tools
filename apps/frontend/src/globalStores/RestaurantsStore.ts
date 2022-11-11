@@ -6,6 +6,7 @@ import {
     getRestaurantsScore,
     MINIMUM_VOTES_BEFORE_RELEVANT,
 } from '../pages/saveur/restaurantsLists/getRestaurantScore'
+import { LoadingStateStore } from '../reusableComponents/form/LoadingStateStore'
 import { notifyError } from '../utils/notification'
 
 const fuseSettings: Fuse.IFuseOptions<IRestaurant> = {
@@ -13,6 +14,8 @@ const fuseSettings: Fuse.IFuseOptions<IRestaurant> = {
     keys: ['name', 'description', 'tags.name'],
 }
 export class RestaurantsStore {
+    loadingState = new LoadingStateStore()
+
     private _fuseInstance: Fuse<IRestaurant> = new Fuse([], fuseSettings)
 
     restaurants: IRestaurant[] = []
@@ -35,7 +38,9 @@ export class RestaurantsStore {
     }
 
     async fetch() {
+        this.loadingState.setIsLoading(true)
         const req = await fetchBackendJson<IRestaurant[], unknown>('/restaurants', 'GET')
+        this.loadingState.setIsLoading(false)
         if (req.ok) {
             this.setRestaurants(req.json)
             return

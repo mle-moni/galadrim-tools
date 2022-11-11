@@ -56,7 +56,7 @@ export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: nu
                 const zoom = parseZoomLevel(zoomRaw)
                 saveurStore.flyToRestaurantId(restaurantId, zoom)
             }
-        }, [searchParams, saveurStore])
+        }, [searchParams, saveurStore, saveurStore.restaurantsStore.loadingState.isLoading])
 
         return (
             <>
