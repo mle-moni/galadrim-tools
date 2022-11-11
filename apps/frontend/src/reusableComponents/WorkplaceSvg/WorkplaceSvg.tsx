@@ -413,7 +413,7 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     x2="453"
                     y2="612"
                     stroke={wallsColor}
-                    stroke-width="4"
+                    strokeWidth="4"
                 />
                 <line
                     id="Line 131"
@@ -422,7 +422,7 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     x2="504"
                     y2="611"
                     stroke={wallsColor}
-                    stroke-width="4"
+                    strokeWidth="4"
                 />
                 <line
                     id="Line 128"
@@ -431,8 +431,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     x2="455"
                     y2="568"
                     stroke={wallsColor}
-                    stroke-width="2"
-                    stroke-dasharray="4 4"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
                 />
                 <line
                     id="Line 129"
@@ -441,8 +441,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     x2="456"
                     y2="612"
                     stroke={wallsColor}
-                    stroke-width="2"
-                    stroke-dasharray="4 4"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
                 />
                 <rect id="Rectangle 102" x="457" y="569" width="45" height="41" {...svgProps} />
             </>
