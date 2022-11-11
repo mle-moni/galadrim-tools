@@ -1,8 +1,9 @@
 import { Avatar, Box, Button, Stack, Typography } from '@mui/material'
+import { observer } from 'mobx-react-lite'
 import { AppStore } from '../../globalStores/AppStore'
 import { WhoamiStore } from './WhoamiStore'
 
-export const Whoami = () => {
+export const Whoami = observer(() => {
     const { authStore } = AppStore
     const store = new WhoamiStore()
 
@@ -43,4 +44,4 @@ export const Whoami = () => {
             </Button>
         </Stack>
     )
-}
+})
