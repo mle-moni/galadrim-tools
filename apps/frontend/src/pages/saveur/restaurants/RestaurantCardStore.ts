@@ -45,7 +45,7 @@ export class RestaurantCardStore {
             this.setRating(rating)
             return
         }
-        notifyError('Impossible de sauvegarder la note')
+        notifyError('Impossible de sauvegarder la note, bizarre')
     }
 
     get ratios() {

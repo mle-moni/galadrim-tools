@@ -116,7 +116,7 @@ export class RestaurantStore {
             notifySuccess(`Le restaurant ${this.name} a été créé !`)
             this.reset()
         } else {
-            notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}`))
+            notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}, bizarre`))
         }
     }
 
@@ -140,7 +140,7 @@ export class RestaurantStore {
             notifySuccess(`Le restaurant ${this.name} a été modifié !`)
         } else {
             notifyError(
-                getErrorMessage(res.json, `Impossible de modifier le restaurant ${this.name}`)
+                getErrorMessage(res.json, `Impossible de modifier le restaurant ${this.name}, bizarre`)
             )
         }
     }

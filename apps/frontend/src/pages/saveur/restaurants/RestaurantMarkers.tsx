@@ -20,7 +20,7 @@ export const RestaurantMarkers = observer<{ saveurStore: SaveurStore; userId: nu
                         console.log(`%c${posStr}`, 'color: #a442f5')
                         console.log('%c*********************************', 'color: #4287f5')
                         notifyError(
-                            'Impossible de copier dans le presse papier, ouvrez la console pour récuperer la position'
+                            'Impossible de copier dans le presse papier, ouvrez la console pour récupérer la position'
                         )
                     },
                     success: () => {

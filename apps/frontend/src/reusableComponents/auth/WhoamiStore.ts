@@ -38,7 +38,7 @@ export class WhoamiStore {
                     console.log(`%c${res.json.token}`, 'color: #a442f5')
                     console.log('%c*********************************', 'color: #4287f5')
                     notifyError(
-                        'impossible de copier dans le presse papier, ouvrez la console pour récuperer le token'
+                        'Impossible de copier dans le presse papier, ouvrez la console pour récupérer le token'
                     )
                 },
             })

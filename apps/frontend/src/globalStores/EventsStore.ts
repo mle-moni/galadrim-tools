@@ -92,7 +92,7 @@ export class EventsStore {
         )
         this.setWaiting(false)
         if (!res.ok || !res.json.deleted) {
-            return notifyError(`Erreur lors de la suprression de la réservation`)
+            return notifyError(`Erreur lors de la suppression de la réservation`)
         }
     }
     appendEvents(events: RoomEvent[]) {
