@@ -43,6 +43,7 @@ export class SocketStore {
         this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
         this.socket.on('fetchAll', () => AppStore.fetchAll())
         this.socket.on('updateUser', (userInfo) => this.updateUser(userInfo))
+        this.socket.on('updateRights', (rights) => this.updateRights(rights))
     }
 
     socketAuth() {
@@ -95,5 +96,9 @@ export class SocketStore {
 
     updateUser(userInfo: UserData) {
         AppStore.updateUser(userInfo)
+    }
+
+    updateRights(rights: number) {
+        AppStore.authStore.updateRights(rights)
     }
 }

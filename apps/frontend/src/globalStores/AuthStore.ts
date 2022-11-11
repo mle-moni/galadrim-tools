@@ -177,4 +177,8 @@ export class AuthStore {
             this.user.imageUrl = this.imageSrc
         }
     }
+
+    updateRights(rights: number) {
+        this.user.rights = rights
+    }
 }

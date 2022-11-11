@@ -68,6 +68,10 @@ export default class User extends BaseModel {
         }
     }
 
+    get personalSocket() {
+        return `user-${this.id}`
+    }
+
     public userData(): IUserData {
         this.socketToken = nanoid()
         this.save()
