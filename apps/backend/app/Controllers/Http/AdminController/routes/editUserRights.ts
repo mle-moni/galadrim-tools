@@ -19,7 +19,7 @@ export const editUserRightsRoute = async ({ request, response }: HttpContextCont
     })
     const user = await User.find(id)
     if (!user) {
-        return response.badRequest({ error: `impossible de trouver l'utilisateur avec l'id ${id}` })
+        return response.badRequest({ error: `Impossible de trouver l'utilisateur avec l'id ${id}` })
     }
     user.rights = rights
     await user.save()

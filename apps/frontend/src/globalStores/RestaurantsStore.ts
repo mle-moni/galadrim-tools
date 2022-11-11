@@ -40,7 +40,7 @@ export class RestaurantsStore {
             this.setRestaurants(req.json)
             return
         }
-        notifyError('Impossible de récuperer les restaurants')
+        notifyError('Impossible de récupérer les restaurants')
     }
 
     setSearch(str: string) {

@@ -26,7 +26,7 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
             'description.minLength': 'La description est trop courte',
             'lat.required': 'La latitude est requise',
             'lat.number': 'La latitude doit être un nombre',
-            'lng.required': 'La latitude est requise',
+            'lng.required': 'La longitude est requise',
             'lng.number': 'La longitude doit être un nombre',
             'tags.required': 'Il doit y avoir au moins 1 tag',
             'tags.exists': 'Les tags doivent exister (tu nous fais quoi) !!?',
