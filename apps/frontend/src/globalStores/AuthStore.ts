@@ -172,7 +172,7 @@ export class AuthStore {
 
     updateProfileData(username: string, email: string) {
         this.user.username = username
-        this.setEmail(email)
+        this.user.email = email
         if (this.imageSrc) {
             this.user.imageUrl = this.imageSrc
         }

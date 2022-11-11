@@ -18,7 +18,10 @@ export const ProfilePage = observer(() => {
         () => new TextFieldStore(authStore.user.username),
         [authStore.user.username]
     )
-    const emailStore = useMemo(() => new TextFieldStore(authStore.email), [authStore.email])
+    const emailStore = useMemo(
+        () => new TextFieldStore(authStore.user.email),
+        [authStore.user.email]
+    )
 
     return (
         <MainLayout fullscreen={false}>

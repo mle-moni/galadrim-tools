@@ -4,4 +4,5 @@ export interface IUserData {
     socketToken: string
     imageUrl: string
     rights: number
+    email: string
 }

@@ -81,6 +81,7 @@ export default class User extends BaseModel {
             socketToken: this.socketToken,
             imageUrl: this.imageSrc,
             rights: this.rights,
+            email: this.email,
         }
     }
 
