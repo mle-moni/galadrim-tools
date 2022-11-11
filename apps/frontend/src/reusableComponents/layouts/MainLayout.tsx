@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { ComponentProps, FC, PropsWithChildren } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
+import { PatchNotes } from '../../reusableComponents/patchNotes/PatchNotes'
 import { getTheme } from '../../theme'
 import { Whoami } from '../auth/Whoami'
 
@@ -43,6 +44,7 @@ export const MainLayout = observer(
                     </Box>
                     {children}
                 </div>
+                <PatchNotes />
             </Root>
         )
     }

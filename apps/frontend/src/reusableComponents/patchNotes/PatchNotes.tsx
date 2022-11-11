@@ -1,0 +1,36 @@
+import { Box, Chip, Typography } from '@mui/material'
+import { observer } from 'mobx-react-lite'
+import { useEffect, useMemo } from 'react'
+import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
+import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
+import { PATCH_NOTES, PATCH_VERSION } from '../../utils/patchNotesInfos'
+
+const PATCH_VERSION_KEY = 'PATCH_VERSION'
+
+export const PatchNotes = observer(() => {
+    const modalStore = useMemo(() => new SimpleModalStore(), [])
+
+    useEffect(() => {
+        const oldPatchVersion = localStorage.getItem(PATCH_VERSION_KEY)
+        const shouldDisplay = oldPatchVersion !== PATCH_VERSION && PATCH_NOTES.length !== 0
+        if (shouldDisplay) {
+            modalStore.setModalOpen(true)
+        }
+        localStorage.setItem(PATCH_VERSION_KEY, PATCH_VERSION)
+    }, [])
+
+    return (
+        <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography sx={{ fontSize: 18 }}>Changements pour la version</Typography>
+                <Chip sx={{ ml: 2 }} label={PATCH_VERSION} />
+            </Box>
+
+            <ul style={{ fontFamily: `"Roboto","Helvetica","Arial",sans-serif` }}>
+                {PATCH_NOTES.map((note, index) => (
+                    <li key={index}>{note}</li>
+                ))}
+            </ul>
+        </SimpleModal>
+    )
+})
