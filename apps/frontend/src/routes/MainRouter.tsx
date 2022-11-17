@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import { AppStore } from '../globalStores/AppStore'
-import CreateIdeaPage from '../pages/idea/createIdea/CreateIdeaPage'
 import IdeaPage from '../pages/idea/IdeaPage'
 import LoadingPage from '../pages/loading/LoadingPage'
 import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
@@ -79,8 +78,7 @@ const AppRoutes = () => {
             <Route path="/saveur/restaurantsList/:listName" element={<RestaurantsListPage />} />
             <Route path="/saveur" element={<SaveurPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/idee" element={<IdeaPage />} />
-            <Route path="/idee/ajouter" element={<CreateIdeaPage />} />
+            <Route path="/ideas" element={<IdeaPage />} />
 
             <Route path="*" element={<NotFoundPage />} />
         </Routes>
