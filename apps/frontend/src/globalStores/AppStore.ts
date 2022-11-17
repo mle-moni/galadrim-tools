@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { NavigateFunction } from 'react-router-dom'
 import { fetchUsers, UserData } from '../api/galadrimeurs'
+import { IdeasStore } from '../pages/idea/IdeasStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
 import { NotificationStore } from './NotificationStore'
@@ -24,9 +25,15 @@ export class MainStore {
 
     public socketStore = new SocketStore()
 
+    public ideaStore = new IdeasStore()
+
     constructor() {
         makeAutoObservable(this)
         this.init()
+    }
+
+    public setUsersMap(state: Map<number, UserData>) {
+        this.users = state
     }
 
     public setAppReady(state: boolean) {
@@ -44,7 +51,7 @@ export class MainStore {
 
     async init() {
         const [users] = await Promise.all([fetchUsers(), this.authStore.init()])
-        this.users = new Map<number, UserData>(users.map((user) => [user.id, user]))
+        this.setUsersMap(new Map<number, UserData>(users.map((user) => [user.id, user])))
         this.setAppReady(true)
     }
 
@@ -52,7 +59,7 @@ export class MainStore {
         this.saveurStore.init()
         this.eventsStore.fetchEvents()
         const users = await fetchUsers()
-        this.users = new Map<number, UserData>(users.map((user) => [user.id, user]))
+        this.setUsersMap(new Map<number, UserData>(users.map((user) => [user.id, user])))
     }
 
     addUser(user: UserData) {

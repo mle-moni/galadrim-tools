@@ -38,9 +38,10 @@ MYSQL_DB_NAME
 ### Docker mysql database
 
 if you have docker/docker-compose installed, you can run
-it will launch a mysql server on the port 3310 you can edit this in [docker-compose.yml](./docker-compose.yml)
 
 -   `docker-compose up`
+
+it will launch a mysql server on the port 3310 you can edit this in [docker-compose.yml](./docker-compose.yml)
 
 ### database setup
 

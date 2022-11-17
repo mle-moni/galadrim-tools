@@ -11,7 +11,9 @@ type MainLayoutProps = PropsWithChildren<{
     fullscreen?: boolean
 }>
 
-const Root = styled(Box)<MainLayoutProps>(({ fullscreen }) =>
+const Root = styled(Box, {
+    shouldForwardProp: (propName: string) => propName !== 'fullscreen',
+})<MainLayoutProps>(({ fullscreen }) =>
     sx({
         display: 'flex',
         height: fullscreen ? '100vh' : 'auto',

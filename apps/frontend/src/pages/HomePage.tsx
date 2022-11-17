@@ -1,5 +1,6 @@
 import {
     AdminPanelSettings,
+    BugReport,
     CalendarMonth,
     GitHub,
     Lightbulb,
@@ -32,10 +33,11 @@ const HomePage = observer(() => {
                     title="Participer"
                 />
                 <IconLink
-                    Icon={Lightbulb}
+                    Icon={BugReport}
                     link="https://github.com/mle-moni/galadrim-tools/issues"
-                    title="Proposer une idée"
+                    title="Reporter un bug"
                 />
+                <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
                 <IconLink
                     Icon={AdminPanelSettings}
                     link="/admin"
