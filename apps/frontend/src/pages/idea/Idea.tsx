@@ -76,7 +76,8 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId 
                         {numberOfUpvote}
                     </IconReactionWrapper>
                 </Tooltip>
-                {hasRights(authStore.user.rights, ['IDEAS_ADMIN']) && (
+                {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
+                    authStore.user.id === idea.createdBy) && (
                     <Tooltip title={'Supprimer'}>
                         <IconReactionWrapper>
                             <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
