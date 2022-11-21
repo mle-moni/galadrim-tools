@@ -2,7 +2,7 @@ import { IIdea, IIdeaNote, IUserData } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
-import { notifyError } from '../../utils/notification'
+import { notifyError, notifySuccess } from '../../utils/notification'
 import { APPLICATION_JSON_HEADERS } from './createIdea/CreateIdeaStore'
 
 export const findUserReaction = (idea: IIdea, userId: IUserData['id']) => {
@@ -45,6 +45,21 @@ export class IdeasStore {
 
     setReactions(idea: IIdea, state: IIdeaNote[]) {
         idea.reactions = state
+    }
+
+    removeIdeaById(id: number) {
+        this.setIdeas(this._ideas.filter((idea) => id !== idea.id))
+    }
+
+    async deleteIdea(id: number) {
+        const res = await fetchBackendJson(`/ideas/${id}`, 'DELETE')
+
+        if (res.ok) {
+            notifySuccess(`L'idée a été supprimée`)
+            this.removeIdeaById(id)
+        } else {
+            notifyError(getErrorMessage(res.json, `impossible de supprimer l'idée numéro ${id}`))
+        }
     }
 
     async deleteReaction(idea: IIdea, userId: IIdeaNote['userId']) {

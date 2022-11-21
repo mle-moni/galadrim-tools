@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
+import { useIsMobile } from '../../hooks/useIsMobile'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
@@ -16,6 +17,8 @@ const IdeaPage = observer(() => {
     const modalStore = useMemo(() => new SimpleModalStore(), [])
 
     const { ideaStore, authStore } = AppStore
+
+    const isMobile = useIsMobile()
 
     useEffect(() => {
         if (!ideaStore.loadingState.isLoading) {
@@ -41,11 +44,13 @@ const IdeaPage = observer(() => {
                     J'ai une idée !
                 </GaladrimButton>
             </CenteredDiv>
-            <Masonry columns={5} spacing={3}>
-                {ideaStore.ideas.map((idea) => (
-                    <Idea key={idea.id} idea={idea} userId={authStore.user.id} />
-                ))}
-            </Masonry>
+            <CenteredDiv>
+                <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+                    {ideaStore.ideas.map((idea) => (
+                        <Idea key={idea.id} idea={idea} userId={authStore.user.id} />
+                    ))}
+                </Masonry>
+            </CenteredDiv>
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
                     onPublish={(newIdea) => {

@@ -1,4 +1,7 @@
-import { IIdea, IUserData } from '@galadrim-tools/shared'
+import { hasRights, IIdea, IUserData } from '@galadrim-tools/shared'
+import { Delete } from '@mui/icons-material'
+import ThumbDownIcon from '@mui/icons-material/ThumbDown'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import {
     Box,
     BoxProps,
@@ -9,15 +12,13 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp'
-import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import { green, red } from '@mui/material/colors'
 import { styled } from '@mui/material/styles'
+import { observer } from 'mobx-react-lite'
 import { AppStore } from '../../globalStores/AppStore'
-import { findUserReaction } from './IdeasStore'
 import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
 import { getUsersIdWithSpecificReaction } from './helper'
+import { findUserReaction } from './IdeasStore'
 
 const getReactions = (idea: IIdea, userId: IUserData['id']) => {
     const numberOfReaction = idea.reactions.length
@@ -42,7 +43,7 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
 }))
 
 const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId }) => {
-    const { ideaStore, users } = AppStore
+    const { ideaStore, users, authStore } = AppStore
     const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(idea, userId)
 
     return (
@@ -75,6 +76,15 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId 
                         {numberOfUpvote}
                     </IconReactionWrapper>
                 </Tooltip>
+                {hasRights(authStore.user.rights, ['IDEAS_ADMIN']) && (
+                    <Tooltip title={'Supprimer'}>
+                        <IconReactionWrapper>
+                            <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
+                                <Delete />
+                            </IconButton>
+                        </IconReactionWrapper>
+                    </Tooltip>
+                )}
             </CardActions>
         </Card>
     )
