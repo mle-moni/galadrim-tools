@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
+import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
@@ -21,6 +22,8 @@ const IdeaPage = observer(() => {
             ideaStore.fetchIdeaList()
         }
     }, [])
+
+    useCheckConnection(authStore)
 
     return (
         <>
