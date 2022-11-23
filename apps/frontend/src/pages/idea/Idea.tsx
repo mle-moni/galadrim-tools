@@ -54,16 +54,6 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId 
                 </Typography>
             </CardContent>
             <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}>
-                    <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
-                        <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, false)}>
-                            <ThumbDownIcon
-                                sx={{ color: currentUserReaction === false ? red[700] : undefined }}
-                            />
-                        </IconButton>
-                        {numberOfDownvote}
-                    </IconReactionWrapper>
-                </Tooltip>
                 <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}>
                     <IconReactionWrapper>
                         <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, true)}>
@@ -74,6 +64,16 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId 
                             />
                         </IconButton>
                         {numberOfUpvote}
+                    </IconReactionWrapper>
+                </Tooltip>
+                <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}>
+                    <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
+                        <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, false)}>
+                            <ThumbDownIcon
+                                sx={{ color: currentUserReaction === false ? red[700] : undefined }}
+                            />
+                        </IconButton>
+                        {numberOfDownvote}
                     </IconReactionWrapper>
                 </Tooltip>
                 {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||

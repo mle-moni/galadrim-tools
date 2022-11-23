@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { indexRoute } from './routes'
 import { destroyRoute } from './routes/destroy'
+import { getAllEvents } from './routes/getAllEvents'
 import { showRoute } from './routes/show'
 import { storeRoute } from './routes/store'
 import { updateRoute } from './routes/update'
@@ -24,5 +25,9 @@ export default class EventsController {
 
     public async destroy(params: HttpContextContract) {
         return destroyRoute(params)
+    }
+
+    public async all(params: HttpContextContract) {
+        return getAllEvents(params)
     }
 }

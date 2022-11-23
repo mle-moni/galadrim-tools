@@ -1,5 +1,6 @@
+import { Loop } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Box, Button } from '@mui/material'
+import { Box, Button, Tooltip } from '@mui/material'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
@@ -24,6 +25,17 @@ const RoomPage = () => {
                     >
                         Retour
                     </Button>
+                </Box>
+                <Box sx={{ position: 'absolute', top: 96, left: 32, zIndex: 10 }}>
+                    <Tooltip title="Charger toutes les réservations, par défaut seulement 200 réservations sont chargées">
+                        <Button
+                            startIcon={<Loop />}
+                            variant="contained"
+                            onClick={() => AppStore.eventsStore.fetchEvents(true)}
+                        >
+                            Charger plus
+                        </Button>
+                    </Tooltip>
                 </Box>
                 <RoomCalendar />
             </div>
