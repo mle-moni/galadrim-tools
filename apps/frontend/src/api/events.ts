@@ -3,8 +3,9 @@ import { RawRoomEvent, RoomEvent } from '../globalStores/EventsStore'
 import { fetchBackend } from './fetch'
 import { UserData } from './galadrimeurs'
 
-export const fetchEvents = async () => {
-    const res = await fetchBackend('/events')
+export const fetchEvents = async (all = false) => {
+    const path = all ? '/allEvents' : '/events'
+    const res = await fetchBackend(path)
     if (!res.ok) return []
     return res.json()
 }

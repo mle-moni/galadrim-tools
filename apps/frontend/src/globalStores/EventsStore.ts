@@ -42,8 +42,8 @@ export class EventsStore {
         this.waiting = state
     }
 
-    async fetchEvents() {
-        const events: RoomEvent[] = (await fetchEvents()).map((rawEvent: RawRoomEvent) =>
+    async fetchEvents(all = false) {
+        const events: RoomEvent[] = (await fetchEvents(all)).map((rawEvent: RawRoomEvent) =>
             getEventFromApi(rawEvent)
         )
         this.setEvents(events)
