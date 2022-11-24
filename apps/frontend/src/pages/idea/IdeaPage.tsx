@@ -1,3 +1,4 @@
+import { IIdea } from '@galadrim-tools/shared'
 import { Lightbulb } from '@mui/icons-material'
 import { Masonry } from '@mui/lab'
 import { Divider, Typography } from '@mui/material'
@@ -28,6 +29,18 @@ const IdeaPage = observer(() => {
 
     useCheckConnection(authStore)
 
+    const displayIdeas = (ideas: IIdea[], isBad?: boolean) => {
+        return (
+            <CenteredDiv>
+                <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+                    {ideas.map((idea) => (
+                        <Idea key={idea.id} idea={idea} userId={authStore.user.id} isBad={isBad} />
+                    ))}
+                </Masonry>
+            </CenteredDiv>
+        )
+    }
+
     return (
         <>
             <Typography style={{ textAlign: 'center', fontSize: 32 }}>
@@ -44,29 +57,13 @@ const IdeaPage = observer(() => {
                     J'ai une idée !
                 </GaladrimButton>
             </CenteredDiv>
-            {ideaStore.notBadIdeas.length > 0 && (
-                <CenteredDiv>
-                    <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
-                        {ideaStore.notBadIdeas.map((idea) => (
-                            <Idea key={idea.id} idea={idea} userId={authStore.user.id} />
-                        ))}
-                    </Masonry>
-                </CenteredDiv>
-            )}
+            {ideaStore.notBadIdeas.length > 0 && displayIdeas(ideaStore.notBadIdeas)}
             {ideaStore.notBadIdeas.length > 0 && ideaStore.badIdeas.length > 0 && (
-                <CenteredDiv>
+                <CenteredDiv style={{ marginBottom: 25 }}>
                     <Divider orientation="horizontal" sx={{ width: '80%' }} />
                 </CenteredDiv>
             )}
-            {ideaStore.badIdeas.length > 0 && (
-                <CenteredDiv style={{ marginTop: 25 }}>
-                    <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
-                        {ideaStore.badIdeas.map((idea) => (
-                            <Idea key={idea.id} idea={idea} userId={authStore.user.id} isBad />
-                        ))}
-                    </Masonry>
-                </CenteredDiv>
-            )}
+            {ideaStore.badIdeas.length > 0 && displayIdeas(ideaStore.badIdeas, true)}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
                     onPublish={() => {
