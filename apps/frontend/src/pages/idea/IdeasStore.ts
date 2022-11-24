@@ -105,10 +105,6 @@ export class IdeasStore {
         }
     }
 
-    saveIdeaLocally(idea: IIdea) {
-        this.ideas.push(idea)
-    }
-
     saveReactionLocally(idea: IIdea, reaction: IIdeaNote) {
         const currentReaction = findUserReaction(idea, reaction.userId)
         if (currentReaction) {
@@ -164,5 +160,16 @@ export class IdeasStore {
         }
 
         this.saveReaction(matchingIdea, userReaction)
+    }
+
+    createOrUpdateIdea(idea: IIdea) {
+        const foundIdea = this._ideas.find(({ id }) => idea.id === id)
+        if (foundIdea === undefined) {
+            this._ideas.unshift(idea)
+            return
+        }
+        foundIdea.createdBy = idea.createdBy
+        foundIdea.reactions = idea.reactions
+        foundIdea.text = idea.text
     }
 }

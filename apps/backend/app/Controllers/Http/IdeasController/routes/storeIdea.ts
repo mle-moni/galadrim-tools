@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Idea from '../../../../Models/Idea'
+import Ws from '../../../../Services/Ws'
 
 const ideaSchema = schema.create({
     text: schema.string([rules.trim(), rules.maxLength(300), rules.minLength(2)]),
@@ -14,6 +15,8 @@ export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => 
 
     const createdIdea = await Idea.create({ userId: user.id, text })
     await createdIdea.load('ideaVotes')
+
+    Ws.io.to('connectedSockets').emit('createIdea', createdIdea.frontendData)
 
     return { message: "L'idée à été créé !", idea: createdIdea.frontendData }
 }

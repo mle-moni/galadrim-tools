@@ -53,8 +53,7 @@ const IdeaPage = observer(() => {
             </CenteredDiv>
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
-                    onPublish={(newIdea) => {
-                        ideaStore.saveIdeaLocally(newIdea)
+                    onPublish={() => {
                         modalStore.setModalOpen(false)
                     }}
                 />
