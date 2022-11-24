@@ -42,8 +42,8 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
     alignItems: 'center',
 }))
 
-const Idea = observer<{ idea: IIdea & { isBad: boolean }; userId: IUserData['id'] }>(
-    ({ idea, userId }) => {
+const Idea = observer<{ idea: IIdea; userId: IUserData['id']; isBad?: boolean }>(
+    ({ idea, userId, isBad }) => {
         const { ideaStore, users, authStore } = AppStore
         const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(idea, userId)
 
@@ -52,7 +52,7 @@ const Idea = observer<{ idea: IIdea & { isBad: boolean }; userId: IUserData['id'
                 style={{
                     cursor: 'pointer',
                     maxWidth: 345,
-                    backgroundColor: idea.isBad ? 'rgba(120, 120, 120, 0.5)' : undefined,
+                    backgroundColor: isBad ? 'rgba(120, 120, 120, 0.5)' : undefined,
                 }}
             >
                 <CardContent>
