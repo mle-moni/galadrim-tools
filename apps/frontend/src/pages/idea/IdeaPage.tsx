@@ -47,7 +47,7 @@ const IdeaPage = observer(() => {
             <CenteredDiv>
                 <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
                     {ideaStore.orderedIdeas.map((idea) => (
-                        <Idea key={idea.id} idea={idea} userId={authStore.user.id} />
+                        <Idea key={idea.id} idea={idea} user={authStore.user} />
                     ))}
                 </Masonry>
             </CenteredDiv>

@@ -40,6 +40,7 @@ export default class Idea extends BaseModel {
             createdBy: this.userId,
             text: this.text,
             reactions: this.ideaVotes.map((ideaVote) => ideaVote.frontendData),
+            createdAt: this.createdAt.toJSDate(),
         }
     }
 }

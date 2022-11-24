@@ -38,13 +38,16 @@ export class IdeasStore {
     }
 
     get orderedIdeas() {
-        const ideasWithMoreInfos = this.ideas.map(({ createdBy, id, reactions, text }) => ({
-            createdBy,
-            id,
-            reactions,
-            text,
-            isBad: this.isIdeaBad(reactions),
-        }))
+        const ideasWithMoreInfos = this.ideas.map(
+            ({ createdBy, createdAt, id, reactions, text }) => ({
+                createdBy,
+                id,
+                reactions,
+                text,
+                createdAt,
+                isBad: this.isIdeaBad(reactions),
+            })
+        )
 
         const orderedIdeas = ideasWithMoreInfos.sort((a, b) => Number(a.isBad) - Number(b.isBad))
 
@@ -56,7 +59,10 @@ export class IdeasStore {
         const result = await fetchBackendJson<IIdea[], unknown>('/ideas')
         this.loadingState.setIsLoading(false)
         if (result.ok) {
-            this.ideas = result.json
+            this.ideas = result.json.map((idea) => ({
+                ...idea,
+                createdAt: new Date(idea.createdAt),
+            }))
         }
     }
 
