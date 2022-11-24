@@ -30,7 +30,7 @@ const IdeaPage = observer(() => {
 
     return (
         <>
-            <Typography style={{ textAlign: 'center', fontSize: 32 }}>
+            <Typography style={{ textAlign: 'center', fontSize: 32, paddingTop: 30 }}>
                 Proposer une idée pour améliorer Galadrim
             </Typography>
 
