@@ -11,4 +11,5 @@ export interface IIdea {
     text: string
     createdBy: IUserData['id']
     reactions: IIdeaNote[]
+    createdAt: Date
 }

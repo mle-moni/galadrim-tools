@@ -15,6 +15,9 @@ import {
 import { green, red } from '@mui/material/colors'
 import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
+import moment from 'moment'
+import 'moment/dist/locale/fr'
+
 import { AppStore } from '../../globalStores/AppStore'
 import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
 import { getUsersIdWithSpecificReaction } from './helper'
@@ -42,10 +45,13 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
     alignItems: 'center',
 }))
 
-const Idea = observer<{ idea: IIdea; userId: IUserData['id']; isBad?: boolean }>(
-    ({ idea, userId, isBad }) => {
+const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
+    ({ idea, user, isBad = false }) => {
         const { ideaStore, users, authStore } = AppStore
-        const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(idea, userId)
+        const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(
+            idea,
+            user.id
+        )
 
         return (
             <Card
@@ -53,6 +59,7 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id']; isBad?: boolean }>
                     cursor: 'pointer',
                     maxWidth: 345,
                     backgroundColor: isBad ? 'rgba(120, 120, 120, 0.5)' : undefined,
+                    opacity: isBad ? 0.8 : undefined,
                 }}
             >
                 <CardContent>
@@ -66,7 +73,7 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id']; isBad?: boolean }>
                     >
                         <IconReactionWrapper>
                             <IconButton
-                                onClick={() => ideaStore.setReaction(idea.id, userId, true)}
+                                onClick={() => ideaStore.setReaction(idea.id, user.id, true)}
                             >
                                 <ThumbUpIcon
                                     sx={{
@@ -83,7 +90,7 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id']; isBad?: boolean }>
                     >
                         <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton
-                                onClick={() => ideaStore.setReaction(idea.id, userId, false)}
+                                onClick={() => ideaStore.setReaction(idea.id, user.id, false)}
                             >
                                 <ThumbDownIcon
                                     sx={{
@@ -104,6 +111,14 @@ const Idea = observer<{ idea: IIdea; userId: IUserData['id']; isBad?: boolean }>
                             </IconReactionWrapper>
                         </Tooltip>
                     )}
+                </CardActions>
+                <CardActions
+                    sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
+                >
+                    <Typography sx={{ fontSize: 11, color: 'gray' }}>{user.username}</Typography>
+                    <Typography sx={{ fontSize: 11, color: 'gray' }}>
+                        {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
+                    </Typography>
                 </CardActions>
             </Card>
         )

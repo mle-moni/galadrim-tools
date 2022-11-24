@@ -14,12 +14,24 @@ import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStor
 import CreateIdeaModal from './CreateIdeaModal'
 import Idea from './Idea'
 
+const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isBad }) => {
+    const { authStore } = AppStore
+    const isMobile = useIsMobile()
+    return (
+        <CenteredDiv>
+            <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+                {ideas.map((idea) => (
+                    <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
+                ))}
+            </Masonry>
+        </CenteredDiv>
+    )
+})
+
 const IdeaPage = observer(() => {
     const modalStore = useMemo(() => new SimpleModalStore(), [])
 
     const { ideaStore, authStore } = AppStore
-
-    const isMobile = useIsMobile()
 
     useEffect(() => {
         if (!ideaStore.loadingState.isLoading) {
@@ -28,18 +40,6 @@ const IdeaPage = observer(() => {
     }, [])
 
     useCheckConnection(authStore)
-
-    const displayIdeas = (ideas: IIdea[], isBad?: boolean) => {
-        return (
-            <CenteredDiv>
-                <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
-                    {ideas.map((idea) => (
-                        <Idea key={idea.id} idea={idea} userId={authStore.user.id} isBad={isBad} />
-                    ))}
-                </Masonry>
-            </CenteredDiv>
-        )
-    }
 
     return (
         <>
@@ -57,13 +57,13 @@ const IdeaPage = observer(() => {
                     J'ai une idée !
                 </GaladrimButton>
             </CenteredDiv>
-            {ideaStore.notBadIdeas.length > 0 && displayIdeas(ideaStore.notBadIdeas)}
+            {ideaStore.notBadIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.notBadIdeas} />}
             {ideaStore.notBadIdeas.length > 0 && ideaStore.badIdeas.length > 0 && (
                 <CenteredDiv style={{ marginBottom: 25 }}>
                     <Divider orientation="horizontal" sx={{ width: '80%' }} />
                 </CenteredDiv>
             )}
-            {ideaStore.badIdeas.length > 0 && displayIdeas(ideaStore.badIdeas, true)}
+            {ideaStore.badIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.badIdeas} isBad />}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
                     onPublish={() => {

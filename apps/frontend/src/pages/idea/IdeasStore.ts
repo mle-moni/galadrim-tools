@@ -34,7 +34,8 @@ export class IdeasStore {
         const downvotes = reactions.reduce((acc, { isUpvote }) => acc + Number(!isUpvote), 0)
         const ratio = reactions.length > 0 ? downvotes / reactions.length : 0
 
-        return reactions.length > 5 && ratio > 0.7
+        return ratio > 0.7
+        // return reactions.length > 5 && ratio > 0.7
     }
 
     get badIdeas() {
@@ -50,7 +51,10 @@ export class IdeasStore {
         const result = await fetchBackendJson<IIdea[], unknown>('/ideas')
         this.loadingState.setIsLoading(false)
         if (result.ok) {
-            this.ideas = result.json
+            this.ideas = result.json.map((idea) => ({
+                ...idea,
+                createdAt: new Date(idea.createdAt),
+            }))
         }
     }
 
