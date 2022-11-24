@@ -30,6 +30,27 @@ export class IdeasStore {
         return this._ideas
     }
 
+    isIdeaBad(reactions: IIdeaNote[]) {
+        const downvotes = reactions.reduce((acc, { isUpvote }) => acc + Number(!isUpvote), 0)
+        const ratio = reactions.length > 0 ? downvotes / reactions.length : 0
+
+        return reactions.length > 5 && ratio > 0.7
+    }
+
+    get orderedIdeas() {
+        const ideasWithMoreInfos = this.ideas.map(({ createdBy, id, reactions, text }) => ({
+            createdBy,
+            id,
+            reactions,
+            text,
+            isBad: this.isIdeaBad(reactions),
+        }))
+
+        const orderedIdeas = ideasWithMoreInfos.sort((a, b) => Number(a.isBad) - Number(b.isBad))
+
+        return orderedIdeas
+    }
+
     async fetchIdeaList() {
         this.loadingState.setIsLoading(true)
         const result = await fetchBackendJson<IIdea[], unknown>('/ideas')
