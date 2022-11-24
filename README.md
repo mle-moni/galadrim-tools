@@ -19,6 +19,7 @@ on the frontend you need to create a `.env` you can copy and use the default [.e
 ```
 VITE_API_URL=http://localhost:3000/api
 VITE_SOCKET_API_URL=http://localhost:3333
+VITE_BAD_IDEA_DOWNVOTES_TRESHOLD=80
 ```
 
 on the backend you need to create a `.env` you can copy and modify [.env.example](./apps/backend/.env.example)

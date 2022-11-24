@@ -42,53 +42,72 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
     alignItems: 'center',
 }))
 
-const Idea = observer<{ idea: IIdea; userId: IUserData['id'] }>(({ idea, userId }) => {
-    const { ideaStore, users, authStore } = AppStore
-    const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(idea, userId)
+const Idea = observer<{ idea: IIdea; userId: IUserData['id']; greyed?: boolean }>(
+    ({ idea, userId, greyed }) => {
+        const { ideaStore, users, authStore } = AppStore
+        const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(idea, userId)
 
-    return (
-        <Card style={{ cursor: 'pointer', maxWidth: 345 }}>
-            <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    {idea.text}
-                </Typography>
-            </CardContent>
-            <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}>
-                    <IconReactionWrapper>
-                        <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, true)}>
-                            <ThumbUpIcon
-                                sx={{
-                                    color: currentUserReaction === true ? green[500] : undefined,
-                                }}
-                            />
-                        </IconButton>
-                        {numberOfUpvote}
-                    </IconReactionWrapper>
-                </Tooltip>
-                <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}>
-                    <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
-                        <IconButton onClick={() => ideaStore.setReaction(idea.id, userId, false)}>
-                            <ThumbDownIcon
-                                sx={{ color: currentUserReaction === false ? red[700] : undefined }}
-                            />
-                        </IconButton>
-                        {numberOfDownvote}
-                    </IconReactionWrapper>
-                </Tooltip>
-                {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
-                    authStore.user.id === idea.createdBy) && (
-                    <Tooltip title={'Supprimer'}>
+        return (
+            <Card
+                style={{
+                    cursor: 'pointer',
+                    maxWidth: 345,
+                    backgroundColor: greyed ? '#CFCFCF' : 'white',
+                }}
+            >
+                <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                        {idea.text}
+                    </Typography>
+                </CardContent>
+                <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
+                    <Tooltip
+                        title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}
+                    >
                         <IconReactionWrapper>
-                            <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
-                                <Delete />
+                            <IconButton
+                                onClick={() => ideaStore.setReaction(idea.id, userId, true)}
+                            >
+                                <ThumbUpIcon
+                                    sx={{
+                                        color:
+                                            currentUserReaction === true ? green[500] : undefined,
+                                    }}
+                                />
                             </IconButton>
+                            {numberOfUpvote}
                         </IconReactionWrapper>
                     </Tooltip>
-                )}
-            </CardActions>
-        </Card>
-    )
-})
+                    <Tooltip
+                        title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}
+                    >
+                        <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
+                            <IconButton
+                                onClick={() => ideaStore.setReaction(idea.id, userId, false)}
+                            >
+                                <ThumbDownIcon
+                                    sx={{
+                                        color: currentUserReaction === false ? red[700] : undefined,
+                                    }}
+                                />
+                            </IconButton>
+                            {numberOfDownvote}
+                        </IconReactionWrapper>
+                    </Tooltip>
+                    {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
+                        authStore.user.id === idea.createdBy) && (
+                        <Tooltip title={'Supprimer'}>
+                            <IconReactionWrapper>
+                                <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
+                                    <Delete />
+                                </IconButton>
+                            </IconReactionWrapper>
+                        </Tooltip>
+                    )}
+                </CardActions>
+            </Card>
+        )
+    }
+)
 
 export default Idea
