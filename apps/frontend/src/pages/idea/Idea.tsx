@@ -53,6 +53,8 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
             user.id
         )
 
+        const author = users.get(idea.createdBy)
+
         return (
             <Card
                 style={{
@@ -115,7 +117,11 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                 <CardActions
                     sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
                 >
-                    <Typography sx={{ fontSize: 11, color: 'gray' }}>{user.username}</Typography>
+                    {author !== undefined && (
+                        <Typography sx={{ fontSize: 11, color: 'gray' }}>
+                            {author.username}
+                        </Typography>
+                    )}
                     <Typography sx={{ fontSize: 11, color: 'gray' }}>
                         {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
                     </Typography>
