@@ -1,6 +1,6 @@
 import { Lightbulb } from '@mui/icons-material'
 import { Masonry } from '@mui/lab'
-import { Typography } from '@mui/material'
+import { Divider, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
@@ -44,13 +44,29 @@ const IdeaPage = observer(() => {
                     J'ai une idée !
                 </GaladrimButton>
             </CenteredDiv>
-            <CenteredDiv>
-                <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
-                    {ideaStore.orderedIdeas.map((idea) => (
-                        <Idea key={idea.id} idea={idea} userId={authStore.user.id} />
-                    ))}
-                </Masonry>
-            </CenteredDiv>
+            {ideaStore.notBadIdeas.length > 0 && (
+                <CenteredDiv>
+                    <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+                        {ideaStore.notBadIdeas.map((idea) => (
+                            <Idea key={idea.id} idea={idea} userId={authStore.user.id} />
+                        ))}
+                    </Masonry>
+                </CenteredDiv>
+            )}
+            {ideaStore.notBadIdeas.length > 0 && ideaStore.badIdeas.length > 0 && (
+                <CenteredDiv>
+                    <Divider orientation="horizontal" sx={{ width: '80%' }} />
+                </CenteredDiv>
+            )}
+            {ideaStore.badIdeas.length > 0 && (
+                <CenteredDiv style={{ marginTop: 25 }}>
+                    <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+                        {ideaStore.badIdeas.map((idea) => (
+                            <Idea key={idea.id} idea={idea} userId={authStore.user.id} isBad />
+                        ))}
+                    </Masonry>
+                </CenteredDiv>
+            )}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
                     onPublish={() => {

@@ -37,18 +37,12 @@ export class IdeasStore {
         return reactions.length > 5 && ratio > 0.7
     }
 
-    get orderedIdeas() {
-        const ideasWithMoreInfos = this.ideas.map(({ createdBy, id, reactions, text }) => ({
-            createdBy,
-            id,
-            reactions,
-            text,
-            isBad: this.isIdeaBad(reactions),
-        }))
+    get badIdeas() {
+        return this.ideas.filter((idea) => this.isIdeaBad(idea.reactions))
+    }
 
-        const orderedIdeas = ideasWithMoreInfos.sort((a, b) => Number(a.isBad) - Number(b.isBad))
-
-        return orderedIdeas
+    get notBadIdeas() {
+        return this.ideas.filter((idea) => !this.isIdeaBad(idea.reactions))
     }
 
     async fetchIdeaList() {
