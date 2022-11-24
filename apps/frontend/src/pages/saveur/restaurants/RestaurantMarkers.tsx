@@ -12,7 +12,7 @@ import { notifyError, notifySuccess } from '../../../utils/notification'
 const parseZoomLevel = (zoomRaw: string | null) => {
     if (zoomRaw) {
         const zoom = parseInt(zoomRaw)
-        if (Number.isNaN(zoomRaw)) {
+        if (Number.isNaN(zoomRaw) || zoom > MAX_ZOOM) {
             return MAX_ZOOM
         }
         return zoom
