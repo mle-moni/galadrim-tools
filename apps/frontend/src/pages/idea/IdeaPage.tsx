@@ -19,7 +19,7 @@ const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isB
     const isMobile = useIsMobile()
     return (
         <CenteredDiv>
-            <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+            <Masonry sx={{ width: '80%', marginBottom: 0 }} columns={isMobile ? 1 : 5} spacing={3}>
                 {ideas.map((idea) => (
                     <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
                 ))}
