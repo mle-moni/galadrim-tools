@@ -12,7 +12,8 @@
         "build:shared": "cd ./libs/shared && yarn build",
         "migrate-prod": "cd ./apps/backend && yarn migrate-prod",
         "deploy:backend": "cd ./apps/backend && yarn deploy",
-        "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && yarn deploy:frontend"
+        "deploy:frontend:nobuild": "cd ./apps/frontend && yarn deploy",
+        "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && cd ./apps/frontend && yarn deploy"
     },
     "private": true,
     "workspaces": [

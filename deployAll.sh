@@ -11,7 +11,7 @@ TIME_DOWN=`date +%s`
 yarn build:backend &&
 yarn migrate-prod &&
 yarn deploy:backend &&
-yarn deploy:frontend &&
+yarn deploy:frontend:nobuild &&
 rm -f /home/ubuntu/galadrim-tools/apps/backend/build/tmp &&
 ln -s /home/ubuntu/galadrim-tools/apps/backend/tmp /home/ubuntu/galadrim-tools/apps/backend/build/tmp &&
 TIME_UP=`date +%s`
