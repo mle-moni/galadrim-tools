@@ -54,9 +54,11 @@ Route.group(() => {
     .prefix('statistics')
 
 Route.group(() => {
-    Route.post('/createUser', 'AdminController.createUser').middleware('rights:USER_ADMIN')
-    Route.get('/userRights', 'AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
-    Route.put('/userRights', 'AdminController.editUserRights').middleware('rights:RIGHTS_ADMIN')
+    Route.post('/createUser', 'admin/AdminController.createUser').middleware('rights:USER_ADMIN')
+    Route.get('/userRights', 'admin/AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
+    Route.put('/userRights', 'admin/AdminController.editUserRights').middleware(
+        'rights:RIGHTS_ADMIN'
+    )
     Route.get('/dashboard', 'DashboardController.index')
 })
     .middleware('auth:web,api')
