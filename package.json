@@ -11,6 +11,7 @@
         "build:backend": "cd ./apps/backend && yarn build",
         "build:shared": "cd ./libs/shared && yarn build",
         "migrate-prod": "cd ./apps/backend && yarn migrate-prod",
+        "deploy:backend": "cd ./apps/backend && yarn deploy",
         "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && yarn deploy:frontend"
     },
     "private": true,
