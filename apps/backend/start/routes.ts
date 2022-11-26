@@ -24,9 +24,9 @@ Route.get('/', async () => {
     return { service: 'galadrim tools backend' }
 })
 
-Route.post('/login', 'AuthController.login')
-Route.post('/logout', 'AuthController.logout')
-Route.post('/getOtp', 'AuthController.getOtp')
+Route.post('/login', 'auth/AuthController.login')
+Route.post('/logout', 'auth/AuthController.logout')
+Route.post('/getOtp', 'auth/AuthController.getOtp')
 
 Route.group(() => {
     Route.resource('events', 'EventsController').apiOnly()
@@ -36,10 +36,10 @@ Route.group(() => {
     Route.resource('notes', 'RestaurantNotesController').apiOnly()
     Route.resource('ideas', 'IdeasController').apiOnly()
     Route.post('createOrUpdateIdeaVote', 'IdeasController.createOrUpdateVote')
-    Route.get('/me', 'AuthController.me')
-    Route.post('/createApiToken', 'AuthController.createApiToken')
-    Route.post('/changePassword', 'AuthController.changePassword')
-    Route.post('/updateProfile', 'AuthController.updateProfile')
+    Route.get('/me', 'auth/AuthController.me')
+    Route.post('/createApiToken', 'auth/AuthController.createApiToken')
+    Route.post('/changePassword', 'auth/AuthController.changePassword')
+    Route.post('/updateProfile', 'auth/AuthController.updateProfile')
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'GaladrimeursController.index')

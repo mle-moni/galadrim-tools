@@ -1,11 +1,11 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { changePasswordRoute } from './routes/changePassword'
-import { createApiTokenRoute } from './routes/getApiToken'
-import { getOtpRoute } from './routes/getOtp'
-import { loginRoute } from './routes/login'
-import { logoutRoute } from './routes/logout'
-import { meRoute } from './routes/me'
-import { updateProfileRoute } from './routes/updateProfile'
+import { changePasswordRoute } from './changePassword'
+import { createApiTokenRoute } from './getApiToken'
+import { getOtpRoute } from './getOtp'
+import { loginRoute } from './login'
+import { logoutRoute } from './logout'
+import { meRoute } from './me'
+import { updateProfileRoute } from './updateProfile'
 
 export default class EventsController {
     public async login(params: HttpContextContract) {
