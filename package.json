@@ -4,7 +4,14 @@
     "license": "GPLv2",
     "scripts": {
         "deploy": "git pull && ./deployAll.sh",
-        "deploy:frontend": "git pull && nx build frontend && nx deploy frontend"
+        "test:backend": "cd ./apps/backend && yarn test",
+        "test:frontend": "cd ./apps/frontend && yarn test",
+        "test": "yarn test:backend && yarn test:frontend",
+        "build:frontend": "cd ./apps/frontend && yarn build",
+        "build:backend": "cd ./apps/backend && yarn build",
+        "build:shared": "cd ./libs/shared && yarn build",
+        "migrate-prod": "cd ./apps/backend && yarn migrate-prod",
+        "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && yarn deploy:frontend"
     },
     "private": true,
     "workspaces": [
