@@ -1,4 +1,4 @@
-import { RIGHTS } from '@galadrim-tools/shared/src'
+import { RIGHTS } from '@galadrim-tools/shared'
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class Users extends BaseSchema {
