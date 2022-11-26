@@ -20,6 +20,12 @@ interface ApiRoomStatistic {
     username: string
 }
 
+const formatTime = (time: string) => {
+    const date = new Date(0)
+    date.setSeconds(Number(time)) // specify value for SECONDS here
+    return date.toISOString().slice(11, 19)
+}
+
 export class StatisticsStore {
     public timePerUserData: ApiTimeStatistic[] = []
     public amountPerUserData: ApiAmountStatistic[] = []
@@ -44,18 +50,35 @@ export class StatisticsStore {
         this.roomData = newRoomData
     }
 
-    async fetchTimePerUser() {
-        const res = await fetchBackendJson<ApiTimeStatistic[], unknown>('/statistics/time')
-        if (res.ok) this.setTimePerUserData(res.json)
+    async fetchTimePerUser(isDays: boolean) {
+        const qs = isDays ? '?days=30' : ''
+        const res = await fetchBackendJson<ApiTimeStatistic[], unknown>('/statistics/time' + qs)
+        if (!res.ok) return
+
+        const userTimes = res.json
+        const formattedTimes = userTimes.map((userTime) => ({
+            ...userTime,
+            time: formatTime(userTime.time),
+        }))
+        this.setTimePerUserData(formattedTimes)
     }
 
-    async fetchAmountPerUser() {
-        const res = await fetchBackendJson<ApiAmountStatistic[], unknown>('/statistics/amount')
+    async fetchAmountPerUser(isDays: boolean) {
+        const qs = isDays ? '?days=30' : ''
+        const res = await fetchBackendJson<ApiAmountStatistic[], unknown>('/statistics/amount' + qs)
         if (res.ok) this.setAmountPerUserData(res.json)
     }
 
-    async fetchRoomData() {
-        const res = await fetchBackendJson<ApiRoomStatistic[], unknown>('/statistics/rooms')
-        if (res.ok) this.setRoomData(res.json)
+    async fetchRoomData(isDays: boolean) {
+        const qs = isDays ? '?days=30' : ''
+        const res = await fetchBackendJson<ApiRoomStatistic[], unknown>('/statistics/rooms' + qs)
+
+        if (!res.ok) return
+        const rooms = res.json
+        const formattedRooms = rooms.map((room) => ({
+            ...room,
+            time: formatTime(room.time),
+        }))
+        this.setRoomData(formattedRooms)
     }
 }
