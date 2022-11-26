@@ -1,6 +1,6 @@
-import { getEventsAmountPerGaladrimeurs } from './routes/amount'
-import { getGaladrimeurFavoriteRooms } from './routes/rooms'
-import { getTimePerGaladrimeurs } from './routes/time'
+import { getEventsAmountPerGaladrimeurs } from './getEventsAmountPerGaladrimeurs'
+import { getGaladrimeurFavoriteRooms } from './getGaladrimeurFavoriteRooms'
+import { getTimePerGaladrimeurs } from './getTimePerGaladrimeurs'
 
 export default class StatisticsController {
     public async favoriteRoom() {
