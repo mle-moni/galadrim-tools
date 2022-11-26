@@ -1,7 +1,8 @@
 import { IIdea } from '@galadrim-tools/shared'
 import { Lightbulb } from '@mui/icons-material'
+import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Masonry } from '@mui/lab'
-import { Divider, Typography } from '@mui/material'
+import { Button, Divider, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
@@ -9,6 +10,8 @@ import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
+import { IconLink } from '../../reusableComponents/common/IconLink'
+import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import CreateIdeaModal from './CreateIdeaModal'
@@ -19,7 +22,7 @@ const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isB
     const isMobile = useIsMobile()
     return (
         <CenteredDiv>
-            <Masonry sx={{ width: '80%' }} columns={isMobile ? 1 : 5} spacing={3}>
+            <Masonry sx={{ width: '80%', marginBottom: 0 }} columns={isMobile ? 1 : 5} spacing={3}>
                 {ideas.map((idea) => (
                     <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
                 ))}
@@ -43,6 +46,7 @@ const IdeaPage = observer(() => {
 
     return (
         <>
+            <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
             <Typography style={{ textAlign: 'center', fontSize: 32, paddingTop: 30 }}>
                 Proposer une idée pour améliorer Galadrim
             </Typography>
