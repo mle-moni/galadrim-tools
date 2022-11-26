@@ -1,8 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { indexRoute } from './routes'
-import { destroyRoute } from './routes/destroy'
-import { showRoute } from './routes/show'
-import { storeOrUpdateRoute } from './routes/storeOrUpdate'
+import { destroyRoute } from './destroyRestaurantNotes'
+import { indexRoute } from './restaurantNotesIndex'
+import { showRoute } from './showRestaurantNotes'
+import { storeOrUpdateRoute } from './storeOrUpdateRestaurantNotes'
 
 export default class RestaurantsController {
     public async index(params: HttpContextContract) {
