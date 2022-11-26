@@ -1,9 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { destroyRoute } from 'App/Controllers/Http/events/destroyEvent'
-import { indexRoute } from 'App/Controllers/Http/events/eventsIndex'
-import { showRoute } from 'App/Controllers/Http/events/showEvent'
-import { storeRoute } from 'App/Controllers/Http/events/storeEvent'
-import { updateRoute } from 'App/Controllers/Http/events/updateEvent'
+import { destroyRoute } from 'App/Controllers/Http/tags/destroyTag'
+import { showRoute } from 'App/Controllers/Http/tags/showTag'
+import { storeRoute } from 'App/Controllers/Http/tags/storeTag'
+import { indexRoute } from 'App/Controllers/Http/tags/tagsIndex'
+import { updateRoute } from 'App/Controllers/Http/tags/updateTag'
 
 export default class TagsController {
     public async index(params: HttpContextContract) {

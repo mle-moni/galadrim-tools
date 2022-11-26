@@ -1,9 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { destroyRoute } from 'App/Controllers/Http/events/destroyEvent'
-import { indexRoute } from 'App/Controllers/Http/events/eventsIndex'
-import { showRoute } from 'App/Controllers/Http/events/showEvent'
-import { storeRoute } from 'App/Controllers/Http/events/storeEvent'
-import { updateRoute } from 'App/Controllers/Http/events/updateEvent'
+import { destroyRoute } from 'App/Controllers/Http/restaurants/destroyRestaurant'
+import { indexRoute } from 'App/Controllers/Http/restaurants/restaurantsIndex'
+import { showRoute } from 'App/Controllers/Http/restaurants/showRestaurant'
+import { storeRoute } from 'App/Controllers/Http/restaurants/storeRestaurant'
+import { updateRoute } from 'App/Controllers/Http/restaurants/updateRestaurant'
 
 export default class RestaurantsController {
     public async index(params: HttpContextContract) {
