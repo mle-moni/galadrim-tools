@@ -59,7 +59,7 @@ Route.group(() => {
     Route.put('/userRights', 'admin/AdminController.editUserRights').middleware(
         'rights:RIGHTS_ADMIN'
     )
-    Route.get('/dashboard', 'DashboardController.index')
+    Route.get('/dashboard', 'dashboard/DashboardController.index')
 })
     .middleware('auth:web,api')
     .prefix('admin')
