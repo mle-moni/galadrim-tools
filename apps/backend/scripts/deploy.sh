@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BUILD_PATH="../../dist/apps/backend"
+BUILD_PATH="./build"
 PM2_NAME="galadrim-tools"
 
 stat $BUILD_PATH &> /dev/null  || (echo "backend should be built before" && exit 1) &&

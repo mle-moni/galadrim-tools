@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BUILD_PATH="../../dist/apps/frontend"
+BUILD_PATH="./dist"
 DEPLOY_PATH="/var/www/galadrim-tools"
 
 stat $BUILD_PATH &> /dev/null  || (echo "frontend should be built before" && exit 1) &&

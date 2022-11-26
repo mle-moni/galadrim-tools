@@ -1,5 +1,16 @@
 {
     "name": "@galadrim-tools/shared",
     "version": "1.0.0",
-    "main": "src/index"
+    "main": "dist/index.js",
+    "private": true,
+    "dependencies": {
+        "pino-std-serializers": "^6.0.0",
+        "typescript": "^4.1.3",
+        "zod": "^3.19.1"
+    },
+    "scripts": {
+        "build": "rm -rf ./dist && tsc",
+        "build:watch": "tsc -w",
+        "dev": "npm run build:watch"
+    }
 }

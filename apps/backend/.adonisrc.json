@@ -1,7 +1,7 @@
 {
     "typescript": true,
     "commands": [
-        "./apps/backend/commands",
+        "./commands",
         "@adonisjs/core/build/commands/index.js",
         "@adonisjs/repl/build/commands",
         "@adonisjs/lucid/build/commands",

@@ -1,34 +1,30 @@
 {
-    // "extends": "../../node_modules/adonis-preset-ts/tsconfig",
-    "extends": "../../tsconfig.base.json",
-    "include": [
-        "**/*"
-    ],
+    "extends": "adonis-preset-ts/tsconfig.json",
+    "include": ["**/*"],
+    "exclude": ["node_modules", "build"],
     "compilerOptions": {
-        "target": "ES2020",
-        "module": "commonjs",
-        "lib": [
-            "ES2020"
-        ],
-        "noUnusedLocals": true,
-        "incremental": true,
-        "noUnusedParameters": true,
-        "removeComments": true,
-        "outDir": "../../dist/apps/backend",
-        "strictNullChecks": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
+        "outDir": "build",
+        "rootDir": "./",
+        "sourceMap": true,
+        "paths": {
+            "App/*": ["./apps/backend/app/*"],
+            "Config/*": ["./apps/backend/config/*"],
+            "Contracts/*": ["./apps/backend/contracts/*"],
+            "Database/*": ["./apps/backend/database/*"]
+        },
         "types": [
+            "@adonisjs/session",
             "@adonisjs/core",
             "@adonisjs/repl",
+            "@japa/preset-adonis/build/adonis-typings",
             "@adonisjs/lucid",
-            "@adonisjs/auth",
-            "@adonisjs/session",
             "@adonisjs/mail",
             "@adonisjs/view",
-            "@japa/preset-adonis/build/adonis-typings",
-            "@adonisjs/attachment-lite",
-            "@adonisjs/bouncer"
+            "@adonisjs/auth",
+            "@adonisjs/drive-s3",
+            "@adonisjs/bouncer",
+            "adonis5-sentry",
+            "@adonisjs/attachment-lite"
         ]
     }
 }
