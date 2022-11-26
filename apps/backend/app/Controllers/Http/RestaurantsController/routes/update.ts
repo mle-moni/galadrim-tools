@@ -1,8 +1,8 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Restaurant from '../../../../Models/Restaurant'
-import RestaurantTag from '../../../../Models/RestaurantTag'
-import Ws from '../../../../Services/Ws'
+import Restaurant from 'App/Models/Restaurant'
+import RestaurantTag from 'App/Models/RestaurantTag'
+import Ws from 'App/Services/Ws'
 import { validateRestaurantsParams } from './store'
 
 type PromiseType<T> = T extends Promise<infer U> ? U : never

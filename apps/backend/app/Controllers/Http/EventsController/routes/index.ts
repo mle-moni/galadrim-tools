@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Event from '../../../../Models/Event'
+import Event from 'App/Models/Event'
 
 const EVENTS_LIMIT = 200
 

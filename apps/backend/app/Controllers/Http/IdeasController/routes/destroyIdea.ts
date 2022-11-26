@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Idea from '../../../../Models/Idea'
-import Ws from '../../../../Services/Ws'
+import Idea from 'App/Models/Idea'
+import Ws from 'App/Services/Ws'
 
 export const destroyIdeaRoute = async ({ params, bouncer }: HttpContextContract) => {
     const idea = await Idea.findOrFail(params.id)

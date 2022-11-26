@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Idea from '../../../../Models/Idea'
-import Ws from '../../../../Services/Ws'
+import Idea from 'App/Models/Idea'
+import Ws from 'App/Services/Ws'
 
 const ideaSchema = schema.create({
     text: schema.string([rules.trim(), rules.maxLength(300), rules.minLength(2)]),

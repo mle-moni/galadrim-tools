@@ -1,5 +1,5 @@
+import User from 'App/Models/User'
 import { Socket } from 'socket.io'
-import User from '../../../Models/User'
 import { validateInput } from '../utils/validation/validateInput'
 
 export type SocketAuthDto = {

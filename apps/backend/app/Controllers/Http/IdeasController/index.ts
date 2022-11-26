@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Idea from 'App/Models/Idea'
 import { createOrUpdateVoteRoute } from '../../../Controllers/Http/IdeasController/routes/createOrUpdateVote'
 import { destroyIdeaRoute } from '../../../Controllers/Http/IdeasController/routes/destroyIdea'
 import { showIdeaRoute } from '../../../Controllers/Http/IdeasController/routes/showIdea'
 import { storeIdeaRoute } from '../../../Controllers/Http/IdeasController/routes/storeIdea'
 import { updateIdeaRoute } from '../../../Controllers/Http/IdeasController/routes/updateIdea'
-import Idea from '../../../Models/Idea'
 
 export default class IdeasController {
     public async index({}: HttpContextContract) {

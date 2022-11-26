@@ -1,7 +1,7 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Ws from '../../../../Services/Ws'
+import Ws from 'App/Services/Ws'
 
 const updateProfileSchema = schema.create({
     email: schema.string([rules.trim()]),

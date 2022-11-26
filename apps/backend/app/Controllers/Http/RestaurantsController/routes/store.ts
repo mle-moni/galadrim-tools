@@ -1,9 +1,9 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Restaurant from '../../../../Models/Restaurant'
-import RestaurantTag from '../../../../Models/RestaurantTag'
-import Ws from '../../../../Services/Ws'
+import Restaurant from 'App/Models/Restaurant'
+import RestaurantTag from 'App/Models/RestaurantTag'
+import Ws from 'App/Services/Ws'
 
 const StoreValidationSchema = schema.create({
     name: schema.string([rules.trim(), rules.maxLength(40), rules.minLength(2)]),

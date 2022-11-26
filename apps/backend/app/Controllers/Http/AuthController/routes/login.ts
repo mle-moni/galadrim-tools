@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import User from '../../../../Models/User'
+import User from 'App/Models/User'
 
 const loginSchema = schema.create({
     email: schema.string([rules.trim()]),

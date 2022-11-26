@@ -2,8 +2,8 @@ import Mail from '@ioc:Adonis/Addons/Mail'
 import Env from '@ioc:Adonis/Core/Env'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import User from 'App/Models/User'
 import { nanoid } from 'nanoid'
-import User from '../../../../Models/User'
 
 const createUserSchema = schema.create({
     email: schema.string([
