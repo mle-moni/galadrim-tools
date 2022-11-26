@@ -9,8 +9,8 @@ see some other sample images [here](./readme-images/README.md)
 
 ## Setup
 
--   for the backend you will need a mysql database ([docker setup](#-Docker-mysql-database))
 -   yarn install
+-   for the backend you will need a mysql database ([docker setup](#Docker-mysql-database))
 
 ## Environment
 
