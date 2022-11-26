@@ -29,8 +29,8 @@ Route.post('/logout', 'auth/AuthController.logout')
 Route.post('/getOtp', 'auth/AuthController.getOtp')
 
 Route.group(() => {
-    Route.resource('events', 'EventsController').apiOnly()
-    Route.get('/allEvents', 'EventsController.all')
+    Route.resource('events', 'events/EventsController').apiOnly()
+    Route.get('/allEvents', 'events/EventsController.all')
     Route.resource('tags', 'TagsController').apiOnly()
     Route.resource('restaurants', 'RestaurantsController').apiOnly()
     Route.resource('notes', 'RestaurantNotesController').apiOnly()
