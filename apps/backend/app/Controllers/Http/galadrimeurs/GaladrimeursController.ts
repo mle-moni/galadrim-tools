@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { indexRoute } from './routes'
-import { usersRoute } from './routes/users'
+import { indexRoute } from './galadrimeursIndex'
+import { usersRoute } from './users'
 
 export default class GaladrimeursController {
     public async index(params: HttpContextContract) {
