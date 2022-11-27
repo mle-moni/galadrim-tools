@@ -1,24 +1,22 @@
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button, FormControlLabel, Stack, Switch, Typography } from '@mui/material'
+import { Button, Stack, Switch, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
 import { amountColumns, roomColumns, timeColumns } from './columns'
 import { StatisticsStore } from './StatisticsStore'
 
-const StatisticsPage = () => {
+const StatisticsPage = observer(() => {
     const statisticStore = useMemo(() => new StatisticsStore(), [])
-    const [checked, setChecked] = useState(false)
 
-    const handleChange = () => {
-        statisticStore.fetchAmountPerUser(checked)
-        statisticStore.fetchRoomData(checked)
-        statisticStore.fetchTimePerUser(checked)
-        setChecked((previousValue) => !previousValue)
-    }
+    useEffect(() => {
+        if (!statisticStore.loadingState.isLoading) {
+            statisticStore.fetchStats()
+        }
+    }, [])
 
     return (
         <MainLayout fullscreen={false}>
@@ -36,7 +34,11 @@ const StatisticsPage = () => {
                 </Typography>
                 <Stack direction="row" spacing={1} alignItems="center">
                     <Typography>30 derniers jours</Typography>
-                    <Switch checked={checked} onChange={handleChange} name="period" />
+                    <Switch
+                        checked={statisticStore.showStatsFromAllTime}
+                        onChange={() => statisticStore.toggleStatsMode()}
+                        name="period"
+                    />
                     <Typography>Tout</Typography>
                 </Stack>
                 <Typography variant="h5" gutterBottom>
@@ -93,6 +95,6 @@ const StatisticsPage = () => {
             </Stack>
         </MainLayout>
     )
-}
+})
 
-export default observer(StatisticsPage)
+export default StatisticsPage

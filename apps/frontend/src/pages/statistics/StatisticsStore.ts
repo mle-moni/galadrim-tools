@@ -1,5 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../api/fetch'
+import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
 
 interface ApiTimeStatistic {
     time: string
@@ -27,15 +28,20 @@ const formatTime = (time: string) => {
 }
 
 export class StatisticsStore {
+    loadingState = new LoadingStateStore()
+
     public timePerUserData: ApiTimeStatistic[] = []
     public amountPerUserData: ApiAmountStatistic[] = []
     public roomData: ApiRoomStatistic[] = []
 
+    public showStatsFromAllTime = false
+
     constructor() {
-        this.fetchTimePerUser()
-        this.fetchAmountPerUser()
-        this.fetchRoomData()
         makeAutoObservable(this)
+    }
+
+    setShowStatsFromAllTime(state: boolean) {
+        this.showStatsFromAllTime = state
     }
 
     setTimePerUserData(newTimePerUserData: ApiTimeStatistic[]) {
@@ -50,8 +56,8 @@ export class StatisticsStore {
         this.roomData = newRoomData
     }
 
-    async fetchTimePerUser(isDays: boolean) {
-        const qs = isDays ? '?days=30' : ''
+    async fetchTimePerUser() {
+        const qs = this.showStatsFromAllTime ? '' : '?days=30'
         const res = await fetchBackendJson<ApiTimeStatistic[], unknown>('/statistics/time' + qs)
         if (!res.ok) return
 
@@ -63,14 +69,14 @@ export class StatisticsStore {
         this.setTimePerUserData(formattedTimes)
     }
 
-    async fetchAmountPerUser(isDays: boolean) {
-        const qs = isDays ? '?days=30' : ''
+    async fetchAmountPerUser() {
+        const qs = this.showStatsFromAllTime ? '' : '?days=30'
         const res = await fetchBackendJson<ApiAmountStatistic[], unknown>('/statistics/amount' + qs)
         if (res.ok) this.setAmountPerUserData(res.json)
     }
 
-    async fetchRoomData(isDays: boolean) {
-        const qs = isDays ? '?days=30' : ''
+    async fetchRoomData() {
+        const qs = this.showStatsFromAllTime ? '' : '?days=30'
         const res = await fetchBackendJson<ApiRoomStatistic[], unknown>('/statistics/rooms' + qs)
 
         if (!res.ok) return
@@ -80,5 +86,20 @@ export class StatisticsStore {
             time: formatTime(room.time),
         }))
         this.setRoomData(formattedRooms)
+    }
+
+    async fetchStats() {
+        this.loadingState.setIsLoading(true)
+        await Promise.all([
+            this.fetchAmountPerUser(),
+            this.fetchRoomData(),
+            this.fetchTimePerUser(),
+        ])
+        this.loadingState.setIsLoading(false)
+    }
+
+    async toggleStatsMode() {
+        this.setShowStatsFromAllTime(!this.showStatsFromAllTime)
+        this.fetchStats()
     }
 }
