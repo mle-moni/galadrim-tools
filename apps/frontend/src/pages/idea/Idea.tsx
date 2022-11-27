@@ -124,7 +124,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                                 </IconReactionWrapper>
                             </Tooltip>
                             <Tooltip
-                                title={`Marquer comme ${idea.done ? 'non terminé' : 'terminé'}`}
+                                title={`Marquer comme ${idea.done ? 'non terminée' : 'terminée'}`}
                             >
                                 <IconReactionWrapper>
                                     <IconButton onClick={() => ideaStore.update(idea.id)}>
