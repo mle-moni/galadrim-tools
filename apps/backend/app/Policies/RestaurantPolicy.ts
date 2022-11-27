@@ -1,6 +1,6 @@
 import Bouncer, { BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
-import Restaurant from '../../app/Models/Restaurant'
-import User from '../../app/Models/User'
+import Restaurant from '../Models/Restaurant'
+import User from '../Models/User'
 
 export default class RestaurantPolicy extends BasePolicy {
     public async before(user: User | null) {
