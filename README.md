@@ -45,6 +45,8 @@ it will launch a mysql server on the port 3310 you can edit this in [docker-comp
 
 ### database setup
 
+-   `cd libs/shared`
+-   `yarn build`
 -   `cd ./apps/backend`
 -   `node ace migration:run`
 -   `node ace db:seed`
