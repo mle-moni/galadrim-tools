@@ -16,7 +16,6 @@ export const updateIdeaRoute = async ({ request, bouncer }: HttpContextContract)
     const idea = await Idea.findOrFail(ideaId)
 
     await bouncer.with('IdeasPolicy').authorize('viewUpdateOrDelete', idea)
-    await bouncer.with('IdeasPolicy').authorize('setIdeaDone', done)
 
     idea.text = text
     if (done !== undefined) {

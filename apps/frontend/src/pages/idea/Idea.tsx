@@ -115,22 +115,24 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                     </Tooltip>
                     {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
                         authStore.user.id === idea.createdBy) && (
-                        <Tooltip title={'Supprimer'}>
-                            <IconReactionWrapper>
-                                <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
-                                    <Delete />
-                                </IconButton>
-                            </IconReactionWrapper>
-                        </Tooltip>
-                    )}
-                    {hasRights(authStore.user.rights, ['IDEAS_ADMIN']) && (
-                        <Tooltip title={'Done'}>
-                            <IconReactionWrapper>
-                                <IconButton onClick={() => ideaStore.update(idea.id)}>
-                                    <Done />
-                                </IconButton>
-                            </IconReactionWrapper>
-                        </Tooltip>
+                        <>
+                            <Tooltip title={'Supprimer'}>
+                                <IconReactionWrapper>
+                                    <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
+                                        <Delete />
+                                    </IconButton>
+                                </IconReactionWrapper>
+                            </Tooltip>
+                            <Tooltip
+                                title={`Marquer comme ${idea.done ? 'non terminé' : 'terminé'}`}
+                            >
+                                <IconReactionWrapper>
+                                    <IconButton onClick={() => ideaStore.update(idea.id)}>
+                                        <Done />
+                                    </IconButton>
+                                </IconReactionWrapper>
+                            </Tooltip>
+                        </>
                     )}
                 </CardActions>
                 <CardActions
