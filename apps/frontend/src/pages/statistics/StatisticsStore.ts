@@ -1,5 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../api/fetch'
+import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
+import moment from 'moment'
 
 interface ApiTimeStatistic {
     time: string
@@ -20,16 +22,26 @@ interface ApiRoomStatistic {
     username: string
 }
 
+const formatTime = (seconds: string) => {
+    const duration = moment.duration(seconds, 'seconds')
+    return `${duration.days()} jours ${duration.hours()} heures ${duration.minutes()} minutes`
+}
+
 export class StatisticsStore {
+    loadingState = new LoadingStateStore()
+
     public timePerUserData: ApiTimeStatistic[] = []
     public amountPerUserData: ApiAmountStatistic[] = []
     public roomData: ApiRoomStatistic[] = []
 
+    public showStatsFromAllTime = false
+
     constructor() {
-        this.fetchTimePerUser()
-        this.fetchAmountPerUser()
-        this.fetchRoomData()
         makeAutoObservable(this)
+    }
+
+    setShowStatsFromAllTime(state: boolean) {
+        this.showStatsFromAllTime = state
     }
 
     setTimePerUserData(newTimePerUserData: ApiTimeStatistic[]) {
@@ -45,17 +57,49 @@ export class StatisticsStore {
     }
 
     async fetchTimePerUser() {
-        const res = await fetchBackendJson<ApiTimeStatistic[], unknown>('/statistics/time')
-        if (res.ok) this.setTimePerUserData(res.json)
+        const qs = this.showStatsFromAllTime ? '' : '?days=30'
+        const res = await fetchBackendJson<ApiTimeStatistic[], unknown>('/statistics/time' + qs)
+        if (!res.ok) return
+
+        const userTimes = res.json
+        const formattedTimes = userTimes.map((userTime) => ({
+            ...userTime,
+            time: formatTime(userTime.time),
+        }))
+        this.setTimePerUserData(formattedTimes)
     }
 
     async fetchAmountPerUser() {
-        const res = await fetchBackendJson<ApiAmountStatistic[], unknown>('/statistics/amount')
+        const qs = this.showStatsFromAllTime ? '' : '?days=30'
+        const res = await fetchBackendJson<ApiAmountStatistic[], unknown>('/statistics/amount' + qs)
         if (res.ok) this.setAmountPerUserData(res.json)
     }
 
     async fetchRoomData() {
-        const res = await fetchBackendJson<ApiRoomStatistic[], unknown>('/statistics/rooms')
-        if (res.ok) this.setRoomData(res.json)
+        const qs = this.showStatsFromAllTime ? '' : '?days=30'
+        const res = await fetchBackendJson<ApiRoomStatistic[], unknown>('/statistics/rooms' + qs)
+
+        if (!res.ok) return
+        const rooms = res.json
+        const formattedRooms = rooms.map((room) => ({
+            ...room,
+            time: formatTime(room.time),
+        }))
+        this.setRoomData(formattedRooms)
+    }
+
+    async fetchStats() {
+        this.loadingState.setIsLoading(true)
+        await Promise.all([
+            this.fetchAmountPerUser(),
+            this.fetchRoomData(),
+            this.fetchTimePerUser(),
+        ])
+        this.loadingState.setIsLoading(false)
+    }
+
+    async toggleStatsMode() {
+        this.setShowStatsFromAllTime(!this.showStatsFromAllTime)
+        this.fetchStats()
     }
 }

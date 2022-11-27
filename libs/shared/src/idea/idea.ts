@@ -12,4 +12,5 @@ export interface IIdea {
     createdBy: IUserData['id']
     reactions: IIdeaNote[]
     createdAt: Date
+    done: boolean
 }

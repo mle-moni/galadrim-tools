@@ -1,5 +1,5 @@
 import { hasRights, IIdea, IUserData } from '@galadrim-tools/shared'
-import { Delete } from '@mui/icons-material'
+import { Delete, Done } from '@mui/icons-material'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import {
@@ -45,6 +45,16 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
     alignItems: 'center',
 }))
 
+const getBgColor = (isDone: boolean, isBad: boolean) => {
+    if (isDone) {
+        return 'rgba(76, 175, 80, 0.1)'
+    }
+    if (isBad) {
+        return 'rgba(120, 120, 120, 0.5)'
+    }
+    return undefined
+}
+
 const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
     ({ idea, user, isBad = false }) => {
         const { ideaStore, users, authStore } = AppStore
@@ -60,8 +70,8 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                 style={{
                     cursor: 'pointer',
                     maxWidth: 345,
-                    backgroundColor: isBad ? 'rgba(120, 120, 120, 0.5)' : undefined,
-                    opacity: isBad ? 0.8 : undefined,
+                    backgroundColor: getBgColor(idea.done, isBad),
+                    opacity: isBad && idea.done === false ? 0.8 : undefined,
                 }}
             >
                 <CardContent>
@@ -105,21 +115,37 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                     </Tooltip>
                     {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
                         authStore.user.id === idea.createdBy) && (
-                        <Tooltip title={'Supprimer'}>
-                            <IconReactionWrapper>
-                                <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
-                                    <Delete />
-                                </IconButton>
-                            </IconReactionWrapper>
-                        </Tooltip>
+                        <>
+                            <Tooltip title={'Supprimer'}>
+                                <IconReactionWrapper>
+                                    <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
+                                        <Delete />
+                                    </IconButton>
+                                </IconReactionWrapper>
+                            </Tooltip>
+                            <Tooltip
+                                title={`Marquer comme ${idea.done ? 'non terminé' : 'terminé'}`}
+                            >
+                                <IconReactionWrapper>
+                                    <IconButton onClick={() => ideaStore.update(idea.id)}>
+                                        <Done />
+                                    </IconButton>
+                                </IconReactionWrapper>
+                            </Tooltip>
+                        </>
                     )}
                 </CardActions>
                 <CardActions
                     sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
                 >
                     {author !== undefined && (
-                        <Typography sx={{ fontSize: 11, color: 'gray' }}>
-                            {author.username}
+                        <Typography
+                            sx={{
+                                fontSize: 11,
+                                color: 'gray',
+                            }}
+                        >
+                            {isBad ? '' : author.username}
                         </Typography>
                     )}
                     <Typography sx={{ fontSize: 11, color: 'gray' }}>

@@ -9,8 +9,8 @@ see some other sample images [here](./readme-images/README.md)
 
 ## Setup
 
--   for the backend you will need a mysql database ([docker setup](#-Docker-mysql-database))
 -   yarn install
+-   for the backend you will need a mysql database ([docker setup](#Docker-mysql-database))
 
 ## Environment
 
@@ -51,10 +51,11 @@ it will launch a mysql server on the port 3310 you can edit this in [docker-comp
 
 ## Start project
 
--   at the root of the project run:
-    `nx dev backend`
-    and
-    `nx dev frontend`
+-   `cd ./libs/shared && yarn dev`
+-   `cd ./apps/backend && yarn dev`
+-   `cd ./apps/frontend && yarn dev`
+
+:warning: when updating a file in libs/shared you might need to restart frontend watcher
 
 -   go to http://localhost:3000
 
@@ -84,19 +85,18 @@ node ace repl
 
 When you write complex logic, try to write tests
 
-to test project you can run those nx commands
-(nx commands needs to be run at the root of the project)
+to test all, you can run
+`yarn test`
 
-`nx test backend`
-`nx test frontend`
-`nx test shared`
+or to test only one project, you can do
+`yarn test:backend`
+`yarn test:frontend`
 
 ## Build project
 
-(nx will build dependants projects if needed)
-
-`nx build backend`
-`nx build frontend`
+`yarn build:shared`
+`yarn build:backend`
+`yarn build:frontend`
 
 ## Contributing
 

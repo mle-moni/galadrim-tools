@@ -1,17 +1,47 @@
 {
     "name": "frontend",
-    "version": "3.2.0",
+    "private": true,
+    "version": "3.3.0",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --force",
+        "build": "tsc && vite build",
+        "deploy": "./deploy.sh",
         "test": "vitest run",
         "test:watch": "vitest",
         "tsc": "tsc",
-        "build": "tsc && vite build --emptyOutDir",
-        "deploy": "./deploy.sh",
-        "serve": "vite preview",
-        "lint": "eslint . --ext=.ts"
+        "preview": "vite preview"
     },
     "dependencies": {
-        "@galadrim-tools/shared": "*"
+        "@emotion/react": "^11.10.4",
+        "@emotion/styled": "^11.10.4",
+        "@galadrim-tools/shared": "*",
+        "@mui/icons-material": "^5.10.6",
+        "@mui/lab": "^5.0.0-alpha.101",
+        "@mui/material": "^5.10.7",
+        "@mui/x-data-grid": "^5.5.1",
+        "fuse.js": "^6.6.2",
+        "leaflet": "^1.8.0",
+        "mobx": "^6.6.2",
+        "mobx-react-lite": "^3.4.0",
+        "moment": "^2.29.1",
+        "notistack": "^2.0.3",
+        "react": "^18.2.0",
+        "react-big-calendar": "^0.40.1",
+        "react-dom": "^18.2.0",
+        "react-leaflet": "^4.0.0",
+        "react-router-dom": "^6.4.1",
+        "socket.io-client": "^4.4.0",
+        "zod": "^3.19.1"
+    },
+    "devDependencies": {
+        "@types/leaflet": "^1.7.11",
+        "@types/react": "^18.0.17",
+        "@types/react-big-calendar": "^0.38.0",
+        "@types/react-dom": "^18.0.6",
+        "@vitejs/plugin-react": "^2.1.0",
+        "typescript": "^4.6.4",
+        "jsdom": "^20.0.3",
+        "vite": "^3.1.0",
+        "vitest": "^0.10.5"
     }
 }

@@ -1,4 +1,4 @@
-import { AllRights, hasRights } from '@galadrim-tools/shared/src'
+import { AllRights, hasRights } from '@galadrim-tools/shared'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import ForbiddenException from '../Exceptions/ForbiddenException'
 import UnauthorizedException from '../Exceptions/UnauthorizedException'

@@ -1,5 +1,6 @@
 import { IIdea } from '@galadrim-tools/shared'
 import { Lightbulb } from '@mui/icons-material'
+import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Masonry } from '@mui/lab'
 import { Divider, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -9,6 +10,7 @@ import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
+import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import CreateIdeaModal from './CreateIdeaModal'
@@ -43,6 +45,7 @@ const IdeaPage = observer(() => {
 
     return (
         <>
+            <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
             <Typography style={{ textAlign: 'center', fontSize: 32, paddingTop: 30 }}>
                 Proposer une idée pour améliorer Galadrim
             </Typography>
@@ -64,6 +67,14 @@ const IdeaPage = observer(() => {
                 </CenteredDiv>
             )}
             {ideaStore.badIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.badIdeas} isBad />}
+
+            {ideaStore.doneIdeas.length > 0 &&
+                (ideaStore.notBadIdeas.length > 0 || ideaStore.badIdeas.length > 0) && (
+                    <CenteredDiv style={{ marginBottom: 25 }}>
+                        <Divider orientation="horizontal" sx={{ width: '80%' }} />
+                    </CenteredDiv>
+                )}
+            {ideaStore.doneIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.doneIdeas} />}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
                     onPublish={() => {

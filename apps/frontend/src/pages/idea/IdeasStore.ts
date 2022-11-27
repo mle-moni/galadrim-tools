@@ -34,16 +34,23 @@ export class IdeasStore {
         const downvotes = reactions.reduce((acc, { isUpvote }) => acc + Number(!isUpvote), 0)
         const ratio = reactions.length > 0 ? downvotes / reactions.length : 0
 
-        return ratio > 0.7
-        // return reactions.length > 5 && ratio > 0.7
+        return reactions.length > 5 && ratio > 0.7
+    }
+
+    get doneIdeas() {
+        return this.ideas.filter((idea) => idea.done)
+    }
+
+    get notDoneIdeas() {
+        return this.ideas.filter((idea) => !idea.done)
     }
 
     get badIdeas() {
-        return this.ideas.filter((idea) => this.isIdeaBad(idea.reactions))
+        return this.notDoneIdeas.filter((idea) => this.isIdeaBad(idea.reactions))
     }
 
     get notBadIdeas() {
-        return this.ideas.filter((idea) => !this.isIdeaBad(idea.reactions))
+        return this.notDoneIdeas.filter((idea) => !this.isIdeaBad(idea.reactions))
     }
 
     async fetchIdeaList() {
@@ -78,6 +85,26 @@ export class IdeasStore {
             this.removeIdeaById(id)
         } else {
             notifyError(getErrorMessage(res.json, `impossible de supprimer l'idée numéro ${id}`))
+        }
+    }
+
+    async update(id: number) {
+        const matchingIdea = this.findIdea(id)
+        if (!matchingIdea) return
+
+        const body = new FormData()
+        body.append('done', (!matchingIdea.done).toString())
+        body.append('ideaId', id.toString())
+        body.append('text', matchingIdea.text)
+
+        const res = await fetchBackendJson(`/ideas/${id}`, 'PUT', { body })
+
+        if (res.ok) {
+            notifySuccess(`L'idée a été mise à jour`)
+        } else {
+            notifyError(
+                getErrorMessage(res.json, `impossible de mettre à jour l'idée numéro ${id}`)
+            )
         }
     }
 
@@ -169,5 +196,6 @@ export class IdeasStore {
         foundIdea.createdBy = idea.createdBy
         foundIdea.reactions = idea.reactions
         foundIdea.text = idea.text
+        foundIdea.done = idea.done
     }
 }

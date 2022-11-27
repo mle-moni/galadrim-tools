@@ -1,16 +1,22 @@
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Switch, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
 import { amountColumns, roomColumns, timeColumns } from './columns'
 import { StatisticsStore } from './StatisticsStore'
 
-const StatisticsPage = () => {
+const StatisticsPage = observer(() => {
     const statisticStore = useMemo(() => new StatisticsStore(), [])
+
+    useEffect(() => {
+        if (!statisticStore.loadingState.isLoading) {
+            statisticStore.fetchStats()
+        }
+    }, [])
 
     return (
         <MainLayout fullscreen={false}>
@@ -26,6 +32,15 @@ const StatisticsPage = () => {
                 <Typography variant="h3" gutterBottom>
                     Statistiques de Rooms
                 </Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography>30 derniers jours</Typography>
+                    <Switch
+                        checked={statisticStore.showStatsFromAllTime}
+                        onChange={() => statisticStore.toggleStatsMode()}
+                        name="period"
+                    />
+                    <Typography>Tout</Typography>
+                </Stack>
                 <Typography variant="h5" gutterBottom>
                     La salle préférée des Galadrimeurs 💕
                 </Typography>
@@ -80,6 +95,6 @@ const StatisticsPage = () => {
             </Stack>
         </MainLayout>
     )
-}
+})
 
-export default observer(StatisticsPage)
+export default StatisticsPage
