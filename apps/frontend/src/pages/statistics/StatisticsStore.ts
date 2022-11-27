@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../api/fetch'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
+import moment from 'moment'
 
 interface ApiTimeStatistic {
     time: string
@@ -21,10 +22,9 @@ interface ApiRoomStatistic {
     username: string
 }
 
-const formatTime = (time: string) => {
-    const date = new Date(0)
-    date.setSeconds(Number(time)) // specify value for SECONDS here
-    return date.toISOString().slice(11, 19)
+const formatTime = (seconds: string) => {
+    const duration = moment.duration(seconds, 'seconds')
+    return `${duration.days()}J ${duration.hours()}H ${duration.minutes()}M`
 }
 
 export class StatisticsStore {
