@@ -24,7 +24,7 @@ interface ApiRoomStatistic {
 
 const formatTime = (seconds: string) => {
     const duration = moment.duration(seconds, 'seconds')
-    return `${duration.days()}J ${duration.hours()}H ${duration.minutes()}M`
+    return `${duration.days()} jours ${duration.hours()} heures ${duration.minutes()} minutes`
 }
 
 export class StatisticsStore {

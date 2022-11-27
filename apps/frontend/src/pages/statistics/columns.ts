@@ -1,10 +1,16 @@
 import { GridColumns, GridComparatorFn } from '@mui/x-data-grid'
 
 const timeComparator: GridComparatorFn = (v1, v2) => {
-    const [hour1, minute1, second1] = v1!.toString().split(':')
-    const [hour2, minute2, second2] = v2!.toString().split(':')
-    const date1 = new Date(0, 0, 0, +hour1, +minute1, +second1)
-    const date2 = new Date(0, 0, 0, +hour2, +minute2, +second2)
+    const [days1, hours1, minutes1] = v1!
+        .toString()
+        .split(' ')
+        .filter((_: string, i: number) => i % 2 === 0)
+    const [days2, hours2, minutes2] = v2!
+        .toString()
+        .split(' ')
+        .filter((_: string, i: number) => i % 2 === 0)
+    const date1 = new Date(0, 0, +days1, +hours1, +minutes1)
+    const date2 = new Date(0, 0, +days2, +hours2, +minutes2)
     return date1.getTime() - date2.getTime()
 }
 
@@ -16,9 +22,8 @@ const username = {
 const time = {
     field: 'time',
     headerName: 'Temps passé dans les salles',
-    width: 200,
     sortComparator: timeComparator,
-    sortingOrder: ['desc', 'asc'],
+    flex: 1,
 }
 const amount = {
     field: 'amount',
