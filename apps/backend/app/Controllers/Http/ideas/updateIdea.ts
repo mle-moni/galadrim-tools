@@ -1,3 +1,4 @@
+import { IDEAS_STATE } from '@galadrim-tools/shared'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Idea from 'App/Models/Idea'
@@ -6,11 +7,11 @@ import Ws from 'App/Services/Ws'
 const ideaSchema = schema.create({
     text: schema.string([rules.trim(), rules.maxLength(300), rules.minLength(2)]),
     ideaId: schema.number([rules.exists({ table: 'ideas', column: 'id' })]),
-    done: schema.boolean.optional(),
+    state: schema.enum.optional(IDEAS_STATE),
 })
 
 export const updateIdeaRoute = async ({ request, bouncer }: HttpContextContract) => {
-    const { text, ideaId, done } = await request.validate({
+    const { text, ideaId, state } = await request.validate({
         schema: ideaSchema,
     })
     const idea = await Idea.findOrFail(ideaId)
@@ -18,8 +19,8 @@ export const updateIdeaRoute = async ({ request, bouncer }: HttpContextContract)
     await bouncer.with('IdeasPolicy').authorize('viewUpdateOrDelete', idea)
 
     idea.text = text
-    if (done !== undefined) {
-        idea.done = done
+    if (state !== undefined) {
+        idea.state = state
     }
 
     await idea.save()

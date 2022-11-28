@@ -23,6 +23,9 @@ export default class Idea extends BaseModel {
     @column()
     public done: boolean
 
+    @column()
+    public state: IIdea['state']
+
     @hasMany(() => IdeaVote)
     public ideaVotes: HasMany<typeof IdeaVote>
 
@@ -44,7 +47,7 @@ export default class Idea extends BaseModel {
             text: this.text,
             reactions: this.ideaVotes.map((ideaVote) => ideaVote.frontendData),
             createdAt: this.createdAt.toJSDate(),
-            done: Boolean(this.done),
+            state: this.state,
         }
     }
 }
