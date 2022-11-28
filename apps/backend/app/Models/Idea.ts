@@ -21,9 +21,6 @@ export default class Idea extends BaseModel {
     public text: string
 
     @column()
-    public done: boolean
-
-    @column()
     public state: IIdea['state']
 
     @hasMany(() => IdeaVote)
