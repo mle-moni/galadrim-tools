@@ -1,4 +1,4 @@
-import { hasRights, IIdea, IUserData } from '@galadrim-tools/shared'
+import { hasRights, IdeaState, IIdea, IUserData } from '@galadrim-tools/shared'
 import { Delete, Done } from '@mui/icons-material'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
@@ -8,6 +8,7 @@ import {
     Card,
     CardActions,
     CardContent,
+    Chip,
     IconButton,
     Tooltip,
     Typography,
@@ -45,8 +46,8 @@ const IconReactionWrapper = styled(Box)<BoxProps>(() => ({
     alignItems: 'center',
 }))
 
-const getBgColor = (isDone: boolean, isBad: boolean) => {
-    if (isDone) {
+const getBgColor = (state: IdeaState, isBad: boolean) => {
+    if (state === 'DONE') {
         return 'rgba(76, 175, 80, 0.1)'
     }
     if (isBad) {
@@ -70,14 +71,17 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                 style={{
                     cursor: 'pointer',
                     maxWidth: 345,
-                    backgroundColor: getBgColor(idea.done, isBad),
-                    opacity: isBad && idea.done === false ? 0.8 : undefined,
+                    backgroundColor: getBgColor(idea.state, isBad),
+                    opacity: isBad && idea.state !== 'DONE' ? 0.8 : undefined,
                 }}
             >
                 <CardContent>
                     <Typography variant="body2" color="text.secondary">
                         {idea.text}
                     </Typography>
+                    {idea.state === 'DOING' && (
+                        <Chip sx={{ my: 1 }} variant="outlined" label="En cours" />
+                    )}
                 </CardContent>
                 <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
                     <Tooltip
@@ -124,7 +128,9 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                                 </IconReactionWrapper>
                             </Tooltip>
                             <Tooltip
-                                title={`Marquer comme ${idea.done ? 'non terminée' : 'terminée'}`}
+                                title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(
+                                    idea.state
+                                )}`}
                             >
                                 <IconReactionWrapper>
                                     <IconButton onClick={() => ideaStore.update(idea.id)}>

@@ -1,4 +1,4 @@
-import { IIdea, IIdeaNote, IUserData } from '@galadrim-tools/shared'
+import { IdeaState, IIdea, IIdeaNote, IUserData } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
@@ -38,11 +38,11 @@ export class IdeasStore {
     }
 
     get doneIdeas() {
-        return this.ideas.filter((idea) => idea.done)
+        return this.ideas.filter((idea) => idea.state === 'DONE')
     }
 
     get notDoneIdeas() {
-        return this.ideas.filter((idea) => !idea.done)
+        return this.ideas.filter((idea) => idea.state !== 'DONE')
     }
 
     get badIdeas() {
@@ -88,12 +88,32 @@ export class IdeasStore {
         }
     }
 
+    getNextIdeaState(state: IdeaState): IdeaState {
+        if (state === 'TODO') {
+            return 'DOING'
+        }
+        if (state === 'DOING') {
+            return 'DONE'
+        }
+        return 'TODO'
+    }
+
+    getUiNextIdeaStateString(state: IdeaState) {
+        if (state === 'TODO') {
+            return "'en cours'"
+        }
+        if (state === 'DOING') {
+            return "'fait'"
+        }
+        return "'à faire'"
+    }
+
     async update(id: number) {
         const matchingIdea = this.findIdea(id)
         if (!matchingIdea) return
 
         const body = new FormData()
-        body.append('done', (!matchingIdea.done).toString())
+        body.append('state', this.getNextIdeaState(matchingIdea.state))
         body.append('ideaId', id.toString())
         body.append('text', matchingIdea.text)
 
@@ -196,6 +216,6 @@ export class IdeasStore {
         foundIdea.createdBy = idea.createdBy
         foundIdea.reactions = idea.reactions
         foundIdea.text = idea.text
-        foundIdea.done = idea.done
+        foundIdea.state = idea.state
     }
 }

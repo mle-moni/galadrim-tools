@@ -12,5 +12,9 @@ export interface IIdea {
     createdBy: IUserData['id']
     reactions: IIdeaNote[]
     createdAt: Date
-    done: boolean
+    state: IdeaState
 }
+
+export type IdeaState = typeof IDEAS_STATE[number]
+
+export const IDEAS_STATE = ['TODO', 'DOING', 'DONE'] as const
