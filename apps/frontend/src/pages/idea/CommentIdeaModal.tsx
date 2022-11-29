@@ -52,7 +52,7 @@ const CommentIdeaModal = observer<{
     userId: IIdeaComment['userId']
 }>(({ idea, userId }) => {
     const ideaCommentStore = useMemo(() => new CreateIdeaCommentStore(idea.id, userId), [])
-    const scrollCommentsRef = useRef()
+    const scrollCommentsRef = useRef<any>()
 
     useEffect(() => {
         setTimeout(() => {
