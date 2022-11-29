@@ -53,9 +53,18 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
         >
             <CardMedia component="img" height="180" image={getImageUrl(restaurant.image)} />
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    {restaurant.name}
-                </Typography>
+                <Box sx={{ display: 'flex' }}>
+                    <Typography sx={{ flex: 1 }} gutterBottom variant="h5" component="div">
+                        {restaurant.name}
+                    </Typography>
+                    <Typography
+                        variant="caption"
+                        gutterBottom
+                        sx={{ fontSize: 16, marginLeft: 2, marginTop: 0.5 }}
+                    >
+                        {restaurant.averagePrice && `${restaurant.averagePrice}€`}
+                    </Typography>
+                </Box>
                 <RestaurantTags tags={restaurant.tags} />
                 <Typography variant="body2" color="text.secondary">
                     {restaurant.description}
