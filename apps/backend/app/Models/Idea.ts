@@ -22,6 +22,9 @@ export default class Idea extends BaseModel {
     public text: string
 
     @column()
+    public isAnonymous: boolean
+
+    @column()
     public state: IIdea['state']
 
     @hasMany(() => IdeaVote)
@@ -51,6 +54,7 @@ export default class Idea extends BaseModel {
             comments: this.ideaComments.map((ideaComment) => ideaComment.frontendData),
             createdAt: this.createdAt.toJSDate(),
             state: this.state,
+            isAnonymous: this.isAnonymous,
         }
     }
 }

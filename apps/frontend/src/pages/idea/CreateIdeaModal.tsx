@@ -1,5 +1,5 @@
 import { Lightbulb } from '@mui/icons-material'
-import { Button } from '@mui/material'
+import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
@@ -21,6 +21,15 @@ const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish
                 Icon={Lightbulb}
                 onChange={(idea) => ideaStore.text.setText(idea)}
             />
+            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                <Checkbox
+                    checked={ideaStore.isAnonymous.checked}
+                    value={ideaStore.isAnonymous}
+                    onChange={(event) => ideaStore.isAnonymous.setChecked(event.target.checked)}
+                    sx={{ padding: 0 }}
+                />
+                <Typography sx={{ marginLeft: 1 }}>Publier en anonyme</Typography>
+            </Box>
             <Button
                 fullWidth
                 variant="contained"

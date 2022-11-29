@@ -5,15 +5,16 @@ import Ws from 'App/Services/Ws'
 
 const ideaSchema = schema.create({
     text: schema.string([rules.trim(), rules.maxLength(300), rules.minLength(2)]),
+    isAnonymous: schema.boolean(),
 })
 
 export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => {
     const user = auth.user!
-    const { text } = await request.validate({
+    const { text, isAnonymous } = await request.validate({
         schema: ideaSchema,
     })
 
-    const createdIdea = await Idea.create({ userId: user.id, text })
+    const createdIdea = await Idea.create({ userId: user.id, text, isAnonymous })
     await createdIdea.load('ideaVotes')
     await createdIdea.load('ideaComments')
 

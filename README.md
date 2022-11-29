@@ -53,9 +53,7 @@ it will launch a mysql server on the port 3310 you can edit this in [docker-comp
 
 ## Start project
 
--   `cd ./libs/shared && yarn dev`
--   `cd ./apps/backend && yarn dev`
--   `cd ./apps/frontend && yarn dev`
+-   `yarn dev`
 
 :warning: when updating a file in libs/shared you might need to restart frontend watcher
 
