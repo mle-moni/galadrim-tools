@@ -9,6 +9,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import IdeaVote from '../../app/Models/IdeaVote'
+import IdeaComment from './IdeaComment'
 
 export default class Idea extends BaseModel {
     @column({ isPrimary: true })
@@ -26,6 +27,9 @@ export default class Idea extends BaseModel {
     @hasMany(() => IdeaVote)
     public ideaVotes: HasMany<typeof IdeaVote>
 
+    @hasMany(() => IdeaComment)
+    public ideaComments: HasMany<typeof IdeaComment>
+
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
@@ -35,6 +39,7 @@ export default class Idea extends BaseModel {
     @beforeFetch()
     public static autoLoadParameters(query: ModelQueryBuilderContract<typeof Idea>) {
         query.preload('ideaVotes')
+        query.preload('ideaComments')
     }
 
     get frontendData(): IIdea {
@@ -43,6 +48,7 @@ export default class Idea extends BaseModel {
             createdBy: this.userId,
             text: this.text,
             reactions: this.ideaVotes.map((ideaVote) => ideaVote.frontendData),
+            comments: this.ideaComments.map((ideaComment) => ideaComment.frontendData),
             createdAt: this.createdAt.toJSDate(),
             state: this.state,
         }

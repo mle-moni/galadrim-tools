@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { createOrUpdateVoteRoute } from 'App/Controllers/Http/ideas/createOrUpdateVote'
+import { createCommentRoute } from 'App/Controllers/Http/ideas/createComment'
 import { destroyIdeaRoute } from 'App/Controllers/Http/ideas/destroyIdea'
 import { showIdeaRoute } from 'App/Controllers/Http/ideas/showIdea'
 import { storeIdeaRoute } from 'App/Controllers/Http/ideas/storeIdea'
@@ -32,5 +33,9 @@ export default class IdeasController {
 
     public async createOrUpdateVote(params: HttpContextContract) {
         return createOrUpdateVoteRoute(params)
+    }
+
+    public async createComment(params: HttpContextContract) {
+        return createCommentRoute(params)
     }
 }

@@ -25,6 +25,7 @@ export const updateIdeaRoute = async ({ request, bouncer }: HttpContextContract)
 
     await idea.save()
     await idea.load('ideaVotes')
+    await idea.load('ideaComments')
 
     Ws.io.to('connectedSockets').emit('updateIdea', idea.frontendData)
 

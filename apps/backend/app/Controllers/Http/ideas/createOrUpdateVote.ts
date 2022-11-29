@@ -12,6 +12,7 @@ const ideaSchema = schema.create({
 const notifyUser = async (ideaId: number) => {
     const idea = await Idea.findOrFail(ideaId)
     await idea.load('ideaVotes')
+    await idea.load('ideaComments')
 
     Ws.io.to('connectedSockets').emit('updateIdea', idea.frontendData)
 }

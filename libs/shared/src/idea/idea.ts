@@ -1,5 +1,12 @@
 import { IUserData } from '../user'
 
+export interface IIdeaComment {
+    ideaId: IIdea['id']
+    userId: IUserData['id']
+    message: string
+    createdAt?: Date
+}
+
 export interface IIdeaNote {
     ideaId: IIdea['id']
     userId: IUserData['id']
@@ -11,6 +18,7 @@ export interface IIdea {
     text: string
     createdBy: IUserData['id']
     reactions: IIdeaNote[]
+    comments: IIdeaComment[]
     createdAt: Date
     state: IdeaState
 }

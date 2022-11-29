@@ -1,5 +1,5 @@
 import { hasRights, IdeaState, IIdea, IUserData } from '@galadrim-tools/shared'
-import { Delete, Done } from '@mui/icons-material'
+import { Delete, Done, Comment } from '@mui/icons-material'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import {
@@ -13,14 +13,17 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material'
-import { green, red } from '@mui/material/colors'
 import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import 'moment/dist/locale/fr'
+import { useMemo } from 'react'
 
 import { AppStore } from '../../globalStores/AppStore'
+import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
+import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
+import CommentIdeaModal from './CommentIdeaModal'
 import { getUsersIdWithSpecificReaction } from './helper'
 import { findUserReaction } from './IdeasStore'
 
@@ -58,6 +61,7 @@ const getBgColor = (state: IdeaState, isBad: boolean) => {
 
 const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
     ({ idea, user, isBad = false }) => {
+        const modalStore = useMemo(() => new SimpleModalStore(), [])
         const { ideaStore, users, authStore } = AppStore
         const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(
             idea,
@@ -67,98 +71,133 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
         const author = users.get(idea.createdBy)
 
         return (
-            <Card
-                style={{
-                    cursor: 'pointer',
-                    maxWidth: 345,
-                    backgroundColor: getBgColor(idea.state, isBad),
-                    opacity: isBad && idea.state !== 'DONE' ? 0.8 : undefined,
-                }}
-            >
-                <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                        {idea.text}
-                    </Typography>
-                    {idea.state === 'DOING' && (
-                        <Chip sx={{ my: 1 }} variant="outlined" label="En cours" />
-                    )}
-                </CardContent>
-                <CardActions sx={{ display: 'flex', justifyContent: 'end' }}>
-                    <Tooltip
-                        title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}
-                    >
-                        <IconReactionWrapper>
-                            <IconButton
-                                onClick={() => ideaStore.setReaction(idea.id, user.id, true)}
-                            >
-                                <ThumbUpIcon
-                                    sx={{
-                                        color:
-                                            currentUserReaction === true ? green[500] : undefined,
-                                    }}
-                                />
-                            </IconButton>
-                            {numberOfUpvote}
-                        </IconReactionWrapper>
-                    </Tooltip>
-                    <Tooltip
-                        title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}
-                    >
-                        <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
-                            <IconButton
-                                onClick={() => ideaStore.setReaction(idea.id, user.id, false)}
-                            >
-                                <ThumbDownIcon
-                                    sx={{
-                                        color: currentUserReaction === false ? red[700] : undefined,
-                                    }}
-                                />
-                            </IconButton>
-                            {numberOfDownvote}
-                        </IconReactionWrapper>
-                    </Tooltip>
-                    {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
-                        authStore.user.id === idea.createdBy) && (
-                        <>
-                            <Tooltip title={'Supprimer'}>
-                                <IconReactionWrapper>
-                                    <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
-                                        <Delete />
-                                    </IconButton>
-                                </IconReactionWrapper>
-                            </Tooltip>
-                            <Tooltip
-                                title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(
-                                    idea.state
-                                )}`}
-                            >
-                                <IconReactionWrapper>
-                                    <IconButton onClick={() => ideaStore.update(idea.id)}>
-                                        <Done />
-                                    </IconButton>
-                                </IconReactionWrapper>
-                            </Tooltip>
-                        </>
-                    )}
-                </CardActions>
-                <CardActions
-                    sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
+            <>
+                <Card
+                    style={{
+                        cursor: 'pointer',
+                        maxWidth: 345,
+                        backgroundColor: getBgColor(idea.state, isBad),
+                        opacity: isBad && idea.state !== 'DONE' ? 0.8 : undefined,
+                    }}
                 >
-                    {author !== undefined && (
-                        <Typography
-                            sx={{
-                                fontSize: 11,
-                                color: 'gray',
-                            }}
-                        >
-                            {isBad ? '' : author.username}
+                    <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                            {idea.text}
                         </Typography>
-                    )}
-                    <Typography sx={{ fontSize: 11, color: 'gray' }}>
-                        {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
-                    </Typography>
-                </CardActions>
-            </Card>
+                        {idea.state === 'DOING' && (
+                            <Chip sx={{ my: 1 }} variant="outlined" label="En cours" />
+                        )}
+                    </CardContent>
+                    <CardActions sx={{ display: 'flex' }}>
+                        <Tooltip title={'Commentaires'}>
+                            <Box
+                                sx={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                <Typography>{idea.comments.length}</Typography>
+                                <IconButton onClick={() => modalStore.setModalOpen(true)}>
+                                    <Comment />
+                                </IconButton>
+                            </Box>
+                        </Tooltip>
+                        <Tooltip
+                            title={getNameOfUsers(
+                                getUsersIdWithSpecificReaction(idea, true),
+                                users
+                            )}
+                        >
+                            <IconReactionWrapper>
+                                <IconButton
+                                    onClick={() => ideaStore.setReaction(idea.id, user.id, true)}
+                                >
+                                    <ThumbUpIcon
+                                        sx={{
+                                            color:
+                                                currentUserReaction === true
+                                                    ? '#5bb65f'
+                                                    : undefined,
+                                        }}
+                                    />
+                                </IconButton>
+                                {numberOfUpvote}
+                            </IconReactionWrapper>
+                        </Tooltip>
+                        <Tooltip
+                            title={getNameOfUsers(
+                                getUsersIdWithSpecificReaction(idea, false),
+                                users
+                            )}
+                        >
+                            <IconReactionWrapper sx={{ display: 'flex', alignItems: 'center' }}>
+                                <IconButton
+                                    onClick={() => ideaStore.setReaction(idea.id, user.id, false)}
+                                >
+                                    <ThumbDownIcon
+                                        sx={{
+                                            color:
+                                                currentUserReaction === false
+                                                    ? '#f0625f'
+                                                    : undefined,
+                                        }}
+                                    />
+                                </IconButton>
+                                {numberOfDownvote}
+                            </IconReactionWrapper>
+                        </Tooltip>
+                        {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
+                            authStore.user.id === idea.createdBy) && (
+                            <>
+                                <Tooltip title={'Supprimer'}>
+                                    <IconReactionWrapper>
+                                        <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
+                                            <Delete />
+                                        </IconButton>
+                                    </IconReactionWrapper>
+                                </Tooltip>
+                                <Tooltip
+                                    title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(
+                                        idea.state
+                                    )}`}
+                                >
+                                    <IconReactionWrapper>
+                                        <IconButton onClick={() => ideaStore.update(idea.id)}>
+                                            <Done />
+                                        </IconButton>
+                                    </IconReactionWrapper>
+                                </Tooltip>
+                            </>
+                        )}
+                    </CardActions>
+                    <CardActions
+                        sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
+                    >
+                        {author !== undefined && (
+                            <Typography
+                                sx={{
+                                    fontSize: 11,
+                                    color: 'gray',
+                                }}
+                            >
+                                {isBad ? '' : author.username}
+                            </Typography>
+                        )}
+                        <Typography sx={{ fontSize: 11, color: 'gray' }}>
+                            {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
+                        </Typography>
+                    </CardActions>
+                </Card>
+                <SimpleModal
+                    open={modalStore.modalOpen}
+                    width={800}
+                    onClose={() => modalStore.setModalOpen(false)}
+                >
+                    <CommentIdeaModal idea={idea} userId={user.id} />
+                </SimpleModal>
+            </>
         )
     }
 )

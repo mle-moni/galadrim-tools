@@ -15,6 +15,7 @@ export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => 
 
     const createdIdea = await Idea.create({ userId: user.id, text })
     await createdIdea.load('ideaVotes')
+    await createdIdea.load('ideaComments')
 
     Ws.io.to('connectedSockets').emit('createIdea', createdIdea.frontendData)
 
