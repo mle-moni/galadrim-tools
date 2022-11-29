@@ -68,7 +68,8 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
             user.id
         )
 
-        const author = users.get(idea.createdBy)
+        const author_username =
+            idea.createdBy && !idea.isAnonymous ? users.get(idea.createdBy)?.username : ''
 
         return (
             <>
@@ -175,16 +176,14 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                     <CardActions
                         sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
                     >
-                        {author !== undefined && (
-                            <Typography
-                                sx={{
-                                    fontSize: 11,
-                                    color: 'gray',
-                                }}
-                            >
-                                {isBad ? '' : author.username}
-                            </Typography>
-                        )}
+                        <Typography
+                            sx={{
+                                fontSize: 11,
+                                color: 'gray',
+                            }}
+                        >
+                            {isBad ? '' : author_username}
+                        </Typography>
                         <Typography sx={{ fontSize: 11, color: 'gray' }}>
                             {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
                         </Typography>

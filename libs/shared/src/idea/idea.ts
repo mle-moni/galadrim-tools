@@ -21,6 +21,7 @@ export interface IIdea {
     comments: IIdeaComment[]
     createdAt: Date
     state: IdeaState
+    isAnonymous: boolean
 }
 
 export type IdeaState = typeof IDEAS_STATE[number]

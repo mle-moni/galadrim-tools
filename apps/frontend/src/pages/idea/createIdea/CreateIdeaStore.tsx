@@ -1,6 +1,7 @@
 import { LoadingStateStore } from '../../../reusableComponents/form/LoadingStateStore'
 import { makeAutoObservable } from 'mobx'
 import { TextFieldStore } from '../../../reusableComponents/form/TextFieldStore'
+import { CheckboxFieldStore } from '../../../reusableComponents/form/CheckboxFieldStore'
 import { fetchBackendJson, getErrorMessage } from '../../../api/fetch'
 import { IIdea } from '@galadrim-tools/shared'
 import { notifyError } from '../../../utils/notification'
@@ -10,6 +11,7 @@ export type CreateIdeaCallback = Parameters<CreateIdeaStore['createIdea']>[0]
 export const APPLICATION_JSON_HEADERS = [['Content-Type', 'application/json']] as [string, string][]
 export class CreateIdeaStore {
     text = new TextFieldStore()
+    isAnonymous = new CheckboxFieldStore()
 
     loadingState = new LoadingStateStore()
 
@@ -26,7 +28,10 @@ export class CreateIdeaStore {
             '/ideas',
             'POST',
             {
-                body: JSON.stringify({ text: this.text.text }),
+                body: JSON.stringify({
+                    text: this.text.text,
+                    isAnonymous: this.isAnonymous.checked,
+                }),
                 headers: APPLICATION_JSON_HEADERS,
             }
         )
