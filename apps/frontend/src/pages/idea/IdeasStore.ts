@@ -1,4 +1,4 @@
-import { IdeaState, IIdea, IIdeaNote, IUserData } from '@galadrim-tools/shared'
+import { IdeaState, IIdea, IIdeaNote, IUserData, IIdeaComment } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
@@ -7,6 +7,10 @@ import { APPLICATION_JSON_HEADERS } from './createIdea/CreateIdeaStore'
 
 export const findUserReaction = (idea: IIdea, userId: IUserData['id']) => {
     return idea.reactions.find((r) => r.userId === userId)
+}
+
+export const findUserComment = (idea: IIdea, userId: IUserData['id']) => {
+    return idea.comments.find((r) => r.userId === userId)
 }
 
 export class IdeasStore {
@@ -150,16 +154,7 @@ export class IdeasStore {
         }
     }
 
-    saveReactionLocally(idea: IIdea, reaction: IIdeaNote) {
-        const currentReaction = findUserReaction(idea, reaction.userId)
-        if (currentReaction) {
-            currentReaction.isUpvote = reaction.isUpvote
-        } else {
-            idea.reactions.push(reaction)
-        }
-    }
-
-    async saveReaction(idea: IIdea, reaction: IIdeaNote) {
+    async saveReaction(reaction: IIdeaNote) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { userId, ...rest } = reaction
         const result = await fetchBackendJson<{ message: string; ideaVote: IIdeaNote }, unknown>(
@@ -170,9 +165,7 @@ export class IdeasStore {
                 headers: APPLICATION_JSON_HEADERS,
             }
         )
-        if (result.ok) {
-            this.saveReactionLocally(idea, result.json.ideaVote)
-        } else if (!result.ok) {
+        if (!result.ok) {
             notifyError(getErrorMessage(result.json, "Votre note n'a pas pu être pris en compte"))
         }
     }
@@ -204,7 +197,41 @@ export class IdeasStore {
             }
         }
 
-        this.saveReaction(matchingIdea, userReaction)
+        this.saveReaction(userReaction)
+    }
+
+    async saveComment(comment: IIdeaComment) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { userId: _, ...rest } = comment
+        const result = await fetchBackendJson<
+            { message: string; ideaComment: IIdeaComment },
+            unknown
+        >('/createIdeaComment', 'POST', {
+            body: JSON.stringify(rest),
+            headers: APPLICATION_JSON_HEADERS,
+        })
+        if (!result.ok) {
+            notifyError(
+                getErrorMessage(result.json, "Votre commentaire n'a pas pu être pris en compte")
+            )
+        }
+    }
+
+    setComment(ideaId: IIdea['id'], userId: IUserData['id'], newComment: string) {
+        const matchingIdea = this.findIdea(ideaId)
+
+        if (!matchingIdea) {
+            notifyError('Impossible de sauvegarder le commentaire')
+            return
+        }
+
+        const userComment = {
+            userId: userId,
+            ideaId: ideaId,
+            message: newComment,
+        }
+
+        this.saveComment(userComment)
     }
 
     createOrUpdateIdea(idea: IIdea) {
@@ -217,5 +244,6 @@ export class IdeasStore {
         foundIdea.reactions = idea.reactions
         foundIdea.text = idea.text
         foundIdea.state = idea.state
+        foundIdea.comments = idea.comments
     }
 }
