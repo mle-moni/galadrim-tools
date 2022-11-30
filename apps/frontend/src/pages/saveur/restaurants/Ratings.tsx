@@ -1,3 +1,4 @@
+import { NotesOption } from '@galadrim-tools/shared'
 import {
     Box,
     CardContent,
@@ -21,6 +22,7 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 const RatioWrapper = styled(Box)({
     display: 'flex',
     alignItems: 'center',
+    cursor: 'pointer',
 })
 
 const ProgressWrapper = styled(Box)(({ theme }) => ({ width: '100%', padding: theme.spacing(1) }))
@@ -39,13 +41,14 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 type RatingsProps = {
     ratios: Ratio[]
+    onClick?: (id: NotesOption) => void
 }
 
-const Ratings = observer<RatingsProps>(({ ratios }) => {
+const Ratings = observer<RatingsProps>(({ ratios, onClick }) => {
     return (
         <StyledCardContent>
             {ratios.map((ratio) => (
-                <RatioWrapper key={ratio.id}>
+                <RatioWrapper key={ratio.id} onClick={() => onClick && onClick(ratio.id)}>
                     <Typography>{ratio.label}</Typography>
                     <ProgressWrapper>
                         <Tooltip title={getNameOfUsers(ratio.userIds, AppStore.users)}>

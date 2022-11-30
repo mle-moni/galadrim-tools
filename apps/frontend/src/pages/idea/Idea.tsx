@@ -68,8 +68,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
             user.id
         )
 
-        const author_username =
-            idea.createdBy && !idea.isAnonymous ? users.get(idea.createdBy)?.username : ''
+        const author_username = idea.createdBy ? users.get(idea.createdBy)?.username : ''
 
         return (
             <>
@@ -85,11 +84,8 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                         <Typography variant="body2" color="text.secondary">
                             {idea.text}
                         </Typography>
-                        {idea.state === 'DOING' && (
-                            <Chip sx={{ my: 1 }} variant="outlined" label="En cours" />
-                        )}
                     </CardContent>
-                    <CardActions sx={{ display: 'flex' }}>
+                    <CardActions sx={{ display: 'flex', overflowX: 'auto', paddingY: 0 }}>
                         <Tooltip title={'Commentaires'}>
                             <Box
                                 sx={{
@@ -149,30 +145,36 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                                 {numberOfDownvote}
                             </IconReactionWrapper>
                         </Tooltip>
-                        {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
-                            authStore.user.id === idea.createdBy) && (
-                            <>
-                                <Tooltip title={'Supprimer'}>
-                                    <IconReactionWrapper>
-                                        <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
-                                            <Delete />
-                                        </IconButton>
-                                    </IconReactionWrapper>
-                                </Tooltip>
-                                <Tooltip
-                                    title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(
-                                        idea.state
-                                    )}`}
-                                >
-                                    <IconReactionWrapper>
-                                        <IconButton onClick={() => ideaStore.update(idea.id)}>
-                                            <Done />
-                                        </IconButton>
-                                    </IconReactionWrapper>
-                                </Tooltip>
-                            </>
-                        )}
                     </CardActions>
+                    {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) || idea.isOwner) && (
+                        <CardActions
+                            sx={{
+                                display: 'flex',
+                                overflowX: 'auto',
+                                justifyContent: 'flex-end',
+                                paddingY: 0,
+                            }}
+                        >
+                            <Tooltip title={'Supprimer'}>
+                                <IconReactionWrapper>
+                                    <IconButton onClick={() => ideaStore.deleteIdea(idea.id)}>
+                                        <Delete />
+                                    </IconButton>
+                                </IconReactionWrapper>
+                            </Tooltip>
+                            <Tooltip
+                                title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(
+                                    idea.state
+                                )}`}
+                            >
+                                <IconReactionWrapper>
+                                    <IconButton onClick={() => ideaStore.update(idea.id)}>
+                                        <Done />
+                                    </IconButton>
+                                </IconReactionWrapper>
+                            </Tooltip>
+                        </CardActions>
+                    )}
                     <CardActions
                         sx={{ paddingTop: 0, display: 'flex', justifyContent: 'space-between' }}
                     >

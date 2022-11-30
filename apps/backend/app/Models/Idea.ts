@@ -45,16 +45,27 @@ export default class Idea extends BaseModel {
         query.preload('ideaComments')
     }
 
+    public isOwner(userId: number) {
+        return this.userId === userId
+    }
+
     get frontendData(): IIdea {
         return {
             id: this.id,
-            createdBy: this.userId,
+            createdBy: this.isAnonymous ? undefined : this.userId,
             text: this.text,
             reactions: this.ideaVotes.map((ideaVote) => ideaVote.frontendData),
             comments: this.ideaComments.map((ideaComment) => ideaComment.frontendData),
             createdAt: this.createdAt.toJSDate(),
             state: this.state,
-            isAnonymous: this.isAnonymous,
+            isOwner: false,
+        }
+    }
+
+    public getUserFrontendData(userId: number): IIdea {
+        return {
+            ...this.frontendData,
+            isOwner: this.isOwner(userId),
         }
     }
 }

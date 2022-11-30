@@ -5,7 +5,8 @@ import { Box } from '@mui/material'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { observer } from 'mobx-react-lite'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
+import { useSearchParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import { MAX_ZOOM } from '../../globalStores/SaveurStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
@@ -32,6 +33,28 @@ export const POS_ALL_LOCAUX: Locaux[] = [
         position: [47.212274232959295, -1.5560218495098455],
     },
 ]
+
+interface MapEventsProps {}
+
+const MapEvents = observer<MapEventsProps>(() => {
+    const [, setSearchParams] = useSearchParams()
+
+    const mapEvents = useMapEvents({
+        zoomend: () => {
+            setSearchParams((searchParams) => {
+                let params: {
+                    'zoom'?: string
+                    'restaurant-id'?: string
+                } = { zoom: mapEvents.getZoom().toString() }
+                const restaurantId = searchParams.get('restaurant-id')
+                if (restaurantId) params['restaurant-id'] = restaurantId
+                return new URLSearchParams(params)
+            })
+        },
+    })
+
+    return <></>
+})
 
 const SaveurPage = observer(() => {
     const { saveurStore, authStore } = AppStore
@@ -72,6 +95,7 @@ const SaveurPage = observer(() => {
                 doubleClickZoom={false}
                 zoomControl={false}
             >
+                <MapEvents />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://osm.mle-moni.fr/tile/{z}/{x}/{y}.png"
@@ -81,7 +105,6 @@ const SaveurPage = observer(() => {
                         <Popup offset={new L.Point(0, -20)}>{name}</Popup>
                     </Marker>
                 ))}
-
                 <RestaurantMarkers saveurStore={saveurStore} userId={authStore.user.id} />
             </MapContainer>
             <SaveurLeftMenu saveurStore={saveurStore} />

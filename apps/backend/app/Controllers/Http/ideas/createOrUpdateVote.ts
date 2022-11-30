@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Idea from 'App/Models/Idea'
 import IdeaVote from 'App/Models/IdeaVote'
+import User from 'App/Models/User'
 import Ws from 'App/Services/Ws'
 
 const ideaSchema = schema.create({
@@ -9,12 +10,13 @@ const ideaSchema = schema.create({
     ideaId: schema.number([rules.exists({ table: 'ideas', column: 'id' })]),
 })
 
-const notifyUser = async (ideaId: number) => {
+const notifyUser = async (ideaId: number, user: User) => {
     const idea = await Idea.findOrFail(ideaId)
     await idea.load('ideaVotes')
     await idea.load('ideaComments')
 
-    Ws.io.to('connectedSockets').emit('updateIdea', idea.frontendData)
+    Ws.io.to('connectedSockets').except(user.personalSocket).emit('updateIdea', idea.frontendData)
+    Ws.io.to(user.personalSocket).emit('updateIdea', idea.getUserFrontendData(user.id))
 }
 
 export const createOrUpdateVoteRoute = async ({ auth, request, response }: HttpContextContract) => {
@@ -30,7 +32,7 @@ export const createOrUpdateVoteRoute = async ({ auth, request, response }: HttpC
             .andWhere('userId', userId)
             .delete()
         if (numberOfDeletedItems === 1) {
-            await notifyUser(ideaId)
+            await notifyUser(ideaId, user)
             return { message: 'La reaction a été supprimée' }
         }
         return response.badRequest({ error: 'Une erreur est servenue' })
@@ -40,7 +42,7 @@ export const createOrUpdateVoteRoute = async ({ auth, request, response }: HttpC
 
     const reaction = isUpvote ? 'aimez' : "n'aimez pas"
 
-    await notifyUser(ideaId)
+    await notifyUser(ideaId, user)
 
     return { message: `Vous ${reaction} cette idée`, ideaVote: ideaVote.frontendData }
 }

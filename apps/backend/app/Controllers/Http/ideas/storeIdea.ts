@@ -14,11 +14,15 @@ export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => 
         schema: ideaSchema,
     })
 
-    const createdIdea = await Idea.create({ userId: user.id, text, isAnonymous })
+    const createdIdea = await Idea.create({ userId: user.id, text, isAnonymous, state: 'TODO' })
     await createdIdea.load('ideaVotes')
     await createdIdea.load('ideaComments')
 
-    Ws.io.to('connectedSockets').emit('createIdea', createdIdea.frontendData)
+    Ws.io
+        .to('connectedSockets')
+        .except(user.personalSocket)
+        .emit('createIdea', createdIdea.frontendData)
+    Ws.io.to(user.personalSocket).emit('createIdea', createdIdea.getUserFrontendData(user.id))
 
     return { message: "L'idée à été créé !", idea: createdIdea.frontendData }
 }
