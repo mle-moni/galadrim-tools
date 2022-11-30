@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getApiUrl } from '../../../api/fetch'
 import { MAX_ZOOM, SaveurStore } from '../../../globalStores/SaveurStore'
 import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
@@ -22,13 +23,22 @@ import { RestaurantCardStore } from './RestaurantCardStore'
 
 export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
 
-export const RestaurantTags = observer<{ tags: ITag[] }>(({ tags }) => (
-    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
-        {tags.map(({ id, name }) => (
-            <Chip key={id} label={name} variant="filled" sx={{ margin: 0.5 }} />
-        ))}
-    </Box>
-))
+export const RestaurantTags = observer<{ tags: ITag[]; saveurStore: SaveurStore }>(
+    ({ tags, saveurStore }) => (
+        <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {tags.map(({ id, name }) => (
+                <Box
+                    key={id}
+                    onClick={() => {
+                        saveurStore.restaurantsStore.setSearch(name)
+                    }}
+                >
+                    <Chip label={name} variant="filled" sx={{ margin: 0.5, cursor: 'pointer' }} />
+                </Box>
+            ))}
+        </Box>
+    )
+)
 
 export const getImageUrl = (image: IImage | null) => {
     if (image === null) {
@@ -44,12 +54,13 @@ interface RestaurantCardProps {
 
 export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveurStore }) => {
     const store = useMemo(() => new RestaurantCardStore(restaurant), [restaurant])
+    const [, setSearchParams] = useSearchParams()
 
     return (
         <Card
             key={restaurant.name}
             sx={{ maxWidth: 400 }}
-            style={{ cursor: 'pointer', boxShadow: '1px 5px 5px grey' }}
+            style={{ boxShadow: '1px 5px 5px grey' }}
         >
             <CardMedia component="img" height="180" image={getImageUrl(restaurant.image)} />
             <CardContent>
@@ -65,11 +76,11 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                         {restaurant.averagePrice && `${restaurant.averagePrice}€`}
                     </Typography>
                 </Box>
-                <RestaurantTags tags={restaurant.tags} />
+                <RestaurantTags tags={restaurant.tags} saveurStore={saveurStore} />
                 <Typography variant="body2" color="text.secondary">
                     {restaurant.description}
                 </Typography>
-                <Ratings ratios={store.ratios} />
+                <Ratings ratios={store.ratios} onClick={(id) => store.saveRating(id)} />
             </CardContent>
             <Collapse in={store.isRatingDevelopped}>
                 <RatingComponent
@@ -100,6 +111,12 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 <Button
                     size="small"
                     onClick={() => {
+                        setSearchParams(
+                            (searchParams) =>
+                                new URLSearchParams({
+                                    zoom: searchParams.get('zoom') ?? MAX_ZOOM.toString(),
+                                })
+                        )
                         saveurStore.restaurantsStore.setRestaurantClicked()
                     }}
                     title="Fermer"

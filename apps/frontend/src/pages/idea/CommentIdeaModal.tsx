@@ -15,7 +15,7 @@ const CommentDiv = observer<{
     userId: IIdeaComment['userId']
 }>(({ comment, userId }) => {
     const { users } = AppStore
-    const username = users.get(comment.userId)?.username
+    const user = users.get(comment.userId)
     const isSelf = comment.userId === userId
 
     return (
@@ -27,9 +27,19 @@ const CommentDiv = observer<{
                 paddingBottom: 1,
             }}
         >
-            <Typography sx={{ color: 'gray' }}>
-                {username} ( {moment(comment.createdAt).fromNow()} )
-            </Typography>
+            {user && (
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1 }}>
+                    <img
+                        src={user.imageUrl ?? undefined}
+                        width="50px"
+                        height="50px"
+                        style={{ borderRadius: 1000, marginRight: 10 }}
+                    />
+                    <Typography sx={{ color: 'gray' }}>
+                        {user.username} ( {moment(comment.createdAt).fromNow()} )
+                    </Typography>
+                </Box>
+            )}
             <Typography
                 sx={{
                     paddingX: 2,

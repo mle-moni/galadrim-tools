@@ -68,8 +68,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
             user.id
         )
 
-        const author_username =
-            idea.createdBy && !idea.isAnonymous ? users.get(idea.createdBy)?.username : ''
+        const author_username = idea.createdBy ? users.get(idea.createdBy)?.username : ''
 
         return (
             <>
@@ -149,8 +148,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                                 {numberOfDownvote}
                             </IconReactionWrapper>
                         </Tooltip>
-                        {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) ||
-                            authStore.user.id === idea.createdBy) && (
+                        {(hasRights(authStore.user.rights, ['IDEAS_ADMIN']) || idea.isOwner) && (
                             <>
                                 <Tooltip title={'Supprimer'}>
                                     <IconReactionWrapper>

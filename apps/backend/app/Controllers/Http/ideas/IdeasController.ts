@@ -8,9 +8,11 @@ import { updateIdeaRoute } from 'App/Controllers/Http/ideas/updateIdea'
 import Idea from 'App/Models/Idea'
 
 export default class IdeasController {
-    public async index({}: HttpContextContract) {
+    public async index({ auth }: HttpContextContract) {
+        const user = auth.user!
+
         const ideas = await Idea.all()
-        const data = ideas.map((idea) => idea.frontendData)
+        const data = ideas.map((idea) => idea.getUserFrontendData(user.id))
 
         return data
     }

@@ -16,12 +16,12 @@ export interface IIdeaNote {
 export interface IIdea {
     id: number
     text: string
-    createdBy: IUserData['id']
+    createdBy?: IUserData['id']
     reactions: IIdeaNote[]
     comments: IIdeaComment[]
     createdAt: Date
     state: IdeaState
-    isAnonymous: boolean
+    isOwner: boolean
 }
 
 export type IdeaState = typeof IDEAS_STATE[number]
