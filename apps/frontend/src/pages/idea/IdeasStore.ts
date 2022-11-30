@@ -41,20 +41,17 @@ export class IdeasStore {
         return reactions.length > 5 && ratio > 0.7
     }
 
-    get doneIdeas() {
-        return this.ideas.filter((idea) => idea.state === 'DONE')
-    }
-
-    get notDoneIdeas() {
-        return this.ideas.filter((idea) => idea.state !== 'DONE')
-    }
-
     get badIdeas() {
-        return this.notDoneIdeas.filter((idea) => this.isIdeaBad(idea.reactions))
+        return this.ideas.filter((idea) => idea.state !== 'DONE' && this.isIdeaBad(idea.reactions))
     }
 
-    get notBadIdeas() {
-        return this.notDoneIdeas.filter((idea) => !this.isIdeaBad(idea.reactions))
+    get ideasByState() {
+        return {
+            todo: this.ideas.filter((idea) => !idea.state || idea.state === 'TODO'),
+            doing: this.ideas.filter((idea) => idea.state === 'DOING'),
+            done: this.ideas.filter((idea) => idea.state === 'DONE'),
+            refused: this.badIdeas,
+        }
     }
 
     async fetchIdeaList() {

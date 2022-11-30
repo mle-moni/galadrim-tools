@@ -2,12 +2,13 @@ import { IIdea } from '@galadrim-tools/shared'
 import { Lightbulb } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Masonry } from '@mui/lab'
-import { Divider, Typography } from '@mui/material'
+import { Box, Divider, Tab, Tabs, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { useIsMobile } from '../../hooks/useIsMobile'
+import { RenouvArtWait } from '../../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
@@ -30,7 +31,22 @@ const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isB
     )
 })
 
+interface TabPanelProps {
+    children?: React.ReactNode
+    index: number
+    value: number
+}
+
+const TabPanel = observer<TabPanelProps>(({ children, value, index }) => {
+    return (
+        <div role="tabpanel" hidden={value !== index} style={{ marginTop: 20 }}>
+            {value === index && <>{children}</>}
+        </div>
+    )
+})
+
 const IdeaPage = observer(() => {
+    const [tab, setTab] = useState<0 | 1 | 2 | 3>(0)
     const modalStore = useMemo(() => new SimpleModalStore(), [])
 
     const { ideaStore, authStore } = AppStore
@@ -42,6 +58,19 @@ const IdeaPage = observer(() => {
     }, [])
 
     useCheckConnection(authStore)
+
+    const ideasByState = ideaStore.ideasByState
+
+    const states: {
+        label: string
+        message: string
+        value: keyof typeof ideasByState
+    }[] = [
+        { label: 'A faire', message: 'à faire', value: 'todo' },
+        { label: 'En cours', message: 'en cours', value: 'doing' },
+        { label: 'Terminées', message: 'terminée', value: 'done' },
+        { label: 'Refusées', message: 'refusée', value: 'refused' },
+    ]
 
     return (
         <>
@@ -60,21 +89,26 @@ const IdeaPage = observer(() => {
                     J'ai une idée !
                 </GaladrimButton>
             </CenteredDiv>
-            {ideaStore.notBadIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.notBadIdeas} />}
-            {ideaStore.notBadIdeas.length > 0 && ideaStore.badIdeas.length > 0 && (
-                <CenteredDiv style={{ marginBottom: 25 }}>
-                    <Divider orientation="horizontal" sx={{ width: '80%' }} />
-                </CenteredDiv>
-            )}
-            {ideaStore.badIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.badIdeas} isBad />}
-
-            {ideaStore.doneIdeas.length > 0 &&
-                (ideaStore.notBadIdeas.length > 0 || ideaStore.badIdeas.length > 0) && (
-                    <CenteredDiv style={{ marginBottom: 25 }}>
-                        <Divider orientation="horizontal" sx={{ width: '80%' }} />
-                    </CenteredDiv>
-                )}
-            {ideaStore.doneIdeas.length > 0 && <DisplayIdeas ideas={ideaStore.doneIdeas} />}
+            <Tabs centered variant="fullWidth" value={tab} onChange={(_event, tab) => setTab(tab)}>
+                {states.map(({ value, label }) => (
+                    <Tab key={value} label={label} />
+                ))}
+            </Tabs>
+            {states.map(({ value, message }, index) => (
+                <TabPanel index={index} value={tab} key={index}>
+                    {ideasByState[value].length > 0 ? (
+                        <DisplayIdeas ideas={ideasByState[value]} />
+                    ) : ideaStore.loadingState.isLoading ? (
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            <RenouvArtWait />
+                        </Box>
+                    ) : (
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                            <Typography>Il n'y a aucune idée {message} pour le moment.</Typography>
+                        </Box>
+                    )}
+                </TabPanel>
+            ))}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
                 <CreateIdeaModal
                     onPublish={() => {
