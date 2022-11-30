@@ -93,7 +93,10 @@ const RestaurantsListPage = observer(() => {
                                         <Typography sx={{ fontSize: 'x-large' }}>
                                             {`${index + 1} ➝ ${name}`}
                                         </Typography>
-                                        <RestaurantTags tags={tags} />
+                                        <RestaurantTags
+                                            saveurStore={AppStore.saveurStore}
+                                            tags={tags}
+                                        />
                                         <Typography>{description}</Typography>
 
                                         {averagePrice !== null && (
