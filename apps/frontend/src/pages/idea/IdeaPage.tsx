@@ -28,11 +28,12 @@ const IDEA_PAGE_STATES: {
     { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
     { label: 'Terminées ✅', message: 'terminée', value: 'done' },
     { label: 'Refusées 🚫', message: 'refusée', value: 'refused' },
-    {
-        label: 'You shall not pass! 🧙‍♂️',
-        message: 'you shall not pass',
-        value: 'you_should_not_pass',
-    },
+    // TODO show 'You shall not pass' only if user parameter allow it
+    // {
+    //     label: 'You shall not pass! 🧙‍♂️',
+    //     message: 'you shall not pass',
+    //     value: 'you_should_not_pass',
+    // },
 ]
 
 const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isBad }) => {
