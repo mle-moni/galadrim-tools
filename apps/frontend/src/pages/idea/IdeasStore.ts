@@ -41,16 +41,39 @@ export class IdeasStore {
         return reactions.length > 5 && ratio > 0.7
     }
 
+    hasUserDownVote(reactions: IIdeaNote[], userId: number) {
+        return reactions.findIndex((reaction) => reaction.userId === userId) > 0
+    }
+
+    get shouldPassIdeas() {
+        return this.ideas.filter(
+            (idea) =>
+                idea.state === 'DONE' ||
+                !(
+                    this.hasUserDownVote(idea.reactions, 7) &&
+                    this.hasUserDownVote(idea.reactions, 20)
+                )
+        )
+    }
+
     get badIdeas() {
-        return this.ideas.filter((idea) => idea.state !== 'DONE' && this.isIdeaBad(idea.reactions))
+        return this.shouldPassIdeas.filter(
+            (idea) => idea.state !== 'DONE' && this.isIdeaBad(idea.reactions)
+        )
     }
 
     get ideasByState() {
         return {
-            todo: this.ideas.filter((idea) => !idea.state || idea.state === 'TODO'),
-            doing: this.ideas.filter((idea) => idea.state === 'DOING'),
-            done: this.ideas.filter((idea) => idea.state === 'DONE'),
+            todo: this.shouldPassIdeas.filter((idea) => !idea.state || idea.state === 'TODO'),
+            doing: this.shouldPassIdeas.filter((idea) => idea.state === 'DOING'),
+            done: this.shouldPassIdeas.filter((idea) => idea.state === 'DONE'),
             refused: this.badIdeas,
+            you_should_not_pass: this.ideas.filter(
+                (idea) =>
+                    idea.state !== 'DONE' &&
+                    this.hasUserDownVote(idea.reactions, 7) &&
+                    this.hasUserDownVote(idea.reactions, 20)
+            ),
         }
     }
 

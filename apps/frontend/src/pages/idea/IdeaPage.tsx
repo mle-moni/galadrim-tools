@@ -66,10 +66,15 @@ const IdeaPage = observer(() => {
         message: string
         value: keyof typeof ideasByState
     }[] = [
-        { label: 'A faire', message: 'à faire', value: 'todo' },
-        { label: 'En cours', message: 'en cours', value: 'doing' },
-        { label: 'Terminées', message: 'terminée', value: 'done' },
-        { label: 'Refusées', message: 'refusée', value: 'refused' },
+        { label: 'A faire 💤', message: 'à faire', value: 'todo' },
+        { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
+        { label: 'Terminées ✅', message: 'terminée', value: 'done' },
+        { label: 'Refusées 🚫', message: 'refusée', value: 'refused' },
+        {
+            label: 'You shall not pass! 🧙‍♂️',
+            message: 'you shall not pass',
+            value: 'you_should_not_pass',
+        },
     ]
 
     return (
