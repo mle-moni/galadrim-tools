@@ -1,9 +1,10 @@
-import { IdeaState, IIdea, IIdeaNote, IUserData, IIdeaComment } from '@galadrim-tools/shared'
+import { IdeaState, IIdea, IIdeaComment, IIdeaNote, IUserData } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
 import { notifyError, notifySuccess } from '../../utils/notification'
 import { APPLICATION_JSON_HEADERS } from './createIdea/CreateIdeaStore'
+import { IdeaPageStateValue } from './IdeaPage'
 
 export const findUserReaction = (idea: IIdea, userId: IUserData['id']) => {
     return idea.reactions.find((r) => r.userId === userId)
@@ -62,7 +63,9 @@ export class IdeasStore {
         )
     }
 
-    get ideasByState() {
+    get ideasByState(): {
+        [K in IdeaPageStateValue]: IIdea[]
+    } {
         return {
             todo: this.shouldPassIdeas.filter((idea) => !idea.state || idea.state === 'TODO'),
             doing: this.shouldPassIdeas.filter((idea) => idea.state === 'DOING'),
