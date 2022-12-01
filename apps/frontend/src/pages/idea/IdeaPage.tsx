@@ -1,33 +1,32 @@
-import { IIdea } from '@galadrim-tools/shared'
 import { Lightbulb } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Masonry } from '@mui/lab'
-import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Chip, Tab, Tabs, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
-import { useIsMobile } from '../../hooks/useIsMobile'
-import { RenouvArtWait } from '../../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import CreateIdeaModal from './CreateIdeaModal'
-import Idea from './Idea'
+import DisplayIdeas from './DisplayIdeas'
 
 export type IdeaPageStateValue = 'todo' | 'doing' | 'done' | 'refused' | 'you_should_not_pass'
 
-const IDEA_PAGE_STATES: {
+export interface IdeaPageState {
     label: string
     message: string
     value: IdeaPageStateValue
-}[] = [
+    isBad?: boolean
+}
+
+const IDEA_PAGE_STATES: IdeaPageState[] = [
     { label: 'A faire 💤', message: 'à faire', value: 'todo' },
     { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
     { label: 'Terminées ✅', message: 'terminée', value: 'done' },
-    { label: 'Refusées 🚫', message: 'refusée', value: 'refused' },
+    { label: 'Refusées 🚫', message: 'refusée', value: 'refused', isBad: true },
     // TODO show 'You shall not pass' only if user parameter allow it
     // {
     //     label: 'You shall not pass! 🧙‍♂️',
@@ -36,17 +35,17 @@ const IDEA_PAGE_STATES: {
     // },
 ]
 
-const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isBad }) => {
-    const { authStore } = AppStore
-    const isMobile = useIsMobile()
+interface TabTitleProps {
+    label: string
+    badgeNumber: number
+}
+
+const TabTitle = observer<TabTitleProps>(({ label, badgeNumber }) => {
     return (
-        <CenteredDiv>
-            <Masonry sx={{ width: '80%', marginBottom: 0 }} columns={isMobile ? 1 : 5} spacing={3}>
-                {ideas.map((idea) => (
-                    <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
-                ))}
-            </Masonry>
-        </CenteredDiv>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+            <Typography>{label}</Typography>
+            <Chip label={badgeNumber} color="secondary" />
+        </Box>
     )
 })
 
@@ -78,8 +77,6 @@ const IdeaPage = observer(() => {
 
     useCheckConnection(authStore)
 
-    const ideasByState = ideaStore.ideasByState
-
     return (
         <>
             <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
@@ -99,22 +96,20 @@ const IdeaPage = observer(() => {
             </CenteredDiv>
             <Tabs centered variant="fullWidth" value={tab} onChange={(_event, tab) => setTab(tab)}>
                 {IDEA_PAGE_STATES.map(({ value, label }) => (
-                    <Tab key={value} label={label} />
+                    <Tab
+                        key={value}
+                        label={
+                            <TabTitle
+                                label={label}
+                                badgeNumber={ideaStore.ideasByState[value].length}
+                            />
+                        }
+                    />
                 ))}
             </Tabs>
-            {IDEA_PAGE_STATES.map(({ value, message }, index) => (
+            {IDEA_PAGE_STATES.map((state, index) => (
                 <TabPanel index={index} value={tab} key={index}>
-                    {ideasByState[value].length > 0 ? (
-                        <DisplayIdeas ideas={ideasByState[value]} />
-                    ) : ideaStore.loadingState.isLoading ? (
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                            <RenouvArtWait />
-                        </Box>
-                    ) : (
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                            <Typography>Il n'y a aucune idée {message} pour le moment.</Typography>
-                        </Box>
-                    )}
+                    <DisplayIdeas state={state} />
                 </TabPanel>
             ))}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
