@@ -35,7 +35,7 @@ export const createOrUpdateVoteRoute = async ({ auth, request, response }: HttpC
             await notifyUser(ideaId, user)
             return { message: 'La reaction a été supprimée' }
         }
-        return response.badRequest({ error: 'Une erreur est servenue' })
+        return response.badRequest({ error: 'Doucement, il ne faudrait pas casser la souris' })
     }
 
     const ideaVote = await IdeaVote.updateOrCreate({ ideaId, userId }, { ideaId, userId, isUpvote })
