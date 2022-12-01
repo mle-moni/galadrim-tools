@@ -23,11 +23,12 @@ const IDEA_PAGE_STATES: {
     label: string
     message: string
     value: IdeaPageStateValue
+    isBad?: boolean
 }[] = [
     { label: 'A faire 💤', message: 'à faire', value: 'todo' },
     { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
     { label: 'Terminées ✅', message: 'terminée', value: 'done' },
-    { label: 'Refusées 🚫', message: 'refusée', value: 'refused' },
+    { label: 'Refusées 🚫', message: 'refusée', value: 'refused', isBad: true },
     // TODO show 'You shall not pass' only if user parameter allow it
     // {
     //     label: 'You shall not pass! 🧙‍♂️',
@@ -36,17 +37,44 @@ const IDEA_PAGE_STATES: {
     // },
 ]
 
-const DisplayIdeas = observer<{ ideas: IIdea[]; isBad?: boolean }>(({ ideas, isBad }) => {
-    const { authStore } = AppStore
+interface DisplayIdeasProps {
+    state: typeof IDEA_PAGE_STATES[number]
+}
+
+const DisplayIdeas = observer<DisplayIdeasProps>(({ state }) => {
+    const { authStore, ideaStore } = AppStore
     const isMobile = useIsMobile()
+
+    const ideasByState = ideaStore.ideasByState
+    const { value, message, isBad = false } = state
+    const ideas = ideasByState[value]
+
+    if (ideas.length > 0) {
+        return (
+            <CenteredDiv>
+                <Masonry
+                    sx={{ width: '80%', marginBottom: 0 }}
+                    columns={isMobile ? 1 : 5}
+                    spacing={3}
+                >
+                    {ideas.map((idea) => (
+                        <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
+                    ))}
+                </Masonry>
+            </CenteredDiv>
+        )
+    }
+    if (ideaStore.loadingState.isLoading) {
+        return (
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <RenouvArtWait />
+            </Box>
+        )
+    }
     return (
-        <CenteredDiv>
-            <Masonry sx={{ width: '80%', marginBottom: 0 }} columns={isMobile ? 1 : 5} spacing={3}>
-                {ideas.map((idea) => (
-                    <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
-                ))}
-            </Masonry>
-        </CenteredDiv>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <Typography>Il n'y a aucune idée {message} pour le moment.</Typography>
+        </Box>
     )
 })
 
@@ -78,8 +106,6 @@ const IdeaPage = observer(() => {
 
     useCheckConnection(authStore)
 
-    const ideasByState = ideaStore.ideasByState
-
     return (
         <>
             <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
@@ -102,19 +128,9 @@ const IdeaPage = observer(() => {
                     <Tab key={value} label={label} />
                 ))}
             </Tabs>
-            {IDEA_PAGE_STATES.map(({ value, message }, index) => (
+            {IDEA_PAGE_STATES.map((state, index) => (
                 <TabPanel index={index} value={tab} key={index}>
-                    {ideasByState[value].length > 0 ? (
-                        <DisplayIdeas ideas={ideasByState[value]} />
-                    ) : ideaStore.loadingState.isLoading ? (
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                            <RenouvArtWait />
-                        </Box>
-                    ) : (
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                            <Typography>Il n'y a aucune idée {message} pour le moment.</Typography>
-                        </Box>
-                    )}
+                    <DisplayIdeas state={state} />
                 </TabPanel>
             ))}
             <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>

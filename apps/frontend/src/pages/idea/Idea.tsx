@@ -8,7 +8,6 @@ import {
     Card,
     CardActions,
     CardContent,
-    Chip,
     IconButton,
     Tooltip,
     Typography,
