@@ -1,30 +1,28 @@
-import { IIdea } from '@galadrim-tools/shared'
 import { Lightbulb } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Masonry } from '@mui/lab'
-import { Box, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Chip, Tab, Tabs, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
-import { useIsMobile } from '../../hooks/useIsMobile'
-import { RenouvArtWait } from '../../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import CreateIdeaModal from './CreateIdeaModal'
-import Idea from './Idea'
+import DisplayIdeas from './DisplayIdeas'
 
 export type IdeaPageStateValue = 'todo' | 'doing' | 'done' | 'refused' | 'you_should_not_pass'
 
-const IDEA_PAGE_STATES: {
+export interface IdeaPageState {
     label: string
     message: string
     value: IdeaPageStateValue
     isBad?: boolean
-}[] = [
+}
+
+const IDEA_PAGE_STATES: IdeaPageState[] = [
     { label: 'A faire 💤', message: 'à faire', value: 'todo' },
     { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
     { label: 'Terminées ✅', message: 'terminée', value: 'done' },
@@ -37,43 +35,16 @@ const IDEA_PAGE_STATES: {
     // },
 ]
 
-interface DisplayIdeasProps {
-    state: typeof IDEA_PAGE_STATES[number]
+interface TabTitleProps {
+    label: string
+    badgeNumber: number
 }
 
-const DisplayIdeas = observer<DisplayIdeasProps>(({ state }) => {
-    const { authStore, ideaStore } = AppStore
-    const isMobile = useIsMobile()
-
-    const ideasByState = ideaStore.ideasByState
-    const { value, message, isBad = false } = state
-    const ideas = ideasByState[value]
-
-    if (ideas.length > 0) {
-        return (
-            <CenteredDiv>
-                <Masonry
-                    sx={{ width: '80%', marginBottom: 0 }}
-                    columns={isMobile ? 1 : 5}
-                    spacing={3}
-                >
-                    {ideas.map((idea) => (
-                        <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
-                    ))}
-                </Masonry>
-            </CenteredDiv>
-        )
-    }
-    if (ideaStore.loadingState.isLoading) {
-        return (
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                <RenouvArtWait />
-            </Box>
-        )
-    }
+const TabTitle = observer<TabTitleProps>(({ label, badgeNumber }) => {
     return (
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <Typography>Il n'y a aucune idée {message} pour le moment.</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+            <Typography>{label}</Typography>
+            <Chip label={badgeNumber} color="secondary" />
         </Box>
     )
 })
@@ -125,7 +96,15 @@ const IdeaPage = observer(() => {
             </CenteredDiv>
             <Tabs centered variant="fullWidth" value={tab} onChange={(_event, tab) => setTab(tab)}>
                 {IDEA_PAGE_STATES.map(({ value, label }) => (
-                    <Tab key={value} label={label} />
+                    <Tab
+                        key={value}
+                        label={
+                            <TabTitle
+                                label={label}
+                                badgeNumber={ideaStore.ideasByState[value].length}
+                            />
+                        }
+                    />
                 ))}
             </Tabs>
             {IDEA_PAGE_STATES.map((state, index) => (
