@@ -6,6 +6,8 @@ import { notifyError, notifySuccess } from '../../utils/notification'
 import { APPLICATION_JSON_HEADERS } from './createIdea/CreateIdeaStore'
 import { IdeaPageStateValue } from './IdeaPage'
 
+export const SHOULD_NOT_PASS_ACTIVATED = false
+
 export const findUserReaction = (idea: IIdea, userId: IUserData['id']) => {
     return idea.reactions.find((r) => r.userId === userId)
 }
@@ -49,7 +51,8 @@ export class IdeasStore {
     get shouldPassIdeas() {
         return this.ideas.filter(
             (idea) =>
-                idea.state === 'DONE' ||
+                SHOULD_NOT_PASS_ACTIVATED === false ||
+                idea.state !== 'TODO' ||
                 !(
                     this.hasUserDownVote(idea.reactions, 7) &&
                     this.hasUserDownVote(idea.reactions, 20)
@@ -63,17 +66,24 @@ export class IdeasStore {
         )
     }
 
+    get notBadIdeas() {
+        return this.shouldPassIdeas.filter(
+            (idea) => idea.state !== 'TODO' || !this.isIdeaBad(idea.reactions)
+        )
+    }
+
     get ideasByState(): {
         [K in IdeaPageStateValue]: IIdea[]
     } {
         return {
-            todo: this.shouldPassIdeas.filter((idea) => !idea.state || idea.state === 'TODO'),
-            doing: this.shouldPassIdeas.filter((idea) => idea.state === 'DOING'),
-            done: this.shouldPassIdeas.filter((idea) => idea.state === 'DONE'),
+            todo: this.notBadIdeas.filter((idea) => !idea.state || idea.state === 'TODO'),
+            doing: this.notBadIdeas.filter((idea) => idea.state === 'DOING'),
+            done: this.notBadIdeas.filter((idea) => idea.state === 'DONE'),
             refused: this.badIdeas,
             you_should_not_pass: this.ideas.filter(
                 (idea) =>
-                    idea.state !== 'DONE' &&
+                    SHOULD_NOT_PASS_ACTIVATED &&
+                    idea.state === 'TODO' &&
                     this.hasUserDownVote(idea.reactions, 7) &&
                     this.hasUserDownVote(idea.reactions, 20)
             ),
