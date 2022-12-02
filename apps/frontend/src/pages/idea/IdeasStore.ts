@@ -59,7 +59,7 @@ export class IdeasStore {
 
     get badIdeas() {
         return this.shouldPassIdeas.filter(
-            (idea) => idea.state !== 'DONE' && this.isIdeaBad(idea.reactions)
+            (idea) => idea.state === 'TODO' && this.isIdeaBad(idea.reactions)
         )
     }
 
