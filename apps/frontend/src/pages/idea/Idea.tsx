@@ -185,9 +185,11 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                         >
                             {isBad ? '' : author_username}
                         </Typography>
-                        <Typography sx={{ fontSize: 11, color: 'gray' }}>
-                            {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
-                        </Typography>
+                        <Tooltip title={moment(idea.createdAt).format('DD/MM/YYYY HH:mm')}>
+                            <Typography sx={{ fontSize: 11, color: 'gray' }}>
+                                {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
+                            </Typography>
+                        </Tooltip>
                     </CardActions>
                 </Card>
                 <SimpleModal
