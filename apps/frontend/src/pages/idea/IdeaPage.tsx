@@ -12,6 +12,7 @@ import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import CreateIdeaModal from './CreateIdeaModal'
 import DisplayIdeas from './DisplayIdeas'
+import { SHOULD_NOT_PASS_ACTIVATED } from './IdeasStore'
 
 export type IdeaPageStateValue = 'todo' | 'doing' | 'done' | 'refused' | 'you_should_not_pass'
 
@@ -22,18 +23,20 @@ export interface IdeaPageState {
     isBad?: boolean
 }
 
-const IDEA_PAGE_STATES: IdeaPageState[] = [
+let IDEA_PAGE_STATES: IdeaPageState[] = [
     { label: 'A faire 💤', message: 'à faire', value: 'todo' },
     { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
     { label: 'Terminées ✅', message: 'terminée', value: 'done' },
     { label: 'Refusées 🚫', message: 'refusée', value: 'refused', isBad: true },
-    // TODO show 'You shall not pass' only if user parameter allow it
-    // {
-    //     label: 'You shall not pass! 🧙‍♂️',
-    //     message: 'you shall not pass',
-    //     value: 'you_should_not_pass',
-    // },
 ]
+
+if (SHOULD_NOT_PASS_ACTIVATED) {
+    IDEA_PAGE_STATES.push({
+        label: 'You shall not pass! 🧙‍♂️',
+        message: 'you shall not pass',
+        value: 'you_should_not_pass',
+    })
+}
 
 interface TabTitleProps {
     label: string
