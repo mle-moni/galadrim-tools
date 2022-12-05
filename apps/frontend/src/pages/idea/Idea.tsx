@@ -25,6 +25,7 @@ import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
 import CommentIdeaModal from './CommentIdeaModal'
 import { getUsersIdWithSpecificReaction } from './helper'
 import { findUserReaction } from './IdeasStore'
+import { getHumanFormattedDate, getHumanFormattedTimeDifference } from './ideasUtils'
 
 const getReactions = (idea: IIdea, userId: IUserData['id']) => {
     const numberOfReaction = idea.reactions.length
@@ -185,9 +186,9 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                         >
                             {isBad ? '' : author_username}
                         </Typography>
-                        <Tooltip title={moment(idea.createdAt).format('DD/MM/YYYY HH:mm')}>
+                        <Tooltip title={getHumanFormattedDate(idea.createdAt)}>
                             <Typography sx={{ fontSize: 11, color: 'gray' }}>
-                                {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
+                                {getHumanFormattedTimeDifference(idea.createdAt)}
                             </Typography>
                         </Tooltip>
                     </CardActions>

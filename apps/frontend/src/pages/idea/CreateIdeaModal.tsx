@@ -1,20 +1,20 @@
 import { Lightbulb } from '@mui/icons-material'
 import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
 import { CreateIdeaCallback, CreateIdeaStore } from './createIdea/CreateIdeaStore'
 
 const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish }) => {
     const ideaStore = useMemo(() => new CreateIdeaStore(), [])
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        ideaStore.createIdea(onPublish)
+    }
+
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault()
-                ideaStore.createIdea(onPublish)
-            }}
-        >
+        <form onSubmit={handleSubmit}>
             <TextInputWithIcon
                 value={ideaStore.text.text}
                 placeholder={'Quelle est ton idée ?'}
