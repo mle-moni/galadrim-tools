@@ -14,8 +14,6 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
-import moment from 'moment'
-import 'moment/dist/locale/fr'
 import { useMemo } from 'react'
 
 import { AppStore } from '../../globalStores/AppStore'
