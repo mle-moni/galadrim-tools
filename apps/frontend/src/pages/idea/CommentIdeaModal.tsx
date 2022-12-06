@@ -1,14 +1,11 @@
 import { IIdea, IIdeaComment } from '@galadrim-tools/shared'
 import { Send } from '@mui/icons-material'
-import { Box, Button, OutlinedInput, Typography } from '@mui/material'
+import { Box, Button, OutlinedInput, Tooltip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import moment from 'moment'
-import 'moment/dist/locale/fr'
-import { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { CreateIdeaCommentStore } from './createIdea/CreateIdeaCommentStore'
-
-moment.locale('fr')
+import { getHumanFormattedDate, getHumanFormattedTimeDifference } from './ideasUtils'
 
 const CommentDiv = observer<{
     comment: IIdeaComment
@@ -35,9 +32,12 @@ const CommentDiv = observer<{
                         height="50px"
                         style={{ borderRadius: 1000, marginRight: 10 }}
                     />
-                    <Typography sx={{ color: 'gray' }}>
-                        {user.username} ( {moment(comment.createdAt).fromNow()} )
-                    </Typography>
+                    <Typography sx={{ color: 'gray', mr: 1 }}>{user.username}</Typography>
+                    <Tooltip title={getHumanFormattedDate(comment.createdAt)} placement="top">
+                        <Typography sx={{ color: 'gray' }}>
+                            ( {getHumanFormattedTimeDifference(comment.createdAt)} )
+                        </Typography>
+                    </Tooltip>
                 </Box>
             )}
             <Typography
@@ -70,14 +70,14 @@ const CommentIdeaModal = observer<{
         }, 100)
     }, [scrollCommentsRef, idea.comments])
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        ideaCommentStore.createIdeaComment()
+        ideaCommentStore.message.setText('')
+    }
+
     return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault()
-                ideaCommentStore.createIdeaComment()
-                ideaCommentStore.message.setText('')
-            }}
-        >
+        <form onSubmit={handleSubmit}>
             <Box sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
                 {idea.comments.map((comment, index) => {
                     return <CommentDiv comment={comment} userId={userId} key={index} />

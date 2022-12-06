@@ -14,8 +14,6 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
-import moment from 'moment'
-import 'moment/dist/locale/fr'
 import { useMemo } from 'react'
 
 import { AppStore } from '../../globalStores/AppStore'
@@ -25,6 +23,7 @@ import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
 import CommentIdeaModal from './CommentIdeaModal'
 import { getUsersIdWithSpecificReaction } from './helper'
 import { findUserReaction } from './IdeasStore'
+import { getHumanFormattedDate, getHumanFormattedTimeDifference } from './ideasUtils'
 
 const getReactions = (idea: IIdea, userId: IUserData['id']) => {
     const numberOfReaction = idea.reactions.length
@@ -185,9 +184,11 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                         >
                             {isBad ? '' : author_username}
                         </Typography>
-                        <Typography sx={{ fontSize: 11, color: 'gray' }}>
-                            {idea.createdAt ? moment(idea.createdAt).fromNow() : ''}
-                        </Typography>
+                        <Tooltip title={getHumanFormattedDate(idea.createdAt)}>
+                            <Typography sx={{ fontSize: 11, color: 'gray' }}>
+                                {getHumanFormattedTimeDifference(idea.createdAt)}
+                            </Typography>
+                        </Tooltip>
                     </CardActions>
                 </Card>
                 <SimpleModal
