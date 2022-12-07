@@ -12,6 +12,7 @@ export default class Restaurants extends BaseSchema {
 
     public async down() {
         this.schema.alterTable(this.tableName, (table) => {
+            table.dropForeign('user_id')
             table.dropColumn('user_id')
             table.dropColumn('average_price')
         })
