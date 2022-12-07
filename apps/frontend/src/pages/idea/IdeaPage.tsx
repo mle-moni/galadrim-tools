@@ -24,7 +24,7 @@ export interface IdeaPageState {
 }
 
 let IDEA_PAGE_STATES: IdeaPageState[] = [
-    { label: 'A faire 💤', message: 'à faire', value: 'todo' },
+    { label: 'A faire 👀', message: 'à faire', value: 'todo' },
     { label: 'En cours 🚀', message: 'en cours', value: 'doing' },
     { label: 'Terminées ✅', message: 'terminée', value: 'done' },
     { label: 'Refusées 🚫', message: 'refusée', value: 'refused', isBad: true },
