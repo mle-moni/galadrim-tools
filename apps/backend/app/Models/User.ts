@@ -4,7 +4,6 @@ import Env from '@ioc:Adonis/Core/Env'
 import Hash from '@ioc:Adonis/Core/Hash'
 import {
     BaseModel,
-    beforeFetch,
     beforeFind,
     beforeSave,
     column,
