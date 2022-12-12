@@ -15,6 +15,7 @@ import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getApiUrl } from '../../../api/fetch'
+import { AppStore } from '../../../globalStores/AppStore'
 import { MAX_ZOOM, SaveurStore } from '../../../globalStores/SaveurStore'
 import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
 import RatingComponent from './RatingComponent'
@@ -55,6 +56,8 @@ interface RestaurantCardProps {
 export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveurStore }) => {
     const store = useMemo(() => new RestaurantCardStore(restaurant), [restaurant])
     const [, setSearchParams] = useSearchParams()
+
+    const choosen = AppStore.authStore.user.dailyChoice === restaurant.id
 
     return (
         <Card
@@ -107,6 +110,18 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                     title="Afficher sur la carte"
                 >
                     <Room />
+                </Button>
+                <Button
+                    size="small"
+                    onClick={() => {
+                        saveurStore.restaurantsStore.chooseRestaurant(restaurant.id)
+                    }}
+                    title="Je vais y manger ce midi"
+                >
+                    <img
+                        src={getApiUrl() + `/maps/i_choose_you${choosen ? '' : '_gray'}.png`}
+                        style={{ width: 25, height: 25 }}
+                    />
                 </Button>
                 <Button
                     size="small"

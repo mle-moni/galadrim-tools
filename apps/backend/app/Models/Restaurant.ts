@@ -2,14 +2,17 @@ import { _assertTrue } from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import {
     BaseModel,
+    beforeFetch,
     column,
     HasMany,
     hasMany,
     ManyToMany,
     manyToMany,
-    ModelObject,
+    ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
+import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
+import RestaurantChoice from './RestaurantChoice'
 import RestaurantNote from './RestaurantNote'
 import Tag from './Tag'
 
@@ -44,45 +47,51 @@ export default class Restaurant extends BaseModel {
     @hasMany(() => RestaurantNote)
     public notes: HasMany<typeof RestaurantNote>
 
+    @hasMany(() => RestaurantChoice)
+    public choices: HasMany<typeof RestaurantChoice>
+
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
 
-    toJSON(): ModelObject {
-        return this.serialize({
-            fields: {
-                omit: ['updatedAt'],
-            },
-            relations: {
-                notes: {
-                    fields: {
-                        omit: ['createdAt', 'updatedAt'],
-                    },
-                },
-                tags: {
-                    fields: {
-                        omit: ['createdAt', 'updatedAt'],
-                    },
-                },
-            },
-        })
+    get dailyChoices() {
+        return this.choices
+            .filter((choice) => choice.day === formatDateToNumber(new Date()))
+            .map((choice) => choice.userId)
+    }
+
+    @beforeFetch()
+    public static autoLoadParameters(query: ModelQueryBuilderContract<typeof Restaurant>) {
+        query.preload('tags')
+        query.preload('notes')
+        query.preload('choices')
+    }
+
+    get frontendData() {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            lat: this.lat,
+            lng: this.lng,
+            averagePrice: this.averagePrice,
+            userId: this.userId,
+            image: this.image,
+            tags: this.tags.map((tag) => tag.frontendData),
+            notes: this.notes.map((note) => note.frontendData),
+            choices: this.dailyChoices,
+            createdAt: this.createdAt.toJSDate(),
+        }
     }
 
     static async fetchById(id: number) {
-        const restaurants = await Restaurant.query()
-            .where('id', id)
-            .preload('tags')
-            .preload('notes')
+        const restaurant = await Restaurant.findOrFail(id)
+        await restaurant.load('tags')
+        await restaurant.load('notes')
+        await restaurant.load('choices')
 
-        _assertTrue(
-            restaurants.length === 1,
-            `expected restaurants.length to be '1' but got '${restaurants.length}'`
-        )
-
-        const restaurant = restaurants[0]
-
-        return restaurant
+        return restaurant.frontendData
     }
 }

@@ -1,13 +1,19 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { ITag } from 'libs/shared/dist'
+import { IChoice } from 'libs/shared/dist'
 import { DateTime } from 'luxon'
 
-export default class Tag extends BaseModel {
+export default class RestaurantChoice extends BaseModel {
     @column({ isPrimary: true })
     public id: number
 
     @column()
-    public name: string
+    public restaurantId: number
+
+    @column()
+    public userId: number
+
+    @column()
+    public day: number
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
@@ -15,10 +21,12 @@ export default class Tag extends BaseModel {
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
 
-    get frontendData(): ITag {
+    get frontendData(): IChoice {
         return {
             id: this.id,
-            name: this.name,
+            restaurantId: this.restaurantId,
+            userId: this.userId,
+            createdAt: this.createdAt.toJSDate(),
         }
     }
 }

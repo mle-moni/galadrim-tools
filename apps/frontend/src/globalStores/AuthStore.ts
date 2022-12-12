@@ -1,4 +1,4 @@
-import { ApiError, ApiNotification, IUserData } from '@galadrim-tools/shared'
+import { ApiError, ApiNotification, IChoice, IRestaurant, IUserData } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
@@ -180,5 +180,16 @@ export class AuthStore {
 
     updateRights(rights: number) {
         this.user.rights = rights
+    }
+
+    chooseRestaurant(restaurant: IRestaurant) {
+        if (!this._user) throw new Error('use this computed only after login')
+        if (restaurant.choices.includes(this._user.id)) {
+            this._user.dailyChoice = restaurant.id
+            return
+        }
+        if (this._user.dailyChoice === restaurant.id) {
+            this._user.dailyChoice = null
+        }
     }
 }

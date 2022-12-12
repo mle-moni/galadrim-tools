@@ -17,6 +17,7 @@ import { LocauxSwitch } from './LocauxSwitch'
 import { getFavouriteLocauxIndex } from './persistLocauxPreferences'
 import { RestaurantMarkers } from './restaurants/RestaurantMarkers'
 import { SaveurLeftMenu } from './restaurants/SaveurLeftMenu'
+import { UserDailyChoices } from './restaurants/UserDailyChoices'
 
 export interface Locaux {
     name: string
@@ -108,6 +109,7 @@ const SaveurPage = observer(() => {
                 <RestaurantMarkers saveurStore={saveurStore} userId={authStore.user.id} />
             </MapContainer>
             <SaveurLeftMenu saveurStore={saveurStore} />
+            <UserDailyChoices saveurStore={saveurStore} />
             <Box
                 sx={{
                     zIndex: 10,

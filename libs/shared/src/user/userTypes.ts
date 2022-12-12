@@ -1,3 +1,5 @@
+import { IRestaurant } from '../saveur'
+
 export interface IUserData {
     id: number
     username: string
@@ -5,4 +7,5 @@ export interface IUserData {
     imageUrl: string
     rights: number
     email: string
+    dailyChoice: IRestaurant['id'] | null
 }

@@ -91,6 +91,7 @@ export class SocketStore {
 
     updateRestaurant(restaurant: IRestaurant) {
         AppStore.saveurStore.restaurantsStore.editRestaurant(restaurant)
+        AppStore.authStore.chooseRestaurant(restaurant)
     }
 
     deleteRestaurant(id: number) {

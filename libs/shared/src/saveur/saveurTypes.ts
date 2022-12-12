@@ -25,6 +25,7 @@ export interface IRestaurant {
     createdAt: string // parsable date
     averagePrice: number | null
     userId: number
+    choices: IChoice['userId'][]
 }
 
 export interface INotes {
@@ -32,4 +33,11 @@ export interface INotes {
     restaurantId: number
     userId: number
     note: NotesOption
+}
+
+export interface IChoice {
+    id: number
+    restaurantId: number
+    userId: number
+    createdAt: Date
 }
