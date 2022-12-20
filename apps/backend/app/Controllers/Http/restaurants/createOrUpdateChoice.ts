@@ -2,7 +2,6 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Restaurant from 'App/Models/Restaurant'
 import RestaurantChoice from 'App/Models/RestaurantChoice'
-import User from 'App/Models/User'
 import { formatDateToNumber } from 'App/Services/Date'
 import Ws from 'App/Services/Ws'
 
