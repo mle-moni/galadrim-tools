@@ -41,6 +41,7 @@ export class SocketStore {
         this.socket.on('createRestaurant', (restaurant) => this.createRestaurant(restaurant))
         this.socket.on('updateRestaurant', (restaurant) => this.updateRestaurant(restaurant))
         this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
+        this.socket.on('chooseRestaurant', (restaurant) => this.chooseRestaurant(restaurant))
         this.socket.on('fetchAll', () => AppStore.fetchAll())
         this.socket.on('updateUser', (userInfo) => this.updateUser(userInfo))
         this.socket.on('updateRights', (rights) => this.updateRights(rights))
@@ -91,6 +92,10 @@ export class SocketStore {
 
     updateRestaurant(restaurant: IRestaurant) {
         AppStore.saveurStore.restaurantsStore.editRestaurant(restaurant)
+    }
+
+    chooseRestaurant(restaurant: IRestaurant) {
+        AppStore.authStore.chooseRestaurant(restaurant)
     }
 
     deleteRestaurant(id: number) {

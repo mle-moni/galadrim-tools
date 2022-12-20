@@ -19,10 +19,10 @@ export class RestaurantCardStore {
     constructor(private restaurant: IRestaurant) {
         makeAutoObservable(this)
 
-        const itemFound = restaurant.notes.find(
+        const ratingFound = restaurant.notes.find(
             (item) => item.userId === AppStore.authStore.user.id
         )
-        this.rating = itemFound?.note ?? null
+        this.rating = ratingFound?.note ?? null
     }
 
     toggleIsRatingDevelopped() {

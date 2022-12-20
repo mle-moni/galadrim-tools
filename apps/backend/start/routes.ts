@@ -33,6 +33,10 @@ Route.group(() => {
     Route.get('/allEvents', 'events/EventsController.all')
     Route.resource('tags', 'tags/TagsController').apiOnly()
     Route.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
+    Route.post(
+        'createOrUpdateRestaurantChoice',
+        'restaurants/RestaurantsController.createOrUpdateChoice'
+    )
     Route.resource('notes', 'restaurantNotes/RestaurantNotesController').apiOnly()
     Route.resource('ideas', 'ideas/IdeasController').apiOnly()
     Route.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')

@@ -1,6 +1,6 @@
 {
     "name": "galadrim-tools",
-    "version": "3.3.0",
+    "version": "3.4.0",
     "license": "GPLv2",
     "scripts": {
         "dev": "concurrently --kill-others \"yarn dev:shared\" \"yarn dev:backend\" \"yarn dev:frontend\"",

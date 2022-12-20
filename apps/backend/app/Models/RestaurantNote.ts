@@ -1,5 +1,5 @@
-import { NotesOption } from '@galadrim-tools/shared'
-import { BaseModel, column, ModelObject } from '@ioc:Adonis/Lucid/Orm'
+import { INotes, NotesOption } from '@galadrim-tools/shared'
+import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 
 export default class RestaurantNote extends BaseModel {
@@ -21,11 +21,12 @@ export default class RestaurantNote extends BaseModel {
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
 
-    toJSON(): ModelObject {
-        return this.serialize({
-            fields: {
-                omit: ['createdAt', 'updatedAt'],
-            },
-        })
+    get frontendData(): INotes {
+        return {
+            id: this.id,
+            restaurantId: this.restaurantId,
+            userId: this.userId,
+            note: this.note,
+        }
     }
 }

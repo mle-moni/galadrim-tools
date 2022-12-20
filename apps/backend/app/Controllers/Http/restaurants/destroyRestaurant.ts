@@ -10,7 +10,9 @@ export const destroyRoute = async ({ params, auth, response }: HttpContextContra
     if (!hasRights(user.rights, ['MIAM_ADMIN'])) {
         return response.forbidden({ error: `Vous n'avez pas les droits nécessaires` })
     }
-    const eventJson = restaurant.toJSON()
+
+    await restaurant.load((builder) => builder.preload('tags').preload('notes').preload('choices'))
+    const eventJson = restaurant.frontendData
     await restaurant.delete()
 
     Ws.io.to('connectedSockets').emit('deleteRestaurant', eventJson)

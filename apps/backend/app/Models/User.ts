@@ -2,10 +2,20 @@ import { AllRights, hasRights, hasSomeRights, IUserData } from '@galadrim-tools/
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import Env from '@ioc:Adonis/Core/Env'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { BaseModel, beforeSave, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+    BaseModel,
+    beforeFind,
+    beforeSave,
+    column,
+    hasMany,
+    HasMany,
+    ModelQueryBuilderContract,
+} from '@ioc:Adonis/Lucid/Orm'
+import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
 import { URL } from 'url'
+import RestaurantChoice from './RestaurantChoice'
 
 export default class User extends BaseModel {
     @column({ isPrimary: true })
@@ -38,11 +48,19 @@ export default class User extends BaseModel {
     @attachment({ folder: 'avatar', preComputeUrl: true })
     public image: AttachmentContract | null
 
+    @hasMany(() => RestaurantChoice)
+    public choices: HasMany<typeof RestaurantChoice>
+
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     public updatedAt: DateTime
+
+    @beforeFind()
+    public static autoLoadParametersFind(query: ModelQueryBuilderContract<typeof User>) {
+        query.preload('choices')
+    }
 
     @beforeSave()
     public static async hashPassword(user: User) {
@@ -68,8 +86,19 @@ export default class User extends BaseModel {
         }
     }
 
+    public static getPersonalSocketFromId(id: number) {
+        return `user-${id}`
+    }
+
     get personalSocket() {
-        return `user-${this.id}`
+        return User.getPersonalSocketFromId(this.id)
+    }
+
+    get dailyChoice() {
+        return (
+            this.choices.find((choice) => choice.day === formatDateToNumber(new Date()))
+                ?.restaurantId ?? null
+        )
     }
 
     public userData(): IUserData {
@@ -82,6 +111,7 @@ export default class User extends BaseModel {
             imageUrl: this.imageSrc,
             rights: this.rights,
             email: this.email,
+            dailyChoice: this.dailyChoice,
         }
     }
 

@@ -3,5 +3,5 @@ import RestaurantNote from 'App/Models/RestaurantNote'
 
 export const showRoute = async ({ params }: HttpContextContract) => {
     const restaurantNote = await RestaurantNote.findOrFail(params.id)
-    return restaurantNote
+    return restaurantNote.frontendData
 }
