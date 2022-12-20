@@ -119,8 +119,8 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                     title="Je vais y manger ce midi"
                 >
                     <img
-                        src={getApiUrl() + `/maps/i_choose_you${choosen ? '' : '_gray'}.png`}
-                        style={{ width: 25, height: 25 }}
+                        src={getApiUrl() + `/maps/i_choose_you.png`}
+                        style={{ width: 25, height: 25, filter: `grayscale(${choosen ? 0 : 1})` }}
                     />
                 </Button>
                 <Button
