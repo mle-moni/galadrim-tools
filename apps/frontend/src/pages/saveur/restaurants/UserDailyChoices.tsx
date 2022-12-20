@@ -14,6 +14,16 @@ const topColors = [
     ['#A77044', '#824A02', 'white'],
 ]
 
+const getBadgeStyleFromIndex = (index: number) => {
+    return index < 3
+        ? {
+              backgroundColor: topColors[index][0],
+              border: `1px solid ${topColors[index][1]}`,
+              color: topColors[index][2],
+          }
+        : {}
+}
+
 const RestaurantChoices = observer<{
     restaurant: IRestaurant
     index: number
@@ -46,13 +56,7 @@ const RestaurantChoices = observer<{
                     color="secondary"
                     label={restaurant.choices.length}
                     sx={{
-                        ...(index < 3
-                            ? {
-                                  backgroundColor: topColors[index][0],
-                                  border: `1px solid ${topColors[index][1]}`,
-                                  color: topColors[index][2],
-                              }
-                            : {}),
+                        ...getBadgeStyleFromIndex(index),
                         cursor: 'pointer',
                     }}
                 />
@@ -65,10 +69,6 @@ export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveur
     const store = useMemo(() => new SimpleModalStore(), [])
 
     const restaurants = saveurStore.restaurantsStore.restaurantChoices
-
-    useEffect(() => {
-        store.setModalOpen(true)
-    }, [store])
 
     return (
         <Box

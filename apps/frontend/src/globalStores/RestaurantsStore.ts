@@ -1,7 +1,7 @@
 import { IRestaurant } from '@galadrim-tools/shared'
 import Fuse from 'fuse.js'
 import { makeAutoObservable } from 'mobx'
-import { fetchBackendJson } from '../api/fetch'
+import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { APPLICATION_JSON_HEADERS } from '../pages/idea/createIdea/CreateIdeaStore'
 import {
     getRestaurantsScore,
@@ -160,7 +160,7 @@ export class RestaurantsStore {
     }
 
     async chooseRestaurant(id: number) {
-        const req = await fetchBackendJson<IRestaurant, unknown>(
+        const res = await fetchBackendJson<IRestaurant, unknown>(
             `/createOrUpdateRestaurantChoice`,
             'POST',
             {
@@ -170,9 +170,10 @@ export class RestaurantsStore {
                 headers: APPLICATION_JSON_HEADERS,
             }
         )
-        if (req.ok) {
+        if (res.ok) {
             return
         }
-        notifyError('Impossible de choisir le restaurant, bizarre')
+
+        notifyError(getErrorMessage(res.json, 'Impossible de choisir le restaurant, bizarre'))
     }
 }

@@ -86,8 +86,12 @@ export default class User extends BaseModel {
         }
     }
 
+    public static getPersonalSocketFromId(id: number) {
+        return `user-${id}`
+    }
+
     get personalSocket() {
-        return `user-${this.id}`
+        return User.getPersonalSocketFromId(this.id)
     }
 
     get dailyChoice() {

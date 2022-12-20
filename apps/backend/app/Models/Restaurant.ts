@@ -88,9 +88,9 @@ export default class Restaurant extends BaseModel {
 
     static async fetchById(id: number) {
         const restaurant = await Restaurant.findOrFail(id)
-        await restaurant.load('tags')
-        await restaurant.load('notes')
-        await restaurant.load('choices')
+        await restaurant.load((builder) =>
+            builder.preload('tags').preload('notes').preload('choices')
+        )
 
         return restaurant.frontendData
     }
