@@ -44,11 +44,11 @@ type RatingsProps = {
     onClick?: (id: NotesOption) => void
 }
 
-const Ratings = observer<RatingsProps>(({ ratios, onClick }) => {
+const Ratings = observer<RatingsProps>(({ ratios }) => {
     return (
         <StyledCardContent>
             {ratios.map((ratio) => (
-                <RatioWrapper key={ratio.id} onClick={() => onClick && onClick(ratio.id)}>
+                <RatioWrapper key={ratio.id}>
                     <Typography>{ratio.label}</Typography>
                     <ProgressWrapper>
                         <Tooltip title={getNameOfUsers(ratio.userIds, AppStore.users)}>

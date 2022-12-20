@@ -83,7 +83,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 <Typography variant="body2" color="text.secondary">
                     {restaurant.description}
                 </Typography>
-                <Ratings ratios={store.ratios} onClick={(id) => store.saveRating(id)} />
+                <Ratings ratios={store.ratios} />
             </CardContent>
             <Collapse in={store.isRatingDevelopped}>
                 <RatingComponent
