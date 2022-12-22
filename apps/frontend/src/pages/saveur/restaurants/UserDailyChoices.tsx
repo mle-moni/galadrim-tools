@@ -51,6 +51,8 @@ const RestaurantChoices = observer<{
             <Tooltip
                 title={getNameOfUsers(restaurant.choices, AppStore.users)}
                 placement="bottom-end"
+                arrow
+                disableInteractive
             >
                 <Chip
                     color="secondary"

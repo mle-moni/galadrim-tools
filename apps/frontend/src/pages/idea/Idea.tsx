@@ -84,21 +84,21 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                         </Typography>
                     </CardContent>
                     <CardActions sx={{ display: 'flex', overflowX: 'auto', paddingY: 0 }}>
-                        <Tooltip title={'Commentaires'}>
-                            <Box
-                                sx={{
-                                    flex: 1,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <Typography>{idea.comments.length}</Typography>
+                        <Box
+                            sx={{
+                                flex: 1,
+                                display: 'flex',
+                                alignItems: 'center',
+                                cursor: 'pointer',
+                            }}
+                        >
+                            <Typography>{idea.comments.length}</Typography>
+                            <Tooltip title={'Commentaires'}>
                                 <IconButton onClick={() => modalStore.setModalOpen(true)}>
                                     <Comment />
                                 </IconButton>
-                            </Box>
-                        </Tooltip>
+                            </Tooltip>
+                        </Box>
                         <Tooltip
                             title={getNameOfUsers(
                                 getUsersIdWithSpecificReaction(idea, true),
