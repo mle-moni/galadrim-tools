@@ -14,8 +14,8 @@ jobs:
               with:
                   node-version: '16.x'
 
-            - name: Install dependencies 📦
-              run: yarn install --frozen-lockfile
+            # - name: Install dependencies 📦
+            #   run: yarn install --frozen-lockfile
 
             - name: Run tsc in backend
               run: cd apps/backend && yarn tsc
