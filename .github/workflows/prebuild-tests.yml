@@ -17,7 +17,7 @@ jobs:
               run: yarn install --frozen-lockfile
 
             - name: Run tsc in backend
-              run: cd .. && ls
+              run: yarn build:backend
 
             - name: Run tsc in frontend
               run: cd apps/frontend && yarn tsc
