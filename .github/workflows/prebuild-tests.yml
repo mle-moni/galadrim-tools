@@ -1,0 +1,27 @@
+name: Prebuild tests
+run-name: Running prebuild tests
+on:
+    pull_request:
+        branches:
+            - master
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Set up Node.js ⚙️
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '16.x'
+
+            - name: Install dependencies 📦
+              run: yarn install --frozen-lockfile
+
+            - name: Build shared library
+              run: yarn build:shared
+
+            - name: Run tsc in backend
+              run: cd apps/backend && yarn tsc
+
+            - name: Run tsc in frontend
+              run: cd apps/frontend && yarn tsc
