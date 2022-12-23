@@ -45,10 +45,12 @@ Route.group(() => {
     Route.post('/createApiToken', 'auth/AuthController.createApiToken')
     Route.post('/changePassword', 'auth/AuthController.changePassword')
     Route.post('/updateProfile', 'auth/AuthController.updateProfile')
+    Route.get('/users', 'galadrimeurs/GaladrimeursController.users')
+
+    Route.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
-Route.get('/users', 'galadrimeurs/GaladrimeursController.users')
 
 Route.group(() => {
     Route.get('/rooms', 'statistics/StatisticsController.favoriteRoom')

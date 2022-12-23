@@ -45,6 +45,9 @@ export default class User extends BaseModel {
     @column()
     public rights: number
 
+    @column()
+    public notificationsSettings: number
+
     @attachment({ folder: 'avatar', preComputeUrl: true })
     public image: AttachmentContract | null
 
@@ -110,6 +113,7 @@ export default class User extends BaseModel {
             socketToken: this.socketToken,
             imageUrl: this.imageSrc,
             rights: this.rights,
+            notificationsSettings: this.notificationsSettings,
             email: this.email,
             dailyChoice: this.dailyChoice,
         }

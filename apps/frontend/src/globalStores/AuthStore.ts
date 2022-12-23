@@ -1,4 +1,4 @@
-import { ApiError, ApiNotification, IChoice, IRestaurant, IUserData } from '@galadrim-tools/shared'
+import { ApiError, ApiNotification, IRestaurant, IUserData } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
@@ -191,5 +191,9 @@ export class AuthStore {
         if (this._user.dailyChoice === restaurant.id) {
             this._user.dailyChoice = null
         }
+    }
+
+    setUserNotificationSetting(notificationsSettings: number) {
+        this.user.notificationsSettings = notificationsSettings
     }
 }

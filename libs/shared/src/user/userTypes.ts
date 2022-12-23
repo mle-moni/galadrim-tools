@@ -6,6 +6,7 @@ export interface IUserData {
     socketToken: string
     imageUrl: string
     rights: number
+    notificationsSettings: number
     email: string
     dailyChoice: IRestaurant['id'] | null
 }

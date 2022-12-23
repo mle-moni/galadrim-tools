@@ -25,3 +25,7 @@ export const notifyUser = (
         autoHideDuration,
     })
 }
+
+export const closeAllSnackbars = () => {
+    AppStore.notification.close()
+}
