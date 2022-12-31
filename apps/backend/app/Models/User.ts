@@ -11,6 +11,7 @@ import {
     HasMany,
     ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
+import Notification from 'App/Models/Notification'
 import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
@@ -53,6 +54,9 @@ export default class User extends BaseModel {
 
     @hasMany(() => RestaurantChoice)
     public choices: HasMany<typeof RestaurantChoice>
+
+    @hasMany(() => Notification)
+    public notifications: HasMany<typeof Notification>
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
@@ -116,6 +120,7 @@ export default class User extends BaseModel {
             notificationsSettings: this.notificationsSettings,
             email: this.email,
             dailyChoice: this.dailyChoice,
+            notifications: this.notifications,
         }
     }
 

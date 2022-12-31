@@ -1,5 +1,12 @@
 import { IRestaurant } from '../saveur'
 
+export interface INotification {
+    id: number
+    userId: number
+    text: string
+    link: string | null
+}
+
 export interface IUserData {
     id: number
     username: string
@@ -9,4 +16,5 @@ export interface IUserData {
     notificationsSettings: number
     email: string
     dailyChoice: IRestaurant['id'] | null
+    notifications: INotification[]
 }
