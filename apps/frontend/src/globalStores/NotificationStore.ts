@@ -20,7 +20,7 @@ export class NotificationStore {
         return key
     }
 
-    close(key: SnackbarKey) {
+    close(key?: SnackbarKey) {
         if (!this._close) throw new Error('snackbar methods should be set before use')
         this._close(key)
         this.notifications = this.notifications.filter((notif) => key !== notif)

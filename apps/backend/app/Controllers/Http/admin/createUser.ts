@@ -1,3 +1,4 @@
+import { DEFAULT_NOTIFICATION_SETTINGS } from '@galadrim-tools/shared'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import Env from '@ioc:Adonis/Core/Env'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
@@ -33,6 +34,7 @@ export const createUserRoute = async ({ request }: HttpContextContract) => {
         username,
         password: nanoid(),
         otpToken,
+        notificationsSettings: DEFAULT_NOTIFICATION_SETTINGS,
         imageUrl:
             'https://res.cloudinary.com/forest2/image/fetch/f_auto,w_150,h_150/https://forest.galadrim.fr/img/users/0.jpg',
     })

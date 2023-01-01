@@ -1,4 +1,10 @@
-import { AllRights, hasRights, hasSomeRights, IUserData } from '@galadrim-tools/shared'
+import {
+    AllRights,
+    hasRights,
+    hasSomeRights,
+    INotification,
+    IUserData,
+} from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import Env from '@ioc:Adonis/Core/Env'
 import Hash from '@ioc:Adonis/Core/Hash'
@@ -11,6 +17,7 @@ import {
     HasMany,
     ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
+import Notification from 'App/Models/Notification'
 import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
@@ -45,11 +52,17 @@ export default class User extends BaseModel {
     @column()
     public rights: number
 
+    @column()
+    public notificationsSettings: number
+
     @attachment({ folder: 'avatar', preComputeUrl: true })
     public image: AttachmentContract | null
 
     @hasMany(() => RestaurantChoice)
     public choices: HasMany<typeof RestaurantChoice>
+
+    @hasMany(() => Notification)
+    public notifications: HasMany<typeof Notification>
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
@@ -104,14 +117,21 @@ export default class User extends BaseModel {
     public userData(): IUserData {
         this.socketToken = nanoid()
         this.save()
+
+        const notifications = this.notifications.sort(
+            (a, b) => b.id - a.id
+        ) as unknown as INotification[]
+
         return {
             id: this.id,
             username: this.username,
             socketToken: this.socketToken,
             imageUrl: this.imageSrc,
             rights: this.rights,
+            notificationsSettings: this.notificationsSettings,
             email: this.email,
             dailyChoice: this.dailyChoice,
+            notifications,
         }
     }
 

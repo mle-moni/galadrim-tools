@@ -1,4 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { readNotifications } from 'App/Controllers/Http/auth/readNotifications'
+import { updateNotificationsSettings } from 'App/Controllers/Http/auth/updateNotificationsSettings'
 import { changePasswordRoute } from './changePassword'
 import { createApiTokenRoute } from './getApiToken'
 import { getOtpRoute } from './getOtp'
@@ -34,5 +36,13 @@ export default class EventsController {
 
     public async updateProfile(params: HttpContextContract) {
         return updateProfileRoute(params)
+    }
+
+    public async updateNotificationsSettings(params: HttpContextContract) {
+        return updateNotificationsSettings(params)
+    }
+
+    public async readNotifications(params: HttpContextContract) {
+        return readNotifications(params)
     }
 }

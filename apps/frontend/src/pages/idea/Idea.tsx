@@ -1,5 +1,5 @@
 import { hasRights, IdeaState, IIdea, IUserData } from '@galadrim-tools/shared'
-import { Delete, Done, Comment } from '@mui/icons-material'
+import { Comment, Delete, Done } from '@mui/icons-material'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import {
