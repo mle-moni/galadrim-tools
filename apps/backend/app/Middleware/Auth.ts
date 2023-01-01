@@ -34,9 +34,7 @@ export default class AuthMiddleware {
 
         for (let guard of guards) {
             guardLastAttempted = guard
-            
-            // TO REMOVE
-            return true
+
             if (await auth.use(guard).check()) {
                 /**
                  * Instruct auth to use the given guard as the default guard for

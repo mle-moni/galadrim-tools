@@ -12,6 +12,9 @@ export default class Notification extends BaseModel {
     public read: boolean
 
     @column()
+    public title: string
+
+    @column()
     public text: string
 
     @column()

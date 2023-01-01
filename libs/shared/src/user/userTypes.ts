@@ -3,6 +3,8 @@ import { IRestaurant } from '../saveur'
 export interface INotification {
     id: number
     userId: number
+    read: boolean
+    title: string
     text: string
     link: string | null
 }

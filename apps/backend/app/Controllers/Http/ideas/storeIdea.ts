@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Idea from 'App/Models/Idea'
+import { createNotificationForUsers, cropText } from 'App/Services/notifications'
 import Ws from 'App/Services/Ws'
 
 const ideaSchema = schema.create({
@@ -23,6 +24,18 @@ export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => 
         .except(user.personalSocket)
         .emit('createIdea', createdIdea.frontendData)
     Ws.io.to(user.personalSocket).emit('createIdea', createdIdea.getUserFrontendData(user.id))
+
+    const username = isAnonymous ? 'une personne anonyme 🥸' : user.username
+
+    createNotificationForUsers(
+        {
+            title: 'Nouvelle idée dans la boîte à idée',
+            text: `${cropText(text)} ajouté par ${username}`,
+            type: 'NEW_IDEA',
+            link: '/ideas',
+        },
+        user.id
+    )
 
     return { message: "L'idée à été créé !", idea: createdIdea.frontendData }
 }

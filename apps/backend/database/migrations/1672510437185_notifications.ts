@@ -10,6 +10,7 @@ export default class extends BaseSchema {
             table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
 
             table.boolean('read').notNullable().defaultTo(false)
+            table.text('title').notNullable()
             table.text('text').notNullable()
             table.string('link').nullable()
 

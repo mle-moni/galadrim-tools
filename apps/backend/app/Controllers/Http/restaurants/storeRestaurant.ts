@@ -3,6 +3,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Restaurant from 'App/Models/Restaurant'
 import RestaurantTag from 'App/Models/RestaurantTag'
+import { createNotificationForUsers } from 'App/Services/notifications'
 import Ws from 'App/Services/Ws'
 
 const StoreValidationSchema = schema.create({
@@ -56,6 +57,16 @@ export const storeRoute = async ({ request, auth }: HttpContextContract) => {
     const restaurantToSend = await Restaurant.fetchById(restaurant.id)
 
     Ws.io.to('connectedSockets').emit('createRestaurant', restaurantToSend)
+
+    createNotificationForUsers(
+        {
+            title: 'Nouveau restaurant',
+            text: `${name} ajouté par ${user.username}`,
+            type: 'NEW_RESTAURANT',
+            link: `/saveur?zoom=18&restaurant-id=${restaurant.id}`,
+        },
+        user.id
+    )
 
     return restaurantToSend
 }
