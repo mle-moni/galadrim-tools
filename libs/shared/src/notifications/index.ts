@@ -22,3 +22,8 @@ export const generateNotificationsSettings = (notificationSettingsWanted: Notifi
         NOTIFICATIONS.DEFAULT
     )
 }
+
+export const DEFAULT_NOTIFICATION_SETTINGS = generateNotificationsSettings([
+    'NEW_IDEA',
+    'NEW_RESTAURANT',
+])
