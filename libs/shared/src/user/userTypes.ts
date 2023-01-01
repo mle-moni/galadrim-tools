@@ -7,6 +7,7 @@ export interface INotification {
     title: string
     text: string
     link: string | null
+    createdAt: string
 }
 
 export interface IUserData {

@@ -1,4 +1,10 @@
-import { AllRights, hasRights, hasSomeRights, IUserData } from '@galadrim-tools/shared'
+import {
+    AllRights,
+    hasRights,
+    hasSomeRights,
+    INotification,
+    IUserData,
+} from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import Env from '@ioc:Adonis/Core/Env'
 import Hash from '@ioc:Adonis/Core/Hash'
@@ -111,6 +117,11 @@ export default class User extends BaseModel {
     public userData(): IUserData {
         this.socketToken = nanoid()
         this.save()
+
+        const notifications = this.notifications.sort(
+            (a, b) => b.id - a.id
+        ) as unknown as INotification[]
+
         return {
             id: this.id,
             username: this.username,
@@ -120,7 +131,7 @@ export default class User extends BaseModel {
             notificationsSettings: this.notificationsSettings,
             email: this.email,
             dailyChoice: this.dailyChoice,
-            notifications: this.notifications,
+            notifications,
         }
     }
 

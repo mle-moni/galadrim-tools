@@ -204,6 +204,12 @@ export class AuthStore {
     }
 
     addNotification(notification: INotification) {
-        this.user.notifications.push(notification)
+        this.user.notifications.unshift(notification)
+    }
+
+    readNotifications() {
+        this.user.notifications.forEach((notification) => {
+            notification.read = true
+        })
     }
 }

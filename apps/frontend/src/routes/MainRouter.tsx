@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import { AppStore } from '../globalStores/AppStore'
 import IdeaPage from '../pages/idea/IdeaPage'
 import LoadingPage from '../pages/loading/LoadingPage'
+import { Notifications } from '../pages/notifications/Notifications'
 import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 
 const StatisticsPage = React.lazy(() => import('../pages/statistics/StatisticsPage'))
@@ -62,30 +63,36 @@ const AppRoutes = () => {
     }, [])
 
     return (
-        <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/getOtp" element={<GetOtpPage />} />
-            <Route path="/changePassword" element={<ChangePasswordPage />} />
-            <Route path="/admin/createUser" element={<CreateUserPage />} />
-            <Route path="/admin/rights" element={<AdminRightsPage />} />
-            <Route path="/admin/dashboard" element={<DashboardPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/rooms" element={<RoomsHomePage />} />
-            <Route path="/rooms/statistics" element={<StatisticsPage />} />
-            <Route path="room" element={<RoomPage />}>
-                <Route path=":roomName" element={<RoomPage />} />
-            </Route>
-            <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
-            <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />
-            <Route path="/saveur/restaurantsList/:listName" element={<RestaurantsListPage />} />
-            <Route path="/saveur" element={<SaveurPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/notificationsSettings" element={<NotificationsSettingsPage />} />
-            <Route path="/ideas" element={<IdeaPage />} />
+        <>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/getOtp" element={<GetOtpPage />} />
+                <Route path="/changePassword" element={<ChangePasswordPage />} />
+                <Route path="/admin/createUser" element={<CreateUserPage />} />
+                <Route path="/admin/rights" element={<AdminRightsPage />} />
+                <Route path="/admin/dashboard" element={<DashboardPage />} />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/rooms" element={<RoomsHomePage />} />
+                <Route path="/rooms/statistics" element={<StatisticsPage />} />
+                <Route path="room" element={<RoomPage />}>
+                    <Route path=":roomName" element={<RoomPage />} />
+                </Route>
+                <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
+                <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />
+                <Route path="/saveur/restaurantsList/:listName" element={<RestaurantsListPage />} />
+                <Route path="/saveur" element={<SaveurPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route
+                    path="/profile/notificationsSettings"
+                    element={<NotificationsSettingsPage />}
+                />
+                <Route path="/ideas" element={<IdeaPage />} />
 
-            <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+                <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+            <Notifications />
+        </>
     )
 }
 
