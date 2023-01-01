@@ -10,6 +10,8 @@ import { NotificationsComponentStore } from './NotificationsComponentStore'
 export const Notifications = observer(() => {
     const store = useMemo(() => new NotificationsComponentStore(AppStore), [])
 
+    if (!AppStore.authStore.connected) return null
+
     return (
         <>
             <SimpleModal open={store.modalStore.modalOpen} onClose={() => store.closeModal()}>

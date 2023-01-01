@@ -20,5 +20,6 @@ export const loginRoute = async ({ request, auth }: HttpContextContract) => {
     } else {
         await auth.attempt(email, password, true)
     }
+    await auth.user?.load('notifications')
     return auth.user?.userData()
 }

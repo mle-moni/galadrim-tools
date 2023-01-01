@@ -27,5 +27,7 @@ export const updateProfileRoute = async ({ request, auth }: HttpContextContract)
 
     Ws.io.to('connectedSockets').emit('updateUser', user.shortData)
 
+    await auth.user?.load('notifications')
+
     return auth.user?.userData()
 }
