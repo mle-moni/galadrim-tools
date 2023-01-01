@@ -1,4 +1,4 @@
-import { IIdea, IRestaurant, ITag } from '@galadrim-tools/shared'
+import { IIdea, INotification, IRestaurant, ITag } from '@galadrim-tools/shared'
 import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getSocketApiUrl } from '../api/fetch'
@@ -48,6 +48,7 @@ export class SocketStore {
         this.socket.on('createIdea', (idea) => this.createOrUpdateIdea(idea))
         this.socket.on('updateIdea', (idea) => this.createOrUpdateIdea(idea))
         this.socket.on('deleteIdea', (ideaId) => this.deleteIdea(ideaId))
+        this.socket.on('notification', (notification) => this.addNotification(notification))
     }
 
     socketAuth() {
@@ -116,5 +117,9 @@ export class SocketStore {
 
     deleteIdea(id: number) {
         AppStore.ideaStore.removeIdeaById(id)
+    }
+
+    addNotification(notification: INotification) {
+        AppStore.authStore.addNotification(notification)
     }
 }

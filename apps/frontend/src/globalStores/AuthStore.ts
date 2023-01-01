@@ -1,4 +1,10 @@
-import { ApiError, ApiNotification, IRestaurant, IUserData } from '@galadrim-tools/shared'
+import {
+    ApiError,
+    ApiNotification,
+    INotification,
+    IRestaurant,
+    IUserData,
+} from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
@@ -195,5 +201,9 @@ export class AuthStore {
 
     setUserNotificationSetting(notificationsSettings: number) {
         this.user.notificationsSettings = notificationsSettings
+    }
+
+    addNotification(notification: INotification) {
+        this.user.notifications.push(notification)
     }
 }
