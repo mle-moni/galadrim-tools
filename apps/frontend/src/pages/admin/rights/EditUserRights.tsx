@@ -86,6 +86,17 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                     }
                     label="Administration des idées"
                 />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={editUserRightsStore.hasRight('NOTIFICATION_ADMIN')}
+                            onChange={() => {
+                                editUserRightsStore.toggleRight('NOTIFICATION_ADMIN')
+                            }}
+                        />
+                    }
+                    label="Administration des notifications"
+                />
             </FormGroup>
         )
     }

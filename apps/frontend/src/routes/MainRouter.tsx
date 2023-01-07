@@ -28,6 +28,9 @@ const GetOtpPage = React.lazy(() => import('../pages/getOtp/GetOtpPage'))
 const ChangePasswordPage = React.lazy(() => import('../pages/changePassword/ChangePasswordPage'))
 const CreateUserPage = React.lazy(() => import('../pages/admin/createUser/CreateUserPage'))
 const AdminRightsPage = React.lazy(() => import('../pages/admin/rights/AdminRightsPage'))
+const NotificationsAdminPage = React.lazy(
+    () => import('../pages/admin/notifications/NotificationsAdminPage')
+)
 const DashboardPage = React.lazy(() => import('../pages/admin/dashboard/DashboardPage'))
 const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'))
 const RoomPage = React.lazy(() => import('../pages/room/RoomPage'))
@@ -70,6 +73,7 @@ const AppRoutes = () => {
                 <Route path="/getOtp" element={<GetOtpPage />} />
                 <Route path="/changePassword" element={<ChangePasswordPage />} />
                 <Route path="/admin/createUser" element={<CreateUserPage />} />
+                <Route path="/admin/notifications" element={<NotificationsAdminPage />} />
                 <Route path="/admin/rights" element={<AdminRightsPage />} />
                 <Route path="/admin/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />

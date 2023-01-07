@@ -8,12 +8,12 @@ import {
 } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useRights } from '../hooks/useRights'
+import { AppStore } from '../globalStores/AppStore'
 import { IconLink } from '../reusableComponents/common/IconLink'
 import MainLayout from '../reusableComponents/layouts/MainLayout'
 
 const HomePage = observer(() => {
-    const canSeeAdminPage = useRights('some', ['EVENT_ADMIN', 'RIGHTS_ADMIN', 'USER_ADMIN'])
+    const canSeeAdminPage = AppStore.authStore.user.rights !== 0
 
     return (
         <MainLayout fullscreen>

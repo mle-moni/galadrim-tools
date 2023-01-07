@@ -1,7 +1,16 @@
-import { ChevronLeft, Dashboard, PersonAddAlt, Settings } from '@mui/icons-material'
+import { AllRights, hasRights } from '@galadrim-tools/shared'
+import {
+    ChevronLeft,
+    Dashboard,
+    NotificationAdd,
+    PersonAddAlt,
+    Settings,
+} from '@mui/icons-material'
 import { styled, SvgIconTypeMap } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
-import { useRights } from '../../hooks/useRights'
+import { useMemo } from 'react'
+import { Navigate } from 'react-router-dom'
+import { AppStore } from '../../globalStores/AppStore'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
@@ -10,6 +19,7 @@ interface LinkFormat {
     to: string
     text: string
     icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>>
+    right: AllRights
 }
 
 const allLinks: LinkFormat[] = [
@@ -17,18 +27,27 @@ const allLinks: LinkFormat[] = [
         to: '/admin/createUser',
         text: 'Créer un utilisateur',
         icon: PersonAddAlt,
+        right: 'USER_ADMIN',
     },
     {
         to: '/admin/rights',
         text: 'Gerer les droits des utilisateurs',
         icon: Settings,
+        right: 'RIGHTS_ADMIN',
     },
     {
         to: '/admin/dashboard',
         text: 'Accéder au dashboard',
         icon: Dashboard,
+        right: 'DASHBOARD_ADMIN',
     },
-    { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft },
+    {
+        to: '/admin/notifications',
+        text: 'Envoyer des notifications',
+        icon: NotificationAdd,
+        right: 'NOTIFICATION_ADMIN',
+    },
+    { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft, right: 'DEFAULT' },
 ]
 
 const StyledDiv = styled('div')({
@@ -37,14 +56,22 @@ const StyledDiv = styled('div')({
 })
 
 export const AdminPage = () => {
-    useRights('some', ['EVENT_ADMIN', 'RIGHTS_ADMIN', 'USER_ADMIN'], '/')
+    const user = AppStore.authStore.user
+    const links = useMemo(
+        () => allLinks.filter(({ right }) => hasRights(user.rights, [right])),
+        [user.rights]
+    )
+
+    if (user.rights === 0) {
+        return <Navigate to={'/'} />
+    }
 
     return (
         <MainLayout fullscreen>
             <StyledDiv>
                 <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
                     <h1 style={{ textAlign: 'center' }}>Administration</h1>
-                    {allLinks.map((link) => (
+                    {links.map((link) => (
                         <CustomLink key={link.to} to={link.to} p={1}>
                             <link.icon sx={{ mr: 1 }} />
                             {link.text}

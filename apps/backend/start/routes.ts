@@ -67,6 +67,9 @@ Route.group(() => {
     Route.put('/userRights', 'admin/AdminController.editUserRights').middleware(
         'rights:RIGHTS_ADMIN'
     )
+    Route.post('/createNotification', 'admin/AdminController.createNotification').middleware(
+        'rights:NOTIFICATION_ADMIN'
+    )
     Route.get('/dashboard', 'dashboard/DashboardController.index')
 })
     .middleware('auth:web,api')

@@ -116,7 +116,9 @@ export class RestaurantStore {
             notifySuccess(`Le restaurant ${this.name} a été créé !`)
             this.reset()
         } else {
-            notifyError(getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}, bizarre`))
+            notifyError(
+                getErrorMessage(res.json, `Impossible de créer le restaurant ${this.name}, bizarre`)
+            )
         }
     }
 
@@ -140,7 +142,10 @@ export class RestaurantStore {
             notifySuccess(`Le restaurant ${this.name} a été modifié !`)
         } else {
             notifyError(
-                getErrorMessage(res.json, `Impossible de modifier le restaurant ${this.name}, bizarre`)
+                getErrorMessage(
+                    res.json,
+                    `Impossible de modifier le restaurant ${this.name}, bizarre`
+                )
             )
         }
     }
@@ -151,5 +156,6 @@ export class RestaurantStore {
         this.setCoordinates('')
         this.setTags([])
         this.setImage(null)
+        this.setAveragePrice('')
     }
 }
