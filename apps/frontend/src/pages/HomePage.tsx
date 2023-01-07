@@ -13,7 +13,9 @@ import { IconLink } from '../reusableComponents/common/IconLink'
 import MainLayout from '../reusableComponents/layouts/MainLayout'
 
 const HomePage = observer(() => {
-    const canSeeAdminPage = AppStore.authStore.user.rights !== 0
+    const canSeeAdminPage = AppStore.authStore.connected
+        ? AppStore.authStore.user.rights !== 0
+        : false
 
     return (
         <MainLayout fullscreen>

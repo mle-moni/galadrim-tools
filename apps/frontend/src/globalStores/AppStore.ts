@@ -15,6 +15,8 @@ export class MainStore {
 
     public users = new Map<number, UserData>()
 
+    public usersArray: UserData[] = []
+
     public eventsStore = new EventsStore()
 
     public saveurStore = new SaveurStore()
@@ -36,6 +38,10 @@ export class MainStore {
         this.users = state
     }
 
+    public setUsersArray(state: UserData[]) {
+        this.usersArray = state
+    }
+
     public setAppReady(state: boolean) {
         this.appIsReady = state
     }
@@ -51,6 +57,7 @@ export class MainStore {
 
     async init() {
         const [users] = await Promise.all([fetchUsers(), this.authStore.init()])
+        this.setUsersArray(users)
         this.setUsersMap(new Map<number, UserData>(users.map((user) => [user.id, user])))
         this.setAppReady(true)
     }

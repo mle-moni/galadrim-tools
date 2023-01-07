@@ -42,7 +42,11 @@ export class NotificationsComponentStore {
     linkClicked(link: string | null) {
         if (link === null) return
         this.closeModal()
-        this.appStore.navigate(link)
+        if (link.startsWith('http')) {
+            window.open(link)
+        } else {
+            this.appStore.navigate(link)
+        }
     }
 
     closeModal() {

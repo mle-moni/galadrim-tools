@@ -1,11 +1,11 @@
-import { LoadingStateStore } from '../../../reusableComponents/form/LoadingStateStore'
-import { makeAutoObservable } from 'mobx'
-import { TextFieldStore } from '../../../reusableComponents/form/TextFieldStore'
-import { fetchBackendJson, getErrorMessage } from '../../../api/fetch'
 import { IIdeaComment } from '@galadrim-tools/shared'
+import { makeAutoObservable } from 'mobx'
+import { fetchBackendJson, getErrorMessage } from '../../../api/fetch'
+import { LoadingStateStore } from '../../../reusableComponents/form/LoadingStateStore'
+import { TextFieldStore } from '../../../reusableComponents/form/TextFieldStore'
 import { notifyError } from '../../../utils/notification'
+import { APPLICATION_JSON_HEADERS } from './CreateIdeaStore'
 
-export const APPLICATION_JSON_HEADERS = [['Content-Type', 'application/json']] as [string, string][]
 export class CreateIdeaCommentStore {
     ideaId: IIdeaComment['ideaId']
     userId: IIdeaComment['userId']

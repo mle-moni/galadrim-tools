@@ -10,10 +10,11 @@ export interface TextInputWithIconProps {
     }
     onChange: (value: string) => void
     error?: boolean
+    required?: boolean
 }
 
 export const TextInputWithIcon = observer<TextInputWithIconProps>(
-    ({ value, onChange, placeholder, Icon, error }) => {
+    ({ value, onChange, placeholder, Icon, error, required }) => {
         return (
             <OutlinedInput
                 value={value}
@@ -27,6 +28,7 @@ export const TextInputWithIcon = observer<TextInputWithIconProps>(
                 }
                 sx={{ mt: 2 }}
                 error={error}
+                required={required}
             />
         )
     }
