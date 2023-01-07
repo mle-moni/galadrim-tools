@@ -2,6 +2,7 @@ export const NOTIFICATIONS = {
     DEFAULT: 0b0,
     NEW_RESTAURANT: 0b1,
     NEW_IDEA: 0b10,
+    SENT_BY_ADMIN: 0b100,
 } as const
 
 export type NotificationName = keyof typeof NOTIFICATIONS
@@ -26,4 +27,5 @@ export const generateNotificationsSettings = (notificationSettingsWanted: Notifi
 export const DEFAULT_NOTIFICATION_SETTINGS = generateNotificationsSettings([
     'NEW_IDEA',
     'NEW_RESTAURANT',
+    'SENT_BY_ADMIN',
 ])
