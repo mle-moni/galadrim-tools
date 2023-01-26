@@ -1,8 +1,8 @@
 import { IRestaurant } from '@galadrim-tools/shared'
-import { ArrowDropDown, ArrowDropUp, ArrowLeft, ArrowRight } from '@mui/icons-material'
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
 import { Box, Chip, Tooltip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { AppStore } from '../../../globalStores/AppStore'
 import { SaveurStore } from '../../../globalStores/SaveurStore'
 import { SimpleModalStore } from '../../../reusableComponents/modal/SimpleModalStore'
@@ -68,9 +68,8 @@ const RestaurantChoices = observer<{
 })
 
 export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
-    const store = useMemo(() => new SimpleModalStore(), [])
-
     const restaurants = saveurStore.restaurantsStore.restaurantChoices
+    const store = useMemo(() => new SimpleModalStore(restaurants.length !== 0), [])
 
     return (
         <Box

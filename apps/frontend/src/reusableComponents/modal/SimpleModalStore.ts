@@ -3,8 +3,9 @@ import { makeAutoObservable } from 'mobx'
 export class SimpleModalStore {
     modalOpen = false
 
-    constructor() {
+    constructor(modalOpen = false) {
         makeAutoObservable(this)
+        this.modalOpen = modalOpen
     }
 
     setModalOpen(state: boolean) {
