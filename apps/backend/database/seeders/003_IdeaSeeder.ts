@@ -1,8 +1,8 @@
+import { faker } from '@faker-js/faker'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import Idea from '../../app/Models/Idea'
-import IdeaVote from '../../app/Models/IdeaVote'
 import IdeaComment from '../../app/Models/IdeaComment'
-import { faker } from '@faker-js/faker'
+import IdeaVote from '../../app/Models/IdeaVote'
 
 const ideas = [
     { id: 1, userId: 1, text: faker.commerce.productDescription() },
@@ -41,7 +41,7 @@ const ideaComments = [
 ]
 
 export default class UserSeeder extends BaseSeeder {
-    public static developmentOnly = true
+    public static environment = ['development']
 
     public async run() {
         await Idea.updateOrCreateMany('id', ideas)

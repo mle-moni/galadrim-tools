@@ -3,7 +3,7 @@ import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
 import User from '../../app/Models/User'
 
 export default class UserSeeder extends BaseSeeder {
-    public static developmentOnly = true
+    public static environment = ['development']
 
     public async run() {
         User.updateOrCreateMany('id', [
