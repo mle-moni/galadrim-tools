@@ -1,31 +1,43 @@
+import { schema, validator } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
 import { Socket } from 'socket.io'
-import { validateInput } from '../utils/validation/validateInput'
-
-export type SocketAuthDto = {
-    userId: number
-    socketToken: string
-}
+import { joinAuthRestrictedEvents } from './authRestrictedEvents'
 
 const BAD_AUTH_REQUEST = `Mauvaises données d'authentification`
 
-export async function socketAuth(socket: Socket, dto: SocketAuthDto) {
-    const isValid = validateInput(dto, {
-        keys: [
-            { key: 'userId', cases: ['#number'] },
-            { key: 'socketToken', cases: ['#string'] },
-        ],
-    })
-    if (!isValid) {
+const authSchema = schema.create({
+    userId: schema.number(),
+    socketToken: schema.string(),
+})
+
+const checkDto = async (dto: unknown) => {
+    try {
+        const params = await validator.validate({
+            schema: authSchema,
+            data: dto,
+        })
+        return { isValid: true, params } as const
+    } catch (error) {
+        return { isValid: false } as const
+    }
+}
+
+export async function socketAuth(socket: Socket, dto: unknown) {
+    const res = await checkDto(dto)
+    if (!res.isValid) {
         return socket.emit('error', BAD_AUTH_REQUEST)
     }
-    const user = await User.find(dto.userId)
-    if (!user || user.socketToken !== dto.socketToken) {
+    const { socketToken, userId } = res.params
+    const user = await User.find(userId)
+    if (!user || user.socketToken !== socketToken) {
         return socket.emit('error', BAD_AUTH_REQUEST)
     }
+    joinAuthRestrictedEvents(socket)
     socket.data.user = user.toJSON()
     socket.join('connectedSockets')
     socket.join(user.personalSocket)
     socket.emit('success', 'Mises à jour en temps réel activées')
     socket.emit('fetchAll')
+
+    socket.emit('getId', socket.id, user.username)
 }
