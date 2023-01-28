@@ -170,20 +170,21 @@ function genScope() {
 
     innerSocket.on('ladderTournois', (arr) => {
         ladder.innerHTML = ''
-        let psd = []
+        let userIds = []
         // tri data
         for (let i = 0, rank = 1; i < arr.length; i++, rank++) {
             let canStore = true
-            for (let j = 0; j < psd.length; j++) {
-                if (arr[i].psd === psd[j]) {
+            for (let j = 0; j < userIds.length; j++) {
+                if (arr[i].userId === userIds[j]) {
                     canStore = false
                     rank--
                     break
                 }
             }
-            if (canStore) {
+            const username = users.get(arr[i].userId)?.username
+            if (canStore && username) {
                 let p = document.createElement('p')
-                p.appendChild(document.createTextNode(rank + '. ' + arr[i].psd))
+                p.appendChild(document.createTextNode(rank + '. ' + username))
                 p.innerHTML += ' &rarr; '
                 p.appendChild(
                     document.createTextNode(
@@ -192,7 +193,7 @@ function genScope() {
                 )
                 p.className = 'ladder'
                 ladder.appendChild(p)
-                psd.push(arr[i].psd)
+                userIds.push(arr[i].userId)
             }
         }
         ladder.innerHTML +=
