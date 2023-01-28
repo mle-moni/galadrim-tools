@@ -18,6 +18,7 @@
 |
 */
 
+import Env from '@ioc:Adonis/Core/Env'
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
@@ -74,3 +75,8 @@ Route.group(() => {
 })
     .middleware('auth:web,api')
     .prefix('admin')
+
+Route.get('authRedirect/:target', ({ response, request }) => {
+    const target = request.param('target')
+    return response.redirect(`${Env.get('FRONTEND_URL')}/login?redirect=${target}`)
+})

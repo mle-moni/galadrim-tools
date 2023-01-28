@@ -60,6 +60,14 @@ export class AuthStore {
         AppStore.socketStore.connect()
         const params = new URLSearchParams(location.search)
         notifySuccess(`Bienvenue ${res.json.username} !`)
+        const redirection = params.get('redirect')
+        if (redirection !== null) {
+            if (redirection.startsWith('http')) {
+                location.replace(redirection)
+            } else {
+                location.replace(window.atob(redirection))
+            }
+        }
         if (params.get('intent') === CHANGE_PASSWORD_INTENT) {
             AppStore.navigate('/changePassword')
         } else {
