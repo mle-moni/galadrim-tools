@@ -23,7 +23,6 @@ export class TagsStore {
             this.setTags(req.json)
             return
         }
-        notifyError('Impossible de récupérer les tags')
     }
 
     setNewTagName(tagName: string) {
