@@ -27,7 +27,7 @@
             style="visibility: hidden; z-index: 1; display: flex; flex-direction: column"
         ></div>
         <script>
-            fetch('http://localhost:3333/users')
+            fetch(`${location.origin}/users`)
                 .then((res) => res.json())
                 .then((users) => {
                     const usersMap = new Map(users.map((usr) => [usr.id, usr]))
