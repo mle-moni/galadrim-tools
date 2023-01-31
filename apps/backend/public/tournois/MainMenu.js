@@ -1,4 +1,30 @@
+const LOCAL_STORAGE_KEYS = {
+    PLAYER_X: 'PLAYER_X',
+    PLAYER_Y: 'PLAYER_Y',
+}
+
+function savePlayerPosition(x, y) {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.PLAYER_X, x.toString())
+    localStorage.setItem(LOCAL_STORAGE_KEYS.PLAYER_Y, y.toString())
+}
+
+function getPlayerPosition() {
+    const xRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.PLAYER_X)
+    const yRaw = localStorage.getItem(LOCAL_STORAGE_KEYS.PLAYER_Y)
+
+    if (xRaw === null || yRaw === null) {
+        return {
+            x: 20,
+            y: 1550,
+        }
+    }
+
+    return { x: +xRaw, y: +yRaw }
+}
+
 class MainMenu extends Phaser.Scene {
+    frames = 0
+
     constructor() {
         super({
             key: 'MainMenu',
@@ -59,7 +85,9 @@ class MainMenu extends Phaser.Scene {
             }
         })
 
-        this.player = this.physics.add.sprite(20, 1550, this.spriteName)
+        const { x, y } = getPlayerPosition()
+
+        this.player = this.physics.add.sprite(x, y, this.spriteName)
 
         this.player.body.setCircle(11, 6, 25)
         self.physics.add.world.gravity = { x: 0, y: 0 }
@@ -259,6 +287,13 @@ class MainMenu extends Phaser.Scene {
 
     update() {
         let self = this
+
+        this.frames++
+
+        if (this.frames === 60) {
+            this.frames = 0
+            savePlayerPosition(this.player.x, this.player.y)
+        }
 
         if (this.canMove) {
             if (self.game.cursors.left.isDown) {
