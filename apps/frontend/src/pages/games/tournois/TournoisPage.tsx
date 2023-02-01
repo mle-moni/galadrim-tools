@@ -36,7 +36,7 @@ const RESULT_COLUMNS: GridColDef[] = [
     {
         field: 'username',
         headerName: 'Joueur',
-        width: 300,
+        width: 200,
     },
     {
         field: 'score',
@@ -61,6 +61,9 @@ const TournoisPage = observer(() => {
     useEffect(() => {
         if (!resultsStore.loadingState.isLoading) {
             resultsStore.fetchResults()
+        }
+        if (AppStore.tournoisResultsStore === null) {
+            AppStore.setTournoisResultsStore(resultsStore)
         }
     }, [])
 

@@ -1,5 +1,6 @@
 import { schema, validator } from '@ioc:Adonis/Core/Validator'
 import PlatformerResult from 'App/Models/PlatformerResult'
+import Ws from 'App/Services/Ws'
 import { Socket } from 'socket.io'
 import { getSocketUser } from '../authRestrictedEvents'
 
@@ -35,14 +36,14 @@ export const scoreTournois = async (socket: Socket, data: unknown, mapId: unknow
     if (password === socket.id) {
         const score = Math.round((jumps + time) * 100)
 
-        await PlatformerResult.create({ userId: user.id, jumps, time, score, mapId })
+        const result = await PlatformerResult.create({ userId: user.id, jumps, time, score, mapId })
         const scoresModels = await PlatformerResult.query()
             .where('mapId', mapId)
             .orderBy('score', 'asc')
 
         const scores = scoresModels.map((model) => model.toJSON())
 
-        socket.broadcast.emit('ladderTournois', scores)
-        socket.emit('ladderTournois', scores)
+        Ws.io.to('connectedSockets').emit('game.tournois.newResult', result.toJSON())
+        Ws.io.to('connectedSockets').emit('ladderTournois', scores)
     }
 }

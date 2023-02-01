@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client'
 import { getEventFromApi } from '../api/events'
 import { getSocketApiUrl } from '../api/fetch'
 import { UserData } from '../api/galadrimeurs'
+import { TournoisResult } from '../pages/games/tournois/TournoisResultsStore'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
 import { RawRoomEvent } from './EventsStore'
@@ -49,6 +50,7 @@ export class SocketStore {
         this.socket.on('updateIdea', (idea) => this.createOrUpdateIdea(idea))
         this.socket.on('deleteIdea', (ideaId) => this.deleteIdea(ideaId))
         this.socket.on('notification', (notification) => this.addNotification(notification))
+        this.socket.on('game.tournois.newResult', (newResult) => this.addTournoisResult(newResult))
     }
 
     socketAuth() {
@@ -121,5 +123,9 @@ export class SocketStore {
 
     addNotification(notification: INotification) {
         AppStore.authStore.addNotification(notification)
+    }
+
+    addTournoisResult(newResult: TournoisResult) {
+        AppStore.tournoisResultsStore?.addResult(newResult)
     }
 }

@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { NavigateFunction } from 'react-router-dom'
 import { fetchUsers, UserData } from '../api/galadrimeurs'
+import { TournoisResultsStore } from '../pages/games/tournois/TournoisResultsStore'
 import { IdeasStore } from '../pages/idea/IdeasStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
@@ -28,6 +29,8 @@ export class MainStore {
     public socketStore = new SocketStore()
 
     public ideaStore = new IdeasStore()
+
+    public tournoisResultsStore: TournoisResultsStore | null = null
 
     constructor() {
         makeAutoObservable(this)
@@ -81,6 +84,10 @@ export class MainStore {
         }
         userFound.username = user.username
         userFound.imageUrl = user.imageUrl
+    }
+
+    setTournoisResultsStore(state: TournoisResultsStore | null) {
+        this.tournoisResultsStore = state
     }
 }
 

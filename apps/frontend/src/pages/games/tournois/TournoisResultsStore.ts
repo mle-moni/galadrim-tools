@@ -5,7 +5,7 @@ import { LoadingStateStore } from '../../../reusableComponents/form/LoadingState
 import { notifyError } from '../../../utils/notification'
 import { ResultRow } from './TournoisPage'
 
-interface TournoisResult {
+export interface TournoisResult {
     id: number
     mapId: number
     userId: number
@@ -57,5 +57,27 @@ export class TournoisResultsStore {
 
     setMapIndex(state: number) {
         this.mapIndex = state
+    }
+
+    addResult(result: TournoisResult) {
+        let updated = false
+        for (let i = 0; i < this.results.length; i++) {
+            const res = this.results[i]
+
+            if (res.mapId === result.mapId && res.userId === result.userId) {
+                if (res.score < result.score) return
+                this.results[i] = result
+                updated = true
+                break
+            }
+        }
+
+        if (!this.mapIds.includes(result.mapId)) {
+            this.mapIds.push(result.mapId)
+        }
+
+        if (updated) return
+
+        this.results.push(result)
     }
 }
