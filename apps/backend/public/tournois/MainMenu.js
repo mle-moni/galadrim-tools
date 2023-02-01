@@ -34,21 +34,13 @@ class MainMenu extends Phaser.Scene {
     preload() {
         this.load.image('tilesetPokemon', './assets/maps/tilesets/tileset_pokemon.png')
         this.load.tilemapTiledJSON('MainMenu', './assets/maps/tilemaps/MainMenu.json')
-        this.load.spritesheet('leo', './assets/sprites/leo_full.png', {
-            frameWidth: 32,
-            frameHeight: 48,
-        })
-        this.load.spritesheet('victorieux', './assets/sprites/victorieux_full.png', {
-            frameWidth: 32,
-            frameHeight: 48,
-        })
+        loadSkins(this)
     }
 
     create() {
         let self = this
         self.available = true
-        this.spriteName =
-            this.game.pseudo === 'Mordka' || this.game.pseudo === 'Redz' ? 'victorieux' : 'leo'
+        this.spriteName = getSkinForUser(self.game.user)
         this.canMove = true
         this.notWonYet = true
         this.jumps = 0
@@ -110,102 +102,7 @@ class MainMenu extends Phaser.Scene {
             }
         })
 
-        //  Our this.player animations, idleing, walking left and walking right. + left and right on air
-        this.anims.create({
-            key: 'left_leo',
-            frames: this.anims.generateFrameNumbers('leo', { start: 0, end: 3 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'up_leo',
-            frames: this.anims.generateFrameNumbers('leo', { start: 12, end: 15 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'down_leo',
-            frames: this.anims.generateFrameNumbers('leo', { start: 8, end: 11 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'leftJump_leo',
-            frames: this.anims.generateFrameNumbers('leo', { start: 0, end: 3 }),
-            frameRate: 3,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'rightJump_leo',
-            frames: this.anims.generateFrameNumbers('leo', { start: 4, end: 7 }),
-            frameRate: 3,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'idle_leo',
-            frames: [{ key: 'leo', frame: 8 }],
-            frameRate: 20,
-        })
-
-        this.anims.create({
-            key: 'right_leo',
-            frames: this.anims.generateFrameNumbers('leo', { start: 4, end: 7 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'left_victorieux',
-            frames: this.anims.generateFrameNumbers('victorieux', { start: 0, end: 3 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'leftJump_victorieux',
-            frames: this.anims.generateFrameNumbers('victorieux', { start: 0, end: 3 }),
-            frameRate: 3,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'rightJump_victorieux',
-            frames: this.anims.generateFrameNumbers('victorieux', { start: 4, end: 7 }),
-            frameRate: 3,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'idle_victorieux',
-            frames: [{ key: 'victorieux', frame: 8 }],
-            frameRate: 20,
-        })
-
-        this.anims.create({
-            key: 'right_victorieux',
-            frames: this.anims.generateFrameNumbers('victorieux', { start: 4, end: 7 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'up_victorieux',
-            frames: this.anims.generateFrameNumbers('victorieux', { start: 12, end: 15 }),
-            frameRate: 5,
-            repeat: -1,
-        })
-
-        this.anims.create({
-            key: 'down_victorieux',
-            frames: this.anims.generateFrameNumbers('victorieux', { start: 8, end: 11 }),
-            frameRate: 5,
-            repeat: -1,
-        })
+        setupAnimations(this)
 
         //  Input Events
         self.game.cursors = this.input.keyboard.createCursorKeys()
@@ -290,7 +187,7 @@ class MainMenu extends Phaser.Scene {
 
         this.frames++
 
-        if (this.frames === 60) {
+        if (this.frames === 20) {
             this.frames = 0
             savePlayerPosition(this.player.x, this.player.y)
         }

@@ -55,6 +55,9 @@ export default class User extends BaseModel {
     @column()
     public notificationsSettings: number
 
+    @column()
+    public skin: string | null
+
     @attachment({ folder: 'avatar', preComputeUrl: true })
     public image: AttachmentContract | null
 
@@ -132,6 +135,7 @@ export default class User extends BaseModel {
             email: this.email,
             dailyChoice: this.dailyChoice,
             notifications,
+            skin: this.skin,
         }
     }
 

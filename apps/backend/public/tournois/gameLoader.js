@@ -72,6 +72,7 @@ function setChat() {
 function genScope() {
     let controller = false
     const innerSocket = io.connect(location.origin)
+    let user = null
 
     fetch('/me')
         .then((res) => {
@@ -81,6 +82,7 @@ function genScope() {
             location.replace(`${location.origin}/authRedirect/${window.btoa(location.href)}`)
         })
         .then((value) => {
+            user = value
             innerSocket.emit('auth', {
                 userId: value.id,
                 socketToken: value.socketToken,
@@ -116,6 +118,7 @@ function genScope() {
         game.password = password
         game.pseudo = pseudo
         game.socket = ioSocket
+        game.user = user
 
         let controller = function (type, action, psd, obj) {
             if (type === 0) {
@@ -138,6 +141,9 @@ function genScope() {
     }
 
     innerSocket.on('getId', (id, psd) => {
+        if (user === null) {
+            throw new Error('user is null, this should never happen')
+        }
         controller = genGame(id, psd, innerSocket)
         setChat()
     })
@@ -161,11 +167,11 @@ function genScope() {
     })
 
     innerSocket.on('disconnect', () => {
-        alert(
-            'Vous avez ete deconnecte, cela est probablement du à une mise a jour du serveur faite par ' +
-                'Le gentil developpeur, nous devons rafraichir la page, desole pour le derrangement'
-        )
-        location.reload()
+        // alert(
+        //     'Vous avez ete deconnecte, cela est probablement du à une mise a jour du serveur faite par ' +
+        //         'Le gentil developpeur, nous devons rafraichir la page, desole pour le derrangement'
+        // )
+        // location.reload()
     })
 
     innerSocket.on('ladderTournois', (arr) => {
