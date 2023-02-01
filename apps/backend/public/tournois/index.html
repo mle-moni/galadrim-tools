@@ -4,6 +4,7 @@
         <title>Tournois</title>
         <link rel="icon" type="image/png" href="https://galadrim.fr/img/favicon.png" />
         <script src="/socket.io/socket.io.js"></script>
+        <script src="./helpers.js"></script>
         <script src="./animations.js"></script>
         <script src="./gameLoader.js"></script>
         <script src="./phaser.min.js"></script>
@@ -18,6 +19,11 @@
                 font-size: 25px;
             }
         </style>
+        <link href="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/style.css" rel="stylesheet" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/siiimple-toast/dist/siiimple-toast.min.js"
+            defer
+        ></script>
     </head>
     <body style="background-color: black">
         <p id="jumps" style="position: absolute; left: 10px; top: 10px; color: red; z-index: 1">

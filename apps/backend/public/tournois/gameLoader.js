@@ -167,11 +167,11 @@ function genScope() {
     })
 
     innerSocket.on('disconnect', () => {
-        // alert(
-        //     'Vous avez ete deconnecte, cela est probablement du à une mise a jour du serveur faite par ' +
-        //         'Le gentil developpeur, nous devons rafraichir la page, desole pour le derrangement'
-        // )
-        // location.reload()
+        toast(
+            'alert',
+            'Connexion avec le serveur perdue, votre score de cette partie ne sera probablement pas enregistré ! (dsl :c)',
+            { duration: 10_000 }
+        )
     })
 
     innerSocket.on('ladderTournois', (arr) => {

@@ -5,6 +5,7 @@ import {
     GitHub,
     Lightbulb,
     RestaurantMenu,
+    VideogameAsset,
 } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -29,6 +30,8 @@ const HomePage = observer(() => {
             >
                 <IconLink Icon={CalendarMonth} link="/rooms" title="Réservation de salles" />
                 <IconLink Icon={RestaurantMenu} link="/saveur" title="Restaurants" />
+                <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
+                <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
                 <IconLink
                     Icon={GitHub}
                     link="https://github.com/mle-moni/galadrim-tools"
@@ -39,7 +42,6 @@ const HomePage = observer(() => {
                     link="https://github.com/mle-moni/galadrim-tools/issues"
                     title="Reporter un bug"
                 />
-                <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
                 <IconLink
                     Icon={AdminPanelSettings}
                     link="/admin"

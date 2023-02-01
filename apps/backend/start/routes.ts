@@ -80,3 +80,9 @@ Route.get('authRedirect/:target', ({ response, request }) => {
     const target = request.param('target')
     return response.redirect(`${Env.get('FRONTEND_URL')}/login?redirect=${target}`)
 })
+
+Route.group(() => {
+    Route.get('tournois', 'platformerResults/PlatformerResultsController.index')
+})
+    .prefix('games')
+    .middleware('auth:web,api')

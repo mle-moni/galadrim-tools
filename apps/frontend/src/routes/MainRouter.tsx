@@ -7,6 +7,7 @@ import LoadingPage from '../pages/loading/LoadingPage'
 import { Notifications } from '../pages/notifications/Notifications'
 import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 
+const TournoisPage = React.lazy(() => import('../pages/games/tournois/TournoisPage'))
 const StatisticsPage = React.lazy(() => import('../pages/statistics/StatisticsPage'))
 const NotificationsSettingsPage = React.lazy(
     () => import('../pages/profile/notifications/NotificationsSettingsPage')
@@ -87,6 +88,7 @@ const AppRoutes = () => {
                 <Route path="/saveur/restaurantsList/:listName" element={<RestaurantsListPage />} />
                 <Route path="/saveur" element={<SaveurPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/games/tournois" element={<TournoisPage />} />
                 <Route
                     path="/profile/notificationsSettings"
                     element={<NotificationsSettingsPage />}
