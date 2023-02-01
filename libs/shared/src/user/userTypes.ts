@@ -20,4 +20,5 @@ export interface IUserData {
     email: string
     dailyChoice: IRestaurant['id'] | null
     notifications: INotification[]
+    skin: string | null
 }
