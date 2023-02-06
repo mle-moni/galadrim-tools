@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import { AppStore } from '../globalStores/AppStore'
 import IdeaPage from '../pages/idea/IdeaPage'
 import LoadingPage from '../pages/loading/LoadingPage'
-import { Notifications } from '../pages/notifications/Notifications'
 import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
 
 const TournoisPage = React.lazy(() => import('../pages/games/tournois/TournoisPage'))
@@ -97,7 +96,6 @@ const AppRoutes = () => {
 
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
-            <Notifications />
         </>
     )
 }

@@ -40,12 +40,25 @@ export const Notifications = observer(() => {
                     ))}
                 </Box>
             </SimpleModal>
-            <Box sx={{ position: 'fixed', bottom: 10, right: 10 }}>
-                <IconButton onClick={() => store.showNotifications()}>
-                    <NotificationsNone color={store.unread.length !== 0 ? 'error' : undefined} />
-                    {store.unread.length !== 0 && (
-                        <Typography sx={{ ml: 1 }}>{store.unread.length}</Typography>
-                    )}
+            <Box>
+                <IconButton
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        store.showNotifications()
+                    }}
+                >
+                    <NotificationsNone
+                        className={store.unread.length !== 0 ? 'rotate-center' : undefined}
+                        fontSize="large"
+                        color={store.unread.length !== 0 ? 'error' : undefined}
+                    />
+                    {store.unread.length !== 0 && <Typography>{store.unread.length}</Typography>}
                 </IconButton>
             </Box>
         </>
