@@ -1,4 +1,4 @@
-const skins = ['leo', 'victorieux']
+const skins = ['leo', 'victorieux', 'micka']
 
 const skinsSet = new Set(skins)
 
