@@ -1,5 +1,5 @@
 import { NotificationsNone } from '@mui/icons-material'
-import { Box, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, IconButton, SxProps, Tooltip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
@@ -7,7 +7,7 @@ import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { getHumanFormattedDate, getHumanFormattedTimeDifference } from '../idea/ideasUtils'
 import { NotificationsComponentStore } from './NotificationsComponentStore'
 
-export const Notifications = observer(() => {
+export const Notifications = observer<{ sx?: SxProps }>(({ sx }) => {
     const store = useMemo(() => new NotificationsComponentStore(AppStore), [])
 
     if (!AppStore.authStore.connected) return null
@@ -40,7 +40,7 @@ export const Notifications = observer(() => {
                     ))}
                 </Box>
             </SimpleModal>
-            <Box>
+            <Box sx={sx}>
                 <IconButton
                     sx={{
                         display: 'flex',

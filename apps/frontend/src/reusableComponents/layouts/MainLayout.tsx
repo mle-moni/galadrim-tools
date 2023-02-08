@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { ComponentProps, FC, PropsWithChildren } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
-import { Notifications } from '../../pages/notifications/Notifications'
 import { PatchNotes } from '../../reusableComponents/patchNotes/PatchNotes'
 import { getTheme } from '../../theme'
 import { Whoami } from '../auth/Whoami'
@@ -47,11 +46,6 @@ export const MainLayout = observer(
                     </Box>
                     {children}
                 </div>
-                {authStore.connected && (
-                    <Box sx={{ position: 'absolute', top: 35, right: 115, zIndex: 10 }}>
-                        <Notifications />
-                    </Box>
-                )}
                 <PatchNotes />
             </Root>
         )

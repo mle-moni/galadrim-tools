@@ -69,7 +69,7 @@ const RestaurantChoices = observer<{
 
 export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
     const restaurants = saveurStore.restaurantsStore.restaurantChoices
-    const store = useMemo(() => new SimpleModalStore(restaurants.length !== 0), [])
+    const store = useMemo(() => new SimpleModalStore(restaurants.length !== 0), [restaurants])
 
     return (
         <Box

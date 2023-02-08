@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Stack, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { AppStore } from '../../globalStores/AppStore'
+import { Notifications } from '../../pages/notifications/Notifications'
 import { WhoamiStore } from './WhoamiStore'
 
 export const Whoami = observer(() => {
@@ -20,11 +21,14 @@ export const Whoami = observer(() => {
                     AppStore.navigate('/profile')
                 }}
             >
-                <Avatar
-                    alt={authStore.user.username}
-                    src={authStore.user.imageUrl}
-                    sx={{ width: 56, height: 56, mb: 1 }}
-                />
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Notifications sx={{ position: 'absolute', zIndex: 10, left: -8 }} />
+                    <Avatar
+                        alt={authStore.user.username}
+                        src={authStore.user.imageUrl}
+                        sx={{ width: 56, height: 56, mb: 1 }}
+                    />
+                </Box>
                 <Typography
                     variant="caption"
                     fontSize={16}
