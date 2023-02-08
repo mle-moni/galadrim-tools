@@ -27,7 +27,10 @@ export const Notifications = observer<{ sx?: SxProps }>(({ sx }) => {
                                 borderRadius: 1,
                                 cursor: link !== null ? 'pointer' : undefined,
                             }}
-                            onClick={() => store.linkClicked(link)}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                store.linkClicked(link)
+                            }}
                         >
                             <Typography sx={{ fontSize: 18, mb: 1 }}>{title}</Typography>
                             <Typography>{text}</Typography>
