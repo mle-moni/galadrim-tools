@@ -13,6 +13,7 @@ export default class PlatformerResultsController {
                     .from('platformer_results')
                     .groupBy('map_id', 'user_id')
             })
+            .groupBy('map_id', 'user_id')
 
         return results
     }
