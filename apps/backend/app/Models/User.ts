@@ -18,6 +18,7 @@ import {
     ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
 import Notification from 'App/Models/Notification'
+import RestaurantNote from 'App/Models/RestaurantNote'
 import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
@@ -63,6 +64,9 @@ export default class User extends BaseModel {
 
     @hasMany(() => RestaurantChoice)
     public choices: HasMany<typeof RestaurantChoice>
+
+    @hasMany(() => RestaurantNote)
+    public notes: HasMany<typeof RestaurantNote>
 
     @hasMany(() => Notification)
     public notifications: HasMany<typeof Notification>

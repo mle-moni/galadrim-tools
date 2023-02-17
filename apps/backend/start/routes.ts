@@ -38,6 +38,7 @@ Route.group(() => {
         'createOrUpdateRestaurantChoice',
         'restaurants/RestaurantsController.createOrUpdateChoice'
     )
+    Route.get('/notes/mine', 'restaurantNotes/RestaurantNotesController.mine')
     Route.resource('notes', 'restaurantNotes/RestaurantNotesController').apiOnly()
     Route.resource('ideas', 'ideas/IdeasController').apiOnly()
     Route.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')

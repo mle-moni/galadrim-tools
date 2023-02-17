@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { myRestaurantNotes } from 'App/Controllers/Http/restaurantNotes/myRestaurantNotes'
 import { destroyRoute } from './destroyRestaurantNotes'
 import { indexRoute } from './restaurantNotesIndex'
 import { showRoute } from './showRestaurantNotes'
@@ -23,5 +24,9 @@ export default class RestaurantsController {
 
     public async destroy(params: HttpContextContract) {
         return destroyRoute(params)
+    }
+
+    public async mine(params: HttpContextContract) {
+        return myRestaurantNotes(params)
     }
 }
