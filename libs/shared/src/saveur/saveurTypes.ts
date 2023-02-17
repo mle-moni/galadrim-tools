@@ -33,6 +33,7 @@ export interface INotes {
     restaurantId: number
     userId: number
     note: NotesOption
+    updatedAt: string
 }
 
 export interface IChoice {

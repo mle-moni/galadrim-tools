@@ -81,12 +81,15 @@ export class RestaurantsStore {
         restaurantFound.averagePrice = restaurant.averagePrice
         restaurantFound.userId = restaurant.userId
         restaurantFound.tags = restaurant.tags.map(({ id, name }) => ({ id, name }))
-        restaurantFound.notes = restaurant.notes.map(({ id, note, restaurantId, userId }) => ({
-            id,
-            note,
-            restaurantId,
-            userId,
-        }))
+        restaurantFound.notes = restaurant.notes.map(
+            ({ id, note, restaurantId, userId, updatedAt }) => ({
+                id,
+                note,
+                restaurantId,
+                userId,
+                updatedAt,
+            })
+        )
         restaurantFound.choices = restaurant.choices
         if (restaurant.image === null) {
             restaurantFound.image = null

@@ -12,3 +12,8 @@ export const getHumanFormattedDate = (date?: Date | string) => {
     if (!date) return ''
     return moment(date).format('DD/MM/YYYY HH:mm')
 }
+
+export const getHumanFormattedDay = (date?: Date | string) => {
+    if (!date) return ''
+    return moment(date).format('DD/MM/YYYY')
+}

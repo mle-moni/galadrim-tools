@@ -1,4 +1,4 @@
-import { Euro, FormatListNumbered, Home, Schedule } from '@mui/icons-material'
+import { Euro, FormatListNumbered, Grade, Home, Schedule } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Box } from '@mui/material'
@@ -73,6 +73,7 @@ const SaveurPage = observer(() => {
             <RoundedLinks
                 linkInfos={[
                     { Icon: Home, link: '/' },
+                    { Icon: Grade, link: 'saveur/myRestaurantNotes' },
                     { Icon: FormatListNumbered, link: '/saveur/restaurantsList/best' },
                     { Icon: Schedule, link: 'saveur/restaurantsList/new' },
                     { Icon: Euro, link: 'saveur/restaurantsList/leastExpensive' },

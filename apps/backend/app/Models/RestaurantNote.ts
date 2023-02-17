@@ -27,6 +27,7 @@ export default class RestaurantNote extends BaseModel {
             restaurantId: this.restaurantId,
             userId: this.userId,
             note: this.note,
+            updatedAt: this.updatedAt.toString(),
         }
     }
 }
