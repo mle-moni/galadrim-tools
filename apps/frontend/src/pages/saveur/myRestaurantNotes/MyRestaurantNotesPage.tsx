@@ -3,6 +3,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
+import { NotesOption } from '../../../../../../libs/shared/src/saveur/notes'
 import { NotesValue } from '../../../../../../libs/shared/src/saveur/notes'
 import { NOTES_VALUES } from '../../../../../../libs/shared/src/saveur/notes'
 import { AppStore } from '../../../globalStores/AppStore'
@@ -17,9 +18,9 @@ export type NoteRow = {
 }
 
 const compareNotes = (noteA: NotesValue, noteB: NotesValue) => {
-    const correspondingANote = Object.keys(NOTES_VALUES).find(key => NOTES_VALUES[key] === noteA);
+    const correspondingANote: NotesOption = Object.keys(NOTES_VALUES).find((key: NotesValue) => NOTES_VALUES[key] === noteA)!;
 
-    const correspondingBNote = Object.keys(NOTES_VALUES).find(key => NOTES_VALUES[key] === noteB);
+    const correspondingBNote: NotesOption = Object.keys(NOTES_VALUES).find((key: NotesValue) => NOTES_VALUES[key] === noteB)!;
 
     return +correspondingANote - +correspondingBNote
 }
