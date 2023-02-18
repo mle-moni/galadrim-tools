@@ -3,6 +3,8 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
+import { NotesValue } from '../../../../../../libs/shared/src/saveur/notes'
+import { NOTES_VALUES } from '../../../../../../libs/shared/src/saveur/notes'
 import { AppStore } from '../../../globalStores/AppStore'
 import MainLayout from '../../../reusableComponents/layouts/MainLayout'
 import { MyRestaurantNotesStore } from './MyRestaurantNotesStore'
@@ -10,8 +12,23 @@ import { MyRestaurantNotesStore } from './MyRestaurantNotesStore'
 export type NoteRow = {
     id: number
     restaurantName: string
-    note: string
+    note: NotesValue
     updatedAt: string
+}
+
+const compareNotes = (noteA: NotesValue, noteB: NotesValue) => {
+    const correspondingANote = Object.keys(NOTES_VALUES).find(key => NOTES_VALUES[key] === noteA);
+
+    const correspondingBNote = Object.keys(NOTES_VALUES).find(key => NOTES_VALUES[key] === noteB);
+
+    return +correspondingANote - +correspondingBNote
+}
+
+const compareDates = (dateA: string, dateB: string) => {
+    const d1 = Date.parse(dateA);
+    const d2 = Date.parse(dateB);
+
+    return d1 - d2
 }
 
 const NOTES_COLUMNS: GridColDef[] = [
@@ -24,11 +41,13 @@ const NOTES_COLUMNS: GridColDef[] = [
         field: 'note',
         headerName: 'Note',
         width: 200,
+        sortComparator: compareNotes,
     },
     {
         field: 'updatedAt',
         headerName: 'Date',
         width: 200,
+        sortComparator: compareDates,
     },
 ]
 

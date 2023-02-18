@@ -7,3 +7,5 @@ export const NOTES_VALUES = {
 } as const
 
 export type NotesOption = keyof typeof NOTES_VALUES
+
+export type NotesValue = typeof NOTES_VALUES[NotesOption]
