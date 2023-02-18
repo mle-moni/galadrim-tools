@@ -18,10 +18,14 @@ export type NoteRow = {
 }
 
 const compareNotes = (noteA: NotesValue, noteB: NotesValue) => {
-    const correspondingANote: NotesOption = Object.keys(NOTES_VALUES).find((key: NotesOption) => NOTES_VALUES[key] === noteA)!;
+    const correspondingANote = (Object.keys(NOTES_VALUES) as NotesOption[]).find(
+        (key) => NOTES_VALUES[key] === noteA
+    )!
 
-    const correspondingBNote: NotesOption = Object.keys(NOTES_VALUES).find((key: NotesOption) => NOTES_VALUES[key] === noteB)!;
-
+    const correspondingBNote = (Object.keys(NOTES_VALUES) as NotesOption[]).find(
+        (key) => NOTES_VALUES[key] === noteB
+    )!
+    
     return +correspondingANote - +correspondingBNote
 }
 
