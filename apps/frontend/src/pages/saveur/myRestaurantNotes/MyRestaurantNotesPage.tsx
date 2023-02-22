@@ -26,15 +26,15 @@ const compareNotes = (noteA: NotesValue, noteB: NotesValue) => {
     const correspondingBNote = (Object.keys(NOTES_VALUES) as NotesOption[]).find(
         (key) => NOTES_VALUES[key] === noteB
     )!
-    
+
     return +correspondingANote - +correspondingBNote
 }
 
 const compareDates = (dateA: string, dateB: string) => {
-    const d1 = moment(dateA, "DD-MM-YYYY").toDate();
-    const d2 = moment(dateB, "DD-MM-YYYY").toDate();
+    const d1 = moment(dateA, 'DD-MM-YYYY')
+    const d2 = moment(dateB, 'DD-MM-YYYY')
 
-    return d1 - d2
+    return d1.diff(d2)
 }
 
 const NOTES_COLUMNS: GridColDef[] = [
