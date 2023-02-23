@@ -2,6 +2,7 @@ import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { observer } from 'mobx-react-lite'
+import moment from 'moment'
 import { useEffect, useMemo } from 'react'
 import { NotesOption } from '../../../../../../libs/shared/src/saveur/notes'
 import { NotesValue } from '../../../../../../libs/shared/src/saveur/notes'
@@ -25,15 +26,15 @@ const compareNotes = (noteA: NotesValue, noteB: NotesValue) => {
     const correspondingBNote = (Object.keys(NOTES_VALUES) as NotesOption[]).find(
         (key) => NOTES_VALUES[key] === noteB
     )!
-    
+
     return +correspondingANote - +correspondingBNote
 }
 
 const compareDates = (dateA: string, dateB: string) => {
-    const d1 = Date.parse(dateA);
-    const d2 = Date.parse(dateB);
+    const d1 = moment(dateA, 'DD-MM-YYYY')
+    const d2 = moment(dateB, 'DD-MM-YYYY')
 
-    return d1 - d2
+    return d1.diff(d2)
 }
 
 const NOTES_COLUMNS: GridColDef[] = [
