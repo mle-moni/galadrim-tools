@@ -4,6 +4,7 @@ import { Box, Button, OutlinedInput, Tooltip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
+import { useIsMobile } from '../../hooks/useIsMobile'
 import { CreateIdeaCommentStore } from './createIdea/CreateIdeaCommentStore'
 import { getHumanFormattedDate, getHumanFormattedTimeDifference } from './ideasUtils'
 
@@ -63,6 +64,7 @@ const CommentIdeaModal = observer<{
 }>(({ idea, userId }) => {
     const ideaCommentStore = useMemo(() => new CreateIdeaCommentStore(idea.id, userId), [])
     const scrollCommentsRef = useRef<any>()
+    const isMobile = useIsMobile()
 
     useEffect(() => {
         setTimeout(() => {
@@ -84,15 +86,22 @@ const CommentIdeaModal = observer<{
                 })}
                 <Box key={'bottomRef'} ref={scrollCommentsRef} />
             </Box>
-            <Box style={{ display: 'flex', flex: 1, alignItems: 'center', marginTop: 15 }}>
+            <Box
+                style={{
+                    display: 'flex',
+                    flex: 1,
+                    alignItems: 'center',
+                    marginTop: [6, 15],
+                }}
+            >
                 <OutlinedInput
                     value={ideaCommentStore.message.text}
                     onChange={(e) => ideaCommentStore.message.setText(e.target.value)}
                     placeholder={'Laissez un commentaire..'}
-                    sx={{ flex: 1, marginRight: 2 }}
+                    sx={{ flex: 1, marginRight: [1, 2] }}
                 />
                 <Button disabled={!ideaCommentStore.canCreateIdeaComment} type="submit">
-                    <Send fontSize={'large'} />
+                    <Send fontSize={isMobile ? 'medium' : 'large'} />
                 </Button>
             </Box>
         </form>

@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
+import { useIsMobile } from '../../hooks/useIsMobile'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
@@ -69,6 +70,7 @@ const TabPanel = observer<TabPanelProps>(({ children, value, index }) => {
 const IdeaPage = observer(() => {
     const [tab, setTab] = useState<0 | 1 | 2 | 3>(0)
     const modalStore = useMemo(() => new SimpleModalStore(), [])
+    const scrollableTabs = useIsMobile()
 
     const { ideaStore, authStore } = AppStore
 
@@ -97,7 +99,12 @@ const IdeaPage = observer(() => {
                     J'ai une idée !
                 </GaladrimButton>
             </CenteredDiv>
-            <Tabs centered variant="fullWidth" value={tab} onChange={(_event, tab) => setTab(tab)}>
+            <Tabs
+                variant={scrollableTabs ? 'scrollable' : 'fullWidth'}
+                value={tab}
+                onChange={(_event, tab) => setTab(tab)}
+                scrollButtons={false}
+            >
                 {IDEA_PAGE_STATES.map(({ value, label }) => (
                     <Tab
                         key={value}
