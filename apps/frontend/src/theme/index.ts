@@ -2,6 +2,7 @@ import { createTheme } from '@mui/material'
 
 declare module '@mui/material/styles' {
     interface BreakpointOverrides {
+        mobile: true
         xs: false // removes the `xs` breakpoint
         sm: true
         md: false
@@ -32,6 +33,7 @@ export const getTheme = () =>
         palette: themeColors,
         breakpoints: {
             values: {
+                mobile: 0,
                 sm: 600,
                 desktop: 769,
             },

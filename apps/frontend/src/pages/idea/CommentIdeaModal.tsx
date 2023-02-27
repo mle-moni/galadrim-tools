@@ -91,8 +91,8 @@ const CommentIdeaModal = observer<{
                     display: 'flex',
                     flex: 1,
                     alignItems: 'center',
-                    marginTop: [6, 15],
                 }}
+                sx={{ marginTop: ['6px', '15px'] }}
             >
                 <OutlinedInput
                     value={ideaCommentStore.message.text}

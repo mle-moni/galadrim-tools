@@ -85,7 +85,10 @@ const IdeaPage = observer(() => {
     return (
         <>
             <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
-            <Typography style={{ textAlign: 'center', fontSize: 32, paddingTop: 30 }}>
+            <Typography
+                style={{ textAlign: 'center', fontSize: 32 }}
+                sx={{ paddingTop: [10, null, '30px'] }}
+            >
                 Proposer une idée pour améliorer Galadrim
             </Typography>
 
