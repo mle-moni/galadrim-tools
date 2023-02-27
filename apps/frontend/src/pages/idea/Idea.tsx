@@ -17,6 +17,7 @@ import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 
 import { AppStore } from '../../globalStores/AppStore'
+import { useIsMobile } from '../../hooks/useIsMobile'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
 import { getNameOfUsers } from '../saveur/restaurants/ratingsFunctions'
@@ -65,6 +66,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
             idea,
             user.id
         )
+        const isMobile = useIsMobile()
 
         const author_username = idea.createdBy ? users.get(idea.createdBy)?.username : ''
 
@@ -193,7 +195,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                 </Card>
                 <SimpleModal
                     open={modalStore.modalOpen}
-                    width={800}
+                    width={isMobile ? '80%' : 800}
                     onClose={() => modalStore.setModalOpen(false)}
                 >
                     <CommentIdeaModal idea={idea} userId={user.id} />

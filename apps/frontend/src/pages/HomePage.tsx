@@ -23,9 +23,11 @@ const HomePage = observer(() => {
             <Box
                 sx={{
                     width: '100%',
+                    height: '100%',
                     display: 'flex',
                     justifyContent: 'space-evenly',
                     flexWrap: 'wrap',
+                    marginTop: ['140px', 0],
                 }}
             >
                 <IconLink Icon={CalendarMonth} link="/rooms" title="Réservation de salles" />

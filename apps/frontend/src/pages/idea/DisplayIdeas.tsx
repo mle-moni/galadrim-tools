@@ -24,7 +24,11 @@ const DisplayIdeas = observer<DisplayIdeasProps>(({ state }) => {
         return (
             <CenteredDiv>
                 <Masonry
-                    sx={{ width: '80%', marginBottom: 0 }}
+                    sx={{
+                        width: '80%',
+                        marginBottom: 0,
+                        alignContent: 'center',
+                    }}
                     columns={isMobile ? 1 : 5}
                     spacing={3}
                 >

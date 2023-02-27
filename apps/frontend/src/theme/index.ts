@@ -1,5 +1,17 @@
 import { createTheme } from '@mui/material'
 
+declare module '@mui/material/styles' {
+    interface BreakpointOverrides {
+        mobile: true
+        xs: false // removes the `xs` breakpoint
+        sm: true
+        md: false
+        lg: false
+        xl: false
+        desktop: true
+    }
+}
+
 export const themeColors = {
     primary: {
         main: '#4a453d',
@@ -19,4 +31,11 @@ export const themeColors = {
 export const getTheme = () =>
     createTheme({
         palette: themeColors,
+        breakpoints: {
+            values: {
+                mobile: 0,
+                sm: 600,
+                desktop: 769,
+            },
+        },
     })

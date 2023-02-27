@@ -16,7 +16,7 @@ const Root = styled(Box, {
 })<MainLayoutProps>(({ fullscreen }) =>
     sx({
         display: 'flex',
-        height: fullscreen ? '100vh' : 'auto',
+        minHeight: fullscreen ? '100vh' : 'auto',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
@@ -33,7 +33,11 @@ export const MainLayout = observer(
 
         return (
             <Root fullscreen={fullscreen}>
-                <div style={{ width: '100%' }}>
+                <div
+                    style={{
+                        width: '100%',
+                    }}
+                >
                     <Box
                         sx={{
                             position: 'absolute',
