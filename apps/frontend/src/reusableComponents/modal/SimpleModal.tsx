@@ -17,6 +17,9 @@ export const SimpleModal = observer<PropsWithChildren<SimpleModalProps>>(
                 sx={{
                     backdropFilter: 'blur(3px)',
                 }}
+                onClick={(e) => {
+                    e.stopPropagation()
+                }}
             >
                 <Box
                     sx={{
