@@ -47,6 +47,7 @@ const RoomPage = () => {
                             />
                         }
                         label="slots de 5 minutes"
+                        sx={{ userSelect: 'none' }}
                     />
                 </Box>
                 <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} />
