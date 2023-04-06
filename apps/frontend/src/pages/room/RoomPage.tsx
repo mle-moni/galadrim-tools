@@ -1,13 +1,14 @@
 import { Loop } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Box, Button, Tooltip } from '@mui/material'
-import { useEffect } from 'react'
+import { Box, Button, FormControlLabel, Switch, Tooltip } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
 import { RoomCalendar } from './RoomCalendar'
 
 const RoomPage = () => {
+    const [fiveMinutesSlotMode, setFiveMinutesSlotMode] = useState(false)
     const params = useParams()
 
     useEffect(() => {
@@ -37,7 +38,18 @@ const RoomPage = () => {
                         </Button>
                     </Tooltip>
                 </Box>
-                <RoomCalendar />
+                <Box sx={{ position: 'absolute', top: 160, left: 32, zIndex: 10 }}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={fiveMinutesSlotMode}
+                                onChange={() => setFiveMinutesSlotMode(!fiveMinutesSlotMode)}
+                            />
+                        }
+                        label="slots de 5 minutes"
+                    />
+                </Box>
+                <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} />
             </div>
         </MainLayout>
     )

@@ -29,7 +29,7 @@ const getCalendarEventFromRoomEvent = (roomEvents: RoomEvent[]): CalendarEvent[]
     }))
 }
 
-export const RoomCalendar = observer(() => (
+export const RoomCalendar = observer<{ step: number }>(({ step }) => (
     <div
         style={{
             height: '100%',
@@ -47,7 +47,7 @@ export const RoomCalendar = observer(() => (
                 selectable
                 min={new Date(0, 0, 0, 9, 0, 0)}
                 max={new Date(0, 0, 0, 19, 30, 0)}
-                step={5}
+                step={step}
                 resizableAccessor={() => false}
                 localizer={localizer}
                 events={getCalendarEventFromRoomEvent(AppStore.eventsStore.roomEvents)}
