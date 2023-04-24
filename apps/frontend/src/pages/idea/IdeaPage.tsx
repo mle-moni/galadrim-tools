@@ -70,7 +70,7 @@ const TabPanel = observer<TabPanelProps>(({ children, value, index }) => {
 const IdeaPage = observer(() => {
     const [tab, setTab] = useState<0 | 1 | 2 | 3>(0)
     const modalStore = useMemo(() => new SimpleModalStore(), [])
-    const scrollableTabs = useIsMobile()
+    const isMobile = useIsMobile()
 
     const { ideaStore, authStore } = AppStore
 
@@ -103,7 +103,7 @@ const IdeaPage = observer(() => {
                 </GaladrimButton>
             </CenteredDiv>
             <Tabs
-                variant={scrollableTabs ? 'scrollable' : 'fullWidth'}
+                variant={isMobile ? 'scrollable' : 'fullWidth'}
                 value={tab}
                 onChange={(_event, tab) => setTab(tab)}
                 scrollButtons={false}
@@ -125,7 +125,11 @@ const IdeaPage = observer(() => {
                     <DisplayIdeas state={state} />
                 </TabPanel>
             ))}
-            <SimpleModal open={modalStore.modalOpen} onClose={() => modalStore.setModalOpen(false)}>
+            <SimpleModal
+                open={modalStore.modalOpen}
+                onClose={() => modalStore.setModalOpen(false)}
+                width={isMobile ? '80%' : undefined}
+            >
                 <CreateIdeaModal
                     onPublish={() => {
                         modalStore.setModalOpen(false)

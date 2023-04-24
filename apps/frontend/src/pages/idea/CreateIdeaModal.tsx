@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import React, { useMemo } from 'react'
 import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
 import { CreateIdeaCallback, CreateIdeaStore } from './createIdea/CreateIdeaStore'
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish }) => {
     const ideaStore = useMemo(() => new CreateIdeaStore(), [])

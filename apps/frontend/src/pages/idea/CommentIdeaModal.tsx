@@ -50,6 +50,7 @@ const CommentDiv = observer<{
                     textAlign: isSelf ? 'end' : 'start',
                     width: 'fit-content',
                     border: '1px solid #CECECE',
+                    whiteSpace: 'break-spaces',
                 }}
             >
                 {comment.message}
@@ -99,6 +100,7 @@ const CommentIdeaModal = observer<{
                     onChange={(e) => ideaCommentStore.message.setText(e.target.value)}
                     placeholder={'Laissez un commentaire..'}
                     sx={{ flex: 1, marginRight: [1, 2] }}
+                    multiline
                 />
                 <Button disabled={!ideaCommentStore.canCreateIdeaComment} type="submit">
                     <Send fontSize={isMobile ? 'medium' : 'large'} />
