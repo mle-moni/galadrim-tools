@@ -81,7 +81,11 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                     }}
                 >
                     <CardContent>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ whiteSpace: 'break-spaces' }}
+                        >
                             {idea.text}
                         </Typography>
                     </CardContent>
