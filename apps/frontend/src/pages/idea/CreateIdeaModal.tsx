@@ -1,26 +1,25 @@
 import { Lightbulb } from '@mui/icons-material'
 import { Box, Button, Checkbox, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
 import { CreateIdeaCallback, CreateIdeaStore } from './createIdea/CreateIdeaStore'
-import { useIsMobile } from '../../hooks/useIsMobile'
 
 const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish }) => {
     const ideaStore = useMemo(() => new CreateIdeaStore(), [])
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = () => {
         ideaStore.createIdea(onPublish)
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
             <TextInputWithIcon
                 value={ideaStore.text.text}
                 placeholder={'Quelle est ton idée ?'}
                 Icon={Lightbulb}
                 onChange={(idea) => ideaStore.text.setText(idea)}
+                multiline
             />
             <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
                 <Checkbox
@@ -35,13 +34,13 @@ const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish
                 fullWidth
                 variant="contained"
                 disabled={!ideaStore.canCreateIdea}
-                type="submit"
                 size="large"
                 sx={{ my: 2 }}
+                onClick={handleSubmit}
             >
                 Publier mon idée
             </Button>
-        </form>
+        </div>
     )
 })
 
