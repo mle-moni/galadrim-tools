@@ -12,7 +12,7 @@ export interface MatrixDto {
     black: number
 }
 
-export interface Matrix extends MatrixDto {
+export interface ApiMatrix extends MatrixDto {
     id: number
     createdAt: string
     updatedAt: string

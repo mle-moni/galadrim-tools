@@ -51,6 +51,8 @@ Route.group(() => {
 
     Route.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
     Route.post('/readNotifications', 'auth/AuthController.readNotifications')
+
+    Route.resource('matrices', 'matrices/MatricesController').apiOnly()
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
