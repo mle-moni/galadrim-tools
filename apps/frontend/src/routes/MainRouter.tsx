@@ -39,6 +39,7 @@ const ProfilePage = React.lazy(() => import('../pages/profile/ProfilePage'))
 const MyRestaurantNotesPage = React.lazy(
     () => import('../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage')
 )
+const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
 
 const MainRouter = () => {
     return (
@@ -92,6 +93,7 @@ const AppRoutes = () => {
                 <Route path="/saveur" element={<SaveurPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/games/tournois" element={<TournoisPage />} />
+                <Route path="/codeNames" element={<CodeNamesPage />} />
                 <Route
                     path="/profile/notificationsSettings"
                     element={<NotificationsSettingsPage />}
