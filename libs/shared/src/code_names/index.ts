@@ -90,3 +90,20 @@ export const rotateMatrix = (matrix: MatrixDto): MatrixDto => {
 
     return matrix2dToMatrixDto(rotatedMatrix2D)
 }
+
+export const checkMatrix = (matrix: MatrixDto, matrixToCheck: MatrixDto): boolean => {
+    const checkRed = (matrix.red | matrixToCheck.red) === matrix.red
+    const checkBlue = (matrix.blue | matrixToCheck.blue) === matrix.blue
+    const checkWhite = (matrix.white | matrixToCheck.white) === matrix.white
+
+    return checkRed && checkBlue && checkWhite
+}
+
+export const getMatrixCandidates = (
+    matrixToCheck: MatrixDto,
+    matrices: MatrixDto[]
+): MatrixDto[] => {
+    const filteredMatrices = matrices.filter((matrix) => checkMatrix(matrix, matrixToCheck))
+
+    return filteredMatrices
+}
