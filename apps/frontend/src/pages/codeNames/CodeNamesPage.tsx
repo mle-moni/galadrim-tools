@@ -1,8 +1,8 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { IconButton } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { CodeNamesStore } from './CodeNamesStore'
@@ -13,10 +13,13 @@ const CANVAS_HEIGHT = 600
 export const CodeNamesPage = observer(() => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-    const store = useMemo(() => {
-        if (!canvasRef.current) return null
-        return new CodeNamesStore(canvasRef.current)
-    }, [canvasRef.current])
+    const store = useMemo(() => new CodeNamesStore(), [])
+
+    const draw = useCallback(() => {
+        if (!canvasRef.current) return
+
+        store.setCanvas(canvasRef.current)
+    }, [])
 
     return (
         <>
@@ -32,7 +35,7 @@ export const CodeNamesPage = observer(() => {
                     onClick={(e) => store?.onClick(e.nativeEvent.offsetX, e.nativeEvent.offsetY)}
                 />
 
-                {store !== null && <h1>{store.numberOfMatricesText}</h1>}
+                {store !== null && store._canvas !== null && <h1>{store.numberOfMatricesText}</h1>}
 
                 {store !== null && store.filteredMatrices.length === 1 && (
                     <IconButton
@@ -43,6 +46,8 @@ export const CodeNamesPage = observer(() => {
                         {store.showResult ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                 )}
+
+                {store._canvas === null && <Button onClick={draw}>Commencer</Button>}
             </CenteredDiv>
         </>
     )

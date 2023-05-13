@@ -50,13 +50,23 @@ export class CodeNamesStore {
 
     showResult = false
 
-    constructor(private canvas: HTMLCanvasElement) {
-        this._ctx = canvas.getContext('2d')
+    _canvas: HTMLCanvasElement | null = null
 
+    constructor() {
         makeAutoObservable(this)
 
-        this.draw()
         this.fetch()
+    }
+
+    setCanvas(canvas: HTMLCanvasElement) {
+        this._canvas = canvas
+        this._ctx = canvas.getContext('2d')
+        this.draw()
+    }
+
+    get canvas() {
+        _assert(this._canvas, 'canvas is null, it should not be')
+        return this._canvas
     }
 
     get ctx() {
