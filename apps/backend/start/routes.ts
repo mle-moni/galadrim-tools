@@ -53,6 +53,9 @@ Route.group(() => {
     Route.post('/readNotifications', 'auth/AuthController.readNotifications')
 
     Route.resource('matrices', 'matrices/MatricesController').apiOnly()
+
+    Route.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
+    Route.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')

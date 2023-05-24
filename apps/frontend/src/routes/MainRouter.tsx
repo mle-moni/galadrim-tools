@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { AppStore } from '../globalStores/AppStore'
 import IdeaPage from '../pages/idea/IdeaPage'
 import LoadingPage from '../pages/loading/LoadingPage'
@@ -39,6 +39,7 @@ const ProfilePage = React.lazy(() => import('../pages/profile/ProfilePage'))
 const MyRestaurantNotesPage = React.lazy(
     () => import('../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage')
 )
+const NewCodeNamesGamePage = React.lazy(() => import('../pages/codeNames/NewCodeNamesGamePage'))
 const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
 
 const MainRouter = () => {
@@ -93,7 +94,9 @@ const AppRoutes = () => {
                 <Route path="/saveur" element={<SaveurPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/games/tournois" element={<TournoisPage />} />
-                <Route path="/codeNames" element={<CodeNamesPage />} />
+                <Route path="/codeNames" element={<Navigate to={'/codeNamesGame'} />} />
+                <Route path="/codeNamesGame" element={<NewCodeNamesGamePage />} />
+                <Route path="/codeNamesGame/:id" element={<CodeNamesPage />} />
                 <Route
                     path="/profile/notificationsSettings"
                     element={<NotificationsSettingsPage />}

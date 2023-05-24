@@ -9,6 +9,7 @@ import {
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson } from '../../api/fetch'
 import { notifyError } from '../../utils/notification'
+import { CodeNamesFormStore } from './CodeNamesFormStore'
 
 // X = black
 const MATRIX_CHAR = ['?', 'R', 'B', 'W', 'X'] as const
@@ -51,6 +52,8 @@ export class CodeNamesStore {
     showResult = false
 
     _canvas: HTMLCanvasElement | null = null
+
+    codeNamesFormStore = new CodeNamesFormStore()
 
     constructor() {
         makeAutoObservable(this)

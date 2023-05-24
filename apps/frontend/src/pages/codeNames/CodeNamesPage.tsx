@@ -3,6 +3,8 @@ import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Button, IconButton } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useCallback, useMemo, useRef } from 'react'
+import { AppStore } from '../../globalStores/AppStore'
+import { useCheckConnection } from '../../hooks/useCheckConnection'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { CodeNamesStore } from './CodeNamesStore'
@@ -11,6 +13,9 @@ const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 600
 
 export const CodeNamesPage = observer(() => {
+    const { authStore } = AppStore
+    useCheckConnection(authStore)
+
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
     const store = useMemo(() => new CodeNamesStore(), [])
