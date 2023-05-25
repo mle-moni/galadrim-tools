@@ -89,6 +89,13 @@ export class MainStore {
     setTournoisResultsStore(state: TournoisResultsStore | null) {
         this.tournoisResultsStore = state
     }
+
+    get userOptions() {
+        return this.usersArray.map((user) => ({
+            value: user.id,
+            label: user.username,
+        }))
+    }
 }
 
 export const AppStore = new MainStore()

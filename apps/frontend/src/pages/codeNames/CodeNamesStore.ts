@@ -1,4 +1,5 @@
 import {
+    ApiCodeNamesGame,
     ApiMatrix,
     MatrixDto,
     _assert,
@@ -7,8 +8,9 @@ import {
     matrixDtoToMatrix2d,
 } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
-import { fetchBackendJson } from '../../api/fetch'
-import { notifyError } from '../../utils/notification'
+import { fetchBackendJson, getApiUrl, getErrorMessage } from '../../api/fetch'
+import { notifyError, notifySuccess } from '../../utils/notification'
+import { CodeNamesFormStore } from './CodeNamesFormStore'
 
 // X = black
 const MATRIX_CHAR = ['?', 'R', 'B', 'W', 'X'] as const
@@ -52,10 +54,30 @@ export class CodeNamesStore {
 
     _canvas: HTMLCanvasElement | null = null
 
+    game: ApiCodeNamesGame | null = null
+
+    codeNamesFormStore = new CodeNamesFormStore()
+
     constructor() {
         makeAutoObservable(this)
 
         this.fetch()
+    }
+
+    setGame(game: ApiCodeNamesGame) {
+        this.game = game
+
+        this.codeNamesFormStore.setBlueSpyMaster(game.blueSpyMasterId)
+        this.codeNamesFormStore.setRedSpyMaster(game.redSpyMasterId)
+        this.codeNamesFormStore.imageStore.setImageSrc(`${getApiUrl()}${game.image.url}`)
+        if (game.rounds.length > 0) {
+            const lastState = game.rounds[game.rounds.length - 1]
+            this.matrix.red = lastState.red
+            this.matrix.blue = lastState.blue
+            this.matrix.white = lastState.white
+            this.matrix.black = lastState.black
+            this.draw()
+        }
     }
 
     setCanvas(canvas: HTMLCanvasElement) {
@@ -82,6 +104,19 @@ export class CodeNamesStore {
         }
 
         this.setMatrices(res.json)
+    }
+
+    async fetchGame(id: number) {
+        const res = await fetchBackendJson<ApiCodeNamesGame, unknown>(
+            `/codeNamesGames/${id}`,
+            'GET'
+        )
+        if (!res.ok) {
+            notifyError('Impossible de récupérer la partie, bizarre')
+            return
+        }
+
+        this.setGame(res.json)
     }
 
     setShowResult(state: boolean) {
@@ -180,5 +215,26 @@ export class CodeNamesStore {
         if (this.filteredMatrices.length === 1) return '1 matrice possible'
 
         return `${this.filteredMatrices.length} matrices possibles`
+    }
+
+    async submitNewRound() {
+        const data = this.codeNamesFormStore.getRoundPayload()
+
+        if (!data || !this.game) return
+
+        data.append('red', this.matrix.red.toString())
+        data.append('blue', this.matrix.blue.toString())
+        data.append('white', this.matrix.white.toString())
+        data.append('black', this.matrix.black.toString())
+
+        const res = await fetchBackendJson(`/codeNamesGames/addRound/${this.game.id}`, 'POST', {
+            body: data,
+        })
+
+        if (res.ok) {
+            notifySuccess(`Round sauvegardé !`)
+        } else {
+            notifyError(getErrorMessage(res.json, `Impossible de créer le round, bizarre`))
+        }
     }
 }
