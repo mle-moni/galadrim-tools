@@ -77,12 +77,17 @@ export class CodeNamesFormStore {
     async submitNewGame() {
         const data = this.getPayload()
 
-        const res = await fetchBackendJson('/codeNamesGames', 'POST', {
-            body: data,
-        })
+        const res = await fetchBackendJson<{ game: { id: number } }, unknown>(
+            '/codeNamesGames',
+            'POST',
+            {
+                body: data,
+            }
+        )
 
         if (res.ok) {
             notifySuccess(`Une nouvelle partie a été créée !`)
+            location.replace(`/codeNamesGame/${res.json.game.id}`)
         } else {
             notifyError(getErrorMessage(res.json, `Impossible de créer la partie, bizarre`))
         }

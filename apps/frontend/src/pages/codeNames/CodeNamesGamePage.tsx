@@ -106,6 +106,7 @@ export const CodeNamesGamePage = observer(() => {
 
                     {store !== null && store.filteredMatrices.length === 1 && (
                         <IconButton
+                            sx={{ opacity: 0 }}
                             onClick={() => {
                                 store.setShowResult(!store.showResult)
                             }}
