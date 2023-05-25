@@ -10,7 +10,7 @@ export default class extends BaseSchema {
             table.integer('game_id').unsigned().references('code_names_games.id')
             table.integer('spy_master_id').unsigned().references('users.id')
 
-            table.string('announce').notNullable()
+            table.string('announce').defaultTo('')
 
             table.string('clue_word').notNullable()
             table.integer('clue_number').notNullable()

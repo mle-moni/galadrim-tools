@@ -1,3 +1,5 @@
+import { IImage } from '../saveur'
+
 export type Matrix2d = {
     red: number[]
     blue: number[]
@@ -106,4 +108,32 @@ export const getMatrixCandidates = (
     const filteredMatrices = matrices.filter((matrix) => checkMatrix(matrix, matrixToCheck))
 
     return filteredMatrices
+}
+
+export interface ApiCodeNamesGameRound {
+    id: number
+    gameId: number
+    spyMasterId: number
+    announce: string
+    clueWord: string
+    clueNumber: number
+
+    red: number
+    blue: number
+    white: number
+    black: number
+}
+
+export interface ApiCodeNamesGame {
+    id: number
+
+    redSpyMasterId: number
+    blueSpyMasterId: number
+    isOver: boolean
+
+    image: IImage
+    rounds: ApiCodeNamesGameRound[]
+
+    createdAt: string
+    updatedAt: string
 }

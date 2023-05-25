@@ -19,7 +19,7 @@ export const NewCodeNamesGamePage = observer(() => {
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
-                    codeNamesFormStore.submit()
+                    codeNamesFormStore.submitNewGame()
                 }}
                 style={{
                     display: 'flex',

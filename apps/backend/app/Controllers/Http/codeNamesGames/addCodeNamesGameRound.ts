@@ -5,7 +5,7 @@ import CodeNamesGameRound from 'App/Models/CodeNamesGameRound'
 
 const roundSchema = schema.create({
     spyMasterId: schema.number([rules.exists({ column: 'id', table: 'users' })]),
-    announce: schema.string(),
+    announce: schema.string.optional(),
     clueWord: schema.string(),
     clueNumber: schema.number(),
     red: schema.number(),

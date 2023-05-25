@@ -13,8 +13,11 @@ export default class CodeNamesGame extends BaseModel {
     @column()
     public blueSpyMasterId: number
 
-    @column()
-    public isOver: number
+    @column({
+        prepare: (value: 0 | 1) => Boolean(value),
+        serialize: (value: 0 | 1) => Boolean(value),
+    })
+    public isOver: boolean
 
     @attachment({ folder: 'codeNames', preComputeUrl: true })
     public image: AttachmentContract | null

@@ -40,7 +40,10 @@ const MyRestaurantNotesPage = React.lazy(
     () => import('../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage')
 )
 const NewCodeNamesGamePage = React.lazy(() => import('../pages/codeNames/NewCodeNamesGamePage'))
-const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
+const CodeNamesGamePage = React.lazy(() => import('../pages/codeNames/CodeNamesGamePage'))
+
+// ? this was the old cheat page
+// const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
 
 const MainRouter = () => {
     return (
@@ -96,7 +99,7 @@ const AppRoutes = () => {
                 <Route path="/games/tournois" element={<TournoisPage />} />
                 <Route path="/codeNames" element={<Navigate to={'/codeNamesGame'} />} />
                 <Route path="/codeNamesGame" element={<NewCodeNamesGamePage />} />
-                <Route path="/codeNamesGame/:id" element={<CodeNamesPage />} />
+                <Route path="/codeNamesGame/:id" element={<CodeNamesGamePage />} />
                 <Route
                     path="/profile/notificationsSettings"
                     element={<NotificationsSettingsPage />}
