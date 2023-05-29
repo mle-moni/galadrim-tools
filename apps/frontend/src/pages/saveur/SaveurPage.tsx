@@ -10,8 +10,8 @@ import { useSearchParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import { MAX_ZOOM } from '../../globalStores/SaveurStore'
 import { useCheckConnection } from '../../hooks/useCheckConnection'
-import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
+import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import { HouseMarkerIcon } from '../../reusableComponents/saveur/markers/HouseMarker'
 import { LocauxSwitch } from './LocauxSwitch'
 import { getFavouriteLocauxIndex } from './persistLocauxPreferences'
@@ -27,7 +27,7 @@ export interface Locaux {
 export const POS_ALL_LOCAUX: Locaux[] = [
     {
         name: 'Locaux Paris, Bonne Nouvelle',
-        position: [48.87012, 2.34923],
+        position: [48.87012431059253, 2.3493683338165288],
     },
     {
         name: 'Locaux Nantes',
