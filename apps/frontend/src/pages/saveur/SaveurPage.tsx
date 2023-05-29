@@ -27,7 +27,7 @@ export interface Locaux {
 export const POS_ALL_LOCAUX: Locaux[] = [
     {
         name: 'Locaux Paris, Bonne Nouvelle',
-        position: [48.87012431059253, 2.3493683338165288],
+        position: [48.87006785387298, 2.34934151172638],
     },
     {
         name: 'Locaux Nantes',
