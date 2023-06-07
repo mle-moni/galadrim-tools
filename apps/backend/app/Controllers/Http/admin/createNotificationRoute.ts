@@ -2,9 +2,9 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import User from 'App/Models/User'
 import {
+    NotificationParams,
     createNotificationForUser,
     createNotificationForUsers,
-    NotificationParams,
 } from 'App/Services/notifications'
 
 const createNotificationSchema = schema.create({
@@ -29,5 +29,5 @@ export const createNotificationRoute = async ({ request, auth }: HttpContextCont
 
     await Promise.all(users.map((u) => createNotificationForUser(settings, u)))
 
-    return { notification: 'Les droits ont été mis à jour' }
+    return { notification: 'Notification envoyée' }
 }
