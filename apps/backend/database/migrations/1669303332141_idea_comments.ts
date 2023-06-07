@@ -7,7 +7,7 @@ export default class IdeaComments extends BaseSchema {
         this.schema.createTable(this.tableName, (table) => {
             table.increments('id')
 
-            table.string('message')
+            table.text('message')
 
             table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
             table.integer('idea_id').unsigned().references('ideas.id').onDelete('CASCADE')
