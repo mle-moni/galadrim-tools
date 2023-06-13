@@ -3,7 +3,7 @@ import { autorun, makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
 import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
 import { fetchBackendJson } from '../api/fetch'
-import { notifyError } from '../utils/notification'
+import { notifyError, notifySuccess } from '../utils/notification'
 
 export type RoomEvent = {
     id: number
@@ -71,12 +71,15 @@ export class EventsStore {
     async newEvent(start: Date, end: Date, roomName: string | null = null) {
         if (this.waiting) return
         this.setWaiting(true)
-        const res = postEvent({
+        const res = await postEvent({
             start,
             end,
             room: roomName ?? this.roomName,
         })
         this.setWaiting(false)
+        if (res.id % 10_000 === 0) {
+            notifySuccess(`Vous avez fait la ${res.id}ème réservation de salle !!!`)
+        }
         return res
     }
     onDoubleClickEvent(event: RoomEvent) {
