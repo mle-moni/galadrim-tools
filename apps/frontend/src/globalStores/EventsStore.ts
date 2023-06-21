@@ -3,7 +3,7 @@ import { autorun, makeAutoObservable } from 'mobx'
 import { stringOrDate } from 'react-big-calendar'
 import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
 import { fetchBackendJson } from '../api/fetch'
-import { notifyError, notifySuccess } from '../utils/notification'
+import { notifyError } from '../utils/notification'
 
 export type RoomEvent = {
     id: number
@@ -78,7 +78,7 @@ export class EventsStore {
         })
         this.setWaiting(false)
         if (res.id % 10_000 === 0) {
-            notifySuccess(`Vous avez fait la ${res.id}ème réservation de salle !!!`)
+            location.replace(`/galadrim/scam/winner/omg/`)
         }
         return res
     }
