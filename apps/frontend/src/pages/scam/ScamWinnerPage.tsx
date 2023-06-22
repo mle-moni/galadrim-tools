@@ -9,7 +9,7 @@ export const ScamWinnerPage = observer(() => {
             <CenteredDiv>
                 <div style={{ width: '80%' }}>
                     <marquee bgcolor="red" behavior="alternate" scrolldelay="60">
-                        <h1>🚨Vous avez booké la 10 000 ème reservation de salle !🚨</h1>
+                        <h1>🚨Vous avez booké la 20 000 ème reservation de salle !🚨</h1>
                     </marquee>
                     <br />
                     <h2 style={{ textDecoration: 'underline' }}>
