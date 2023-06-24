@@ -1,5 +1,5 @@
+import { IChoice } from '@galadrim-tools/shared'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { IChoice } from 'libs/shared/dist'
 import { DateTime } from 'luxon'
 
 export default class RestaurantChoice extends BaseModel {
