@@ -100,3 +100,9 @@ Route.group(() => {
 })
     .prefix('games')
     .middleware('auth:web,api')
+
+Route.group(() => {
+    Route.resource('cards', 'cards/CardsController').apiOnly()
+})
+    .middleware('auth:web,api')
+    .prefix('galaguerre')
