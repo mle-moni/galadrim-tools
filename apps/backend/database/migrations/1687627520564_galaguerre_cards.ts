@@ -12,6 +12,8 @@ export default class extends BaseSchema {
             table.integer('cost').notNullable()
             table.string('type').notNullable()
 
+            table.string('card_mode').notNullable()
+
             table.integer('minion_id').unsigned().references('galaguerre_minions.id').nullable()
             table.integer('spell_id').unsigned().references('galaguerre_spells.id').nullable()
             table.integer('weapon_id').unsigned().references('galaguerre_weapons.id').nullable()

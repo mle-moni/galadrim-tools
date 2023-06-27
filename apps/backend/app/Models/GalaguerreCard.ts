@@ -1,4 +1,4 @@
-import { GalaguerreCardType } from '@galadrim-tools/shared'
+import { GalaguerreCardMode, GalaguerreCardType } from '@galadrim-tools/shared'
 import { AttachmentContract, attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
@@ -18,6 +18,9 @@ export default class GalaguerreCard extends BaseModel {
 
     @column()
     public type: GalaguerreCardType
+
+    @column()
+    public cardMode: GalaguerreCardMode
 
     @column()
     public minionId: number | null

@@ -26,3 +26,6 @@ export type GalaguerrePassiveTriggersOn = typeof GALAGUERRE_PASSIVES_TRIGGERS_ON
 
 export const GALAGUERRE_TARGET_TYPES = ['ALL', 'HERO', 'MINION'] as const
 export type GalaguerreTargetType = typeof GALAGUERRE_TARGET_TYPES[number]
+
+export const GALAGUERRE_CARD_MODES = ['CREATION', 'BETA', 'PROD'] as const
+export type GalaguerreCardMode = typeof GALAGUERRE_CARD_MODES[number]
