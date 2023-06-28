@@ -1,6 +1,6 @@
 import { GalaguerreCardMode, GalaguerreCardType } from '@galadrim-tools/shared'
 import { AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import { GalaguerreCardCreationContext } from 'App/Controllers/Http/cards/cardCreateUpdate/galaguerre.creation.types'
 import GalaguerreCard from 'App/Models/GalaguerreCard'
 
 interface CardCreationObject {
@@ -14,13 +14,8 @@ interface CardCreationObject {
     weaponId: number | null
 }
 
-export interface CreateOrUpdateGalaguerreCardParams {
-    cardId?: number
-    trx: TransactionClientContract
-}
-
 export const createOrUpdateGalaguerreCard = async (
-    { trx, cardId }: CreateOrUpdateGalaguerreCardParams,
+    { trx, cardId }: GalaguerreCardCreationContext,
     cardCreationObject: CardCreationObject
 ) => {
     if (cardId === undefined) {

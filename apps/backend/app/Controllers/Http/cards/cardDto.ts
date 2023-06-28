@@ -14,3 +14,8 @@ export const cardDto = schema.object().members({
 })
 
 export type CardDto = typeof cardDto.t
+
+export const minionDto = schema.object().members({
+    attack: schema.number([rules.unsigned()]),
+    health: schema.number([rules.unsigned()]),
+})
