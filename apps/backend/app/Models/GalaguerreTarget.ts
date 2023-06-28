@@ -1,5 +1,5 @@
+import { GalaguerreTargetType } from '@galadrim-tools/shared'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { GalaguerreTargetType } from 'libs/shared/dist'
 import { DateTime } from 'luxon'
 
 export default class GalaguerreTarget extends BaseModel {
