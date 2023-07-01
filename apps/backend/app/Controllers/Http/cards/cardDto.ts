@@ -105,7 +105,9 @@ export const minionCardDto = schema.object().members({
 export type MinionCardDto = typeof minionCardDto.t
 
 export const spellCardDto = schema.object().members({
-    spellDto: schema.object().members({}),
+    spellDto: schema.object().members({
+        action: actionDto,
+    }),
 })
 
 export type SpellCardDto = typeof spellCardDto.t
