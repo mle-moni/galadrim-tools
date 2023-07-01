@@ -1,5 +1,6 @@
 import { createGalaguerreMinion } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreMinion'
 import { createGalaguerreSpell } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreSpell'
+import { createGalaguerreWeapon } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreWeapon'
 import { GalaguerreCardCreationContext } from 'App/Controllers/Http/cards/cardCreateUpdate/galaguerre.creation.types'
 import { CardDto } from 'App/Controllers/Http/cards/cardDto'
 import BadRequestException from 'App/Exceptions/BadRequestException'
@@ -26,6 +27,9 @@ export const createCardSubType = async (
         case 'SPELL':
             const spell = await createGalaguerreSpell(params)
             return { ...RET, spellId: spell.id }
+        case 'WEAPON':
+            const weapon = await createGalaguerreWeapon(params)
+            return { ...RET, weaponId: weapon.id }
         default:
             throw new BadRequestException(`Type '${cardType}' not implemented`)
     }

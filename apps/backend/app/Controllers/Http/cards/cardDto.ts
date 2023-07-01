@@ -111,3 +111,13 @@ export const spellCardDto = schema.object().members({
 })
 
 export type SpellCardDto = typeof spellCardDto.t
+
+export const weaponCardDto = schema.object().members({
+    weaponDto: schema.object().members({
+        durability: schema.number([rules.unsigned()]),
+        damage: schema.number(),
+        deathrattles: schema.array().members(actionDto),
+    }),
+})
+
+export type WeaponCardDto = typeof weaponCardDto.t
