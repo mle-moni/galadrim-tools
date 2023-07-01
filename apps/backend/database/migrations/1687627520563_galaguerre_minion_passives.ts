@@ -7,13 +7,19 @@ export default class extends BaseSchema {
         this.schema.createTable(this.tableName, (table) => {
             table.increments('id')
 
-            table.integer('minion_id').unsigned().references('galaguerre_minions.id').notNullable()
+            table
+                .integer('minion_id')
+                .unsigned()
+                .references('galaguerre_minions.id')
+                .notNullable()
+                .onDelete('CASCADE')
 
             table
                 .integer('passive_id')
                 .unsigned()
                 .references('galaguerre_passives.id')
                 .notNullable()
+                .onDelete('CASCADE')
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })

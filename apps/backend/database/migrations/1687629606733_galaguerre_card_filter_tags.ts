@@ -13,7 +13,12 @@ export default class extends BaseSchema {
                 .references('galaguerre_card_filters.id')
                 .notNullable()
 
-            table.integer('tag_id').unsigned().references('galaguerre_tags.id').notNullable()
+            table
+                .integer('tag_id')
+                .unsigned()
+                .references('galaguerre_tags.id')
+                .notNullable()
+                .onDelete('CASCADE')
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })

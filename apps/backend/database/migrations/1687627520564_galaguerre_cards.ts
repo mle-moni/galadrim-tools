@@ -14,9 +14,26 @@ export default class extends BaseSchema {
 
             table.string('card_mode').notNullable()
 
-            table.integer('minion_id').unsigned().references('galaguerre_minions.id').nullable()
-            table.integer('spell_id').unsigned().references('galaguerre_spells.id').nullable()
-            table.integer('weapon_id').unsigned().references('galaguerre_weapons.id').nullable()
+            table
+                .integer('minion_id')
+                .unsigned()
+                .references('galaguerre_minions.id')
+                .nullable()
+                .onDelete('SET NULL')
+
+            table
+                .integer('spell_id')
+                .unsigned()
+                .references('galaguerre_spells.id')
+                .nullable()
+                .onDelete('SET NULL')
+
+            table
+                .integer('weapon_id')
+                .unsigned()
+                .references('galaguerre_weapons.id')
+                .nullable()
+                .onDelete('SET NULL')
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })

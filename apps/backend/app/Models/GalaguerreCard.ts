@@ -1,6 +1,9 @@
 import { GalaguerreCardMode, GalaguerreCardType } from '@galadrim-tools/shared'
 import { AttachmentContract, attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import GalaguerreMinion from 'App/Models/GalaguerreMinion'
+import GalaguerreSpell from 'App/Models/GalaguerreSpell'
+import GalaguerreWeapon from 'App/Models/GalaguerreWeapon'
 import { DateTime } from 'luxon'
 
 export default class GalaguerreCard extends BaseModel {
@@ -30,6 +33,15 @@ export default class GalaguerreCard extends BaseModel {
 
     @column()
     public weaponId: number | null
+
+    @belongsTo(() => GalaguerreMinion)
+    public minion: BelongsTo<typeof GalaguerreMinion>
+
+    @belongsTo(() => GalaguerreSpell)
+    public spell: BelongsTo<typeof GalaguerreSpell>
+
+    @belongsTo(() => GalaguerreWeapon)
+    public weapon: BelongsTo<typeof GalaguerreWeapon>
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime

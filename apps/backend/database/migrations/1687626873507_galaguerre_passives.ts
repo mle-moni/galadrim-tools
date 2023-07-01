@@ -10,8 +10,19 @@ export default class extends BaseSchema {
             table.string('type').notNullable()
             table.string('triggers_on').nullable()
 
-            table.integer('action_id').unsigned().references('galaguerre_actions.id').nullable()
-            table.integer('boost_id').unsigned().references('galaguerre_boosts.id').nullable()
+            table
+                .integer('action_id')
+                .unsigned()
+                .references('galaguerre_actions.id')
+                .nullable()
+                .onDelete('CASCADE')
+
+            table
+                .integer('boost_id')
+                .unsigned()
+                .references('galaguerre_boosts.id')
+                .nullable()
+                .onDelete('CASCADE')
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })

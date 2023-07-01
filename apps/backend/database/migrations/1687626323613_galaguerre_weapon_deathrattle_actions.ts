@@ -7,8 +7,19 @@ export default class extends BaseSchema {
         this.schema.createTable(this.tableName, (table) => {
             table.increments('id')
 
-            table.integer('weapon_id').unsigned().references('galaguerre_weapons.id').notNullable()
-            table.integer('action_id').unsigned().references('galaguerre_actions.id').notNullable()
+            table
+                .integer('weapon_id')
+                .unsigned()
+                .references('galaguerre_weapons.id')
+                .notNullable()
+                .onDelete('CASCADE')
+
+            table
+                .integer('action_id')
+                .unsigned()
+                .references('galaguerre_actions.id')
+                .notNullable()
+                .onDelete('CASCADE')
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })

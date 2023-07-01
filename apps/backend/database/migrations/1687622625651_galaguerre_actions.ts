@@ -16,6 +16,7 @@ export default class extends BaseSchema {
                 .unsigned()
                 .references('galaguerre_card_filters.id')
                 .nullable()
+                .onDelete('CASCADE')
 
             table.integer('enemy_draw_count').nullable()
             table
@@ -23,11 +24,17 @@ export default class extends BaseSchema {
                 .unsigned()
                 .references('galaguerre_card_filters.id')
                 .nullable()
+                .onDelete('CASCADE')
 
             table.integer('damage').nullable()
             table.integer('heal').nullable()
 
-            table.integer('boost_id').unsigned().references('galaguerre_boosts.id').nullable()
+            table
+                .integer('boost_id')
+                .unsigned()
+                .references('galaguerre_boosts.id')
+                .nullable()
+                .onDelete('CASCADE')
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })
