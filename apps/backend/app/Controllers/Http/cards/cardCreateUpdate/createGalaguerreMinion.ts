@@ -4,6 +4,7 @@ import {
     createGalaguerreAction,
     createMinionPower,
 } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreAction'
+import { createGalaguerrePassive } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerrePassives'
 import { GalaguerreCardCreationContext } from 'App/Controllers/Http/cards/cardCreateUpdate/galaguerre.creation.types'
 import { ActionDto, minionCardDto } from 'App/Controllers/Http/cards/cardDto'
 import GalaguerreMinion from 'App/Models/GalaguerreMinion'
@@ -51,7 +52,11 @@ export const createGalaguerreMinion = async ({
         })
     )
 
-    const promises = [...battlecriesPromises, ...deathrattlesPromises]
+    const passivesPromises = minionDto.passives.map((passiveDto) =>
+        createGalaguerrePassive({ minionId: minion.id, passiveDto, trx })
+    )
+
+    const promises = [...battlecriesPromises, ...deathrattlesPromises, ...passivesPromises]
 
     await Promise.all(promises)
 
@@ -69,7 +74,7 @@ export const createMinionBattlecryOrDeathrattle = async ({
     trx: TransactionClientContract
     ClassToCreate: typeof GalaguerreMinionDeathrattleAction | typeof GalaguerreMinionBattlecryAction
 }) => {
-    const action = await createGalaguerreAction({ actionDto, trx })
+    const action = await createGalaguerreAction(actionDto, trx)
 
     const battleCryOrDeathrattle = await ClassToCreate.create(
         {

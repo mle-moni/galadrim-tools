@@ -3,6 +3,8 @@ import {
     GALAGUERRE_CARD_MODES,
     GALAGUERRE_CARD_TYPES,
     GALAGUERRE_COMPARISONS,
+    GALAGUERRE_PASSIVES_TRIGGERS_ON,
+    GALAGUERRE_PASSIVES_TYPES,
     GALAGUERRE_TARGET_TYPES,
 } from '@galadrim-tools/shared'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
@@ -81,6 +83,14 @@ export const actionDto = schema.object().members(ACTION_PROPERTIES)
 export type ActionDto = typeof actionDto.t
 export const nullableActionDto = schema.object.nullable().members(ACTION_PROPERTIES)
 
+export const passiveDto = schema.object().members({
+    type: schema.enum(GALAGUERRE_PASSIVES_TYPES),
+    triggersOn: schema.enum(GALAGUERRE_PASSIVES_TRIGGERS_ON),
+    action: nullableActionDto,
+    boost: nullableBoostDto,
+})
+export type PassiveDto = typeof passiveDto.t
+
 export const minionCardDto = schema.object().members({
     minionDto: schema.object().members({
         attack: schema.number([rules.unsigned()]),
@@ -88,6 +98,7 @@ export const minionCardDto = schema.object().members({
         minionPower: nullableMinionPowerDto,
         battlecries: schema.array().members(actionDto),
         deathrattles: schema.array().members(actionDto),
+        passives: schema.array().members(passiveDto),
     }),
 })
 

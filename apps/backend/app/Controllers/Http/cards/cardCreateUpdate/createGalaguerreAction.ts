@@ -13,13 +13,10 @@ import GalaguerreCardFilterTag from 'App/Models/GalaguerreCardFilterTag'
 import GalaguerreComparison from 'App/Models/GalaguerreComparison'
 import GalaguerreMinionPower from 'App/Models/GalaguerreMinionPower'
 
-export const createGalaguerreAction = async ({
-    actionDto,
-    trx,
-}: {
-    actionDto: ActionDto
+export const createGalaguerreAction = async (
+    actionDto: ActionDto,
     trx: TransactionClientContract
-}) => {
+) => {
     const [boost, cardFilter, enemyCardFilter] = await Promise.all([
         createGalaguerreBoost(actionDto.boost, trx),
         createCardFilter(actionDto.drawCardFilter, trx),
