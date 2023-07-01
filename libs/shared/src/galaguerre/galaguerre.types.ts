@@ -1,5 +1,5 @@
 export const GALAGUERRE_COMPARISONS = ['<', '>', '='] as const
-export type GalaguerreComparison = typeof GALAGUERRE_COMPARISONS[number]
+export type GalaguerreComparisonType = typeof GALAGUERRE_COMPARISONS[number]
 
 export const GALAGUERRE_CARD_TYPES = ['MINION', 'SPELL', 'WEAPON'] as const
 export type GalaguerreCardType = typeof GALAGUERRE_CARD_TYPES[number]

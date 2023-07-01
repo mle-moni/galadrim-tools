@@ -1,5 +1,14 @@
-import { GALAGUERRE_CARD_MODES, GALAGUERRE_CARD_TYPES } from '@galadrim-tools/shared'
+import {
+    GALAGUERRE_ACTIONS_TYPES,
+    GALAGUERRE_CARD_MODES,
+    GALAGUERRE_CARD_TYPES,
+    GALAGUERRE_COMPARISONS,
+} from '@galadrim-tools/shared'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
+
+export const cardTagIdsDto = schema
+    .array()
+    .members(schema.number([rules.exists({ table: 'galaguerre_tags', column: 'id' })]))
 
 export const cardDto = schema.object().members({
     label: schema.string([rules.trim(), rules.maxLength(80)]),
@@ -8,17 +17,62 @@ export const cardDto = schema.object().members({
     image: schema.file({ size: '2mb', extnames: ['jpg', 'png', 'jpeg'] }),
     type: schema.enum(GALAGUERRE_CARD_TYPES),
 
-    cardTagIds: schema
-        .array()
-        .members(schema.number([rules.exists({ table: 'galaguerre_tags', column: 'id' })])),
+    cardTagIds: cardTagIdsDto,
 })
 
 export type CardDto = typeof cardDto.t
+
+export const nullableMinionPowerDto = schema.object.nullable().members({
+    hasTaunt: schema.boolean(),
+    hasCharge: schema.boolean(),
+    hasWindfury: schema.boolean(),
+    isPoisonous: schema.boolean(),
+})
+
+export type NullableMinionPowerDto = typeof nullableMinionPowerDto.t
+
+const nullableComparisonDto = schema.object.nullable().members({
+    costComparison: schema.enum.nullable(GALAGUERRE_COMPARISONS),
+    cost: schema.number(),
+    attackComparison: schema.enum.nullable(GALAGUERRE_COMPARISONS),
+    attack: schema.number(),
+    healthComparison: schema.enum.nullable(GALAGUERRE_COMPARISONS),
+    health: schema.number(),
+})
+export type NullableComparisonDto = typeof nullableComparisonDto.t
+
+export const nullableCardFilterDto = schema.object.nullable().members({
+    type: schema.enum(GALAGUERRE_CARD_TYPES),
+    comparison: nullableComparisonDto,
+    cardTagIds: cardTagIdsDto,
+})
+export type NullableCardFilterDto = typeof nullableCardFilterDto.t
+
+const ACTION_PROPERTIES = {
+    type: schema.enum(GALAGUERRE_ACTIONS_TYPES),
+    isTargeted: schema.boolean(),
+    drawCount: schema.number(),
+    drawCardFilter: nullableCardFilterDto,
+    enemyDrawCount: schema.number(),
+    enemyDrawCardFilter: nullableCardFilterDto,
+    damage: schema.number(),
+    heal: schema.number(),
+    attackBoost: schema.number(),
+    healthBoost: schema.number(),
+    minionPower: nullableMinionPowerDto,
+}
+
+export const actionDto = schema.object().members(ACTION_PROPERTIES)
+export type ActionDto = typeof actionDto.t
+export const nullableActionDto = schema.object.nullable().members(ACTION_PROPERTIES)
 
 export const minionCardDto = schema.object().members({
     minionDto: schema.object().members({
         attack: schema.number([rules.unsigned()]),
         health: schema.number([rules.unsigned()]),
+        minionPower: nullableMinionPowerDto,
+        battlecries: schema.array().members(actionDto),
+        deathrattles: schema.array().members(actionDto),
     }),
 })
 
