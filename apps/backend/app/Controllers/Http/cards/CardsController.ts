@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { cardsIndex } from 'App/Controllers/Http/cards/cardsIndex'
 import { storeCard } from 'App/Controllers/Http/cards/storeCard'
+import { updateCard } from 'App/Controllers/Http/cards/updateCard'
 
 export default class CardsController {
     public async index(ctx: HttpContextContract) {
@@ -16,7 +17,7 @@ export default class CardsController {
     }
 
     public async update(ctx: HttpContextContract) {
-        return ctx.response.notImplemented({ message: 'not implemented' })
+        return updateCard(ctx)
     }
 
     public async destroy(ctx: HttpContextContract) {
