@@ -31,13 +31,7 @@ export default class GalaguerreAction extends BaseModel {
     public heal: number | null
 
     @column()
-    public attackBoost: number | null
-
-    @column()
-    public healthBoost: number | null
-
-    @column()
-    public minionPowerId: number | null
+    public boostId: number | null
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime

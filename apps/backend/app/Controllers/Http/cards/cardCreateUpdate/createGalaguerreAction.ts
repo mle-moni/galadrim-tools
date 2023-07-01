@@ -1,4 +1,5 @@
 import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import { createGalaguerreBoost } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreBoost'
 import { createGalaguerreTarget } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreTarget'
 import {
     ActionDto,
@@ -19,8 +20,8 @@ export const createGalaguerreAction = async ({
     actionDto: ActionDto
     trx: TransactionClientContract
 }) => {
-    const [minionPower, cardFilter, enemyCardFilter] = await Promise.all([
-        createMinionPower(actionDto.minionPower, trx),
+    const [boost, cardFilter, enemyCardFilter] = await Promise.all([
+        createGalaguerreBoost(actionDto.boost, trx),
         createCardFilter(actionDto.drawCardFilter, trx),
         createCardFilter(actionDto.enemyDrawCardFilter, trx),
     ])
@@ -35,9 +36,7 @@ export const createGalaguerreAction = async ({
             enemyDrawCardFilterId: enemyCardFilter?.id ?? null,
             damage: actionDto.damage,
             heal: actionDto.heal,
-            attackBoost: actionDto.attackBoost,
-            healthBoost: actionDto.healthBoost,
-            minionPowerId: minionPower?.id ?? null,
+            boostId: boost?.id ?? null,
         },
         { client: trx }
     )

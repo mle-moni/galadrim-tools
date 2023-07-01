@@ -27,14 +27,7 @@ export default class extends BaseSchema {
             table.integer('damage').nullable()
             table.integer('heal').nullable()
 
-            table.integer('attack_boost').nullable()
-            table.integer('health_boost').nullable()
-
-            table
-                .integer('minion_power_id')
-                .unsigned()
-                .references('galaguerre_minion_powers.id')
-                .nullable()
+            table.integer('boost_id').unsigned().references('galaguerre_boosts.id').nullable()
 
             table.timestamp('created_at', { useTz: true })
             table.timestamp('updated_at', { useTz: true })

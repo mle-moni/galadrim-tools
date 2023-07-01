@@ -56,6 +56,14 @@ const targetDto = schema.object().members({
 })
 export type TargetDto = typeof targetDto.t
 
+export const nullableBoostDto = schema.object.nullable().members({
+    health: schema.number(),
+    attack: schema.number(),
+    spellPower: schema.number(),
+    minionPower: nullableMinionPowerDto,
+})
+export type NullableBoostDto = typeof nullableBoostDto.t
+
 const ACTION_PROPERTIES = {
     type: schema.enum(GALAGUERRE_ACTIONS_TYPES),
     isTargeted: schema.boolean(),
@@ -65,10 +73,8 @@ const ACTION_PROPERTIES = {
     enemyDrawCardFilter: nullableCardFilterDto,
     damage: schema.number(),
     heal: schema.number(),
-    attackBoost: schema.number(),
-    healthBoost: schema.number(),
-    minionPower: nullableMinionPowerDto,
     targets: schema.array().members(targetDto),
+    boost: nullableBoostDto,
 }
 
 export const actionDto = schema.object().members(ACTION_PROPERTIES)

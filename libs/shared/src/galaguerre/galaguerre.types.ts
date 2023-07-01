@@ -15,9 +15,6 @@ export const GALAGUERRE_ACTIONS_TYPES = [
 ] as const
 export type GalaguerreActionType = typeof GALAGUERRE_ACTIONS_TYPES[number]
 
-export const GALAGUERRE_BOOST_TYPES = ['STATS', 'MINION_POWERS'] as const
-export type GalaguerreBoostType = typeof GALAGUERRE_BOOST_TYPES[number]
-
 export const GALAGUERRE_PASSIVES_TYPES = ['ACTION', 'BOOST'] as const
 export type GalaguerrePassiveType = typeof GALAGUERRE_PASSIVES_TYPES[number]
 
