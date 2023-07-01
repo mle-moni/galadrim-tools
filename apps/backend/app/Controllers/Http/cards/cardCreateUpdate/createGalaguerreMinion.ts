@@ -3,7 +3,7 @@ import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
 import {
     createGalaguerreAction,
     createMinionPower,
-} from 'App/Controllers/Http/cards/cardCreateUpdate/createAction'
+} from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreAction'
 import { GalaguerreCardCreationContext } from 'App/Controllers/Http/cards/cardCreateUpdate/galaguerre.creation.types'
 import { ActionDto, minionCardDto } from 'App/Controllers/Http/cards/cardDto'
 import GalaguerreMinion from 'App/Models/GalaguerreMinion'

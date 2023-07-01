@@ -1,4 +1,5 @@
 import { TransactionClientContract } from '@ioc:Adonis/Lucid/Database'
+import { createGalaguerreTarget } from 'App/Controllers/Http/cards/cardCreateUpdate/createGalaguerreTarget'
 import {
     ActionDto,
     NullableCardFilterDto,
@@ -39,6 +40,14 @@ export const createGalaguerreAction = async ({
             minionPowerId: minionPower?.id ?? null,
         },
         { client: trx }
+    )
+
+    const boostOrActionId = { actionId: action.id }
+
+    await Promise.all(
+        actionDto.targets.map((targetDto) =>
+            createGalaguerreTarget({ targetDto, trx, boostOrActionId })
+        )
     )
 
     return action

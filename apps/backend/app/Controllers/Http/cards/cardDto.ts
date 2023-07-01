@@ -3,6 +3,7 @@ import {
     GALAGUERRE_CARD_MODES,
     GALAGUERRE_CARD_TYPES,
     GALAGUERRE_COMPARISONS,
+    GALAGUERRE_TARGET_TYPES,
 } from '@galadrim-tools/shared'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 
@@ -48,6 +49,13 @@ export const nullableCardFilterDto = schema.object.nullable().members({
 })
 export type NullableCardFilterDto = typeof nullableCardFilterDto.t
 
+const targetDto = schema.object().members({
+    type: schema.enum(GALAGUERRE_TARGET_TYPES),
+    tagId: schema.number([rules.exists({ table: 'galaguerre_tags', column: 'id' })]),
+    comparison: nullableComparisonDto,
+})
+export type TargetDto = typeof targetDto.t
+
 const ACTION_PROPERTIES = {
     type: schema.enum(GALAGUERRE_ACTIONS_TYPES),
     isTargeted: schema.boolean(),
@@ -60,6 +68,7 @@ const ACTION_PROPERTIES = {
     attackBoost: schema.number(),
     healthBoost: schema.number(),
     minionPower: nullableMinionPowerDto,
+    targets: schema.array().members(targetDto),
 }
 
 export const actionDto = schema.object().members(ACTION_PROPERTIES)
