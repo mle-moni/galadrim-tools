@@ -1,12 +1,13 @@
 import { AllRights, hasRights } from '@galadrim-tools/shared'
 import {
+    Add,
     ChevronLeft,
     Dashboard,
     NotificationAdd,
     PersonAddAlt,
     Settings,
 } from '@mui/icons-material'
-import { styled, SvgIconTypeMap } from '@mui/material'
+import { SvgIconTypeMap, styled } from '@mui/material'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import { useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
@@ -46,6 +47,12 @@ const allLinks: LinkFormat[] = [
         text: 'Envoyer des notifications',
         icon: NotificationAdd,
         right: 'NOTIFICATION_ADMIN',
+    },
+    {
+        to: '/admin/galaguerre',
+        text: 'Créer une carte Galaguerre',
+        icon: Add,
+        right: 'GALAGUERRE_ADMIN',
     },
     { to: '/', text: `Retour à l'accueil`, icon: ChevronLeft, right: 'DEFAULT' },
 ]

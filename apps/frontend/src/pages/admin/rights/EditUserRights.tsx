@@ -97,6 +97,28 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                     }
                     label="Administration des notifications"
                 />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={editUserRightsStore.hasRight('CODE_NAMES_ADMIN')}
+                            onChange={() => {
+                                editUserRightsStore.toggleRight('CODE_NAMES_ADMIN')
+                            }}
+                        />
+                    }
+                    label="Administration du code names"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={editUserRightsStore.hasRight('GALAGUERRE_ADMIN')}
+                            onChange={() => {
+                                editUserRightsStore.toggleRight('GALAGUERRE_ADMIN')
+                            }}
+                        />
+                    }
+                    label="Administration de Galaguerre"
+                />
             </FormGroup>
         )
     }
