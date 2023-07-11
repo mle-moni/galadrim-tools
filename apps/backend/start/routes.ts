@@ -56,6 +56,7 @@ Route.group(() => {
 
     Route.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
     Route.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
+    Route.resource('breakVotes', 'breakVotes/BreakVotesController').apiOnly()
 }).middleware('auth:web,api')
 
 Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
