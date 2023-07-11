@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Database from '@ioc:Adonis/Lucid/Database'
+import { TODAY_BREAK_VOTE_FILTER } from 'App/Controllers/Http/breakVotes/breakVotesIndex'
 import BreakVote from 'App/Models/BreakVote'
 import BreakVoteActivity from 'App/Models/BreakVoteActivity'
 import BreakVoteTime from 'App/Models/BreakVoteTime'
@@ -18,6 +19,11 @@ export const storeBreakVote = async ({ auth, request }: HttpContextContract) => 
     const { activities, times } = await request.validate({ schema: breakVoteSchema })
 
     const trx = await Database.transaction()
+
+    await BreakVote.query({ client: trx })
+        .where('user_id', user.id)
+        .andWhereRaw(TODAY_BREAK_VOTE_FILTER)
+        .delete()
 
     try {
         const newBreakVote = await BreakVote.create({ userId: user.id }, { client: trx })
