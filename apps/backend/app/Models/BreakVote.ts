@@ -1,6 +1,6 @@
-import { BaseModel, HasManyThrough, column, hasManyThrough } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import BreakActivity from 'App/Models/BreakActivity'
-import BreakVoteActivity from 'App/Models/BreakVoteActivity'
+import BreakVoteTime from 'App/Models/BreakVoteTime'
 import { DateTime } from 'luxon'
 
 export default class BreakVote extends BaseModel {
@@ -10,8 +10,13 @@ export default class BreakVote extends BaseModel {
     @column()
     public userId: number
 
-    @hasManyThrough([() => BreakActivity, () => BreakVoteActivity])
-    public activities: HasManyThrough<typeof BreakActivity>
+    @manyToMany(() => BreakActivity, {
+        pivotTable: 'break_vote_activities',
+    })
+    public activities: ManyToMany<typeof BreakActivity>
+
+    @hasMany(() => BreakVoteTime)
+    public times: HasMany<typeof BreakVoteTime>
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
