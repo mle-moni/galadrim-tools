@@ -45,6 +45,8 @@ export const storeBreakVote = async ({ auth, request }: HttpContextContract) => 
         )
 
         await trx.commit()
+
+        return { message: 'Vote pris en compte' }
     } catch (error) {
         await trx.rollback()
         throw error
