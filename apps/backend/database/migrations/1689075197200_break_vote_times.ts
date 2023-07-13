@@ -14,7 +14,12 @@ export default class extends BaseSchema {
                 .references('break_votes.id')
                 .onDelete('CASCADE')
 
-            table.time('time').notNullable()
+            table
+                .integer('break_time_id')
+                .notNullable()
+                .unsigned()
+                .references('break_times.id')
+                .onDelete('CASCADE')
         })
     }
 

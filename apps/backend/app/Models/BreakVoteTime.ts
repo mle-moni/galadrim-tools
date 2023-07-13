@@ -8,5 +8,5 @@ export default class BreakVoteTime extends BaseModel {
     public breakVoteId: number
 
     @column()
-    public time: string
+    public breakTimeId: number
 }

@@ -10,7 +10,9 @@ const breakVoteSchema = schema.create({
     activities: schema
         .array()
         .members(schema.number([rules.exists({ table: 'break_activities', column: 'id' })])),
-    times: schema.array().members(schema.string([rules.regex(/^[0-9]{2}:[0-9]{2}$/)])),
+    times: schema
+        .array()
+        .members(schema.number([rules.exists({ table: 'break_times', column: 'id' })])),
 })
 
 export const storeBreakVote = async ({ auth, request }: HttpContextContract) => {
@@ -37,9 +39,9 @@ export const storeBreakVote = async ({ auth, request }: HttpContextContract) => 
         )
 
         await BreakVoteTime.createMany(
-            times.map((time) => ({
+            times.map((timeId) => ({
                 breakVoteId: newBreakVote.id,
-                time,
+                breakTimeId: timeId,
             })),
             { client: trx }
         )

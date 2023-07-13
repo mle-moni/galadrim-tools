@@ -61,6 +61,7 @@ Route.group(() => {
 Route.group(() => {
     Route.resource('votes', 'breakVotes/BreakVotesController').apiOnly()
     Route.resource('activities', 'breakActivities/BreakActivitiesController').apiOnly()
+    Route.resource('times', 'breakTimes/BreakTimesController').apiOnly()
 })
     .prefix('galabreak')
     .middleware('auth:web,api')
