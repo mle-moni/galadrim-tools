@@ -45,7 +45,7 @@ export class GalabreakStore {
     }
 
     setTimes(times: ApiBreakTime[]) {
-        this.times = times
+        this.times = times.sort((a, b) => a.time.localeCompare(b.time))
     }
 
     setVotes(votes: ApiBreakVote[]) {
