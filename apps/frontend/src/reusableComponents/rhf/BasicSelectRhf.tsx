@@ -92,7 +92,7 @@ export const BasicSelectRhf = observer(
 
         const handleChange = (newValue: SelectType) => {
             beforeChange?.(newValue)
-            onChange(newValue as any)
+            onChange(newValue)
             afterChange?.(newValue)
         }
 
