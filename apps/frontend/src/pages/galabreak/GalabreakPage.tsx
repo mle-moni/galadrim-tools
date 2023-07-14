@@ -1,78 +1,38 @@
-import { Autocomplete, TextField, Typography } from '@mui/material'
+import { Home, OpenInNew } from '@mui/icons-material'
+import { Box, CircularProgress } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo } from 'react'
-import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
-import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { AppStore } from '../../globalStores/AppStore'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
+import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
-import { GalabreakStore } from './GalabreakStore'
+import { GalabreakVotes } from './GalabreakVotes'
 
 export const GalabreakPage = observer(() => {
-    const store = useMemo(() => new GalabreakStore(), [])
+    const store = AppStore.galabreakStore
 
     useEffect(() => {
         store.fetchAll()
-    }, [])
+    }, [store])
 
     return (
-        <MainLayout fullscreen>
+        <MainLayout>
+            <RoundedLinks linkInfos={[{ Icon: Home, link: '/' }]} />
+            <h1 style={{ textAlign: 'center' }}>Galabreak</h1>
             <CenteredDiv>
-                <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600, mt: 4 }}>
-                    <GaladrimLogo align="center" sx={{ mb: 2 }} />
-                    <Typography sx={{ fontSize: 26, textAlign: 'center', m: 2 }}>
-                        Une pause s'impose !
-                    </Typography>
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
+                <Box sx={{ width: '80%' }}>
+                    <CenteredDiv>
+                        <Link to="/galabreak/vote">
+                            <GaladrimButton endIcon={<OpenInNew />}>Voter</GaladrimButton>
+                        </Link>
+                    </CenteredDiv>
 
-                            return store.submitVote()
-                        }}
-                    >
-                        <Autocomplete
-                            disablePortal
-                            options={store.activitiesOptions}
-                            multiple
-                            fullWidth
-                            value={store.activitiesValue}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Choisir une/des activités" />
-                            )}
-                            onChange={(_e, value) => {
-                                if (value) {
-                                    store.setActivitiesValue(value)
-                                }
-                            }}
-                            isOptionEqualToValue={(a, b) => a.value === b.value}
-                            filterSelectedOptions
-                        />
+                    {store.isLoading && <CircularProgress />}
 
-                        <Autocomplete
-                            sx={{ my: 2 }}
-                            disablePortal
-                            options={store.timesOptions}
-                            multiple
-                            fullWidth
-                            value={store.timesValue}
-                            renderInput={(params) => (
-                                <TextField {...params} label="Choisir une/des disponibilités" />
-                            )}
-                            onChange={(_e, value) => {
-                                if (value) {
-                                    store.setTimesValue(value)
-                                }
-                            }}
-                            isOptionEqualToValue={(a, b) => a.value === b.value}
-                            filterSelectedOptions
-                        />
-
-                        <GaladrimButton isSubmit fullWidth={false}>
-                            Voter
-                        </GaladrimButton>
-                    </form>
-                </GaladrimRoomsCard>
+                    {!store.isLoading && <GalabreakVotes />}
+                </Box>
             </CenteredDiv>
         </MainLayout>
     )

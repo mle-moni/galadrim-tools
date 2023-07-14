@@ -1,6 +1,6 @@
-import { BaseModel, HasMany, ManyToMany, column, hasMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import BreakActivity from 'App/Models/BreakActivity'
-import BreakVoteTime from 'App/Models/BreakVoteTime'
+import BreakTime from 'App/Models/BreakTime'
 import { DateTime } from 'luxon'
 
 export default class BreakVote extends BaseModel {
@@ -15,8 +15,10 @@ export default class BreakVote extends BaseModel {
     })
     public activities: ManyToMany<typeof BreakActivity>
 
-    @hasMany(() => BreakVoteTime)
-    public times: HasMany<typeof BreakVoteTime>
+    @manyToMany(() => BreakTime, {
+        pivotTable: 'break_vote_times',
+    })
+    public times: ManyToMany<typeof BreakTime>
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime

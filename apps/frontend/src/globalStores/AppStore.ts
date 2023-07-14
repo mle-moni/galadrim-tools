@@ -5,6 +5,7 @@ import { TournoisResultsStore } from '../pages/games/tournois/TournoisResultsSto
 import { IdeasStore } from '../pages/idea/IdeasStore'
 import { AuthStore } from './AuthStore'
 import { EventsStore } from './EventsStore'
+import { GalabreakStore } from './GalabreakStore'
 import { NotificationStore } from './NotificationStore'
 import { SaveurStore } from './SaveurStore'
 import { SocketStore } from './SocketStore'
@@ -29,6 +30,8 @@ export class MainStore {
     public socketStore = new SocketStore()
 
     public ideaStore = new IdeasStore()
+
+    public galabreakStore = new GalabreakStore()
 
     public tournoisResultsStore: TournoisResultsStore | null = null
 
