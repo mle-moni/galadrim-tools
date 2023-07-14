@@ -53,7 +53,7 @@ export type NullableCardFilterDto = typeof nullableCardFilterDto.t
 
 const targetDto = schema.object().members({
     type: schema.enum(GALAGUERRE_TARGET_TYPES),
-    tagId: schema.number([rules.exists({ table: 'galaguerre_tags', column: 'id' })]),
+    tagId: schema.number.nullable([rules.exists({ table: 'galaguerre_tags', column: 'id' })]),
     comparison: nullableComparisonDto,
 })
 export type TargetDto = typeof targetDto.t

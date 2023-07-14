@@ -1,21 +1,16 @@
-import { useIsMobile } from '../../../hooks/useIsMobile'
-import { useRights } from '../../../hooks/useRights'
-import MainLayout from '../../../reusableComponents/layouts/MainLayout'
+import { Add, ChevronLeft } from '@mui/icons-material'
+import { AdminPageTemplate, LinkFormat } from '../AdminPageTemplate'
 
-export const GalaguerreAdminPage = () => {
-    const isMobile = useIsMobile()
-    useRights('all', ['GALAGUERRE_ADMIN'], '/admin')
+const allLinks: LinkFormat[] = [
+    {
+        to: '/admin/galaguerre/createCard',
+        text: 'Créer une carte Galaguerre',
+        icon: Add,
+        right: 'GALAGUERRE_ADMIN',
+    },
+    { to: '/admin', text: `Retour`, icon: ChevronLeft, right: 'DEFAULT' },
+]
 
-    return (
-        <MainLayout>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <div style={{ width: isMobile ? '100%' : '80%' }}>
-                    <h1>Créer une carte</h1>
-                    <p>test</p>
-                </div>
-            </div>
-        </MainLayout>
-    )
-}
+export const GalaguerreAdminPage = () => <AdminPageTemplate allLinks={allLinks} />
 
 export default GalaguerreAdminPage

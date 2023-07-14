@@ -107,3 +107,10 @@ export const stringToNumber = (str: string) => +str
 export const stringToNumberOrNull = ((str: string) =>
     str === '' ? null : +str) as typeof stringToNumber
 export const numberToString = (val: number) => val?.toString() || ''
+
+export const getNumberFieldProps = ({ min }: { min?: number }) => ({
+    type: 'number',
+    min,
+    stringToValue: stringToNumber,
+    valueToString: numberToString,
+})
