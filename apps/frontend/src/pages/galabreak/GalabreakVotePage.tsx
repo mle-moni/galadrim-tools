@@ -1,5 +1,6 @@
+import { HowToVote } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Autocomplete, Box, Button, TextField, Typography } from '@mui/material'
+import { Autocomplete, Box, TextField, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
@@ -36,6 +37,7 @@ export const GalabreakVotePage = observer(() => {
                         }}
                     >
                         <Autocomplete
+                            sx={{ my: 2 }}
                             disablePortal
                             options={store.activitiesOptions}
                             multiple
@@ -72,19 +74,20 @@ export const GalabreakVotePage = observer(() => {
                             filterSelectedOptions
                         />
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+                            <Link to="/galabreak">
+                                <GaladrimButton startIcon={<BackIcon />} variant="contained">
+                                    Retour
+                                </GaladrimButton>
+                            </Link>
                             <GaladrimButton
+                                endIcon={<HowToVote />}
                                 isSubmit
                                 fullWidth={false}
                                 disabled={store.isSubmitDisabled}
                             >
                                 Voter
                             </GaladrimButton>
-                            <Link to="/galabreak">
-                                <Button startIcon={<BackIcon />} variant="contained">
-                                    Retour
-                                </Button>
-                            </Link>
                         </Box>
                     </form>
                 </GaladrimRoomsCard>
