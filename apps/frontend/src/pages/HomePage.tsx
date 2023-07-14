@@ -4,6 +4,7 @@ import {
     CalendarMonth,
     GitHub,
     Lightbulb,
+    Pause,
     RestaurantMenu,
     VideogameAsset,
 } from '@mui/icons-material'
@@ -34,6 +35,7 @@ const HomePage = observer(() => {
                 <IconLink Icon={RestaurantMenu} link="/saveur" title="Restaurants" />
                 <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
                 <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
+                <IconLink Icon={Pause} link="/galabreak" title="Pause ?" />
                 <IconLink
                     Icon={GitHub}
                     link="https://github.com/mle-moni/galadrim-tools"

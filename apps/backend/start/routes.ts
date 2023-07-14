@@ -58,6 +58,14 @@ Route.group(() => {
     Route.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
 }).middleware('auth:web,api')
 
+Route.group(() => {
+    Route.resource('votes', 'breakVotes/BreakVotesController').apiOnly()
+    Route.resource('activities', 'breakActivities/BreakActivitiesController').apiOnly()
+    Route.resource('times', 'breakTimes/BreakTimesController').apiOnly()
+})
+    .prefix('galabreak')
+    .middleware('auth:web,api')
+
 Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
 
 Route.group(() => {
