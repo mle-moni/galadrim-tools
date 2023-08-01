@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { getApiUrl } from '../../../api/fetch'
 import { AppStore } from '../../../globalStores/AppStore'
 import { MAX_ZOOM, SaveurStore } from '../../../globalStores/SaveurStore'
@@ -96,9 +96,11 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 <Button onClick={() => store.toggleIsRatingDevelopped()} size="small">
                     {store.rating ? NOTES_VALUES[store.rating] : <Favorite />}
                 </Button>
-                <CustomLink to={`/saveur/restaurants/${restaurant.id}`}>
-                    <Edit />
-                </CustomLink>
+                <Link to={`/saveur/restaurants/${restaurant.id}`}>
+                    <Button size="small">
+                        <Edit />
+                    </Button>
+                </Link>
                 <Button
                     size="small"
                     onClick={() => {
