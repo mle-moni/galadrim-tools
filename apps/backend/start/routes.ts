@@ -32,6 +32,7 @@ Route.post('/getOtp', 'auth/AuthController.getOtp')
 Route.group(() => {
     Route.resource('events', 'events/EventsController').apiOnly()
     Route.get('/allEvents', 'events/EventsController.all')
+    Route.get('/availableRooms', 'events/EventsController.availableRooms')
     Route.resource('tags', 'tags/TagsController').apiOnly()
     Route.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
     Route.post(
