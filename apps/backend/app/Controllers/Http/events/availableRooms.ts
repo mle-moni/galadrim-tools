@@ -29,9 +29,7 @@ export const availableRooms = async ({ request, response }: HttpContextContract)
     ]
 
     // get all events with dates incompatible with the new event
-    const res = await Event.query()
-        .whereBetween('start', [startDate, endDate])
-        .orWhereBetween('end', [startDate, endDate])
+    const res = await Event.query().where('end', '>', startDate).andWhere('start', '<', endDate)
 
     const unavailableRooms = new Set(res.map((event) => event.room))
 
