@@ -2,13 +2,17 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Event from 'App/Models/Event'
 
 export const availableRooms = async ({ request, response }: HttpContextContract) => {
-    const start = request.param('start', null)
-    const end = request.param('end', null)
+    const queryString = request.qs()
+    const start = queryString.start ?? null
+    const end = queryString.end ?? null
 
     const startDate = new Date(start)
     const endDate = new Date(end)
 
-    if (startDate.toString() === 'Invalid Date' || endDate.toString() === 'Invalid Date') {
+    const invalidDate =
+        startDate.toString() === 'Invalid Date' || endDate.toString() === 'Invalid Date'
+
+    if (invalidDate || !start || !end) {
         return response.badRequest({
             error: 'Invalid Date',
         })
