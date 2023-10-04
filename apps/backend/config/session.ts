@@ -86,7 +86,7 @@ const sessionConfig: SessionConfig = {
     cookie: {
         path: '/',
         httpOnly: true,
-        sameSite: 'None',
+        sameSite: 'none',
     },
 
     /*
