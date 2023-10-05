@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "galadrim-rooms-extension",
+    "version": "1.0",
+    "description": "Galadrim Rooms Extension",
+
+    "icons": {
+        "16": "images/icon-16.png",
+        "32": "images/icon-32.png",
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    },
+    "action": {
+        "default_popup": "src/popup.html",
+        "default_icon": "images/icon-128.png"
+    },
+    "content_scripts": [
+        {
+            "js": ["src/extension.js"],
+            "matches": ["https://calendar.google.com/*"]
+        }
+    ],
+    "permissions": ["storage", "scripting"],
+    "host_permissions": ["*://galadrim-tools-api.mle-moni.fr/*", "*://calendar.google.com/*"]
+}
