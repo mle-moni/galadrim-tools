@@ -20,6 +20,5 @@
             "matches": ["https://calendar.google.com/*"]
         }
     ],
-    "permissions": ["storage", "scripting"],
-    "host_permissions": ["*://galadrim-tools-api.mle-moni.fr/*", "*://calendar.google.com/*"]
+    "permissions": ["storage", "scripting"]
 }
