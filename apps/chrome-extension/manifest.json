@@ -20,5 +20,5 @@
             "matches": ["https://calendar.google.com/*"]
         }
     ],
-    "permissions": ["storage", "scripting"]
+    "permissions": ["storage"]
 }
