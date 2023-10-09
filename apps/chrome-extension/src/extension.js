@@ -37,7 +37,52 @@ const MONTH_NUMBERS = {
     december: 12,
 }
 
-const getHoursMinutes = (str) => {
+const lastLoopData = {}
+
+setInterval(() => {
+    updateExtensionUi()
+}, REFRESH_INTERVAL)
+
+function updateExtensionUi() {
+    chrome.storage.sync.get('galadrimToolsApiToken', function (items) {
+        lastLoopData.apiToken = items.galadrimToolsApiToken
+    })
+
+    if (!lastLoopData.apiToken) return
+
+    const dates = getDates()
+
+    if (!dates) return
+
+    const dateChanged =
+        dates.startIso !== lastLoopData.startIso || dates.endIso !== lastLoopData.endIso
+
+    const stopExecution = !dateChanged && roomSelectIsInDom()
+
+    if (stopExecution) return
+
+    lastLoopData.startIso = dates.startIso
+    lastLoopData.endIso = dates.endIso
+
+    displayAvailableRooms(dates.startIso, dates.endIso)
+}
+
+async function getRooms(start, end) {
+    const res = await fetch(
+        `https://galadrim-tools-api.mle-moni.fr/availableRooms?start=${start}&end=${end}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${lastLoopData.apiToken}`,
+            },
+        }
+    )
+
+    return res.json()
+}
+
+function getHoursMinutes(str) {
     const [hoursStr, minutesAndAmPm] = str.split(':')
     const amPm = minutesAndAmPm.slice(-2).toLowerCase()
     const minutes = minutesAndAmPm.slice(0, 2)
@@ -49,37 +94,6 @@ const getHoursMinutes = (str) => {
 
     return { hours, minutes }
 }
-
-let apiToken = null
-
-async function getRooms(start, end) {
-    const res = await fetch(
-        `https://galadrim-tools-api.mle-moni.fr/availableRooms?start=${start}&end=${end}`,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiToken}`,
-            },
-        }
-    )
-
-    return res.json()
-}
-
-setInterval(() => {
-    chrome.storage.sync.get('galadrimToolsApiToken', function (items) {
-        apiToken = items.galadrimToolsApiToken
-    })
-
-    if (!apiToken) return
-
-    const dates = getDates()
-
-    if (!dates) return
-
-    displayAvailableRooms(dates.startIso, dates.endIso)
-}, REFRESH_INTERVAL)
 
 function getDates() {
     const startDate = document.querySelector('[data-key=startDate]')
@@ -128,6 +142,12 @@ function getTitleValue() {
     return titleInput.value
 }
 
+function roomSelectIsInDom() {
+    const roomSelect = document.getElementById('room-select-container')
+
+    return !!roomSelect
+}
+
 async function displayAvailableRooms(start, end) {
     const availableRooms = await getRooms(start, end)
     const locationDiv = document.querySelector('[data-key=location]')
@@ -160,14 +180,14 @@ async function displayAvailableRooms(start, end) {
         select.addEventListener('change', (e) => {
             locationDiv.click()
             setTimeout(() => {
-                parent.getElementsByTagName('input')[0].value = e.target.value
+                const locationInput = parent.getElementsByTagName('input')[0]
+                locationInput.value = e.target.value
+                locationInput.dispatchEvent(new Event('change'))
             }, 100)
         })
 
         getSubmitButton().addEventListener('click', () => {
-            console.log('room chosen', select.value)
             const isRoom = ROOMS.has(select.value)
-            console.log('isRoom', isRoom)
             if (isRoom) {
                 const title = getTitleValue()
                 createEvent(start, end, select.value, title)
@@ -202,7 +222,7 @@ async function createEvent(start, end, room, title) {
 
     await fetch('https://galadrim-tools-api.mle-moni.fr/events', {
         headers: {
-            Authorization: `Bearer ${apiToken}`,
+            Authorization: `Bearer ${lastLoopData.apiToken}`,
         },
         method: 'POST',
         body: formData,
