@@ -35,4 +35,6 @@ export default Env.rules({
     CACHE_VIEWS: Env.schema.boolean(),
     BACKEND_URL: Env.schema.string({ format: 'url', tld: false }),
     FRONTEND_URL: Env.schema.string({ format: 'url', tld: false }),
+
+    GALADRIM_SECRET_KEY: Env.schema.string.optional(),
 })

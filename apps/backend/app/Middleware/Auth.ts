@@ -1,6 +1,7 @@
 import { AuthenticationException } from '@adonisjs/auth/build/standalone'
 import { GuardsList } from '@ioc:Adonis/Addons/Auth'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { getUserToAuthenticate } from 'App/Services/GaladrimAuth'
 
 /**
  * Auth middleware is meant to restrict un-authenticated access to a given route
@@ -61,16 +62,26 @@ export default class AuthMiddleware {
      * Handle request
      */
     public async handle(
-        { auth }: HttpContextContract,
+        ctx: HttpContextContract,
         next: () => Promise<void>,
         customGuards: (keyof GuardsList)[]
     ) {
+        const { auth } = ctx
+
         /**
          * Uses the user defined guards or the default guard mentioned in
          * the config file
          */
         const guards = customGuards.length ? customGuards : [auth.name]
-        await this.authenticate(auth, guards)
+        try {
+            await this.authenticate(auth, guards)
+        } catch (error) {
+            const user = await getUserToAuthenticate(ctx)
+
+            if (!user) throw error
+
+            await auth.login(user)
+        }
         await next()
     }
 }
