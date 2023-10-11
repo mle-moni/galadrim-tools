@@ -6,6 +6,26 @@ import User from 'App/Models/User'
 import axios from 'axios'
 import crypto from 'crypto'
 import { nanoid } from 'nanoid'
+import timers from 'node:timers/promises'
+
+const EMAIL_CREATION_SET = new Set<string>()
+
+const emailCreationPending = async (email: string) => {
+    if (!EMAIL_CREATION_SET.has(email)) return 'ready'
+
+    await timers.setTimeout(100)
+
+    emailCreationPending(email)
+}
+
+const lockEmail = async (email: string) => {
+    await emailCreationPending(email)
+    EMAIL_CREATION_SET.add(email)
+}
+
+const unlockEmail = (email: string) => {
+    EMAIL_CREATION_SET.delete(email)
+}
 
 const ALGORITHM = 'aes-256-cbc'
 
@@ -61,14 +81,19 @@ const createUserFromEmail = async (email: string) => {
     const res = await axios.get(`https://forest.galadrim.fr/profileInfos?email=${email}`)
     if (res.status === 200) {
         const { username, userId } = res.data
-        const user = await User.create({
-            email,
-            username,
-            password: nanoid(),
-            otpToken: nanoid(),
-            notificationsSettings: DEFAULT_NOTIFICATION_SETTINGS,
-            imageUrl: `https://res.cloudinary.com/forest2/image/fetch/f_auto,w_150,h_150/https://forest.galadrim.fr/img/users/${userId}.jpg`,
-        })
+        await lockEmail(email)
+        const user = await User.updateOrCreate(
+            { email },
+            {
+                email,
+                username,
+                password: nanoid(),
+                otpToken: nanoid(),
+                notificationsSettings: DEFAULT_NOTIFICATION_SETTINGS,
+                imageUrl: `https://res.cloudinary.com/forest2/image/fetch/f_auto,w_150,h_150/https://forest.galadrim.fr/img/users/${userId}.jpg`,
+            }
+        )
+        unlockEmail(email)
 
         return user
     }
