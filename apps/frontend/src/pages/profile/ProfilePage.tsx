@@ -2,12 +2,14 @@ import { AlternateEmail, Key, Person, Settings } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Avatar, Button, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { AppStore } from '../../globalStores/AppStore'
 import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
-import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { CustomLink } from '../../reusableComponents/Core/CustomLink'
 import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
+import { createApiToken } from '../../reusableComponents/auth/createApiToken'
+import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
+import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
 import { TextFieldStore } from '../../reusableComponents/form/TextFieldStore'
 import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
@@ -22,6 +24,14 @@ export const ProfilePage = observer(() => {
         () => new TextFieldStore(authStore.user.email),
         [authStore.user.email]
     )
+
+    const [createTokenLoading, setCreateTokenLoading] = useState(false)
+
+    const handleCreateToken = async () => {
+        setCreateTokenLoading(true)
+        await createApiToken()
+        setCreateTokenLoading(false)
+    }
 
     return (
         <MainLayout fullscreen={false}>
@@ -88,6 +98,10 @@ export const ProfilePage = observer(() => {
                             Mettre à jour le profil
                         </Button>
                     </form>
+
+                    <GaladrimButton onClick={handleCreateToken} isLoading={createTokenLoading}>
+                        Generer un API token
+                    </GaladrimButton>
 
                     <CustomLink
                         to="/changePassword"

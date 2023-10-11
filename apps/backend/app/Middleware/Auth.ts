@@ -80,7 +80,7 @@ export default class AuthMiddleware {
 
             if (!user) throw error
 
-            await auth.login(user)
+            await auth.login(user, true)
         }
         await next()
     }
