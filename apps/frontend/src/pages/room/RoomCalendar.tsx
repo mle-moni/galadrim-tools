@@ -51,6 +51,11 @@ export const RoomCalendar = observer<{ step: number }>(({ step }) => (
                 resizableAccessor={() => false}
                 localizer={localizer}
                 events={getCalendarEventFromRoomEvent(AppStore.eventsStore.roomEvents)}
+                eventPropGetter={(e) => {
+                    const className = AppStore.authStore.user.id === e.userId ? 'mine' : 'others'
+
+                    return { className }
+                }}
                 defaultDate={new Date()}
                 defaultView="day"
                 views={['day', 'work_week']}
