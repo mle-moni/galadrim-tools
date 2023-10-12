@@ -220,7 +220,7 @@ async function createEvent(start, end, room, title) {
         formData.append('title', title)
     }
 
-    await fetch('https://galadrim-tools-api.mle-moni.fr/events', {
+    await fetch('https://tools-api.galadrim.fr/events', {
         headers: {
             Authorization: `Bearer ${lastLoopData.apiToken}`,
         },
