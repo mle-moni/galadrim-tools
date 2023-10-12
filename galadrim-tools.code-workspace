@@ -1,20 +1,24 @@
 {
-	"folders": [
-		{
-			"name": "✨ root",
-			"path": "."
-		},
-		{
-			"name": "🚀 apps/backend",
-			"path": "apps/backend"
-		},
-		{
-			"name": "🚀 apps/frontend",
-			"path": "apps/frontend"
-		},
-		{
-			"name": "📦 libs/shared",
-			"path": "libs/shared"
-		}
-	]
+    "folders": [
+        {
+            "name": "✨ root",
+            "path": "."
+        },
+        {
+            "name": "🚀 apps/backend",
+            "path": "apps/backend"
+        },
+        {
+            "name": "🚀 apps/frontend",
+            "path": "apps/frontend"
+        },
+        {
+            "name": "🧩 apps/chrome-extension",
+            "path": "apps/chrome-extension"
+        },
+        {
+            "name": "📦 libs/shared",
+            "path": "libs/shared"
+        }
+    ]
 }
