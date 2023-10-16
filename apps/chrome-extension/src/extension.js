@@ -1,3 +1,5 @@
+const API_URL = 'https://tools-api.galadrim.fr'
+
 const ROOMS = new Set([
     'Salle Vador',
     'Salle Adier',
@@ -68,16 +70,13 @@ function updateExtensionUi() {
 }
 
 async function getRooms(start, end) {
-    const res = await fetch(
-        `https://galadrim-tools-api.mle-moni.fr/availableRooms?start=${start}&end=${end}`,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${lastLoopData.apiToken}`,
-            },
-        }
-    )
+    const res = await fetch(`${API_URL}/availableRooms?start=${start}&end=${end}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${lastLoopData.apiToken}`,
+        },
+    })
 
     return res.json()
 }
@@ -220,7 +219,7 @@ async function createEvent(start, end, room, title) {
         formData.append('title', title)
     }
 
-    await fetch('https://tools-api.galadrim.fr/events', {
+    await fetch(`${API_URL}/events`, {
         headers: {
             Authorization: `Bearer ${lastLoopData.apiToken}`,
         },
