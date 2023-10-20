@@ -16,6 +16,14 @@
         <style>
             :root {
                 --main-color: #f9efe6;
+
+                --my-events-bg: white;
+                --my-events-border: white;
+                --my-events-text: white;
+
+                --other-events-bg: white;
+                --other-events-border: white;
+                --other-events-text: white;
             }
 
             body,
@@ -107,18 +115,26 @@
             }
 
             .rbc-event {
-                border-color: #ffffff !important;
+                outline: solid 2px #ffffff !important;
                 color: black !important;
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
             }
 
             .rbc-event.others {
-                background-color: #eceef1 !important;
+                background-color: var(--other-events-bg) !important;
+                border-color: var(--other-events-border) !important;
+                color: var(--other-events-text) !important;
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
             }
 
             .rbc-event.mine {
-                border-style: solid;
-                background-color: #0d022a !important;
-                color: white !important;
+                background-color: var(--my-events-bg) !important;
+                border-color: var(--my-events-border) !important;
+                color: var(--my-events-text) !important;
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
             }
         </style>
     </head>

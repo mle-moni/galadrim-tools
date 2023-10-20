@@ -3,12 +3,14 @@ import {
     ApiNotification,
     INotification,
     IRestaurant,
+    ITheme,
     IUserData,
 } from '@galadrim-tools/shared'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { notifyError, notifySuccess } from '../utils/notification'
 import { AppStore } from './AppStore'
+import { ThemeStore } from './ThemeStore'
 
 const CHANGE_PASSWORD_INTENT = 'changePassword' as const
 
@@ -24,6 +26,8 @@ export class AuthStore {
     public image: File | null = null
 
     public imageSrc: string | null = null
+
+    public themeStore = new ThemeStore(this)
 
     constructor() {
         makeAutoObservable(this)
@@ -84,6 +88,7 @@ export class AuthStore {
     }
 
     setUser(user: IUserData | null) {
+        this.themeStore.updateWithTheme(user?.theme ?? null)
         if (!user) {
             this._user = null
             this.connected = false
@@ -219,5 +224,10 @@ export class AuthStore {
         this.user.notifications.forEach((notification) => {
             notification.read = true
         })
+    }
+
+    setUserTheme(theme: ITheme) {
+        this.user.theme = theme
+        this.themeStore.updateWithTheme(theme)
     }
 }

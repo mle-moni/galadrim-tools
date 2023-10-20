@@ -11,6 +11,7 @@ const StatisticsPage = React.lazy(() => import('../pages/statistics/StatisticsPa
 const NotificationsSettingsPage = React.lazy(
     () => import('../pages/profile/notifications/NotificationsSettingsPage')
 )
+const ThemePage = React.lazy(() => import('../pages/profile/theme/ThemePage'))
 const CreateRestaurantPage = React.lazy(
     () => import('../pages/saveur/createRestaurant/CreateRestaurantPage')
 )
@@ -107,6 +108,7 @@ const AppRoutes = () => {
                     path="/profile/notificationsSettings"
                     element={<NotificationsSettingsPage />}
                 />
+                <Route path="/profile/theme" element={<ThemePage />} />
                 <Route path="/ideas" element={<IdeaPage />} />
                 <Route path="/galabreak" element={<GalabreakPage />} />
                 <Route path="/galabreak/vote" element={<GalabreakVotePage />} />

@@ -9,7 +9,7 @@ export const meRoute = async ({ auth, response }: HttpContextContract) => {
         })
     }
 
-    await user.load('notifications')
+    await user.load((q) => q.preload('notifications').preload('theme'))
 
     const userData = user.userData()
 

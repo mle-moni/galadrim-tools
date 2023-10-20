@@ -29,16 +29,24 @@ const getCalendarEventFromRoomEvent = (roomEvents: RoomEvent[]): CalendarEvent[]
     }))
 }
 
-export const RoomCalendar = observer<{ step: number }>(({ step }) => (
+const CALENDAR_POSITION = {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+} as const
+
+export const RoomCalendar = observer<{
+    step: number
+    height?: string | number
+    isAbsolute?: boolean
+}>(({ step, height, isAbsolute = true }) => (
     <div
         style={{
-            height: '100%',
+            height: height ?? '100%',
             display: 'flex',
             justifyContent: 'center',
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
+            ...(isAbsolute ? CALENDAR_POSITION : {}),
             backgroundColor: 'var(--main-color)',
         }}
     >

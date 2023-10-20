@@ -1,4 +1,4 @@
-import { AlternateEmail, Key, Person, Settings } from '@mui/icons-material'
+import { AlternateEmail, ColorLens, Key, Person, Settings } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Avatar, Button, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -108,6 +108,10 @@ export const ProfilePage = observer(() => {
                         style={{ marginBottom: '20px', marginTop: '40px' }}
                     >
                         <Key sx={{ mr: 1 }} /> Changer votre mot de passe
+                    </CustomLink>
+
+                    <CustomLink to="/profile/theme" style={{ marginBottom: '20px' }}>
+                        <ColorLens sx={{ mr: 1 }} /> Thème
                     </CustomLink>
 
                     <CustomLink

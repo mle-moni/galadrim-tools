@@ -3,6 +3,7 @@ import {
     hasRights,
     hasSomeRights,
     INotification,
+    ITheme,
     IUserData,
 } from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
@@ -12,6 +13,8 @@ import {
     BaseModel,
     beforeFind,
     beforeSave,
+    BelongsTo,
+    belongsTo,
     column,
     hasMany,
     HasMany,
@@ -19,6 +22,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import Notification from 'App/Models/Notification'
 import RestaurantNote from 'App/Models/RestaurantNote'
+import Theme from 'App/Models/Theme'
 import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
@@ -59,8 +63,14 @@ export default class User extends BaseModel {
     @column()
     public skin: string | null
 
+    @column()
+    public themeId: number | null
+
     @attachment({ folder: 'avatar', preComputeUrl: true })
     public image: AttachmentContract | null
+
+    @belongsTo(() => Theme)
+    public theme: BelongsTo<typeof Theme>
 
     @hasMany(() => RestaurantChoice)
     public choices: HasMany<typeof RestaurantChoice>
@@ -129,6 +139,8 @@ export default class User extends BaseModel {
             (a, b) => b.id - a.id
         ) as unknown as INotification[]
 
+        const theme = (this.theme?.toJSON() ?? null) as ITheme | null
+
         return {
             id: this.id,
             username: this.username,
@@ -140,6 +152,7 @@ export default class User extends BaseModel {
             dailyChoice: this.dailyChoice,
             notifications,
             skin: this.skin,
+            theme,
         }
     }
 
