@@ -132,7 +132,7 @@ export class EventsStore {
     getRoomEvents(roomName: string) {
         if (roomName === '*')
             return this.events.map((event) => {
-                return { ...event, title: `${event.title} (${event.room})` }
+                return { ...event, title: event.title }
             })
         return this.events.filter((event) => event.room === roomName || event.room === '*')
     }
