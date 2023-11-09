@@ -1,6 +1,9 @@
 import Bouncer, { BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
-import Restaurant from '../Models/Restaurant'
 import User from '../Models/User'
+
+interface Resource {
+    userId: number | null
+}
 
 export default class RestaurantPolicy extends BasePolicy {
     public async before(user: User | null) {
@@ -9,8 +12,8 @@ export default class RestaurantPolicy extends BasePolicy {
         }
     }
 
-    public async viewUpdateOrDelete(user: User, resto: Restaurant) {
-        if (user.id !== resto.userId) {
+    public async viewUpdateOrDelete(user: User, resource: Resource) {
+        if (user.id !== resource.userId) {
             return Bouncer.deny("Vous n'avez pas les droits nécessaires")
         }
         return true

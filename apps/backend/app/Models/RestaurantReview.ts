@@ -1,5 +1,6 @@
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { scaffold } from 'App/Scaffolder/scaffolder'
 import { DateTime } from 'luxon'
 
 export default class RestaurantReview extends BaseModel {
@@ -12,7 +13,7 @@ export default class RestaurantReview extends BaseModel {
     @column()
     public userId: number
 
-    @column()
+    @column(scaffold('string'))
     public comment: string
 
     @attachment({ folder: 'restaurantReviews', preComputeUrl: true })
