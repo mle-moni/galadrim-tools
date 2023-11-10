@@ -1,4 +1,4 @@
-import { IRestaurant } from '@galadrim-tools/shared'
+import { IRestaurant, IReview } from '@galadrim-tools/shared'
 import Fuse from 'fuse.js'
 import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
@@ -66,6 +66,30 @@ export class RestaurantsStore {
         }
     }
 
+    removeReviewById(reviewId: number) {
+        const foundRestaurant = this.restaurants.find(({ reviews }) =>
+            reviews.find(({ id }) => id === reviewId)
+        )
+
+        if (!foundRestaurant) return
+
+        foundRestaurant.reviews = foundRestaurant.reviews.filter(({ id }) => id !== reviewId)
+    }
+
+    createOrUpdateReview(review: IReview) {
+        const restaurant = this.restaurants.find(({ id }) => id === review.restaurantId)
+        if (!restaurant) {
+            return
+        }
+        const foundReview = restaurant.reviews.find(({ id }) => id === review.id)
+        if (foundReview) {
+            foundReview.comment = review.comment
+            foundReview.image = review.image
+            return
+        }
+        restaurant.reviews.push(review)
+    }
+
     addRestaurant(restaurant: IRestaurant) {
         this.restaurants.push(restaurant)
         this.refreshFuse()
@@ -99,6 +123,7 @@ export class RestaurantsStore {
             return
         }
         restaurantFound.image = { ...restaurant.image }
+        restaurantFound.reviews = restaurant.reviews ?? []
         this.refreshFuse()
     }
 

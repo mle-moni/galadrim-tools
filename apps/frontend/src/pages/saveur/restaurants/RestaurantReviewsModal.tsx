@@ -28,6 +28,7 @@ const ReviewDiv = observer<{
                 flexDirection: 'column',
                 alignItems: isSelf ? 'flex-end' : 'flex-start',
                 paddingBottom: 1,
+                my: 4,
             }}
         >
             {user && (
@@ -56,6 +57,7 @@ const ReviewDiv = observer<{
                     width: 'fit-content',
                     border: '1px solid #CECECE',
                     whiteSpace: 'break-spaces',
+                    mb: 1,
                 }}
             >
                 {review.comment}
@@ -128,16 +130,33 @@ export const RestaurantReviewsModal = observer<RestaurantReviewsModalProps>(
                             multiline
                         />
                         <Box sx={{ my: 2 }}>
-                            <input
-                                key={saveurStore.restaurantsStore.reviewsStore.loadingStore.isLoading.toString()}
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) =>
-                                    saveurStore.restaurantsStore.reviewsStore.imageStore.setUploadedImage(
-                                        e.target
+                            <Button variant="contained" component="label" sx={{ my: 2 }}>
+                                Ajouter une image
+                                <input
+                                    key={saveurStore.restaurantsStore.reviewsStore.loadingStore.isLoading.toString()}
+                                    type="file"
+                                    hidden
+                                    accept="image/*"
+                                    id="image"
+                                    multiple
+                                    onChange={(e) =>
+                                        saveurStore.restaurantsStore.reviewsStore.imageStore.setUploadedImage(
+                                            e.target
+                                        )
+                                    }
+                                />
+                            </Button>
+                            {saveurStore.restaurantsStore.reviewsStore.imageStore.image !==
+                                null && (
+                                <span style={{ marginLeft: '12px' }}>
+                                    (
+                                    {
+                                        saveurStore.restaurantsStore.reviewsStore.imageStore.image
+                                            .name
+                                    }
                                     )
-                                }
-                            />
+                                </span>
+                            )}
                         </Box>
                         <Button
                             disabled={saveurStore.restaurantsStore.reviewsStore.submitDisabled}
