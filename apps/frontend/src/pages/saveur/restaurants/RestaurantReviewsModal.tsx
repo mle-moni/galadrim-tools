@@ -129,9 +129,7 @@ export const RestaurantReviewsModal = observer<RestaurantReviewsModalProps>(
                         />
                         <Box sx={{ my: 2 }}>
                             <input
-                                key={
-                                    saveurStore.restaurantsStore.reviewsStore.loadingStore.isLoading
-                                }
+                                key={saveurStore.restaurantsStore.reviewsStore.loadingStore.isLoading.toString()}
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) =>

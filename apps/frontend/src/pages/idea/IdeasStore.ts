@@ -233,7 +233,7 @@ export class IdeasStore {
         this.saveReaction(userReaction)
     }
 
-    async saveComment(comment: IIdeaComment) {
+    async saveComment(comment: Omit<IIdeaComment, 'id'>) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { userId: _, ...rest } = comment
         const result = await fetchBackendJson<
