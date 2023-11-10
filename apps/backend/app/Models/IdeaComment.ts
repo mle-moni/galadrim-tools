@@ -23,6 +23,7 @@ export default class IdeaComment extends BaseModel {
 
     get frontendData(): IIdeaComment {
         return {
+            id: this.id,
             ideaId: this.ideaId,
             message: this.message,
             userId: this.userId,

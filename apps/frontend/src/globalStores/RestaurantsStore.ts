@@ -4,11 +4,12 @@ import { makeAutoObservable } from 'mobx'
 import { fetchBackendJson, getErrorMessage } from '../api/fetch'
 import { APPLICATION_JSON_HEADERS } from '../pages/idea/createIdea/CreateIdeaStore'
 import {
-    getRestaurantsScore,
     MINIMUM_VOTES_BEFORE_RELEVANT,
+    getRestaurantsScore,
 } from '../pages/saveur/restaurantsLists/getRestaurantScore'
 import { LoadingStateStore } from '../reusableComponents/form/LoadingStateStore'
 import { notifyError } from '../utils/notification'
+import { RestaurantReviewsStore } from './RestaurantReviewsStore'
 
 const fuseSettings: Fuse.IFuseOptions<IRestaurant> = {
     includeScore: true,
@@ -24,6 +25,8 @@ export class RestaurantsStore {
     search = ''
 
     restaurantClicked?: IRestaurant = undefined
+
+    reviewsStore = new RestaurantReviewsStore()
 
     constructor() {
         makeAutoObservable(this)

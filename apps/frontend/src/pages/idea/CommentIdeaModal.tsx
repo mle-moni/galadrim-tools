@@ -82,8 +82,8 @@ const CommentIdeaModal = observer<{
     return (
         <form onSubmit={handleSubmit}>
             <Box sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
-                {idea.comments.map((comment, index) => {
-                    return <CommentDiv comment={comment} userId={userId} key={index} />
+                {idea.comments.map((comment) => {
+                    return <CommentDiv comment={comment} userId={userId} key={comment.id} />
                 })}
                 <Box key={'bottomRef'} ref={scrollCommentsRef} />
             </Box>

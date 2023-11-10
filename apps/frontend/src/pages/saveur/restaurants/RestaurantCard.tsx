@@ -1,5 +1,5 @@
 import { IImage, IRestaurant, ITag, NOTES_VALUES } from '@galadrim-tools/shared'
-import { Close, Edit, Favorite, Room } from '@mui/icons-material'
+import { Close, Comment, Edit, Favorite } from '@mui/icons-material'
 import {
     Box,
     Button,
@@ -13,14 +13,14 @@ import {
 } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getApiUrl } from '../../../api/fetch'
 import { AppStore } from '../../../globalStores/AppStore'
 import { MAX_ZOOM, SaveurStore } from '../../../globalStores/SaveurStore'
-import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
 import RatingComponent from './RatingComponent'
 import Ratings from './Ratings'
 import { RestaurantCardStore } from './RestaurantCardStore'
+import { RestaurantReviewsModal } from './RestaurantReviewsModal'
 
 export const DEFAULT_RESTAURANT_IMAGE_PATH = '/default/restaurant.svg'
 
@@ -103,15 +103,17 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                 </Link>
                 <Button
                     size="small"
+                    title="Voir les commentaires"
                     onClick={() => {
-                        saveurStore.leafletMap.flyTo(
-                            { lat: restaurant.lat, lng: restaurant.lng },
-                            MAX_ZOOM
+                        saveurStore.restaurantsStore.reviewsStore.showReviewsForRestaurant(
+                            restaurant.id
                         )
                     }}
-                    title="Afficher sur la carte"
                 >
-                    <Room />
+                    <Comment />
+                    {restaurant.reviews.length === 0 ? null : (
+                        <Typography sx={{ ml: 1 }}>{restaurant.reviews.length}</Typography>
+                    )}
                 </Button>
                 <Button
                     size="small"
@@ -141,6 +143,7 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                     <Close />
                 </Button>
             </CardActions>
+            <RestaurantReviewsModal restaurant={restaurant} saveurStore={saveurStore} />
         </Card>
     )
 })

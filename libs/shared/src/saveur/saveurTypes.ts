@@ -26,6 +26,17 @@ export interface IRestaurant {
     averagePrice: number | null
     userId: number
     choices: IChoice['userId'][]
+    reviews: IReview[]
+}
+
+export interface IReview {
+    id: number
+    restaurantId: number
+    userId: number
+    comment: string
+    image: IImage | null
+    createdAt: string
+    updatedAt: string
 }
 
 export interface INotes {

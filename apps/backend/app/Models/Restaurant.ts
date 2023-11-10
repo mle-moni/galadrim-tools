@@ -1,4 +1,3 @@
-import { _assertTrue } from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import {
     BaseModel,
@@ -10,6 +9,7 @@ import {
     manyToMany,
     ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
+import RestaurantReview from 'App/Models/RestaurantReview'
 import { formatDateToNumber } from 'App/Services/Date'
 import { DateTime } from 'luxon'
 import RestaurantChoice from './RestaurantChoice'
@@ -50,6 +50,9 @@ export default class Restaurant extends BaseModel {
     @hasMany(() => RestaurantChoice)
     public choices: HasMany<typeof RestaurantChoice>
 
+    @hasMany(() => RestaurantReview)
+    public reviews: HasMany<typeof RestaurantReview>
+
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime
 
@@ -67,6 +70,7 @@ export default class Restaurant extends BaseModel {
         query.preload('tags')
         query.preload('notes')
         query.preload('choices')
+        query.preload('reviews')
     }
 
     get frontendData() {
@@ -82,14 +86,16 @@ export default class Restaurant extends BaseModel {
             tags: this.tags.map((tag) => tag.frontendData),
             notes: this.notes.map((note) => note.frontendData),
             choices: this.dailyChoices,
+            reviews: this.reviews,
             createdAt: this.createdAt.toJSDate(),
         }
     }
 
     static async fetchById(id: number) {
         const restaurant = await Restaurant.findOrFail(id)
+
         await restaurant.load((builder) =>
-            builder.preload('tags').preload('notes').preload('choices')
+            builder.preload('tags').preload('notes').preload('choices').preload('reviews')
         )
 
         return restaurant.frontendData
