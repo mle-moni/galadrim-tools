@@ -26,7 +26,7 @@ export class SaveurStore {
         this.setIsReady(true)
     }
 
-    async setIsReady(state: boolean) {
+    setIsReady(state: boolean) {
         this.isReady = state
     }
 

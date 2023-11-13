@@ -121,7 +121,7 @@ export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveur
                         {restaurants.map((restaurant, index) => (
                             <RestaurantChoices
                                 restaurant={restaurant}
-                                key={index}
+                                key={restaurant.id}
                                 index={index}
                                 saveurStore={saveurStore}
                             />

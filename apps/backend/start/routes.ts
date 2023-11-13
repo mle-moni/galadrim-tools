@@ -58,6 +58,10 @@ Route.group(() => {
 
     Route.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
     Route.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
+    Route.resource(
+        'restaurants/:restaurantId/reviews',
+        'restaurantReviews/RestaurantReviewsController'
+    ).apiOnly()
 }).middleware('auth:web,api')
 
 Route.group(() => {
