@@ -3,6 +3,7 @@ export const NOTIFICATIONS = {
     NEW_RESTAURANT: 0b1,
     NEW_IDEA: 0b10,
     SENT_BY_ADMIN: 0b100,
+    NEW_REVIEW: 0b1000,
 } as const
 
 export type NotificationName = keyof typeof NOTIFICATIONS
