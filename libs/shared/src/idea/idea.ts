@@ -1,6 +1,7 @@
 import { IUserData } from '../user'
 
 export interface IIdeaComment {
+    id: number
     ideaId: IIdea['id']
     userId: IUserData['id']
     message: string
