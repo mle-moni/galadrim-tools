@@ -27,8 +27,8 @@ export const storeRestaurantReview = async ({ request, auth, params }: HttpConte
 
     createNotificationForUsers(
         {
-            title: 'Nouvelle idée dans la boîte à idée',
-            text: `Nouvel avis sur ${cropText(restaurant.name, 20)} par ${user.username}`,
+            title: 'Nouvel avis de restaurant',
+            text: `Avis sur ${cropText(restaurant.name, 20)} par ${user.username}`,
             type: 'NEW_REVIEW',
             link: `/saveur?zoom=18&restaurant-id=${restaurantId}`,
         },

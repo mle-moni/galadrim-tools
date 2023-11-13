@@ -3,12 +3,12 @@ import { Send } from '@mui/icons-material'
 import { Box, Button, OutlinedInput, Tooltip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useRef } from 'react'
-import { getApiUrl } from '../../../api/fetch'
 import { AppStore } from '../../../globalStores/AppStore'
 import { SaveurStore } from '../../../globalStores/SaveurStore'
 import { useIsMobile } from '../../../hooks/useIsMobile'
 import { SimpleModal } from '../../../reusableComponents/modal/SimpleModal'
 import { getHumanFormattedDate, getHumanFormattedTimeDifference } from '../../idea/ideasUtils'
+import { getImageUrl } from './RestaurantCard'
 
 interface RestaurantReviewsModalProps {
     restaurant: IRestaurant
@@ -66,7 +66,7 @@ const ReviewDiv = observer<{
             {review.image !== null && (
                 <img
                     title={`${user?.username} : ${review.comment}`}
-                    src={`${getApiUrl()}${review.image.url}`}
+                    src={getImageUrl(review.image)}
                     alt="review image"
                     style={{ borderRadius: '4px', maxWidth: '80%', maxHeight: '300px' }}
                 />
