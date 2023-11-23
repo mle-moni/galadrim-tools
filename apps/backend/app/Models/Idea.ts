@@ -2,6 +2,8 @@ import { IIdea } from '@galadrim-tools/shared'
 import {
     BaseModel,
     beforeFetch,
+    BelongsTo,
+    belongsTo,
     column,
     HasMany,
     hasMany,
@@ -10,6 +12,7 @@ import {
 import { DateTime } from 'luxon'
 import IdeaVote from '../../app/Models/IdeaVote'
 import IdeaComment from './IdeaComment'
+import User from './User'
 
 export default class Idea extends BaseModel {
     @column({ isPrimary: true })
@@ -26,6 +29,9 @@ export default class Idea extends BaseModel {
 
     @column()
     public state: IIdea['state']
+
+    @belongsTo(() => User)
+    public user: BelongsTo<typeof User>
 
     @hasMany(() => IdeaVote)
     public ideaVotes: HasMany<typeof IdeaVote>

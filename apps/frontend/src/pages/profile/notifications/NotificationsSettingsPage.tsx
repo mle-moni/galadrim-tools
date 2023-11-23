@@ -72,6 +72,21 @@ export const NotificationsSettingsPage = observer(() => {
                         }
                         label="Un nouvel avis de restaurant est publié"
                     />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={notificationsSettingsStore.hasNotificationEnabled(
+                                    'NEW_IDEA_COMMENT'
+                                )}
+                                onChange={() => {
+                                    notificationsSettingsStore.toggleNotification(
+                                        'NEW_IDEA_COMMENT'
+                                    )
+                                }}
+                            />
+                        }
+                        label="Un nouveau commentaire d'idée est publié"
+                    />
                     <br />
                     <CustomLink to="/profile">
                         <BackIcon /> Page précédente
