@@ -1,6 +1,7 @@
 import { Masonry } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
+import { useSearchParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { RenouvArtWait } from '../../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
@@ -15,6 +16,7 @@ interface DisplayIdeasProps {
 const DisplayIdeas = observer<DisplayIdeasProps>(({ state }) => {
     const { authStore, ideaStore } = AppStore
     const isMobile = useIsMobile()
+    const [searchParams] = useSearchParams()
 
     const ideasByState = ideaStore.ideasByState
     const { value, message, isBad = false } = state
@@ -33,7 +35,13 @@ const DisplayIdeas = observer<DisplayIdeasProps>(({ state }) => {
                     spacing={3}
                 >
                     {ideas.map((idea) => (
-                        <Idea key={idea.id} idea={idea} user={authStore.user} isBad={isBad} />
+                        <Idea
+                            key={idea.id}
+                            idea={idea}
+                            user={authStore.user}
+                            isBad={isBad}
+                            areCommentsOpen={idea.id.toString() === searchParams.get('ideaId')}
+                        />
                     ))}
                 </Masonry>
             </CenteredDiv>

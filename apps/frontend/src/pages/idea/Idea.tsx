@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 
+import { useSearchParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
@@ -58,15 +59,20 @@ const getBgColor = (state: IdeaState, isBad: boolean) => {
     return undefined
 }
 
-const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
-    ({ idea, user, isBad = false }) => {
-        const modalStore = useMemo(() => new SimpleModalStore(), [])
+const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean; areCommentsOpen: boolean }>(
+    ({ idea, user, isBad = false, areCommentsOpen }) => {
+        const modalStore = useMemo(() => new SimpleModalStore(areCommentsOpen), [areCommentsOpen])
         const { ideaStore, users, authStore } = AppStore
         const { numberOfUpvote, numberOfDownvote, currentUserReaction } = getReactions(
             idea,
             user.id
         )
         const isMobile = useIsMobile()
+        const [, setSearchParams] = useSearchParams()
+        const showComments = () => {
+            modalStore.setModalOpen(true)
+            setSearchParams({ ideaId: idea.id.toString() })
+        }
 
         const author_username = idea.createdBy ? users.get(idea.createdBy)?.username : ''
 
@@ -100,7 +106,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean }>(
                         >
                             <Typography>{idea.comments.length}</Typography>
                             <Tooltip title={'Commentaires'}>
-                                <IconButton onClick={() => modalStore.setModalOpen(true)}>
+                                <IconButton onClick={showComments}>
                                     <Comment />
                                 </IconButton>
                             </Tooltip>
