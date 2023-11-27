@@ -19,6 +19,7 @@ export interface IRestaurant {
     description: string
     lat: number
     lng: number
+    websiteLink: string | null
     tags: ITag[]
     notes: INotes[]
     image: IImage | null

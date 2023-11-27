@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { SimpleModal } from '../../reusableComponents/modal/SimpleModal'
 import { SimpleModalStore } from '../../reusableComponents/modal/SimpleModalStore'
-import { PATCH_NOTES, PATCH_VERSION } from '../../utils/patchNotesInfos'
+import { PATCH_CONTRIBUTORS, PATCH_NOTES, PATCH_VERSION } from '../../utils/patchNotesInfos'
 
 const PATCH_VERSION_KEY = 'PATCH_VERSION'
 
@@ -37,6 +37,10 @@ export const PatchNotes = observer(() => {
                     <li key={index}>{note}</li>
                 ))}
             </ul>
+
+            <Typography sx={{ mt: 2 }} variant="subtitle2">
+                Merci à {PATCH_CONTRIBUTORS.join(', ')} ❤️
+            </Typography>
         </SimpleModal>
     )
 })
