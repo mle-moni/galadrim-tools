@@ -69,12 +69,6 @@ export class RestaurantStore {
     }
 
     get canCreateRestaurant() {
-        console.log('name', this.name)
-        console.log('description', this.description)
-        console.log('lat', this.lat)
-        console.log('lng', this.lng)
-        console.log('tags', this.tags.length)
-
         return (
             this.name !== '' &&
             this.description !== '' &&
