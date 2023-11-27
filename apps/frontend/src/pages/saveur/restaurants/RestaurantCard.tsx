@@ -1,5 +1,5 @@
 import { IImage, IRestaurant, ITag, NOTES_VALUES } from '@galadrim-tools/shared'
-import { Close, Comment, Edit, Favorite } from '@mui/icons-material'
+import { Close, Comment, Edit, Favorite, OpenInNewOutlined } from '@mui/icons-material'
 import {
     Box,
     Button,
@@ -9,6 +9,7 @@ import {
     CardMedia,
     Chip,
     Collapse,
+    IconButton,
     Typography,
 } from '@mui/material'
 import { observer } from 'mobx-react-lite'
@@ -67,8 +68,8 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
         >
             <CardMedia component="img" height="180" image={getImageUrl(restaurant.image)} />
             <CardContent>
-                <Box sx={{ display: 'flex' }}>
-                    <Typography sx={{ flex: 1 }} gutterBottom variant="h5" component="div">
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1 }}>
+                    <Typography sx={{ flex: 1 }} variant="h5" component="div">
                         {restaurant.name}
                     </Typography>
                     <Typography
@@ -78,6 +79,15 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                     >
                         {restaurant.averagePrice && `${restaurant.averagePrice}€`}
                     </Typography>
+                    {restaurant.websiteLink && (
+                        <IconButton
+                            LinkComponent={'a'}
+                            href={restaurant.websiteLink}
+                            target="_blank"
+                        >
+                            <OpenInNewOutlined />
+                        </IconButton>
+                    )}
                 </Box>
                 <RestaurantTags tags={restaurant.tags} saveurStore={saveurStore} />
                 <Typography variant="body2" color="text.secondary">

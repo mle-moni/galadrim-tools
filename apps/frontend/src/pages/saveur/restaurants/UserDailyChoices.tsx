@@ -1,12 +1,13 @@
 import { IRestaurant } from '@galadrim-tools/shared'
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { Box, Chip, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Chip, Tooltip, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { AppStore } from '../../../globalStores/AppStore'
 import { SaveurStore } from '../../../globalStores/SaveurStore'
 import { SimpleModalStore } from '../../../reusableComponents/modal/SimpleModalStore'
 import { getNameOfUsers } from './ratingsFunctions'
+import { Link } from 'react-router-dom'
 
 const topColors = [
     ['#FEE101', '#D6AF36', 'black'],
@@ -45,10 +46,15 @@ const RestaurantChoices = observer<{
                 cursor: 'pointer',
                 gap: 1,
             }}
-            onClick={chooseRestaurant}
         >
-            <Typography sx={{ color: choosen ? '#4BB543' : 'black' }}>{restaurant.name}</Typography>
+            <Link
+                style={{ color: choosen ? '#4BB543' : 'black', textDecoration: 'none' }}
+                to={`/saveur?zoom=18&restaurant-id=${restaurant.id}`}
+            >
+                {restaurant.name}
+            </Link>
             <Tooltip
+                onClick={chooseRestaurant}
                 title={getNameOfUsers(restaurant.choices, AppStore.users)}
                 placement="bottom-end"
                 arrow

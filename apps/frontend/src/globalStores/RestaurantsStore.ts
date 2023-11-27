@@ -107,6 +107,7 @@ export class RestaurantsStore {
         restaurantFound.lng = restaurant.lng
         restaurantFound.averagePrice = restaurant.averagePrice
         restaurantFound.userId = restaurant.userId
+        restaurantFound.websiteLink = restaurant.websiteLink
         restaurantFound.tags = restaurant.tags.map(({ id, name }) => ({ id, name }))
         restaurantFound.notes = restaurant.notes.map(
             ({ id, note, restaurantId, userId, updatedAt }) => ({

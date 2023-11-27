@@ -7,6 +7,7 @@ export class RestaurantStore {
     public name = ''
     public description = ''
     public coordinates = ''
+    public websiteLink = ''
     public lat = 0
     public lng = 0
     public tags: ITag[] = []
@@ -23,6 +24,7 @@ export class RestaurantStore {
             this.coordinates = `${restaurant.lat}, ${restaurant.lng}`
             this.lat = restaurant.lat
             this.lng = restaurant.lng
+            this.websiteLink = restaurant.websiteLink ?? ''
             this.tags = restaurant.tags
             this.imageSrc = restaurant.image?.url ?? null
             const avgPriceText = restaurant.averagePrice ?? ''
@@ -47,6 +49,10 @@ export class RestaurantStore {
         this.lat = Number(coord.split(',')[0])
         this.lng = Number(coord.split(',')[1])
         this.coordinates = coord
+    }
+
+    setWebsiteLink(link: string) {
+        this.websiteLink = link
     }
 
     setTags(tags: ITag[]) {
@@ -93,6 +99,7 @@ export class RestaurantStore {
         data.append('description', this.description)
         data.append('lat', String(this.lat))
         data.append('lng', String(this.lng))
+        data.append('websiteLink', this.websiteLink)
         if (this.averagePrice !== null) {
             data.append('averagePrice', String(this.averagePrice))
         }
@@ -154,6 +161,7 @@ export class RestaurantStore {
         this.setName('')
         this.setDescription('')
         this.setCoordinates('')
+        this.setWebsiteLink('')
         this.setTags([])
         this.setImage(null)
         this.setAveragePrice('')

@@ -33,6 +33,9 @@ export default class Restaurant extends BaseModel {
     public lng: number
 
     @column()
+    public websiteLink: string | null
+
+    @column()
     public averagePrice: number | null
 
     @column()
@@ -80,6 +83,7 @@ export default class Restaurant extends BaseModel {
             description: this.description,
             lat: this.lat,
             lng: this.lng,
+            websiteLink: this.websiteLink,
             averagePrice: this.averagePrice,
             userId: this.userId,
             image: this.image,

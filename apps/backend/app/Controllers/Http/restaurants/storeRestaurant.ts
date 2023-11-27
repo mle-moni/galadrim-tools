@@ -11,6 +11,7 @@ const StoreValidationSchema = schema.create({
     description: schema.string([rules.trim(), rules.maxLength(100), rules.minLength(2)]),
     lat: schema.number(),
     lng: schema.number(),
+    websiteLink: schema.string.optional([rules.url()]),
     tags: schema.array().members(schema.number([rules.exists({ table: 'tags', column: 'id' })])),
     image: schema.file.optional({ extnames: ['jpg', 'png', 'jpeg'], size: '1mb' }),
     averagePrice: schema.number.optional(),
@@ -26,6 +27,7 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
             'description.required': 'La description est requise',
             'description.maxLength': 'La description est trop grande',
             'description.minLength': 'La description est trop courte',
+            'websiteLink.url': 'Le lien du site web doit être une url',
             'lat.required': 'La latitude est requise',
             'lat.number': 'La latitude doit être un nombre',
             'lng.required': 'La longitude est requise',
@@ -40,13 +42,14 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
 
 export const storeRoute = async ({ request, auth }: HttpContextContract) => {
     const user = auth.user!
-    const { name, description, lat, lng, tags, image, averagePrice } =
+    const { name, description, lat, lng, tags, image, averagePrice, websiteLink } =
         await validateRestaurantsParams(request)
     const restaurant = await Restaurant.create({
         name,
         description,
         lat,
         lng,
+        websiteLink,
         averagePrice,
         userId: user.id,
         image: image ? Attachment.fromFile(image) : undefined,

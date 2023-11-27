@@ -1,5 +1,13 @@
 import { IRestaurant } from '@galadrim-tools/shared'
-import { Euro, LocationOn, Message, Storefront, Style, Tag } from '@mui/icons-material'
+import {
+    Euro,
+    LinkOutlined,
+    LocationOn,
+    Message,
+    Storefront,
+    Style,
+    Tag,
+} from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'
 import { toJS } from 'mobx'
@@ -66,6 +74,12 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     onChange={(value) => createRestaurantStore.setAveragePrice(value)}
                     Icon={Euro}
                     error={createRestaurantStore.averagePriceError}
+                />
+                <TextInputWithIcon
+                    value={createRestaurantStore.websiteLink}
+                    placeholder="Lien vers le site du restaurant"
+                    onChange={(value) => createRestaurantStore.setWebsiteLink(value)}
+                    Icon={LinkOutlined}
                 />
                 <TextInputWithIcon
                     value={createRestaurantStore.coordinates}
@@ -149,15 +163,16 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     <span style={{ marginLeft: '12px' }}>({createRestaurantStore.image.name})</span>
                 )}
                 <br />
-                {createRestaurantStore.imageSrc !== null && createRestaurantStore.image === null && (
-                    <div className="flex justify-center">
-                        <img
-                            src={getApiUrl() + createRestaurantStore.imageSrc}
-                            alt={createRestaurantStore.description}
-                            style={{ maxWidth: 300, maxHeight: 300 }}
-                        />
-                    </div>
-                )}
+                {createRestaurantStore.imageSrc !== null &&
+                    createRestaurantStore.image === null && (
+                        <div className="flex justify-center">
+                            <img
+                                src={getApiUrl() + createRestaurantStore.imageSrc}
+                                alt={createRestaurantStore.description}
+                                style={{ maxWidth: 300, maxHeight: 300 }}
+                            />
+                        </div>
+                    )}
                 <Button
                     fullWidth
                     variant="contained"

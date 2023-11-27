@@ -10,12 +10,13 @@ type PromiseType<T> = T extends Promise<infer U> ? U : never
 type RestaurantValidatedInput = PromiseType<ReturnType<typeof validateRestaurantsParams>>
 
 const updateRestaurantScalars = async (restaurant: Restaurant, input: RestaurantValidatedInput) => {
-    const { name, description, lat, lng, image, averagePrice } = input
+    const { name, description, lat, lng, image, averagePrice, websiteLink } = input
 
     restaurant.name = name
     restaurant.description = description
     restaurant.lat = lat
     restaurant.lng = lng
+    restaurant.websiteLink = websiteLink ?? null
 
     restaurant.averagePrice = averagePrice ?? null
 
