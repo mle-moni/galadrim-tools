@@ -85,7 +85,7 @@ export const NotificationsSettingsPage = observer(() => {
                                 }}
                             />
                         }
-                        label="Un nouveau commentaire d'idée est publié"
+                        label="Un nouveau commentaire est publié sur l'une de vos idées"
                     />
                     <br />
                     <CustomLink to="/profile">
