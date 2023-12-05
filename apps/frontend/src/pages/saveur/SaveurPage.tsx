@@ -18,6 +18,7 @@ import { getFavouriteLocauxIndex } from './persistLocauxPreferences'
 import { RestaurantMarkers } from './restaurants/RestaurantMarkers'
 import { SaveurLeftMenu } from './restaurants/SaveurLeftMenu'
 import { UserDailyChoices } from './restaurants/UserDailyChoices'
+import { NANTES_COORDINATES_VALUES, PARIS_COORDINATES_VALUES } from '@galadrim-tools/shared'
 
 export interface Locaux {
     name: string
@@ -27,11 +28,11 @@ export interface Locaux {
 export const POS_ALL_LOCAUX: Locaux[] = [
     {
         name: 'Locaux Paris, Bonne Nouvelle',
-        position: [48.87006785387298, 2.34934151172638],
+        position: PARIS_COORDINATES_VALUES,
     },
     {
         name: 'Locaux Nantes',
-        position: [47.212274232959295, -1.5560218495098455],
+        position: NANTES_COORDINATES_VALUES,
     },
 ]
 
