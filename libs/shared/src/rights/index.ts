@@ -8,6 +8,7 @@ export const RIGHTS = {
     IDEAS_ADMIN: 0b100000,
     NOTIFICATION_ADMIN: 0b1000000,
     CODE_NAMES_ADMIN: 0b10000000,
+    POLL_ADMIN: 0b100000000,
 } as const
 
 export type AllRights = keyof typeof RIGHTS
