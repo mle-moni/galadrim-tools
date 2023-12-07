@@ -1,5 +1,5 @@
 import { hasRights, IdeaState, IIdea, IUserData } from '@galadrim-tools/shared'
-import { Comment, Delete, Done } from '@mui/icons-material'
+import { Comment, Delete, Done, Clear } from '@mui/icons-material'
 import ThumbDownIcon from '@mui/icons-material/ThumbDown'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import {
@@ -179,7 +179,12 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean; areCommen
                             >
                                 <IconReactionWrapper>
                                     <IconButton onClick={() => ideaStore.update(idea.id)}>
-                                        <Done />
+                                        {
+                                            idea.state === "DONE" ?
+                                                <Clear/> :
+                                                <Done />
+
+                                        }
                                     </IconButton>
                                 </IconReactionWrapper>
                             </Tooltip>
