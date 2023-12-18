@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { RewindAdjective } from 'App/Controllers/Http/restaurantRewinds/utils/getAdjective'
+import { RewindAnimal } from 'App/Controllers/Http/restaurantRewinds/utils/getAnimal'
 
 export default class RestaurantRewind extends BaseModel {
     @column({ isPrimary: true })
@@ -36,7 +38,7 @@ export default class RestaurantRewind extends BaseModel {
     public averagePrice: number | null
 
     @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
-    public personality: string[] | null
+    public personality: [RewindAnimal, RewindAdjective] | null
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime

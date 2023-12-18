@@ -1,14 +1,19 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import RestaurantChoice from 'App/Models/RestaurantChoice'
-import RestaurantReview from 'App/Models/RestaurantReview'
-import { validateResourceId } from 'App/Scaffolder/validateResourceId'
+import RestaurantRewind from 'App/Models/RestaurantRewind'
+import { schema, validator } from '@ioc:Adonis/Core/Validator'
 
-export const showRestaurantRewind = async ({ params }: HttpContextContract) => {
-    const { id } = await validateResourceId(params)
+const resourceIdSchema = schema.create({ id: schema.number.optional() })
 
-    const choices = await RestaurantChoice.query().where('user_id', id)
+export const showRestaurantRewind = async ({ params, bouncer, auth }: HttpContextContract) => {
+    const { id } = await validator.validate({ schema: resourceIdSchema, data: params })
+    const restaurantRewind = await RestaurantRewind.query()
+        .where('userId', id ?? auth.user!.id)
+        .orderBy('createdAt', 'desc')
+        .firstOrFail()
 
-    const restaurantRewind = await RestaurantReview.findOrFail(id)
+    if (id) {
+        await bouncer.with('RestaurantsPolicy').authorize('viewUpdateOrDelete', restaurantRewind)
+    }
 
     return restaurantRewind
 }

@@ -20,6 +20,7 @@
 
 import Env from '@ioc:Adonis/Core/Env'
 import Route from '@ioc:Adonis/Core/Route'
+import { showRestaurantRewind } from 'App/Controllers/Http/restaurantRewinds/showRestaurantRewind'
 
 Route.get('/', async () => {
     return { service: 'galadrim tools backend' }
@@ -62,6 +63,7 @@ Route.group(() => {
         'restaurants/:restaurantId/reviews',
         'restaurantReviews/RestaurantReviewsController'
     ).apiOnly()
+    Route.get('rewind/:id?', showRestaurantRewind)
 }).middleware('auth:web,api')
 
 Route.group(() => {
