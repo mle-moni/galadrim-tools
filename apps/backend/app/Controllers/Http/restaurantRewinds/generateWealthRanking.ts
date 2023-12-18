@@ -9,7 +9,7 @@ type WealthRanking = {
 }
 
 export const generateWealthRanking = async () => {
-    const wealthRankings: WealthRanking[] = await Database.rawQuery(
+    const [wealthRankings]: [WealthRanking[]] = await Database.rawQuery(
         `
         SELECT
         rc.user_id,
