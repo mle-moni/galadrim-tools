@@ -1,5 +1,17 @@
 {
   "commands": {
+    "generate:rewind": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/GenerateRewind",
+      "commandName": "generate:rewind",
+      "description": "Generate rewinds for all users",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "scaffold": {
       "settings": {
         "loadApp": true,

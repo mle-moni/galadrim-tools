@@ -1,10 +1,10 @@
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import { RestaurantFactory } from '../factories/RestaurantFactory'
+import { generateRestaurants } from '../factories/generateRestaurant'
 
 export default class RestaurantSeeder extends BaseSeeder {
     public static environment = ['development']
 
     public async run() {
-        await RestaurantFactory.createMany(7)
+        await generateRestaurants(50)
     }
 }
