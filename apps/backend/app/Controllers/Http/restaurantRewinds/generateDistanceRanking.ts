@@ -9,7 +9,7 @@ type DistanceRanking = {
 }
 
 export const generateDistanceRanking = async () => {
-    const distanceRankings: DistanceRanking[] = await Database.rawQuery(
+    const [distanceRankings]: [DistanceRanking[]] = await Database.rawQuery(
         `
   SELECT
   user_id, sum(distance_m)/count(*) as average_distance, count(*) as amount, u.username
@@ -40,6 +40,7 @@ ORDER BY average_distance DESC;
             lng: PARIS_COORDINATES_VALUES[1],
         }
     )
+
     const distanceRankingMap = new Map<number, number>(
         distanceRankings.map((ranking, index) => [ranking.user_id, index + 1])
     )
