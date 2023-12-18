@@ -1,5 +1,4 @@
 import { BaseCommand } from '@adonisjs/core/build/standalone'
-import { generateRewind } from 'App/Controllers/Http/restaurantRewinds/generateRewind'
 
 export default class GenerateRewind extends BaseCommand {
     /**
@@ -30,6 +29,9 @@ export default class GenerateRewind extends BaseCommand {
 
     public async run() {
         this.logger.info('Generating rewinds...')
+        const { generateRewind } = await import(
+            'App/Controllers/Http/restaurantRewinds/generateRewind'
+        )
         await generateRewind()
         this.logger.info('Done!')
     }
