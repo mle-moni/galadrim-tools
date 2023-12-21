@@ -1,12 +1,13 @@
 import RestaurantChoice from 'App/Models/RestaurantChoice'
 import RestaurantNote from 'App/Models/RestaurantNote'
+import RestaurantRewind from 'App/Models/RestaurantRewind'
 import { getAdjective } from './utils/getAdjective'
 import { getAnimal } from './utils/getAnimal'
 import { getDistanceTravelled } from './utils/getDistanceTravelled'
 import { getFavoriteRestaurantCount } from './utils/getFavoriteRestaurantCount'
 import { getRestaurantPerTag } from './utils/getRestaurantPerTag'
+import { getRewindRank } from './utils/getRewindRank'
 import { getTotalPrice } from './utils/getTotalPrice'
-import RestaurantRewind from 'App/Models/RestaurantRewind'
 
 export const generateRewindForUser = async (
     userId: number,
@@ -40,6 +41,8 @@ export const generateRewindForUser = async (
         restaurantNotes.reduce((acc, note) => acc + +note.note, 0) / restaurantNotes.length
     ).toFixed(1)
 
+    const { maxRank, userRank } = await getRewindRank(userId)
+
     const animal = getAnimal(userId, distanceRankingMap)
     const adjective = getAdjective(userId, wealthRankingMap)
     const newRewind = await RestaurantRewind.create({
@@ -54,6 +57,10 @@ export const generateRewindForUser = async (
         totalPrice,
         averagePrice,
         personality: [animal, adjective],
+        maxRank,
+        userRank,
+        wealthRank: wealthRankingMap.get(userId) ?? null,
+        distanceRank: distanceRankingMap.get(userId) ?? null,
     })
 
     return newRewind
