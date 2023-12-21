@@ -31,7 +31,7 @@ export const getRewindRank = async (userId: number): Promise<UserRankResult> => 
         [userId]
     )
 
-    const userRank = userRankData.rows[0] ? userRankData.rows[0].user_rank : null
+    const userRank = userRankData?.rows[0] ? userRankData.rows[0].user_rank : null
 
     // Requête pour obtenir le rank_max en se basant sur le nombre d'utilisateurs ayant au moins un choix de restaurant
     const rankMaxData = await Database.from('restaurant_choices')
