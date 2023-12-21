@@ -7,21 +7,31 @@ interface UserRankResult {
 
 export const getRewindRank = async (userId: number): Promise<UserRankResult> => {
     // Requête pour obtenir le user_rank de l'utilisateur spécifique
-    const userRankData = await Database.from('restaurant_choices')
-        .join('users', 'users.id', 'restaurant_choices.user_id')
-        .select('users.id')
-        .count('restaurant_choices.restaurant_id as restaurant_count')
-        .groupBy('users.id')
-        .orderBy('restaurant_count', 'desc')
-        .select(
-            Database.raw(
-                'RANK() OVER (ORDER BY COUNT(restaurant_choices.restaurant_id) DESC) as user_rank'
-            )
+    const userRankData = await Database.rawQuery(
+        `
+        WITH UserRanks AS (
+            SELECT
+                u.id,
+                COUNT(rc.restaurant_id) AS restaurant_count,
+                RANK() OVER (ORDER BY COUNT(rc.restaurant_id) DESC) AS user_rank
+            FROM
+                restaurant_choices rc
+            JOIN
+                users u ON u.id = rc.user_id
+            GROUP BY
+                u.id
         )
-        .where('users.id', userId)
-        .first()
+        SELECT
+            user_rank
+        FROM
+            UserRanks
+        WHERE
+            id = ?
+    `,
+        [userId]
+    )
 
-    const userRank = userRankData ? userRankData.user_rank : null
+    const userRank = userRankData.rows[0] ? userRankData.rows[0].user_rank : null
 
     // Requête pour obtenir le rank_max en se basant sur le nombre d'utilisateurs ayant au moins un choix de restaurant
     const rankMaxData = await Database.from('restaurant_choices')
