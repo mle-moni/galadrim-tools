@@ -5,6 +5,7 @@ import { AppStore } from '../globalStores/AppStore'
 import IdeaPage from '../pages/idea/IdeaPage'
 import LoadingPage from '../pages/loading/LoadingPage'
 import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
+import Snowfall from 'react-snowfall'
 
 const TournoisPage = React.lazy(() => import('../pages/games/tournois/TournoisPage'))
 const StatisticsPage = React.lazy(() => import('../pages/statistics/StatisticsPage'))
@@ -56,6 +57,15 @@ const MainRouter = () => {
                 <BrowserRouter>
                     <React.Suspense fallback={<LoadingPage />}>
                         <AppRoutes />
+                        <Snowfall
+                            style={{
+                                position: 'fixed',
+                                width: '100vw',
+                                height: '100vh',
+                                zIndex: 6,
+                                color: '#fff',
+                            }}
+                        />
                     </React.Suspense>
                 </BrowserRouter>
             ) : (
