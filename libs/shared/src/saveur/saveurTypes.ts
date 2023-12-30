@@ -54,3 +54,30 @@ export interface IChoice {
     userId: number
     createdAt: Date
 }
+
+const REWIND_ANIMALS = ['GAZELLE', 'BLAIREAU', 'PARESSEUX', 'MICROBE'] as const
+export type RewindAnimal = typeof REWIND_ANIMALS[number]
+
+const REWIND_ADJECTIVES = ['RICHE', 'MOYEN', 'PAUVRE', 'INSIGNIFIANT'] as const
+export type RewindAdjective = typeof REWIND_ADJECTIVES[number]
+
+export interface IRewind {
+    id: number
+    userId: number
+    favoriteRestaurantId: number | null
+    favoriteRestaurantCount: number | null
+    dailyChoiceCount: number | null
+    restaurantPerTag: Record<string, number>
+    restaurantAverageScore: number | null
+    totalDistanceTravelled: number | null
+    averageDistanceTravelled: number | null
+    totalPrice: number | null
+    averagePrice: number | null
+    userRank: number | null
+    wealthRank: number | null
+    distanceRank: number | null
+    maxRank: number
+    personality: [RewindAnimal, RewindAdjective] | null
+    createdAt: string
+    updatedAt: string
+}

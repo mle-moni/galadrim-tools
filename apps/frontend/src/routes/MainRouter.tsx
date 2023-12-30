@@ -23,6 +23,8 @@ const SaveurPage = React.lazy(() => import('../pages/saveur/SaveurPage'))
 const RestaurantsListPage = React.lazy(
     () => import('../pages/saveur/restaurantsLists/RestaurantsListPage')
 )
+const RewindRecapPage = React.lazy(() => import('../pages/saveur/rewind/RewindRecapPage'))
+const RewindPage = React.lazy(() => import('../pages/saveur/rewind/RewindPage'))
 const HomePage = React.lazy(() => import('../pages/HomePage'))
 const RoomsHomePage = React.lazy(() => import('../pages/room/RoomsHomePage'))
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'))
@@ -108,6 +110,8 @@ const AppRoutes = () => {
                 <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
                 <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />
                 <Route path="/saveur/restaurantsList/:listName" element={<RestaurantsListPage />} />
+                <Route path="/saveur/rewind/recap" element={<RewindRecapPage />} />
+                <Route path="/saveur/rewind" element={<RewindPage />} />
                 <Route path="/saveur" element={<SaveurPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/games/tournois" element={<TournoisPage />} />

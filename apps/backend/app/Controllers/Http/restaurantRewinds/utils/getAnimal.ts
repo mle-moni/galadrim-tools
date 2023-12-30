@@ -1,5 +1,4 @@
-const REWIND_ANIMALS = ['GAZELLE', 'BLAIREAU', 'PARESSEUX', 'MICROBE'] as const
-export type RewindAnimal = typeof REWIND_ANIMALS[number]
+import { RewindAnimal } from '@galadrim-tools/shared'
 
 export const getAnimal = (userId: number, rankingMap: Map<number, number>): RewindAnimal => {
     const ranking = rankingMap.get(userId)
