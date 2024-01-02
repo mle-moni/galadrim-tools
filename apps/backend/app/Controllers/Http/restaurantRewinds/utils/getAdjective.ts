@@ -1,5 +1,4 @@
-const REWIND_ADJECTIVES = ['RICHE', 'MOYEN', 'PAUVRE', 'INSIGNIFIANT'] as const
-export type RewindAdjective = typeof REWIND_ADJECTIVES[number]
+import { RewindAdjective } from '@galadrim-tools/shared'
 
 export const getAdjective = (userId: number, rankingMap: Map<number, number>): RewindAdjective => {
     const ranking = rankingMap.get(userId)

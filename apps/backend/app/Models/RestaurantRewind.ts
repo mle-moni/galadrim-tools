@@ -1,6 +1,5 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { RewindAdjective } from 'App/Controllers/Http/restaurantRewinds/utils/getAdjective'
-import { RewindAnimal } from 'App/Controllers/Http/restaurantRewinds/utils/getAnimal'
+import { RewindAdjective, RewindAnimal } from '@galadrim-tools/shared'
 import { DateTime } from 'luxon'
 
 export default class RestaurantRewind extends BaseModel {
