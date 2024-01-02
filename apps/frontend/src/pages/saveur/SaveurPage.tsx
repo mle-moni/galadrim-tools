@@ -1,4 +1,5 @@
-import { Euro, FormatListNumbered, Grade, Home, Schedule, Celebration } from '@mui/icons-material'
+import { NANTES_COORDINATES_VALUES, PARIS_COORDINATES_VALUES } from '@galadrim-tools/shared'
+import { Euro, FormatListNumbered, Grade, Home, Schedule } from '@mui/icons-material'
 import AddIcon from '@mui/icons-material/Add'
 import BackIcon from '@mui/icons-material/ChevronLeft'
 import { Box } from '@mui/material'
@@ -18,7 +19,6 @@ import { getFavouriteLocauxIndex } from './persistLocauxPreferences'
 import { RestaurantMarkers } from './restaurants/RestaurantMarkers'
 import { SaveurLeftMenu } from './restaurants/SaveurLeftMenu'
 import { UserDailyChoices } from './restaurants/UserDailyChoices'
-import { NANTES_COORDINATES_VALUES, PARIS_COORDINATES_VALUES } from '@galadrim-tools/shared'
 
 export interface Locaux {
     name: string
@@ -79,7 +79,7 @@ const SaveurPage = observer(() => {
                     { Icon: Schedule, link: 'saveur/restaurantsList/new' },
                     { Icon: Euro, link: 'saveur/restaurantsList/leastExpensive' },
                     { Icon: AddIcon, link: '/saveur/createRestaurant' },
-                    { Icon: Celebration, link: '/saveur/rewind', shiny: true },
+                    // { Icon: Celebration, link: '/saveur/rewind', shiny: true }, // TODO uncomment when test in prod done
                 ]}
                 horizontalPosition="right"
             />
