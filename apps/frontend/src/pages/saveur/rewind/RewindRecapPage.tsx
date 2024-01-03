@@ -1,12 +1,13 @@
+import { Home } from '@mui/icons-material'
+import { Box, List, ListItemText, Stack, Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
-import { RewindStore } from '../../../globalStores/RewindStore'
-import { RewindRoot } from './RewindPage'
-import { Box, List, ListItemText, Stack, Typography } from '@mui/material'
 import { AppStore } from '../../../globalStores/AppStore'
-import WithRibbons from '../../../reusableComponents/animations/rewind/WithRibbons'
-import { Home } from '@mui/icons-material'
+import { RewindStore } from '../../../globalStores/RewindStore'
+import { useIsMobile } from '../../../hooks/useIsMobile'
 import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
+import WithRibbons from '../../../reusableComponents/animations/rewind/WithRibbons'
+import { RewindRoot } from './RewindPage'
 
 const RewindRecapPage = observer(() => {
     const userRewindStore = useMemo(() => {
@@ -21,6 +22,8 @@ const RewindRecapPage = observer(() => {
         (restaurant) => restaurant.id === userRewindStore.rewind?.favoriteRestaurantId
     )
 
+    const isMobile = useIsMobile()
+
     return (
         <RewindRoot fullscreen>
             <CustomLink to="/saveur" style={{ position: 'absolute', left: 10, top: 10, zIndex: 6 }}>
@@ -29,16 +32,25 @@ const RewindRecapPage = observer(() => {
             <WithRibbons>
                 <Box
                     display={'flex'}
-                    flexDirection={'row'}
+                    flexDirection={isMobile ? 'column' : 'row'}
                     gap={8}
-                    sx={{ backgroundColor: '#F0FFF199', padding: '16px' }}
+                    sx={{
+                        backgroundColor: '#F0FFF199',
+                        padding: '16px',
+                        overflowY: 'scroll',
+                        maxHeight: '100vh',
+                    }}
                 >
                     <Stack display={'flex'} alignItems={'center'}>
                         <h2>{userRewindStore.rewindPersonalityString}</h2>
                         <img
                             src={`/assets/images/rewind/${userRewindStore.rewindImageName}`}
-                            width={600}
-                            height={600}
+                            style={{
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                width: 600,
+                                height: 600,
+                            }}
                         />
                     </Stack>
                     <Stack
