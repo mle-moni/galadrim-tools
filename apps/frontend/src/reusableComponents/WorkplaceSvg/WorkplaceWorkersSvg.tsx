@@ -92,7 +92,7 @@ export const WorkplaceWorkersSvg = ({
                 </foreignObject>
             )}
             {userPicturePhoneBox && (
-                <foreignObject x="460" y="570" width="56px" height="56px">
+                <foreignObject x="136" y="559" width="56px" height="56px">
                     <img
                         width="40px"
                         height="40px"
