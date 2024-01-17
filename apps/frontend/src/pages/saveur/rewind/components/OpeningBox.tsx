@@ -1,8 +1,8 @@
+import { Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
-import './openingBox.css' // Import the CSS file
 import ConfettiExplosion from 'react-confetti-explosion'
 import { RewindStore } from '../../../../globalStores/RewindStore'
-import { Tooltip, Typography } from '@mui/material'
+import './openingBox.css' // Import the CSS file
 
 type GiftProps = {
     rewindStore: RewindStore
@@ -43,8 +43,12 @@ const Gift = ({ rewindStore }: GiftProps) => {
                         >
                             <img
                                 src={`/assets/images/rewind/${rewindStore.rewindImageName}`}
-                                width={600}
-                                height={600}
+                                style={{
+                                    maxWidth: '100%',
+                                    maxHeight: '100%',
+                                    width: 600,
+                                    height: 600,
+                                }}
                             />
                         </Tooltip>
                     </div>
