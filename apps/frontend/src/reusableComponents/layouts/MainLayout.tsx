@@ -9,6 +9,7 @@ import { Whoami } from '../auth/Whoami'
 
 type MainLayoutProps = PropsWithChildren<{
     fullscreen?: boolean
+    noDisconnect?: boolean
 }>
 
 const Root = styled(Box, {
@@ -26,7 +27,7 @@ const Root = styled(Box, {
 )
 
 export const MainLayout = observer(
-    ({ fullscreen, children }: ComponentProps<FC<MainLayoutProps>>) => {
+    ({ fullscreen, children, noDisconnect }: ComponentProps<FC<MainLayoutProps>>) => {
         const { authStore } = AppStore
 
         useCheckConnection(authStore)
@@ -46,7 +47,7 @@ export const MainLayout = observer(
                             zIndex: 10,
                         }}
                     >
-                        {authStore.connected && <Whoami />}
+                        {authStore.connected && <Whoami noDisconnect={noDisconnect} />}
                     </Box>
                     {children}
                 </div>

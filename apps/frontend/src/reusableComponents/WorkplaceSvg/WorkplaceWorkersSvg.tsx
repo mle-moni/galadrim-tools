@@ -17,7 +17,8 @@ export const WorkplaceWorkersSvg = ({
     const userPictureKitchen = getUserPictureUrl('Kitchen')
     const userPictureCoffre = getUserPictureUrl('Coffre')
     const userPictureManguier = getUserPictureUrl('Manguier')
-    const userPicturePhoneBox = getUserPictureUrl('PhoneBox')
+    const userPicturePhoneBox1 = getUserPictureUrl('PhoneBox1')
+    const userPicturePhoneBox2 = getUserPictureUrl('PhoneBox2')
 
     return (
         <svg
@@ -91,12 +92,22 @@ export const WorkplaceWorkersSvg = ({
                     />
                 </foreignObject>
             )}
-            {userPicturePhoneBox && (
+            {userPicturePhoneBox1 && (
                 <foreignObject x="136" y="559" width="56px" height="56px">
                     <img
                         width="40px"
                         height="40px"
-                        src={userPicturePhoneBox}
+                        src={userPicturePhoneBox1}
+                        style={{ borderRadius: '50%' }}
+                    />
+                </foreignObject>
+            )}
+            {userPicturePhoneBox2 && (
+                <foreignObject x="347" y="434" width="56px" height="56px">
+                    <img
+                        width="40px"
+                        height="40px"
+                        src={userPicturePhoneBox2}
                         style={{ borderRadius: '50%' }}
                     />
                 </foreignObject>
