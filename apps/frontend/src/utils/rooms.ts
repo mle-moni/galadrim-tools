@@ -7,7 +7,8 @@ export const RESERVABLE_ROOMS = [
     'Manguier',
     'Turing',
     'Vador',
-    'PhoneBox'
+    'PhoneBox1',
+    'PhoneBox2',
 ] as const
 
 export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
@@ -37,7 +38,10 @@ export const AllRooms = [
         name: 'Cuisine',
     },
     {
-        name: 'Phone box',
+        name: 'Phone box 1',
+    },
+    {
+        name: 'Phone box 2',
     },
 ] as const
 
@@ -50,7 +54,8 @@ const WorkplaceSvgRoomToFullRoomName: {
     Manguier: 'Salle manguier massif',
     Vador: 'Salle Vador',
     Turing: 'Salle Turing',
-    PhoneBox: 'Phone box',
+    PhoneBox1: 'Phone box 1',
+    PhoneBox2: 'Phone box 2',
 }
 
 export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {

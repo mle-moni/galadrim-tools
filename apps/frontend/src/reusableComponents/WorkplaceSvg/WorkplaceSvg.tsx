@@ -16,7 +16,8 @@ export type WorkplaceSvgRoom =
     | 'PetitCouloir'
     | 'Manguier'
     | 'Babyfoot'
-    | 'PhoneBox'
+    | 'PhoneBox1'
+    | 'PhoneBox2'
     | 'Other'
 
 export interface WorkplaceSvgProps {
@@ -402,8 +403,9 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
         )
     }
 
-    const PhoneBox = () => {
-        const svgProps = useRoom('PhoneBox')
+    const PhoneBox1 = () => {
+        const svgProps = useRoom('PhoneBox1')
+
         return (
             <>
                 <line
@@ -427,6 +429,45 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
                     strokeDasharray="4 4"
                 />
                 <rect id="Rectangle 102" x="133" y="558" width="46" height="41" {...svgProps} />
+            </>
+        )
+    }
+
+    const PhoneBox2 = () => {
+        const svgProps = useRoom('PhoneBox2')
+        return (
+            <>
+                <line
+                    id="Line 130"
+                    x1="392"
+                    y1="434"
+                    x2="392"
+                    y2="475"
+                    stroke={wallsColor}
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                />
+                <line
+                    id="Line 131"
+                    x1="346"
+                    y1="475"
+                    x2="392"
+                    y2="475"
+                    stroke={wallsColor}
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                />
+                <line
+                    id="Line 132"
+                    x1="346"
+                    y1="432"
+                    x2="392"
+                    y2="432"
+                    stroke={wallsColor}
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                />
+                <rect id="Rectangle 102" x="345" y="433" width="46" height="41" {...svgProps} />
             </>
         )
     }
@@ -457,7 +498,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             <Babyfoot />
             <Work23Walls />
             <KitchenDoor />
-            <PhoneBox />
+            <PhoneBox1 />
+            <PhoneBox2 />
         </svg>
     )
 }

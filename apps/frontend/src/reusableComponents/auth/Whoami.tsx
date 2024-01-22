@@ -4,7 +4,7 @@ import { AppStore } from '../../globalStores/AppStore'
 import { Notifications } from '../../pages/notifications/Notifications'
 import { WhoamiStore } from './WhoamiStore'
 
-export const Whoami = observer(() => {
+export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) => {
     const { authStore } = AppStore
     const store = new WhoamiStore()
 
@@ -38,14 +38,18 @@ export const Whoami = observer(() => {
                     {authStore.user.username}
                 </Typography>
             </Box>
-            <Button
-                size="small"
-                variant="outlined"
-                color="error"
-                onClick={() => authStore.logout()}
-            >
-                Déconnexion
-            </Button>
+            {noDisconnect ? (
+                <div style={{ width: 120 }} />
+            ) : (
+                <Button
+                    size="small"
+                    variant="outlined"
+                    color="error"
+                    onClick={() => authStore.logout()}
+                >
+                    Déconnexion
+                </Button>
+            )}
         </Stack>
     )
 })

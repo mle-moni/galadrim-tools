@@ -16,7 +16,7 @@ const RoomPage = () => {
     }, [])
 
     return (
-        <MainLayout fullscreen>
+        <MainLayout fullscreen noDisconnect>
             <div>
                 <Box sx={{ position: 'absolute', top: 32, left: 32, zIndex: 10 }}>
                     <Button
@@ -27,7 +27,7 @@ const RoomPage = () => {
                         Retour
                     </Button>
                 </Box>
-                <Box sx={{ position: 'absolute', top: 96, left: 32, zIndex: 10 }}>
+                <Box sx={{ position: 'absolute', top: 32, left: 180, zIndex: 10 }}>
                     <Tooltip title="Charger toutes les réservations, par défaut seulement 200 réservations sont chargées">
                         <Button
                             startIcon={<Loop />}
@@ -38,7 +38,7 @@ const RoomPage = () => {
                         </Button>
                     </Tooltip>
                 </Box>
-                <Box sx={{ position: 'absolute', top: 160, left: 32, zIndex: 10 }}>
+                <Box sx={{ position: 'absolute', top: 86, left: 32, zIndex: 10 }}>
                     <FormControlLabel
                         control={
                             <Switch
