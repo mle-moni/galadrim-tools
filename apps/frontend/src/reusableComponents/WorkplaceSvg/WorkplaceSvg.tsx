@@ -16,8 +16,8 @@ export type WorkplaceSvgRoom =
     | 'PetitCouloir'
     | 'Manguier'
     | 'Babyfoot'
-    | 'PhoneBox1'
-    | 'PhoneBox2'
+    | 'Cube'
+    | 'Arche'
     | 'Other'
 
 export interface WorkplaceSvgProps {
@@ -403,8 +403,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
         )
     }
 
-    const PhoneBox1 = () => {
-        const svgProps = useRoom('PhoneBox1')
+    const Cube = () => {
+        const svgProps = useRoom('Cube')
 
         return (
             <>
@@ -433,8 +433,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
         )
     }
 
-    const PhoneBox2 = () => {
-        const svgProps = useRoom('PhoneBox2')
+    const Arche = () => {
+        const svgProps = useRoom('Arche')
         return (
             <>
                 <line
@@ -498,8 +498,8 @@ export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
             <Babyfoot />
             <Work23Walls />
             <KitchenDoor />
-            <PhoneBox1 />
-            <PhoneBox2 />
+            <Cube />
+            <Arche />
         </svg>
     )
 }

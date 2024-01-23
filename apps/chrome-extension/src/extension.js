@@ -7,7 +7,8 @@ const ROOMS = new Set([
     'Salle manguier massif',
     'Salle du coffre',
     'Cuisine',
-    'Phone box',
+    'Le Cube',
+    "L'Arche",
 ])
 
 const REFRESH_INTERVAL = 1000
