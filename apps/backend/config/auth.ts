@@ -24,7 +24,7 @@ const authConfig: AuthConfig = {
             provider: {
                 driver: 'lucid',
                 identifierKey: 'id',
-                uids: ['username'],
+                uids: ['username', 'email'],
                 model: () => import('../app/Models/User'),
             },
             tokenProvider: {

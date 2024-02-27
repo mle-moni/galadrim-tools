@@ -42,6 +42,7 @@
     },
     "devDependencies": {
         "@adonisjs/assembler": "^5.9.2",
+        "@galadrim/adomin": "^4.1.0",
         "@galadrim/adonis-scaffolder": "^2.0.5",
         "@japa/preset-adonis": "^1.2.0",
         "@japa/runner": "^2.2.1",

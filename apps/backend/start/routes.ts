@@ -22,6 +22,8 @@ import Env from '@ioc:Adonis/Core/Env'
 import Route from '@ioc:Adonis/Core/Route'
 import { showRestaurantRewind } from 'App/Controllers/Http/restaurantRewinds/showRestaurantRewind'
 
+import 'App/Adomin/routes/adominRouter'
+
 Route.get('/', async () => {
     return { service: 'galadrim tools backend' }
 })
