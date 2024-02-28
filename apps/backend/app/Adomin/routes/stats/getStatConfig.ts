@@ -5,56 +5,59 @@ import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG'
 import { computeRightsCheck } from '../adominRoutesOverridesAndRights'
 
 export const isStatConfig = (config: AdominViewConfig): config is StatsViewConfig => {
-  return config.type === 'stats'
+    return config.type === 'stats'
 }
 
 export const getStatConfig = (viewName: string) => {
-  const foundConfig = ADOMIN_CONFIG.views.filter(isStatConfig).find(({ path }) => path === viewName)
+    const foundConfig = ADOMIN_CONFIG.views
+        .filter(isStatConfig)
+        .find(({ path }) => path === viewName)
 
-  if (!foundConfig) throw new Error(`No ADOMIN config found for view ${viewName}`)
+    if (!foundConfig) throw new Error(`No ADOMIN config found for view ${viewName}`)
 
-  return foundConfig
+    return foundConfig
 }
 
 const getFrontendStatConfig = async (config: StatsViewConfig) => {
-  const promises = config.stats.map(async ({ label, dataFetcher, name, type }) => {
-    const data = await dataFetcher()
+    const promises = config.stats.map(async ({ label, dataFetcher, name, type, options }) => {
+        const data = await dataFetcher()
 
-    return {
-      type,
-      name,
-      label,
-      data,
-    }
-  })
+        return {
+            type,
+            name,
+            label,
+            data,
+            options,
+        }
+    })
 
-  return Promise.all(promises)
+    return Promise.all(promises)
 }
 
 export const getStatConfigRoute = async (ctx: HttpContextContract) => {
-  const { params, response } = ctx
-  const viewString = params.view
+    const { params, response } = ctx
+    const viewString = params.view
 
-  const statConfig = ADOMIN_CONFIG.views
-    .filter(isStatConfig)
-    .find(({ path }) => path === viewString)
+    const statConfig = ADOMIN_CONFIG.views
+        .filter(isStatConfig)
+        .find(({ path }) => path === viewString)
 
-  if (!statConfig) {
-    return response.notFound({ error: `View '${viewString}' not found` })
-  }
+    if (!statConfig) {
+        return response.notFound({ error: `View '${viewString}' not found` })
+    }
 
-  const { label, path, isHidden, visibilityCheck } = statConfig
+    const { label, path, isHidden, visibilityCheck } = statConfig
 
-  const visibilityCheckResult = await computeRightsCheck(ctx, visibilityCheck)
+    const visibilityCheckResult = await computeRightsCheck(ctx, visibilityCheck)
 
-  if (visibilityCheckResult === 'STOP') return
+    if (visibilityCheckResult === 'STOP') return
 
-  const frontendStatConfig = await getFrontendStatConfig(statConfig)
+    const frontendStatConfig = await getFrontendStatConfig(statConfig)
 
-  return {
-    path,
-    label,
-    isHidden: isHidden ?? false,
-    stats: frontendStatConfig,
-  }
+    return {
+        path,
+        label,
+        isHidden: isHidden ?? false,
+        stats: frontendStatConfig,
+    }
 }

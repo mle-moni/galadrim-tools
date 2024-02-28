@@ -1,6 +1,6 @@
 import { AdominConfig } from '../adominConfig'
 import { createStatsViewConfig } from '../createStatsViewConfig'
-import { groupByDayOfWeek } from '../routes/stats/groupByHelpers'
+import { groupByDayOfWeek, groupByHour } from '../routes/stats/groupByHelpers'
 
 /**
  * This file will contain your Adomin Config
@@ -21,6 +21,12 @@ export const ADOMIN_CONFIG: AdominConfig = {
                     name: 'usersPerDay',
                     type: 'area',
                     dataFetcher: () => groupByDayOfWeek('events', 'created_at'),
+                },
+                {
+                    label: '',
+                    name: '',
+                    type: 'column',
+                    dataFetcher: () => groupByHour('events', 'created_at'),
                 },
             ],
         }),

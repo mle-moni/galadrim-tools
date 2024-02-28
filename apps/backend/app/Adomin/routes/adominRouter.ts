@@ -11,23 +11,23 @@ import { updateModel } from './models/write/updateModel'
 import { getStatConfigRoute } from './stats/getStatConfig'
 
 Route.group(() => {
-  Route.group(() => {
-    Route.get('config/stats/:view', getStatConfigRoute)
+    Route.group(() => {
+        Route.get('config/stats/:view', getStatConfigRoute)
 
-    Route.get('config', getAdominConfig)
-    Route.get('config/:model', getModelConfigRoute)
+        Route.get('config', getAdominConfig)
+        Route.get('config/:model', getModelConfigRoute)
 
-    Route.post('crud/export/:model', modelList)
-    Route.get('crud/:model', modelList)
-    Route.get('crud/:model/:id', showModel)
-    Route.put('crud/:model/:id', updateModel)
-    Route.delete('crud/:model/:id', deleteModel)
-    Route.post('crud/:model', createModel)
-    Route.post('logout', adominLogout)
-  }).middleware('auth')
-  // ! please restrict this route group for only admins of your app
+        Route.post('crud/export/:model', modelList)
+        Route.get('crud/:model', modelList)
+        Route.get('crud/:model/:id', showModel)
+        Route.put('crud/:model/:id', updateModel)
+        Route.delete('crud/:model/:id', deleteModel)
+        Route.post('crud/:model', createModel)
+        Route.post('logout', adominLogout)
+    }).middleware('auth')
+    // ! please restrict this route group for only admins of your app
 
-  Route.post('login', adominLogin)
+    Route.post('login', adominLogin)
 }).prefix('adomin/api')
 
 // if you want to host your backoffice on the same domain as your backend:

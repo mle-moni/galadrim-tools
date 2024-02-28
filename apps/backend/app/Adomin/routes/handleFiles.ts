@@ -3,18 +3,18 @@ import { LucidRow } from '@ioc:Adonis/Lucid/Orm'
 import type { ColumnConfig } from '../createModelViewConfig'
 
 export const loadFilesForInstances = async (fields: ColumnConfig[], modelInstances: LucidRow[]) => {
-  const filesColumn = fields.filter(({ adomin }) => adomin.type === 'file')
+    const filesColumn = fields.filter(({ adomin }) => adomin.type === 'file')
 
-  const promises = modelInstances.flatMap(async (modelInstance) => {
-    const innerPromises = filesColumn.map(async ({ name }) => {
-      const attachment: AttachmentContract | undefined = modelInstance[name]
-      if (!attachment || typeof attachment.url === 'string') return
-      const url = await attachment.getUrl()
-      attachment.url = url
+    const promises = modelInstances.flatMap(async (modelInstance) => {
+        const innerPromises = filesColumn.map(async ({ name }) => {
+            const attachment: AttachmentContract | undefined = modelInstance[name]
+            if (!attachment || typeof attachment.url === 'string') return
+            const url = await attachment.getUrl()
+            attachment.url = url
+        })
+
+        await Promise.all(innerPromises)
     })
 
-    await Promise.all(innerPromises)
-  })
-
-  await Promise.all(promises)
+    await Promise.all(promises)
 }
