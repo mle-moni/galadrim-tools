@@ -31,7 +31,7 @@ export async function groupByDayOfWeek(table: string, column: string): Promise<[
     const dayOfWeekMap = results.map((row) => {
         // For SQLite, the day_of_week values are strings, convert them to numbers for consistency
         const dayOfWeek = +row.day_of_week
-        const dayName = DAY_LABELS[dayOfWeek - 1]
+        const dayName = DAY_LABELS[dayOfWeek]
         const res: [string, number] = [dayName, Number(row.count)]
 
         return res
