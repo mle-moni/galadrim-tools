@@ -15,11 +15,11 @@ import {
  */
 
 export const ADOMIN_CONFIG: AdominConfig = {
-    title: 'Adomin (edit this)',
+    title: 'Adomin',
     views: [
         createStatsViewConfig({
             label: 'Réservations KPI',
-            path: 'events',
+            path: 'reservations',
             stats: [
                 {
                     label: 'Reservations par jour',
