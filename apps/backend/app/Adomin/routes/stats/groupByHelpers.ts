@@ -5,7 +5,7 @@ const getDayOfWeekSql = (column: string) => {
     const dbType = Env.get('DB_CONNECTION')
     switch (dbType) {
         case 'mysql':
-            return `DAYOFWEEK(${column})`
+            return `DAYOFWEEK(${column}) - 1`
         case 'pg':
             return `EXTRACT(DOW FROM ${column})`
         case 'sqlite':
@@ -17,7 +17,7 @@ const getDayOfWeekSql = (column: string) => {
     }
 }
 
-const DAY_LABELS = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+const DAY_LABELS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
 
 export async function groupByDayOfWeek(table: string, column: string): Promise<[string, number][]> {
     const dayOfWeekSql = getDayOfWeekSql(column)
