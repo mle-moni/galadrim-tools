@@ -27,6 +27,10 @@ export const availableRooms = async ({ request, response }: HttpContextContract)
         'Cuisine',
         'Le Cube',
         "L'Arche",
+        'Nantes - Le boudoir',
+        'Nantes - La cave',
+        'Nantes - La moquette',
+        'Nantes - Le placard',
     ]
 
     // get all events with dates incompatible with the new event

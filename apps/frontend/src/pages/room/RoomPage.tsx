@@ -9,6 +9,7 @@ import { RoomCalendar } from './RoomCalendar'
 
 const RoomPage = () => {
     const [fiveMinutesSlotMode, setFiveMinutesSlotMode] = useState(false)
+    const [nantes, setNantes] = useState(false)
     const params = useParams()
 
     useEffect(() => {
@@ -50,7 +51,16 @@ const RoomPage = () => {
                         sx={{ userSelect: 'none' }}
                     />
                 </Box>
-                <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} />
+                <Box sx={{ position: 'absolute', top: 86, left: 300, zIndex: 10 }}>
+                    <FormControlLabel
+                        control={
+                            <Switch checked={nantes} onChange={() => setNantes((prev) => !prev)} />
+                        }
+                        label="Nantes"
+                        sx={{ userSelect: 'none' }}
+                    />
+                </Box>
+                <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} nantes={nantes} />
             </div>
         </MainLayout>
     )
