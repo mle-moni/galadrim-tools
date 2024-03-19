@@ -6,7 +6,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { AppStore } from '../../globalStores/AppStore'
 import { RoomEvent } from '../../globalStores/EventsStore'
-import { AllRooms } from '../../utils/rooms'
+import { AllRooms, ParisRooms, NantesRooms } from '../../utils/rooms'
 import { MomentFrLocales } from './setFrLocales'
 
 moment.locale('fr', MomentFrLocales)
@@ -38,9 +38,10 @@ const CALENDAR_POSITION = {
 
 export const RoomCalendar = observer<{
     step: number
+    nantes: boolean
     height?: string | number
     isAbsolute?: boolean
-}>(({ step, height, isAbsolute = true }) => (
+}>(({ step, nantes, height, isAbsolute = true }) => (
     <div
         style={{
             height: height ?? '100%',
@@ -86,7 +87,11 @@ export const RoomCalendar = observer<{
                 }}
                 onDoubleClickEvent={(args) => AppStore.eventsStore.onDoubleClickEvent(args)}
                 {...(AppStore.eventsStore.roomName === '*' && {
-                    resources: AllRooms.filter(({ name }) => name !== '*'),
+                    resources: AllRooms.filter(({ name }) =>
+                        Object.values(nantes ? NantesRooms : ParisRooms)
+                            .map(({ name }) => name)
+                            .includes(name)
+                    ),
                     resourceIdAccessor: 'name',
                     resourceTitleAccessor: 'name',
                 })}

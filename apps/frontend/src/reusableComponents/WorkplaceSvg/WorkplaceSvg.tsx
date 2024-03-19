@@ -19,6 +19,10 @@ export type WorkplaceSvgRoom =
     | 'Cube'
     | 'Arche'
     | 'Other'
+    | 'Nantes_Boudoir'
+    | 'Nantes_Cave'
+    | 'Nantes_Torture'
+    | 'Nantes_Placard'
 
 export interface WorkplaceSvgProps {
     width: number

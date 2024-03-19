@@ -9,16 +9,17 @@ export const RESERVABLE_ROOMS = [
     'Vador',
     'Cube',
     'Arche',
+    'Nantes_Boudoir',
+    'Nantes_Torture',
+    'Nantes_Cave',
+    'Nantes_Placard'
 ] as const
 
 export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
 
 export type RoomFullName = typeof AllRooms[number]['name']
 
-export const AllRooms = [
-    {
-        name: '*',
-    },
+export const ParisRooms = [
     {
         name: 'Salle Vador',
     },
@@ -45,6 +46,29 @@ export const AllRooms = [
     },
 ] as const
 
+export const NantesRooms = [
+    {
+        name: "Nantes - Le boudoir",
+    },
+    {
+        name: "Nantes - La salle de torture",
+    },
+    {
+        name: "Nantes - La cave",
+    },
+    {
+        name: "Nantes - Le placard",
+    }
+] as const
+
+export const AllRooms = [
+    {
+        name: '*',
+    },
+    ...ParisRooms,
+    ...NantesRooms,
+] as const
+
 const WorkplaceSvgRoomToFullRoomName: {
     [K in ReservableWorkplaceSvgRoom]: RoomFullName
 } = {
@@ -56,6 +80,10 @@ const WorkplaceSvgRoomToFullRoomName: {
     Turing: 'Salle Turing',
     Cube: 'Le Cube',
     Arche: "L'Arche",
+    Nantes_Boudoir: "Nantes - Le boudoir",
+    Nantes_Cave: "Nantes - La cave",
+    Nantes_Torture: "Nantes - La salle de torture",
+    Nantes_Placard: "Nantes - Le placard",
 }
 
 export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {
