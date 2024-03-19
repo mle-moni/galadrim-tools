@@ -79,7 +79,7 @@ const getHourSql = (column: string) => {
         case 'mysql':
             return `HOUR(CONVERT_TZ(${column}, 'UTC', 'Europe/Paris'))`
         case 'pg':
-            return `EXTRACT(HOUR FROM ${column} AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Paris')`
+            return `EXTRACT(HOUR FROM ${column} AT TIME ZONE 'Europe/Paris')`
         case 'sqlite':
             return `STRFTIME('%H', ${column})`
         default:
