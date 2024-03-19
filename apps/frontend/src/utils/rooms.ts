@@ -10,7 +10,7 @@ export const RESERVABLE_ROOMS = [
     'Cube',
     'Arche',
     'Nantes_Boudoir',
-    'Nantes_Moquette',
+    'Nantes_Torture',
     'Nantes_Cave',
     'Nantes_Placard'
 ] as const
@@ -51,7 +51,7 @@ export const NantesRooms = [
         name: "Nantes - Le boudoir",
     },
     {
-        name: "Nantes - La moquette",
+        name: "Nantes - La salle de torture",
     },
     {
         name: "Nantes - La cave",
@@ -82,7 +82,7 @@ const WorkplaceSvgRoomToFullRoomName: {
     Arche: "L'Arche",
     Nantes_Boudoir: "Nantes - Le boudoir",
     Nantes_Cave: "Nantes - La cave",
-    Nantes_Moquette: "Nantes - La moquette",
+    Nantes_Torture: "Nantes - La salle de torture",
     Nantes_Placard: "Nantes - Le placard",
 }
 

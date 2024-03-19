@@ -29,7 +29,7 @@ export const availableRooms = async ({ request, response }: HttpContextContract)
         "L'Arche",
         'Nantes - Le boudoir',
         'Nantes - La cave',
-        'Nantes - La moquette',
+        'Nantes - La salle de torture',
         'Nantes - Le placard',
     ]
 

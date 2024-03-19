@@ -21,7 +21,7 @@ export type WorkplaceSvgRoom =
     | 'Other'
     | 'Nantes_Boudoir'
     | 'Nantes_Cave'
-    | 'Nantes_Moquette'
+    | 'Nantes_Torture'
     | 'Nantes_Placard'
 
 export interface WorkplaceSvgProps {
