@@ -5,7 +5,7 @@ import { {{crudNames.read}} } from 'App/Controllers/Http/{{crudNames.folder}}/{{
 import { {{crudNames.create}} } from 'App/Controllers/Http/{{crudNames.folder}}/{{crudNames.create}}'
 import { {{crudNames.update}} } from 'App/Controllers/Http/{{crudNames.folder}}/{{crudNames.update}}'
 
-export default class OrganizationsController {
+export default class Controller {
   public async index(ctx: HttpContextContract) {
     return {{crudNames.list}}(ctx)
   }

@@ -5,7 +5,7 @@ import { showRestaurantReview } from 'App/Controllers/Http/restaurantReviews/sho
 import { storeRestaurantReview } from 'App/Controllers/Http/restaurantReviews/storeRestaurantReview'
 import { updateRestaurantReview } from 'App/Controllers/Http/restaurantReviews/updateRestaurantReview'
 
-export default class OrganizationsController {
+export default class RestaurantReviewsController {
     public async index(ctx: HttpContextContract) {
         return restaurantReviewsList(ctx)
     }
