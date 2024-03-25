@@ -66,6 +66,7 @@ Route.group(() => {
         'restaurantReviews/RestaurantReviewsController'
     ).apiOnly()
     Route.get('rewind/:id?', showRestaurantRewind)
+    Route.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
 }).middleware('auth:web,api')
 
 Route.group(() => {

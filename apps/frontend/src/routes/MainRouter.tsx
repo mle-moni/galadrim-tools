@@ -26,6 +26,7 @@ const RewindRecapPage = React.lazy(() => import('../pages/saveur/rewind/RewindRe
 const RewindPage = React.lazy(() => import('../pages/saveur/rewind/RewindPage'))
 const HomePage = React.lazy(() => import('../pages/HomePage'))
 const RoomsHomePage = React.lazy(() => import('../pages/room/RoomsHomePage'))
+const WifiPage = React.lazy(() => import('../pages/wifi/WifiPage'))
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'))
 const GetOtpPage = React.lazy(() => import('../pages/getOtp/GetOtpPage'))
 const ChangePasswordPage = React.lazy(() => import('../pages/changePassword/ChangePasswordPage'))
@@ -117,6 +118,7 @@ const AppRoutes = () => {
                 <Route path="/galabreak" element={<GalabreakPage />} />
                 <Route path="/galabreak/vote" element={<GalabreakVotePage />} />
                 <Route path="/galadrim/scam/winner/omg" element={<ScamWinnerPage />} />
+                <Route path="/wifi" element={<WifiPage />} />
 
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

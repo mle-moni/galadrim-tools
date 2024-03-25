@@ -6,6 +6,7 @@ import {
     Lightbulb,
     Pause,
     RestaurantMenu,
+    SignalWifiBad,
     VideogameAsset,
 } from '@mui/icons-material'
 import { Box } from '@mui/material'
@@ -46,6 +47,7 @@ const HomePage = observer(() => {
                     link="https://github.com/mle-moni/galadrim-tools/issues"
                     title="Reporter un bug"
                 />
+                <IconLink Icon={SignalWifiBad} link="/wifi" title="Problème de connexion ?" />
                 <IconLink
                     Icon={AdminPanelSettings}
                     link="/admin"
