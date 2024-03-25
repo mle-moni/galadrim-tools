@@ -12,6 +12,7 @@ const ROOMS = [
     'Salle Business',
     'Salle Designer',
     'Grande Salle',
+    'Salle du fond',
     'Salle des boss',
 ]
 

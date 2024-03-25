@@ -4,6 +4,7 @@ import {
     groupByDayOfWeek,
     groupByHour,
     groupByMonth,
+    groupByStringField,
     groupByYear,
 } from '../routes/stats/groupByHelpers'
 
@@ -32,6 +33,12 @@ export const ADOMIN_CONFIG: AdominConfig = {
                     name: 'eventsPerHour',
                     type: 'line',
                     dataFetcher: () => groupByHour('events', 'created_at', { allHours: true }),
+                },
+                {
+                    label: 'Reservations par mois',
+                    name: 'eventsPerMonth',
+                    type: 'column',
+                    dataFetcher: () => groupByMonth('events', 'created_at'),
                 },
                 {
                     label: 'Reservations par année',
@@ -95,26 +102,38 @@ export const ADOMIN_CONFIG: AdominConfig = {
             stats: [
                 {
                     label: 'Bugs par heures',
-                    name: 'ideasPerHour',
+                    name: 'bugsPerHour',
                     type: 'line',
                     dataFetcher: () =>
                         groupByHour('bug_connexions', 'created_at', { allHours: true }),
                 },
                 {
+                    label: 'Bugs par salle',
+                    name: 'bugsPerRoom',
+                    type: 'pie',
+                    dataFetcher: () => groupByStringField('bug_connexions', 'room'),
+                },
+                {
+                    label: 'Bugs par connexion',
+                    name: 'bugsPerNetworkName',
+                    type: 'pie',
+                    dataFetcher: () => groupByStringField('bug_connexions', 'network_name'),
+                },
+                {
                     label: 'Bugs par jour',
-                    name: 'ideasPerDay',
+                    name: 'bugsPerDay',
                     type: 'column',
                     dataFetcher: () => groupByDayOfWeek('bug_connexions', 'created_at'),
                 },
                 {
                     label: 'Bugs par mois',
-                    name: 'ideasPerMonth',
+                    name: 'bugsPerMonth',
                     type: 'column',
                     dataFetcher: () => groupByMonth('bug_connexions', 'created_at'),
                 },
                 {
                     label: 'Bugs par année',
-                    name: 'ideasPerYear',
+                    name: 'bugsPerYear',
                     type: 'pie',
                     dataFetcher: () => groupByYear('bug_connexions', 'created_at'),
                 },

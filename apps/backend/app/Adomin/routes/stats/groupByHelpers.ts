@@ -137,6 +137,19 @@ export const groupByYear = async (table: string, column: string): Promise<[strin
     return results.map((row) => [row.year, Number(row.count)] as [string, number])
 }
 
+export const groupByStringField = async (
+    table: string,
+    column: string
+): Promise<[string, number][]> => {
+    const results = await Database.from(table)
+        .select(Database.raw(`${column} as string_field`))
+        .count('* as count')
+        .groupBy('string_field')
+        .orderBy('string_field', 'asc')
+
+    return results.map((row) => [row.string_field, Number(row.count)] as [string, number])
+}
+
 const MONTH_LABELS = [
     'Jan',
     'Fév',
