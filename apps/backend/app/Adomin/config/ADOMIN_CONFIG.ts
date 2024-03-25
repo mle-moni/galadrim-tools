@@ -89,5 +89,36 @@ export const ADOMIN_CONFIG: AdominConfig = {
                 },
             ],
         }),
+        createStatsViewConfig({
+            label: 'Bug de connexions',
+            path: 'bug-connexions',
+            stats: [
+                {
+                    label: 'Bugs par heures',
+                    name: 'ideasPerHour',
+                    type: 'line',
+                    dataFetcher: () =>
+                        groupByHour('bug_connexions', 'created_at', { allHours: true }),
+                },
+                {
+                    label: 'Bugs par jour',
+                    name: 'ideasPerDay',
+                    type: 'column',
+                    dataFetcher: () => groupByDayOfWeek('bug_connexions', 'created_at'),
+                },
+                {
+                    label: 'Bugs par mois',
+                    name: 'ideasPerMonth',
+                    type: 'column',
+                    dataFetcher: () => groupByMonth('bug_connexions', 'created_at'),
+                },
+                {
+                    label: 'Bugs par année',
+                    name: 'ideasPerYear',
+                    type: 'pie',
+                    dataFetcher: () => groupByYear('bug_connexions', 'created_at'),
+                },
+            ],
+        }),
     ],
 }
