@@ -9,7 +9,7 @@ export const ScamWinnerPage = observer(() => {
             <CenteredDiv>
                 <div style={{ width: '80%' }}>
                     <marquee bgcolor="red" behavior="alternate" scrolldelay="60">
-                        <h1>🚨Vous avez booké la 30 000 ème reservation de salle !🚨</h1>
+                        <h1>🚨Vous avez booké la 50 000 ème reservation de salle !🚨</h1>
                     </marquee>
                     <br />
                     <h2 style={{ textDecoration: 'underline' }}>
@@ -28,6 +28,11 @@ export const ScamWinnerPage = observer(() => {
                     <h3>Commentaires :</h3>
                     <br />
                     <div>
+                        <h4>Benjamin D.</h4>
+                        <p>
+                            Heureuse surprise, sans doute mon jour de chance !
+                        </p>
+                        
                         <h4>Jean-Paul Dubost</h4>
                         <p>
                             Au début, je pensais que c'était une blague, mais j'ai finalement eu mon
