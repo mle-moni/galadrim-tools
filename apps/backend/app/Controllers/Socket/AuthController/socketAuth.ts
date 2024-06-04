@@ -36,7 +36,6 @@ export async function socketAuth(socket: Socket, dto: unknown) {
     socket.data.user = user.toJSON()
     socket.join('connectedSockets')
     socket.join(user.personalSocket)
-    socket.emit('success', 'Mises à jour en temps réel activées')
     socket.emit('fetchAll')
 
     socket.emit('getId', socket.id, user.username)

@@ -23,7 +23,6 @@
             "@adonisjs/auth",
             "@adonisjs/drive-s3",
             "@adonisjs/bouncer",
-            "adonis5-sentry",
             "@adonisjs/attachment-lite"
         ]
     }

@@ -12,7 +12,9 @@ export const getApiUrl = () => {
     return url
 }
 
-export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+export const HTTP_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] as const
+export const HTTP_METHODS_OPTIONS = HTTP_METHODS.map((value) => ({ value, label: value }))
+export type HTTPMethod = typeof HTTP_METHODS[number]
 
 export const fetchBackend = (
     endpoint: string,

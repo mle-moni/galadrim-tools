@@ -69,8 +69,6 @@
         "@adonisjs/session": "^6.2.2",
         "@adonisjs/view": "^6.1.4",
         "@faker-js/faker": "^7.6.0",
-        "@sentry/node": "^7.15.0",
-        "adonis5-sentry": "^3.1.0",
         "axios": "^1.5.1",
         "luxon": "^3.0.4",
         "mysql": "^2.18.1",

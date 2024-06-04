@@ -67,7 +67,10 @@ Route.group(() => {
     ).apiOnly()
     Route.get('rewind/:id?', showRestaurantRewind)
     Route.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
+    Route.get('/caddyLogs/:id', 'caddyLogs/CaddyLogsController.show')
 }).middleware('auth:web,api')
+
+Route.post('/caddyLogs', 'caddyLogs/CaddyLogsController.store')
 
 Route.group(() => {
     Route.resource('votes', 'breakVotes/BreakVotesController').apiOnly()

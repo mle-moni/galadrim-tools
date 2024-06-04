@@ -48,6 +48,7 @@ const CodeNamesGamePage = React.lazy(() => import('../pages/codeNames/CodeNamesG
 const ScamWinnerPage = React.lazy(() => import('../pages/scam/ScamWinnerPage'))
 const GalabreakPage = React.lazy(() => import('../pages/galabreak/GalabreakPage'))
 const GalabreakVotePage = React.lazy(() => import('../pages/galabreak/GalabreakVotePage'))
+const CaddyLogsPage = React.lazy(() => import('../pages/caddyLogs/CaddyLogsPage'))
 
 // ? this was the old cheat page
 // const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
@@ -119,6 +120,7 @@ const AppRoutes = () => {
                 <Route path="/galabreak/vote" element={<GalabreakVotePage />} />
                 <Route path="/galadrim/scam/winner/omg" element={<ScamWinnerPage />} />
                 <Route path="/wifi" element={<WifiPage />} />
+                <Route path="/caddyLogs/:id" element={<CaddyLogsPage />} />
 
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
