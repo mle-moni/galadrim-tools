@@ -28,7 +28,6 @@ export interface CaddyLog {
 
 export class CaddyLogsStore {
     originalData: CaddyLog[] = []
-    data: CaddyLog[] = []
 
     start: Date | null = null
     end: Date | null = null
@@ -54,9 +53,12 @@ export class CaddyLogsStore {
         this.setLogs(res.json)
     }
 
-    setLogs(data: CaddyLog[]) {
-        this.originalData = data
-        this.data = data.map((l) => ({
+    setLogs(newData: CaddyLog[]) {
+        this.originalData = newData
+    }
+
+    get data() {
+        return this.originalData.map((l) => ({
             ...l,
             duration_in_ms: Math.round(l.duration_in_s * 1000),
             ts: format(new Date(l.ts), 'dd/MM/yyyy HH:mm:ss'),

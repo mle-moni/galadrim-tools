@@ -1,3 +1,5 @@
+import './tableOverrides.css'
+
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { observer } from 'mobx-react-lite'
 import { HTTP_METHODS_OPTIONS } from '../../api/fetch'
@@ -82,6 +84,7 @@ export const CaddyTableTab = observer<{ caddyLogsStore: CaddyLogsStore }>(({ cad
         columns,
         data: caddyLogsStore.data,
         state: { isLoading: caddyLogsStore.loadingState.isLoading },
+        muiTablePaperProps: { id: 'caddy-table' },
     })
 
     return <MaterialReactTable table={table} />

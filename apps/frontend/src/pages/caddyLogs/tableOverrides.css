@@ -1,0 +1,3 @@
+.MuiTableRow-root, .MuiTableRow-root>td, #caddy-table>.MuiBox-root {
+    background-color: white !important;
+}
