@@ -20,7 +20,7 @@ export class SocketStore {
 
     connect() {
         if (this._socket) return
-        this._socket = io(getSocketApiUrl())
+        this._socket = io(getSocketApiUrl(), { transports: ['websocket'] })
         this.setupEvents()
     }
 
