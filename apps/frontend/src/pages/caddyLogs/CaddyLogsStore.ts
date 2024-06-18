@@ -144,7 +144,7 @@ export class CaddyLogsStore {
         const map = new Map<string, number>()
 
         this.filteredData.forEach((log) => {
-            const uri = log.request.uri
+            const uri = log.request.uri.split('?')[0]
             const duration = Math.round(log.duration_in_s * 1000)
             const found = map.get(uri)
 
