@@ -14,6 +14,8 @@ import { AtopLogsStore } from './AtopLogsStore'
 const ATOP_TABS = [
     { label: 'Memory', value: 0 },
     { label: 'Cpu', value: 1 },
+    { label: 'Disk', value: 2 },
+    { label: 'Network', value: 3 },
 ] as const
 
 type AtopTabValue = typeof ATOP_TABS[number]['value']
@@ -37,6 +39,7 @@ export const AtopLogsPage = observer(() => {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         px: 2,
+                        minHeight: '100vh',
                     }}
                 >
                     <Typography sx={{ fontSize: 26, textAlign: 'center', m: 2 }}>
@@ -54,7 +57,7 @@ export const AtopLogsPage = observer(() => {
                         ))}
                     </Tabs>
 
-                    <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
+                    <Box sx={{ display: 'flex', gap: 2, my: 2, justifyContent: 'center' }}>
                         <DateTimePicker
                             label="Start date filter"
                             value={atopLogsStore.start}
@@ -67,14 +70,54 @@ export const AtopLogsPage = observer(() => {
                         />
                     </Box>
 
-                    {tab === 0 && (
-                        <LineChart
-                            data={atopLogsStore.memoryData}
-                            download
-                            xtitle="Time"
-                            ytitle="Memory used (%)"
-                        />
-                    )}
+                    <Box sx={{ minHeight: '40vh' }}>
+                        {tab === 0 && (
+                            <LineChart
+                                data={atopLogsStore.memoryData}
+                                download
+                                ytitle="Memory used (%)"
+                                max={100}
+                                min={0}
+                            />
+                        )}
+                        {tab === 1 && (
+                            <LineChart
+                                data={atopLogsStore.cpuData}
+                                download
+                                ytitle="Cpu usage (%)"
+                                max={100}
+                                min={0}
+                            />
+                        )}
+                        {tab === 2 && (
+                            <>
+                                <LineChart
+                                    data={atopLogsStore.ioTimeDiskData}
+                                    download
+                                    ytitle="I/O Time (ms)"
+                                />
+                                <LineChart
+                                    data={atopLogsStore.readWriteDiskData}
+                                    download
+                                    ytitle="Read/Write Operations"
+                                />
+                            </>
+                        )}
+                        {tab === 3 && (
+                            <>
+                                <LineChart
+                                    data={atopLogsStore.inOutNetworkData}
+                                    download
+                                    ytitle="Network in/out (bytes)"
+                                />
+                                <LineChart
+                                    data={atopLogsStore.networkErrorsData}
+                                    download
+                                    ytitle="Network in/out errors"
+                                />
+                            </>
+                        )}
+                    </Box>
                 </Box>
             </LocalizationProvider>
         </MainLayout>

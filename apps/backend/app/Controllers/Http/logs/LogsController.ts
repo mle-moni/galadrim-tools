@@ -1,5 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { showAtopLogs } from './showAtopLogs'
 import { showCaddyLogs } from './showCaddyLogs'
+import { storeAtopLogs } from './storeAtopLogs'
 import { storeCaddyLogs } from './storeCaddyLogs'
 
 export default class CaddyLogsController {
@@ -12,10 +14,10 @@ export default class CaddyLogsController {
     }
 
     public async showAtopLogs(ctx: HttpContextContract) {
-        return showCaddyLogs(ctx)
+        return showAtopLogs(ctx)
     }
 
     public async storeAtopLogs(ctx: HttpContextContract) {
-        return storeCaddyLogs(ctx)
+        return storeAtopLogs(ctx)
     }
 }

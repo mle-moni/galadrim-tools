@@ -22,27 +22,29 @@ export interface DiskLog {
     inflight: number
 }
 
+export interface CpuLog {
+    hertz: number
+    nrcpu: number
+    stime: number
+    utime: number
+    ntime: number
+    itime: number
+    wtime: number
+    Itime: number
+    Stime: number
+    steal: number
+    guest: number
+    freq: number
+    freqperc: number
+    instr: number
+    cycle: number
+}
+
 export interface AtopLog {
     host: string
     timestamp: number
     elapsed: number
-    CPU: {
-        hertz: number
-        nrcpu: number
-        stime: number
-        utime: number
-        ntime: number
-        itime: number
-        wtime: number
-        Itime: number
-        Stime: number
-        steal: number
-        guest: number
-        freq: number
-        freqperc: number
-        instr: number
-        cycle: number
-    }
+    CPU: CpuLog
     MEM: {
         physmem: number
         freemem: number
