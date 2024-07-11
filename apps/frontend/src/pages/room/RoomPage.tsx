@@ -6,16 +6,28 @@ import { useParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
 import { RoomCalendar } from './RoomCalendar'
-import { WorkspaceLocation } from '../../utils/rooms'
+import { ValidLocations, WorkspaceLocation } from '../../utils/rooms'
 
 const RoomPage = () => {
+    const defaultLocation = 'bonneNouvelle'
     const [fiveMinutesSlotMode, setFiveMinutesSlotMode] = useState(false)
-    const [selectedLocation, setSelectedLocation] = useState<WorkspaceLocation>('bonneNouvelle')
     const params = useParams()
+
+    const preselectLocation = () => {
+        let storageVal = localStorage.getItem('selectedLocation') ?? defaultLocation
+        if (!ValidLocations.includes(storageVal)) {
+            storageVal = defaultLocation
+            localStorage.setItem('selectedLocation', storageVal)
+        }
+        return storageVal as WorkspaceLocation
+    }
 
     useEffect(() => {
         AppStore.eventsStore.setRoomName(params.roomName ?? '*')
     }, [])
+
+
+    const [selectedLocation, setSelectedLocation] = useState<WorkspaceLocation>(preselectLocation())
 
     return (
         <MainLayout fullscreen noDisconnect>
@@ -57,6 +69,7 @@ const RoomPage = () => {
                             value={selectedLocation}
                             onChange={(_, newValue) => {
                                 setSelectedLocation(newValue as WorkspaceLocation)
+                                localStorage.setItem('selectedLocation', newValue)
                             }}
                         >
                             <FormControlLabel value="bonneNouvelle" control={<Radio />} label="Bonne Nouvelle" />
@@ -65,24 +78,6 @@ const RoomPage = () => {
                         </RadioGroup>
                     </Box>
                 </Box>
-                {/* <Box sx={{ position: 'absolute', top: 86, left: 300, zIndex: 10 }}>
-                    <FormControlLabel
-                        control={
-                            <Switch checked={nantes} onChange={() => setNantes((prev) => !prev)} />
-                        }
-                        label="Nantes"
-                        sx={{ userSelect: 'none' }}
-                    />
-                </Box>
-                <Box sx={{ position: 'absolute', top: 86, left: 480, zIndex: 10 }}>
-                    <FormControlLabel
-                        control={
-                            <Switch checked={saintPaul} onChange={() => setSaintPaul((prev) => !prev)} />
-                        }
-                        label="Saint Paul (Nouveaux locaux)"
-                        sx={{ userSelect: 'none' }}
-                    />
-                </Box> */}
                 <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} location={selectedLocation} />
             </div>
         </MainLayout>

@@ -28,6 +28,12 @@ export type RoomFullName = typeof AllRooms[number]['name']
 
 export type WorkspaceLocation = 'bonneNouvelle' | 'saintPaul' | 'nantes'
 
+export const ValidLocations = [
+    'bonneNouvelle',
+    'saintPaul',
+    'nantes',
+]
+
 export const BonneNouvelleRooms = [
     {
         name: 'Salle Vador',
