@@ -31,6 +31,13 @@ export const availableRooms = async ({ request, response }: HttpContextContract)
         'Nantes - La cave',
         'Nantes - La salle de torture',
         'Nantes - Le placard',
+        // TODO: rajouter les vrais noms des salles
+        'Saint Paul - Salle Adaly 1',
+        'Saint Paul - Salle Adaly 2',
+        'Saint Paul - Salle Adaly 3',
+        'Saint Paul - Salle Designer',
+        'Saint Paul (3e) - Salle 1',
+        'Saint Paul (3e) - Salle 2',
     ]
 
     // get all events with dates incompatible with the new event

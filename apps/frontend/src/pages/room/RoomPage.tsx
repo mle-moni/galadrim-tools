@@ -1,15 +1,16 @@
 import { Loop } from '@mui/icons-material'
 import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Box, Button, FormControlLabel, Switch, Tooltip } from '@mui/material'
+import { Box, Button, FormControlLabel, Radio, RadioGroup, Switch, Tooltip } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppStore } from '../../globalStores/AppStore'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
 import { RoomCalendar } from './RoomCalendar'
+import { WorkspaceLocation } from '../../utils/rooms'
 
 const RoomPage = () => {
     const [fiveMinutesSlotMode, setFiveMinutesSlotMode] = useState(false)
-    const [nantes, setNantes] = useState(false)
+    const [selectedLocation, setSelectedLocation] = useState<WorkspaceLocation>('bonneNouvelle')
     const params = useParams()
 
     useEffect(() => {
@@ -40,18 +41,31 @@ const RoomPage = () => {
                     </Tooltip>
                 </Box>
                 <Box sx={{ position: 'absolute', top: 86, left: 32, zIndex: 10 }}>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={fiveMinutesSlotMode}
-                                onChange={() => setFiveMinutesSlotMode(!fiveMinutesSlotMode)}
-                            />
-                        }
-                        label="slots de 5 minutes"
-                        sx={{ userSelect: 'none' }}
-                    />
+                    <Box sx={{ display: 'inline-flex' }}>    
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={fiveMinutesSlotMode}
+                                    onChange={() => setFiveMinutesSlotMode(!fiveMinutesSlotMode)}
+                                />
+                            }
+                            label="slots de 5 minutes"
+                            sx={{ userSelect: 'none' }}
+                        />
+                        <RadioGroup
+                            row
+                            value={selectedLocation}
+                            onChange={(_, newValue) => {
+                                setSelectedLocation(newValue as WorkspaceLocation)
+                            }}
+                        >
+                            <FormControlLabel value="bonneNouvelle" control={<Radio />} label="Bonne Nouvelle" />
+                            <FormControlLabel value="saintPaul" control={<Radio />} label="Saint Paul" />
+                            <FormControlLabel value="nantes" control={<Radio />} label="Nantes" />
+                        </RadioGroup>
+                    </Box>
                 </Box>
-                <Box sx={{ position: 'absolute', top: 86, left: 300, zIndex: 10 }}>
+                {/* <Box sx={{ position: 'absolute', top: 86, left: 300, zIndex: 10 }}>
                     <FormControlLabel
                         control={
                             <Switch checked={nantes} onChange={() => setNantes((prev) => !prev)} />
@@ -60,7 +74,16 @@ const RoomPage = () => {
                         sx={{ userSelect: 'none' }}
                     />
                 </Box>
-                <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} nantes={nantes} />
+                <Box sx={{ position: 'absolute', top: 86, left: 480, zIndex: 10 }}>
+                    <FormControlLabel
+                        control={
+                            <Switch checked={saintPaul} onChange={() => setSaintPaul((prev) => !prev)} />
+                        }
+                        label="Saint Paul (Nouveaux locaux)"
+                        sx={{ userSelect: 'none' }}
+                    />
+                </Box> */}
+                <RoomCalendar step={fiveMinutesSlotMode ? 5 : 15} location={selectedLocation} />
             </div>
         </MainLayout>
     )

@@ -3,12 +3,12 @@ import { fetchBackendJson, getErrorMessage } from '../../api/fetch'
 import { LoadingStateStore } from '../../reusableComponents/form/LoadingStateStore'
 import { TextFieldStore } from '../../reusableComponents/form/TextFieldStore'
 import { notifyError, notifySuccess } from '../../utils/notification'
-import { ParisRooms } from '../../utils/rooms'
+import { BonneNouvelleRooms } from '../../utils/rooms'
 import { APPLICATION_JSON_HEADERS } from '../idea/createIdea/CreateIdeaStore'
 
 const NETWORK_NAMES = ['WIFI Orbi20', 'WIFI 5G (meteor)', 'WIFI SFR_3A8F', 'ETHERNET']
 const ROOMS = [
-    ...ParisRooms.map(({ name }) => name),
+    ...BonneNouvelleRooms.map(({ name }) => name),
     'Salle Business',
     'Salle Designer',
     'Grande Salle',

@@ -23,6 +23,13 @@ export type WorkplaceSvgRoom =
     | 'Nantes_Cave'
     | 'Nantes_Torture'
     | 'Nantes_Placard'
+    // TODO: rajouter les vrais noms des salles
+    | 'SaintPaul_Adaly1'
+    | 'SaintPaul_Adaly2'
+    | 'SaintPaul_Adaly3'
+    | 'SaintPaul_Designer'
+    | 'SaintPaul_Etage3_1'
+    | 'SaintPaul_Etage3_2'
 
 export interface WorkplaceSvgProps {
     width: number

@@ -12,14 +12,23 @@ export const RESERVABLE_ROOMS = [
     'Nantes_Boudoir',
     'Nantes_Torture',
     'Nantes_Cave',
-    'Nantes_Placard'
+    'Nantes_Placard',
+    // TODO: rajouter les vrais noms des salles
+    'SaintPaul_Adaly1',
+    'SaintPaul_Adaly2',
+    'SaintPaul_Adaly3',
+    'SaintPaul_Designer',
+    'SaintPaul_Etage3_1',
+    'SaintPaul_Etage3_2',
 ] as const
 
 export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
 
 export type RoomFullName = typeof AllRooms[number]['name']
 
-export const ParisRooms = [
+export type WorkspaceLocation = 'bonneNouvelle' | 'saintPaul' | 'nantes'
+
+export const BonneNouvelleRooms = [
     {
         name: 'Salle Vador',
     },
@@ -61,12 +70,36 @@ export const NantesRooms = [
     }
 ] as const
 
+// TODO: rajouter les vrais noms des salles
+export const SaintPaulRooms = [
+    {
+        name: "Saint Paul - Salle Adaly 1",
+    },
+    {
+        name: "Saint Paul - Salle Adaly 2",
+    },
+    {
+        name: "Saint Paul - Salle Adaly 3",
+    },
+    {
+        name: "Saint Paul - Salle Designer",
+    },
+    {
+        name: "Saint Paul (3e) - Salle 1",
+    },
+    {
+        name: "Saint Paul (3e) - Salle 2",
+    }
+] as const
+
+
 export const AllRooms = [
     {
         name: '*',
     },
-    ...ParisRooms,
+    ...BonneNouvelleRooms,
     ...NantesRooms,
+    ...SaintPaulRooms,
 ] as const
 
 const WorkplaceSvgRoomToFullRoomName: {
@@ -84,6 +117,12 @@ const WorkplaceSvgRoomToFullRoomName: {
     Nantes_Cave: "Nantes - La cave",
     Nantes_Torture: "Nantes - La salle de torture",
     Nantes_Placard: "Nantes - Le placard",
+    SaintPaul_Adaly1: "Saint Paul - Salle Adaly 1",
+    SaintPaul_Adaly2: "Saint Paul - Salle Adaly 2",
+    SaintPaul_Adaly3: "Saint Paul - Salle Adaly 3",
+    SaintPaul_Designer: "Saint Paul - Salle Designer",
+    SaintPaul_Etage3_1: "Saint Paul (3e) - Salle 1",
+    SaintPaul_Etage3_2: "Saint Paul (3e) - Salle 2",
 }
 
 export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {
