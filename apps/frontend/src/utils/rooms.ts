@@ -13,13 +13,14 @@ export const RESERVABLE_ROOMS = [
     'Nantes_Torture',
     'Nantes_Cave',
     'Nantes_Placard',
-    // TODO: rajouter les vrais noms des salles
-    'SaintPaul_Adaly1',
-    'SaintPaul_Adaly2',
-    'SaintPaul_Adaly3',
-    'SaintPaul_Designer',
-    'SaintPaul_Etage3_1',
-    'SaintPaul_Etage3_2',
+    'SaintPaul_Amesh',
+    'SaintPaul_Lovelace',
+    'SaintPaul_Turing',
+    'SaintPaul_Manguier',
+    'SaintPaul_Tresor',
+    "SaintPaul_Olympe",
+    "SaintPaul_Foret",
+    "SaintPaul_Mediterranee",
 ] as const
 
 export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
@@ -79,23 +80,29 @@ export const NantesRooms = [
 // TODO: rajouter les vrais noms des salles
 export const SaintPaulRooms = [
     {
-        name: "Saint Paul - Salle Adaly 1",
+        name: 'Salle Amesh'
     },
     {
-        name: "Saint Paul - Salle Adaly 2",
+        name: 'Salle Lovelace'
     },
     {
-        name: "Saint Paul - Salle Adaly 3",
+        name: 'Salle Turing'
     },
     {
-        name: "Saint Paul - Salle Designer",
+        name: 'Salle du manguier (ultra)-massif'
     },
     {
-        name: "Saint Paul (3e) - Salle 1",
+        name: 'Salle du Trésor'
     },
     {
-        name: "Saint Paul (3e) - Salle 2",
-    }
+        name: "L'Olympe"
+    },
+    {
+        name: 'La Forêt'
+    },
+    {
+        name: 'Salle Méditerranée'
+    },
 ] as const
 
 
@@ -123,12 +130,14 @@ const WorkplaceSvgRoomToFullRoomName: {
     Nantes_Cave: "Nantes - La cave",
     Nantes_Torture: "Nantes - La salle de torture",
     Nantes_Placard: "Nantes - Le placard",
-    SaintPaul_Adaly1: "Saint Paul - Salle Adaly 1",
-    SaintPaul_Adaly2: "Saint Paul - Salle Adaly 2",
-    SaintPaul_Adaly3: "Saint Paul - Salle Adaly 3",
-    SaintPaul_Designer: "Saint Paul - Salle Designer",
-    SaintPaul_Etage3_1: "Saint Paul (3e) - Salle 1",
-    SaintPaul_Etage3_2: "Saint Paul (3e) - Salle 2",
+    SaintPaul_Amesh: "Salle Amesh",
+    SaintPaul_Lovelace: "Salle Lovelace",
+    SaintPaul_Turing: "Salle Turing",
+    SaintPaul_Manguier: "Salle du manguier (ultra)-massif",
+    SaintPaul_Tresor: 'Salle du Trésor',
+    SaintPaul_Olympe: "L'Olympe",
+    SaintPaul_Foret: 'La Forêt',
+    SaintPaul_Mediterranee: 'Salle Méditerranée',
 }
 
 export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {
