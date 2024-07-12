@@ -31,6 +31,14 @@ export const availableRooms = async ({ request, response }: HttpContextContract)
         'Nantes - La cave',
         'Nantes - La salle de torture',
         'Nantes - Le placard',
+        'Salle Amesh',
+        'Salle Lovelace',
+        'Salle Turing',
+        'Salle du manguier (ultra)-massif',
+        'Salle du Trésor',
+        "L'Olympe",
+        'La Forêt',
+        'Salle Méditerranée',
     ]
 
     // get all events with dates incompatible with the new event

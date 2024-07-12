@@ -23,6 +23,14 @@ export type WorkplaceSvgRoom =
     | 'Nantes_Cave'
     | 'Nantes_Torture'
     | 'Nantes_Placard'
+    | 'SaintPaul_Amesh'
+    | 'SaintPaul_Lovelace'
+    | 'SaintPaul_Turing'
+    | 'SaintPaul_Manguier'
+    | 'SaintPaul_Tresor'
+    | 'SaintPaul_Olympe'
+    | 'SaintPaul_Foret'
+    | 'SaintPaul_Mediterranee'
 
 export interface WorkplaceSvgProps {
     width: number

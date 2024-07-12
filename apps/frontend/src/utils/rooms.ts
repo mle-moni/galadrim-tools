@@ -12,14 +12,30 @@ export const RESERVABLE_ROOMS = [
     'Nantes_Boudoir',
     'Nantes_Torture',
     'Nantes_Cave',
-    'Nantes_Placard'
+    'Nantes_Placard',
+    'SaintPaul_Amesh',
+    'SaintPaul_Lovelace',
+    'SaintPaul_Turing',
+    'SaintPaul_Manguier',
+    'SaintPaul_Tresor',
+    "SaintPaul_Olympe",
+    "SaintPaul_Foret",
+    "SaintPaul_Mediterranee",
 ] as const
 
 export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
 
 export type RoomFullName = typeof AllRooms[number]['name']
 
-export const ParisRooms = [
+export type WorkspaceLocation = 'bonneNouvelle' | 'saintPaul' | 'nantes'
+
+export const ValidLocations = [
+    'bonneNouvelle',
+    'saintPaul',
+    'nantes',
+]
+
+export const BonneNouvelleRooms = [
     {
         name: 'Salle Vador',
     },
@@ -61,12 +77,42 @@ export const NantesRooms = [
     }
 ] as const
 
+// TODO: rajouter les vrais noms des salles
+export const SaintPaulRooms = [
+    {
+        name: 'Salle Amesh'
+    },
+    {
+        name: 'Salle Lovelace'
+    },
+    {
+        name: 'Salle Turing'
+    },
+    {
+        name: 'Salle du manguier (ultra)-massif'
+    },
+    {
+        name: 'Salle du Trésor'
+    },
+    {
+        name: "L'Olympe"
+    },
+    {
+        name: 'La Forêt'
+    },
+    {
+        name: 'Salle Méditerranée'
+    },
+] as const
+
+
 export const AllRooms = [
     {
         name: '*',
     },
-    ...ParisRooms,
+    ...BonneNouvelleRooms,
     ...NantesRooms,
+    ...SaintPaulRooms,
 ] as const
 
 const WorkplaceSvgRoomToFullRoomName: {
@@ -84,6 +130,14 @@ const WorkplaceSvgRoomToFullRoomName: {
     Nantes_Cave: "Nantes - La cave",
     Nantes_Torture: "Nantes - La salle de torture",
     Nantes_Placard: "Nantes - Le placard",
+    SaintPaul_Amesh: "Salle Amesh",
+    SaintPaul_Lovelace: "Salle Lovelace",
+    SaintPaul_Turing: "Salle Turing",
+    SaintPaul_Manguier: "Salle du manguier (ultra)-massif",
+    SaintPaul_Tresor: 'Salle du Trésor',
+    SaintPaul_Olympe: "L'Olympe",
+    SaintPaul_Foret: 'La Forêt',
+    SaintPaul_Mediterranee: 'Salle Méditerranée',
 }
 
 export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {
