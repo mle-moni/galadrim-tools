@@ -86,7 +86,9 @@ export const SaintPaulRooms = [
         name: 'Salle Lovelace'
     },
     {
-        name: 'Salle Turing'
+        // \u200b is a zero-width space, used to prevent a duplicate name which
+        // causes the room to be rendered multiple times in the frontend
+        name: 'Salle \u200bTuring'
     },
     {
         name: 'Salle du manguier (ultra)-massif'
