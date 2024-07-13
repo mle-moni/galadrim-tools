@@ -1,9 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { destroyRestaurantReview } from 'App/Controllers/Http/restaurantReviews/destroyRestaurantReview'
-import { restaurantReviewsList } from 'App/Controllers/Http/restaurantReviews/restaurantReviewsList'
-import { showRestaurantReview } from 'App/Controllers/Http/restaurantReviews/showRestaurantReview'
-import { storeRestaurantReview } from 'App/Controllers/Http/restaurantReviews/storeRestaurantReview'
-import { updateRestaurantReview } from 'App/Controllers/Http/restaurantReviews/updateRestaurantReview'
+import { destroyRestaurantReview } from '#app/Controllers/Http/restaurantReviews/destroyRestaurantReview'
+import { restaurantReviewsList } from '#app/Controllers/Http/restaurantReviews/restaurantReviewsList'
+import { showRestaurantReview } from '#app/Controllers/Http/restaurantReviews/showRestaurantReview'
+import { storeRestaurantReview } from '#app/Controllers/Http/restaurantReviews/storeRestaurantReview'
+import { updateRestaurantReview } from '#app/Controllers/Http/restaurantReviews/updateRestaurantReview'
 
 export default class RestaurantReviewsController {
     public async index(ctx: HttpContextContract) {

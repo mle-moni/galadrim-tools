@@ -7,8 +7,8 @@ import {
     ModelQueryBuilderContract,
     RelationSubQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
-import { ColumnConfig } from 'App/Adomin/createModelViewConfig'
-import { AdominFieldConfig } from 'App/Adomin/fields.types'
+import { ColumnConfig } from '#app/Adomin/createModelViewConfig'
+import { AdominFieldConfig } from '#app/Adomin/fields.types'
 import { getSqlColumnToUse } from '../getModelConfig'
 import { EXPORT_TYPES } from './downloadExportFile'
 

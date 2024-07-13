@@ -1,7 +1,7 @@
 import { hasRights } from '@galadrim-tools/shared'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Event from 'App/Models/Event'
-import Ws from 'App/Services/Ws'
+import Event from '#app/Models/Event'
+import Ws from '#app/Services/Ws'
 import { validateEventsParams } from './storeEvent'
 
 export const updateRoute = async ({ params, request, auth, response }: HttpContextContract) => {

@@ -1,6 +1,6 @@
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { scaffold } from 'App/Scaffolder/scaffolder'
+import { scaffold } from '#app/Scaffolder/scaffolder'
 import { DateTime } from 'luxon'
 
 export default class RestaurantReview extends BaseModel {

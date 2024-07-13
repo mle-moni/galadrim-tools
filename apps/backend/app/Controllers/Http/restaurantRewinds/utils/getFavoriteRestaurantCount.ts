@@ -1,4 +1,4 @@
-import RestaurantChoice from 'App/Models/RestaurantChoice'
+import RestaurantChoice from '#app/Models/RestaurantChoice'
 
 export const getFavoriteRestaurantCount = (choices: RestaurantChoice[]) => {
     const restaurantMap = new Map<number, number>()

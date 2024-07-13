@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { availableRooms } from 'App/Controllers/Http/events/availableRooms'
+import { availableRooms } from '#app/Controllers/Http/events/availableRooms'
 import { destroyRoute } from './destroyEvent'
 import { indexRoute } from './eventsIndex'
 import { getAllEvents } from './getAllEvents'

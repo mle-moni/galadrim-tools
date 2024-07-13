@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { StatsViewConfig } from 'App/Adomin/createStatsViewConfig'
+import { StatsViewConfig } from '#app/Adomin/createStatsViewConfig'
 import { AdominViewConfig } from '../../adominConfig'
 import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG'
 import { computeRightsCheck } from '../adominRoutesOverridesAndRights'

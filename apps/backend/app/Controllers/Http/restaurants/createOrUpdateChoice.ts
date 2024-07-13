@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Restaurant from 'App/Models/Restaurant'
-import RestaurantChoice from 'App/Models/RestaurantChoice'
-import { formatDateToNumber } from 'App/Services/Date'
-import Ws from 'App/Services/Ws'
+import Restaurant from '#app/Models/Restaurant'
+import RestaurantChoice from '#app/Models/RestaurantChoice'
+import { formatDateToNumber } from '#app/Services/Date'
+import Ws from '#app/Services/Ws'
 
 const choiceSchema = schema.create({
     restaurantId: schema.number([rules.exists({ table: 'restaurants', column: 'id' })]),

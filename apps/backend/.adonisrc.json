@@ -1,59 +1,68 @@
 {
-    "typescript": true,
-    "commands": [
-        "@adonisjs/core/commands",
-        "@adonisjs/lucid/commands",
-        "@adonisjs/mail/commands",
-        "@adonisjs/bouncer/build/commands"
-    ],
-    "exceptionHandlerNamespace": "App/Exceptions/Handler",
-    "aliases": {
-        "App": "app",
-        "Config": "config",
-        "Database": "database",
-        "Contracts": "contracts"
+  "typescript": true,
+  "commands": [
+    "@adonisjs/core/commands",
+    "@adonisjs/lucid/commands",
+    "@adonisjs/mail/commands",
+    "@adonisjs/bouncer/build/commands"
+  ],
+  "exceptionHandlerNamespace": "App/Exceptions/Handler",
+  "preloads": [
+    "./start/routes",
+    "./start/kernel",
+    "./start/bouncer"
+  ],
+  "providers": [
+    "./providers/AppProvider",
+    "@adonisjs/core/providers/app_provider",
+    "@adonisjs/core/providers/hash_provider",
+    {
+      "file": "@adonisjs/core/providers/repl_provider",
+      "environment": [
+        "repl",
+        "test"
+      ]
     },
-    "preloads": ["./start/routes", "./start/kernel", "./start/bouncer"],
-    "providers": [
-        "./providers/AppProvider",
-        "@adonisjs/core/providers/app_provider",
-        "@adonisjs/core/providers/hash_provider",
-        {
-            "file": "@adonisjs/core/providers/repl_provider",
-            "environment": ["repl", "test"]
-        },
-        "@adonisjs/lucid/database_provider",
-        "@adonisjs/auth/auth_provider",
-        "@adonisjs/session/session_provider",
-        "@adonisjs/mail/mail_provider",
-        "@adonisjs/core/providers/edge_provider",
-        "@adonisjs/attachment-lite",
-        "@adonisjs/bouncer"
-    ],
-    "aceProviders": ["@adonisjs/repl"],
-    "metaFiles": [
-        {
-            "pattern": "resources/views/**/*.edge",
-            "reloadServer": false
-        },
-        {
-            "pattern": "public/**",
-            "reloadServer": false
-        }
-    ],
-    "tests": {
-        "suites": [
-            {
-                "name": "functional",
-                "files": ["tests/functional/**/*.spec(.ts|.js)"],
-                "timeout": 60000
-            },
-            {
-                "name": "unit",
-                "files": ["tests/unit/**/*.spec(.ts|.js)"],
-                "timeout": 60000
-            }
-        ]
+    "@adonisjs/lucid/database_provider",
+    "@adonisjs/auth/auth_provider",
+    "@adonisjs/session/session_provider",
+    "@adonisjs/mail/mail_provider",
+    "@adonisjs/core/providers/edge_provider",
+    "@adonisjs/attachment-lite",
+    "@adonisjs/bouncer"
+  ],
+  "aceProviders": [
+    "@adonisjs/repl"
+  ],
+  "metaFiles": [
+    {
+      "pattern": "resources/views/**/*.edge",
+      "reloadServer": false
     },
-    "testProviders": ["@japa/preset-adonis/TestsProvider"]
+    {
+      "pattern": "public/**",
+      "reloadServer": false
+    }
+  ],
+  "tests": {
+    "suites": [
+      {
+        "name": "functional",
+        "files": [
+          "tests/functional/**/*.spec(.ts|.js)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "name": "unit",
+        "files": [
+          "tests/unit/**/*.spec(.ts|.js)"
+        ],
+        "timeout": 60000
+      }
+    ]
+  },
+  "testProviders": [
+    "@japa/preset-adonis/TestsProvider"
+  ]
 }

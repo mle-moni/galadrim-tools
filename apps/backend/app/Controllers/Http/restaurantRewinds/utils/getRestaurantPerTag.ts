@@ -1,4 +1,4 @@
-import RestaurantChoice from 'App/Models/RestaurantChoice'
+import RestaurantChoice from '#app/Models/RestaurantChoice'
 
 export const getRestaurantPerTag = (choices: RestaurantChoice[]) => {
     const restaurantTagMap = new Map<string, number>()

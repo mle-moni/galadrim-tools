@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Idea from 'App/Models/Idea'
-import IdeaComment from 'App/Models/IdeaComment'
-import User from 'App/Models/User'
-import Ws from 'App/Services/Ws'
-import { createNotificationForUser, cropText } from 'App/Services/notifications'
+import Idea from '#app/Models/Idea'
+import IdeaComment from '#app/Models/IdeaComment'
+import User from '#app/Models/User'
+import Ws from '#app/Services/Ws'
+import { createNotificationForUser, cropText } from '#app/Services/notifications'
 
 const ideaSchema = schema.create({
     message: schema.string({ trim: true }),

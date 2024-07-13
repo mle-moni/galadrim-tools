@@ -1,4 +1,4 @@
-import RestaurantChoice from 'App/Models/RestaurantChoice'
+import RestaurantChoice from '#app/Models/RestaurantChoice'
 import { NANTES_COORDINATES_VALUES, PARIS_COORDINATES_VALUES } from '@galadrim-tools/shared'
 
 const toRadians = (degrees: number) => {

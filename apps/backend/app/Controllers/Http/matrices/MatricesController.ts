@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Matrix from 'App/Models/Matrix'
+import Matrix from '#app/Models/Matrix'
 
 export default class MatricesController {
     async index({}: HttpContextContract) {

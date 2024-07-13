@@ -1,7 +1,7 @@
 import { hasRights } from '@galadrim-tools/shared/'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Tag from 'App/Models/Tag'
-import Ws from 'App/Services/Ws'
+import Tag from '#app/Models/Tag'
+import Ws from '#app/Services/Ws'
 
 export const destroyRoute = async ({ params, auth, response }: HttpContextContract) => {
     const tag = await Tag.findOrFail(params.id)

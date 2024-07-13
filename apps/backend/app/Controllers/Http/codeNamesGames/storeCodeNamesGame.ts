@@ -1,7 +1,7 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import CodeNamesGame from 'App/Models/CodeNamesGame'
+import CodeNamesGame from '#app/Models/CodeNamesGame'
 
 const storeCodeNamesGameSchema = schema.create({
     redSpyMasterId: schema.number([rules.exists({ column: 'id', table: 'users' })]),

@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Restaurant from 'App/Models/Restaurant'
+import Restaurant from '#app/Models/Restaurant'
 
 export const indexRoute = async (_params: HttpContextContract) => {
     const restaurants = await Restaurant.all()

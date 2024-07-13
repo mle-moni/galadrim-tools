@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { breakTimesIndex } from 'App/Controllers/Http/breakTimes/breakTimesIndex'
+import { breakTimesIndex } from '#app/Controllers/Http/breakTimes/breakTimesIndex'
 
 export default class BreakTimesController {
     public async index(ctx: HttpContextContract) {

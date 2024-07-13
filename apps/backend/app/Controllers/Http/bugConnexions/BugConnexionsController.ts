@@ -1,9 +1,9 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { bugConnexionsList } from 'App/Controllers/Http/bugConnexions/bugConnexionsList'
-import { destroyBugConnexion } from 'App/Controllers/Http/bugConnexions/destroyBugConnexion'
-import { showBugConnexion } from 'App/Controllers/Http/bugConnexions/showBugConnexion'
-import { storeBugConnexion } from 'App/Controllers/Http/bugConnexions/storeBugConnexion'
-import { updateBugConnexion } from 'App/Controllers/Http/bugConnexions/updateBugConnexion'
+import { bugConnexionsList } from '#app/Controllers/Http/bugConnexions/bugConnexionsList'
+import { destroyBugConnexion } from '#app/Controllers/Http/bugConnexions/destroyBugConnexion'
+import { showBugConnexion } from '#app/Controllers/Http/bugConnexions/showBugConnexion'
+import { storeBugConnexion } from '#app/Controllers/Http/bugConnexions/storeBugConnexion'
+import { updateBugConnexion } from '#app/Controllers/Http/bugConnexions/updateBugConnexion'
 
 export default class BugConnexionsController {
     public async index(ctx: HttpContextContract) {

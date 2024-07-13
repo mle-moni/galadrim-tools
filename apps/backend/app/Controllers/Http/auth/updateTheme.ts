@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Theme from 'App/Models/Theme'
+import Theme from '#app/Models/Theme'
 
 const colorRegex = /^#[0-9a-f]{6}$/i
 

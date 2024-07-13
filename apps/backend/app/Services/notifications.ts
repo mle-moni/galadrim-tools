@@ -1,7 +1,7 @@
 import { hasNotificationEnabled, NotificationName } from '@galadrim-tools/shared'
-import Notification from 'App/Models/Notification'
-import User from 'App/Models/User'
-import Ws from 'App/Services/Ws'
+import Notification from '#app/Models/Notification'
+import User from '#app/Models/User'
+import Ws from '#app/Services/Ws'
 
 export interface NotificationParams {
     title: string

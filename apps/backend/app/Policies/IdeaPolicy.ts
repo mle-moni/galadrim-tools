@@ -1,6 +1,6 @@
 import Bouncer, { BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
-import Idea from 'App/Models/Idea'
-import User from 'App/Models/User'
+import Idea from '#app/Models/Idea'
+import User from '#app/Models/User'
 
 export default class IdeaPolicy extends BasePolicy {
     public async before(user: User | null) {

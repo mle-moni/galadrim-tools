@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { loadFilesForInstances } from 'App/Adomin/routes/handleFiles'
+import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
 import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
 import { validateResourceId } from '../../validateResourceId'
 import { getModelData } from '../getModelData'

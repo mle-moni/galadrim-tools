@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { validator } from '@ioc:Adonis/Core/Validator'
-import { loadFilesForInstances } from 'App/Adomin/routes/handleFiles'
+import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
 import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
 import { getValidatedModelConfig } from '../validateModelName'
 import { downloadExportFile } from './downloadExportFile'

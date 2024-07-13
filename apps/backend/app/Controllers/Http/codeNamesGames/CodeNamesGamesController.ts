@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { addCodeNamesGameRound } from 'App/Controllers/Http/codeNamesGames/addCodeNamesGameRound'
-import { codeNamesGamesIndex } from 'App/Controllers/Http/codeNamesGames/codeNamesGamesIndex'
-import { destroyCodeNamesGame } from 'App/Controllers/Http/codeNamesGames/destroyCodeNamesGame'
-import { showCodeNamesGame } from 'App/Controllers/Http/codeNamesGames/showCodeNamesGame'
-import { storeCodeNamesGame } from 'App/Controllers/Http/codeNamesGames/storeCodeNamesGame'
+import { addCodeNamesGameRound } from '#app/Controllers/Http/codeNamesGames/addCodeNamesGameRound'
+import { codeNamesGamesIndex } from '#app/Controllers/Http/codeNamesGames/codeNamesGamesIndex'
+import { destroyCodeNamesGame } from '#app/Controllers/Http/codeNamesGames/destroyCodeNamesGame'
+import { showCodeNamesGame } from '#app/Controllers/Http/codeNamesGames/showCodeNamesGame'
+import { storeCodeNamesGame } from '#app/Controllers/Http/codeNamesGames/storeCodeNamesGame'
 
 export default class CodeNamesGamesController {
     public async index(ctx: HttpContextContract) {

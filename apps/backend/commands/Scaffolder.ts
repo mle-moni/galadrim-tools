@@ -2,8 +2,8 @@ import { BaseCommand, args } from '@adonisjs/core/build/standalone'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import View from '@ioc:Adonis/Core/View'
 import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
-import { filterUndefinedOrNullValues } from 'App/Scaffolder/array'
-import { FieldToScaffold, getFieldValidationRules } from 'App/Scaffolder/scaffolder'
+import { filterUndefinedOrNullValues } from '#app/Scaffolder/array'
+import { FieldToScaffold, getFieldValidationRules } from '#app/Scaffolder/scaffolder'
 
 import fs from 'fs/promises'
 

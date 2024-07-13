@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { myRestaurantNotes } from 'App/Controllers/Http/restaurantNotes/myRestaurantNotes'
+import { myRestaurantNotes } from '#app/Controllers/Http/restaurantNotes/myRestaurantNotes'
 import { destroyRoute } from './destroyRestaurantNotes'
 import { indexRoute } from './restaurantNotesIndex'
 import { showRoute } from './showRestaurantNotes'

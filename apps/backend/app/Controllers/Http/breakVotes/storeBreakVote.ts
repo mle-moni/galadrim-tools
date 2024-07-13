@@ -1,10 +1,10 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Database from '@ioc:Adonis/Lucid/Database'
-import { TODAY_BREAK_VOTE_FILTER } from 'App/Controllers/Http/breakVotes/breakVotesIndex'
-import BreakVote from 'App/Models/BreakVote'
-import BreakVoteActivity from 'App/Models/BreakVoteActivity'
-import BreakVoteTime from 'App/Models/BreakVoteTime'
+import { TODAY_BREAK_VOTE_FILTER } from '#app/Controllers/Http/breakVotes/breakVotesIndex'
+import BreakVote from '#app/Models/BreakVote'
+import BreakVoteActivity from '#app/Models/BreakVoteActivity'
+import BreakVoteTime from '#app/Models/BreakVoteTime'
 
 const breakVoteSchema = schema.create({
     activities: schema

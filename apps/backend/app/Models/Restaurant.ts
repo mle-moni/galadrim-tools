@@ -9,8 +9,8 @@ import {
     manyToMany,
     ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
-import RestaurantReview from 'App/Models/RestaurantReview'
-import { formatDateToNumber } from 'App/Services/Date'
+import RestaurantReview from '#app/Models/RestaurantReview'
+import { formatDateToNumber } from '#app/Services/Date'
 import { DateTime } from 'luxon'
 import RestaurantChoice from './RestaurantChoice'
 import RestaurantNote from './RestaurantNote'

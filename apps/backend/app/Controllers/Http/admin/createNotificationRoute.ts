@@ -1,11 +1,11 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import User from 'App/Models/User'
+import User from '#app/Models/User'
 import {
     NotificationParams,
     createNotificationForUser,
     createNotificationForUsers,
-} from 'App/Services/notifications'
+} from '#app/Services/notifications'
 
 const createNotificationSchema = schema.create({
     userIds: schema.array().members(schema.number()),

@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import RestaurantRewind from 'App/Models/RestaurantRewind'
+import RestaurantRewind from '#app/Models/RestaurantRewind'
 import { schema, validator } from '@ioc:Adonis/Core/Validator'
 
 const resourceIdSchema = schema.create({ id: schema.number.optional() })

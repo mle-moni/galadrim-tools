@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CodeNamesGame from 'App/Models/CodeNamesGame'
-import Ws from 'App/Services/Ws'
+import CodeNamesGame from '#app/Models/CodeNamesGame'
+import Ws from '#app/Services/Ws'
 
 export const destroyCodeNamesGame = async ({ auth, params, response }: HttpContextContract) => {
     const user = auth.user!

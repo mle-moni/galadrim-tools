@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Idea from 'App/Models/Idea'
+import Idea from '#app/Models/Idea'
 
 export const showIdeaRoute = async ({ params, bouncer }: HttpContextContract) => {
     const idea = await Idea.findOrFail(params.id)

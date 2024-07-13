@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Event from 'App/Models/Event'
+import Event from '#app/Models/Event'
 
 export const availableRooms = async ({ request, response }: HttpContextContract) => {
     const queryString = request.qs()

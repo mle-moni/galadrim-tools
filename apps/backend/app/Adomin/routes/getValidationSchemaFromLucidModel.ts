@@ -1,5 +1,5 @@
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import { AdominFieldConfig } from 'App/Adomin/fields.types'
+import { AdominFieldConfig } from '#app/Adomin/fields.types'
 import { ModelConfig } from '../createModelViewConfig'
 import { AdominValidationMode } from '../validation/adominValidationHelpers'
 

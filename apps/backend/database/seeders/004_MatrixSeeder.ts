@@ -1,6 +1,6 @@
 import { MatrixDto, rotateMatrix } from '@galadrim-tools/shared'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import Matrix from 'App/Models/Matrix'
+import Matrix from '#app/Models/Matrix'
 
 const matrices: MatrixDto[] = [
     {

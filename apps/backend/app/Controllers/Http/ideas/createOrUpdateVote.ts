@@ -1,9 +1,9 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Idea from 'App/Models/Idea'
-import IdeaVote from 'App/Models/IdeaVote'
-import User from 'App/Models/User'
-import Ws from 'App/Services/Ws'
+import Idea from '#app/Models/Idea'
+import IdeaVote from '#app/Models/IdeaVote'
+import User from '#app/Models/User'
+import Ws from '#app/Services/Ws'
 
 const ideaSchema = schema.create({
     isUpvote: schema.boolean.optional(),

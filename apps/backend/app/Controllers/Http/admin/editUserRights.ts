@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema } from '@ioc:Adonis/Core/Validator'
-import User from 'App/Models/User'
-import Ws from 'App/Services/Ws'
+import User from '#app/Models/User'
+import Ws from '#app/Services/Ws'
 
 const editUserRightsSchema = schema.create({
     id: schema.number(),

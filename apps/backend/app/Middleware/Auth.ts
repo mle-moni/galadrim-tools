@@ -1,7 +1,7 @@
 import { AuthenticationException } from '@adonisjs/auth/build/standalone'
 import { GuardsList } from '@ioc:Adonis/Addons/Auth'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { getUserToAuthenticate } from 'App/Services/GaladrimAuth'
+import { getUserToAuthenticate } from '#app/Services/GaladrimAuth'
 
 /**
  * Auth middleware is meant to restrict un-authenticated access to a given route

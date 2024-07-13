@@ -1,4 +1,4 @@
-import User from 'App/Models/User'
+import User from '#app/Models/User'
 import { generateDistanceRanking } from './generateDistanceRanking'
 import { generateRewindForUser } from './generateRewindForUser'
 import { generateWealthRanking } from './generateWealthRanking'

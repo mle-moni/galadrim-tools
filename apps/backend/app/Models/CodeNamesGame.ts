@@ -1,6 +1,6 @@
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
 import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import CodeNamesGameRound from 'App/Models/CodeNamesGameRound'
+import CodeNamesGameRound from '#app/Models/CodeNamesGameRound'
 import { DateTime } from 'luxon'
 
 export default class CodeNamesGame extends BaseModel {

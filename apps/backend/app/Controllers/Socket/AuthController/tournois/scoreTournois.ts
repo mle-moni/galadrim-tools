@@ -1,6 +1,6 @@
 import { schema, validator } from '@ioc:Adonis/Core/Validator'
-import PlatformerResult from 'App/Models/PlatformerResult'
-import Ws from 'App/Services/Ws'
+import PlatformerResult from '#app/Models/PlatformerResult'
+import Ws from '#app/Services/Ws'
 import { Socket } from 'socket.io'
 import { getSocketUser } from '../authRestrictedEvents'
 

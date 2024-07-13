@@ -1,8 +1,8 @@
 import { IDEAS_STATE } from '@galadrim-tools/shared'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Idea from 'App/Models/Idea'
-import Ws from 'App/Services/Ws'
+import Idea from '#app/Models/Idea'
+import Ws from '#app/Services/Ws'
 
 const ideaSchema = schema.create({
     text: schema.string([rules.trim(), rules.maxLength(300), rules.minLength(2)]),

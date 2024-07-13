@@ -20,10 +20,10 @@ import {
     HasMany,
     ModelQueryBuilderContract,
 } from '@ioc:Adonis/Lucid/Orm'
-import Notification from 'App/Models/Notification'
-import RestaurantNote from 'App/Models/RestaurantNote'
-import Theme from 'App/Models/Theme'
-import { formatDateToNumber } from 'App/Services/Date'
+import Notification from '#app/Models/Notification'
+import RestaurantNote from '#app/Models/RestaurantNote'
+import Theme from '#app/Models/Theme'
+import { formatDateToNumber } from '#app/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
 import { URL } from 'url'

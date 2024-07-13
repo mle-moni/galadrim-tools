@@ -3,11 +3,11 @@ import Drive from '@ioc:Adonis/Core/Drive'
 import { ApiClient } from '@japa/api-client'
 
 import { faker } from '@faker-js/faker'
-import Tag from 'App/Models/Tag'
-import Restaurant from 'App/Models/Restaurant'
-import RestaurantTag from 'App/Models/RestaurantTag'
-import User from 'App/Models/User'
-import RestaurantNote from 'App/Models/RestaurantNote'
+import Tag from '#app/Models/Tag'
+import Restaurant from '#app/Models/Restaurant'
+import RestaurantTag from '#app/Models/RestaurantTag'
+import User from '#app/Models/User'
+import RestaurantNote from '#app/Models/RestaurantNote'
 
 const TagNames = ['coréen', 'japonais', 'chinois', 'mexicain', 'israélien']
 

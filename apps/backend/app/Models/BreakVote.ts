@@ -1,6 +1,6 @@
 import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
-import BreakActivity from 'App/Models/BreakActivity'
-import BreakTime from 'App/Models/BreakTime'
+import BreakActivity from '#app/Models/BreakActivity'
+import BreakTime from '#app/Models/BreakTime'
 import { DateTime } from 'luxon'
 
 export default class BreakVote extends BaseModel {

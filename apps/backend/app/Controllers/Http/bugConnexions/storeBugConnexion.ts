@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BugConnexion from 'App/Models/BugConnexion'
+import BugConnexion from '#app/Models/BugConnexion'
 import { bugConnexionSchema } from './bugConnexionSchema'
 
 export const storeBugConnexion = async ({ request, auth }: HttpContextContract) => {

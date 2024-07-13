@@ -1,4 +1,4 @@
-import RestaurantChoice from 'App/Models/RestaurantChoice'
+import RestaurantChoice from '#app/Models/RestaurantChoice'
 
 export const getTotalPrice = (choices: RestaurantChoice[]) => {
     return choices.reduce((acc, choice) => {

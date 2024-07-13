@@ -1,8 +1,8 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import RestaurantReview from 'App/Models/RestaurantReview'
-import { validateResourceId } from 'App/Scaffolder/validateResourceId'
-import Ws from 'App/Services/Ws'
+import RestaurantReview from '#app/Models/RestaurantReview'
+import { validateResourceId } from '#app/Scaffolder/validateResourceId'
+import Ws from '#app/Services/Ws'
 import { restaurantReviewSchema } from './restaurantReviewSchema'
 
 export const updateRestaurantReview = async ({ params, request, bouncer }: HttpContextContract) => {

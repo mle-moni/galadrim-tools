@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { validateTagsParams } from 'App/Controllers/Http/tags/storeTag'
-import Tag from 'App/Models/Tag'
-import Ws from 'App/Services/Ws'
+import { validateTagsParams } from '#app/Controllers/Http/tags/storeTag'
+import Tag from '#app/Models/Tag'
+import Ws from '#app/Services/Ws'
 
 export const updateRoute = async ({ params, request }: HttpContextContract) => {
     const tag = await Tag.findOrFail(params.id)

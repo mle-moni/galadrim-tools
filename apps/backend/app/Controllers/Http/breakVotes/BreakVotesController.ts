@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { breakVotesIndex } from 'App/Controllers/Http/breakVotes/breakVotesIndex'
-import { storeBreakVote } from 'App/Controllers/Http/breakVotes/storeBreakVote'
+import { breakVotesIndex } from '#app/Controllers/Http/breakVotes/breakVotesIndex'
+import { storeBreakVote } from '#app/Controllers/Http/breakVotes/storeBreakVote'
 
 export default class BreakVotesController {
     public async index(ctx: HttpContextContract) {

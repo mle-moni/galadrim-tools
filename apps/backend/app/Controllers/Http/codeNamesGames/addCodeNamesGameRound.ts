@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import CodeNamesGame from 'App/Models/CodeNamesGame'
-import CodeNamesGameRound from 'App/Models/CodeNamesGameRound'
+import CodeNamesGame from '#app/Models/CodeNamesGame'
+import CodeNamesGameRound from '#app/Models/CodeNamesGameRound'
 
 const roundSchema = schema.create({
     spyMasterId: schema.number([rules.exists({ column: 'id', table: 'users' })]),

@@ -1,5 +1,5 @@
 import { schema, validator } from '@ioc:Adonis/Core/Validator'
-import User from 'App/Models/User'
+import User from '#app/Models/User'
 import { Socket } from 'socket.io'
 import { joinAuthRestrictedEvents } from './authRestrictedEvents'
 

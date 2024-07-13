@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { validateRestaurantId } from 'App/Controllers/Http/restaurantReviews/validateRestaurantId'
-import RestaurantReview from 'App/Models/RestaurantReview'
+import { validateRestaurantId } from '#app/Controllers/Http/restaurantReviews/validateRestaurantId'
+import RestaurantReview from '#app/Models/RestaurantReview'
 
 export const restaurantReviewsList = async ({ params }: HttpContextContract) => {
     const { restaurantId } = await validateRestaurantId(params)

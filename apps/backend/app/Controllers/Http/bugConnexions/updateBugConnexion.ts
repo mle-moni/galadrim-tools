@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import BugConnexion from 'App/Models/BugConnexion'
-import { validateResourceId } from 'App/Scaffolder/validateResourceId'
+import BugConnexion from '#app/Models/BugConnexion'
+import { validateResourceId } from '#app/Scaffolder/validateResourceId'
 import { bugConnexionSchema } from './bugConnexionSchema'
 
 export const updateBugConnexion = async ({ params, request, bouncer }: HttpContextContract) => {

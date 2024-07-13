@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Tag from 'App/Models/Tag'
-import Ws from 'App/Services/Ws'
+import Tag from '#app/Models/Tag'
+import Ws from '#app/Services/Ws'
 
 const StoreValidationSchema = schema.create({
     name: schema.string([

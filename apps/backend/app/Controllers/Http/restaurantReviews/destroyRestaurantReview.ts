@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import RestaurantReview from 'App/Models/RestaurantReview'
-import { validateResourceId } from 'App/Scaffolder/validateResourceId'
-import Ws from 'App/Services/Ws'
+import RestaurantReview from '#app/Models/RestaurantReview'
+import { validateResourceId } from '#app/Scaffolder/validateResourceId'
+import Ws from '#app/Services/Ws'
 
 export const destroyRestaurantReview = async ({ params, bouncer }: HttpContextContract) => {
     const { id } = await validateResourceId(params)

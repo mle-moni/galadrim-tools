@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { breakActivitiesIndex } from 'App/Controllers/Http/breakActivities/breakActivitiesIndex'
+import { breakActivitiesIndex } from '#app/Controllers/Http/breakActivities/breakActivitiesIndex'
 
 export default class BreakActivitiesController {
     public async index(ctx: HttpContextContract) {

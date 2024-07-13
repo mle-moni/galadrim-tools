@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
-import PlatformerResult from 'App/Models/PlatformerResult'
+import PlatformerResult from '#app/Models/PlatformerResult'
 
 export default class PlatformerResultsController {
     async index({}: HttpContextContract) {

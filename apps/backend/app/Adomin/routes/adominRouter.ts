@@ -1,5 +1,5 @@
 import Route from '@ioc:Adonis/Core/Route'
-import { adominLogin } from 'App/Adomin/routes/adominLogin'
+import { adominLogin } from '#app/Adomin/routes/adominLogin'
 import { adominLogout } from './adominLogout'
 import { getAdominConfig } from './getAdominConfig'
 import { getModelConfigRoute } from './models/getModelConfig'

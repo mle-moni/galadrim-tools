@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { LucidRow } from '@ioc:Adonis/Lucid/Orm'
-import { toCSVString } from 'App/Adomin/utils/csvUtils'
+import { toCSVString } from '#app/Adomin/utils/csvUtils'
 
 export const EXPORT_TYPES = ['csv', 'xlsx', 'json'] as const
 
