@@ -34,6 +34,7 @@ import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
 import EventsController from '#controllers/events/EventsController'
+import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
 import RestaurantsController from '#controllers/restaurants/RestaurantsController'
 import TagsController from '#controllers/tags/TagsController'
 import { middleware } from './kernel.js'
@@ -56,8 +57,9 @@ router
     router.resource('restaurants', RestaurantsController).apiOnly()
     router.post('createOrUpdateRestaurantChoice', [RestaurantsController, 'createOrUpdateChoice'])
 
-    router.get('/notes/mine', 'restaurantNotes/RestaurantNotesController.mine')
-    router.resource('notes', 'restaurantNotes/RestaurantNotesController').apiOnly()
+    router.get('/notes/mine', [RestaurantNotesController, 'mine'])
+    router.resource('notes', RestaurantNotesController).apiOnly()
+
     router.resource('ideas', 'ideas/IdeasController').apiOnly()
     router.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')
     router.post('createIdeaComment', 'ideas/IdeasController.createComment')
