@@ -1,11 +1,9 @@
 {
     "typescript": true,
     "commands": [
-        "./commands",
-        "@adonisjs/core/build/commands/index.js",
-        "@adonisjs/repl/build/commands",
-        "@adonisjs/lucid/build/commands",
-        "@adonisjs/mail/build/commands",
+        "@adonisjs/core/commands",
+        "@adonisjs/lucid/commands",
+        "@adonisjs/mail/commands",
         "@adonisjs/bouncer/build/commands"
     ],
     "exceptionHandlerNamespace": "App/Exceptions/Handler",
@@ -18,12 +16,17 @@
     "preloads": ["./start/routes", "./start/kernel", "./start/bouncer"],
     "providers": [
         "./providers/AppProvider",
-        "@adonisjs/core",
-        "@adonisjs/lucid",
-        "@adonisjs/auth",
-        "@adonisjs/session",
-        "@adonisjs/mail",
-        "@adonisjs/view",
+        "@adonisjs/core/providers/app_provider",
+        "@adonisjs/core/providers/hash_provider",
+        {
+            "file": "@adonisjs/core/providers/repl_provider",
+            "environment": ["repl", "test"]
+        },
+        "@adonisjs/lucid/database_provider",
+        "@adonisjs/auth/auth_provider",
+        "@adonisjs/session/session_provider",
+        "@adonisjs/mail/mail_provider",
+        "@adonisjs/core/providers/edge_provider",
         "@adonisjs/attachment-lite",
         "@adonisjs/bouncer"
     ],

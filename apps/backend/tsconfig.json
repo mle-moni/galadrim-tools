@@ -1,5 +1,5 @@
 {
-    "extends": "adonis-preset-ts/tsconfig.json",
+    "extends": "@adonisjs/tsconfig/tsconfig.app.json",
     "include": ["**/*"],
     "exclude": ["node_modules", "build"],
     "compilerOptions": {
@@ -12,18 +12,7 @@
             "Contracts/*": ["./apps/backend/contracts/*"],
             "Database/*": ["./apps/backend/database/*"]
         },
-        "types": [
-            "@adonisjs/session",
-            "@adonisjs/core",
-            "@adonisjs/repl",
-            "@japa/preset-adonis/build/adonis-typings",
-            "@adonisjs/lucid",
-            "@adonisjs/mail",
-            "@adonisjs/view",
-            "@adonisjs/auth",
-            "@adonisjs/drive-s3",
-            "@adonisjs/bouncer",
-            "@adonisjs/attachment-lite"
-        ]
+        "types": [],
+        "strictPropertyInitialization": false
     }
 }
