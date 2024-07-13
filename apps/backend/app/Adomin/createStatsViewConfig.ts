@@ -1,4 +1,4 @@
-import { AdominRightsCheckFunction } from './routes/adominRoutesOverridesAndRights'
+import { AdominRightsCheckFunction } from './routes/adominRoutesOverridesAndRights.js'
 
 export interface StatsViewConfig {
     type: 'stats'

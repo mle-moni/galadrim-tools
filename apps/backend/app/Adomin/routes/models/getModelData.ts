@@ -1,5 +1,5 @@
-import { getModelConfig, getModelFieldStrs } from './getModelConfig'
-import { loadRelations } from './read/modelQueryHelpers'
+import { getModelConfig, getModelFieldStrs } from './getModelConfig.js'
+import { loadRelations } from './read/modelQueryHelpers.js'
 import { LucidModel } from " @adonisjs/lucid/types/model";
 
 export const getModelData = async (Model: LucidModel, primaryKeyValue: string | number) => {

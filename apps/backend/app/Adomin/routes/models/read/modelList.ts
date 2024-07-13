@@ -1,11 +1,11 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { validator } from '@adonisjs/validator'
 import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
-import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
-import { getValidatedModelConfig } from '../validateModelName'
-import { downloadExportFile } from './downloadExportFile'
-import { getModelList } from './getDataList'
-import { paginationSchema } from './modelQueryHelpers'
+import { computeRightsCheck } from '../../adominRoutesOverridesAndRights.js'
+import { getValidatedModelConfig } from '../validateModelName.js'
+import { downloadExportFile } from './downloadExportFile.js'
+import { getModelList } from './getDataList.js'
+import { paginationSchema } from './modelQueryHelpers.js'
 
 const prepareQsObject = (input?: string) => {
     if (!input) return []

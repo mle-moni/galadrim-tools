@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { ADOMIN_CONFIG } from '../config/ADOMIN_CONFIG'
-import type { ModelConfig } from '../createModelViewConfig'
-import { StatsViewConfig } from '../createStatsViewConfig'
-import { computeRightsCheck } from './adominRoutesOverridesAndRights'
+import { ADOMIN_CONFIG } from '../config/ADOMIN_CONFIG.js'
+import type { ModelConfig } from '../createModelViewConfig.js'
+import { StatsViewConfig } from '../createStatsViewConfig.js'
+import { computeRightsCheck } from './adominRoutesOverridesAndRights.js'
 
 export const defaultFooterText = 'Made with ❤️ by Galadrim'
 

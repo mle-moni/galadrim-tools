@@ -5,7 +5,7 @@ import Restaurant from '#app/Models/Restaurant'
 import RestaurantReview from '#app/Models/RestaurantReview'
 import Ws from '#app/Services/Ws'
 import { createNotificationForUsers, cropText } from '#app/Services/notifications'
-import { restaurantReviewSchema } from './restaurantReviewSchema'
+import { restaurantReviewSchema } from './restaurantReviewSchema.js'
 
 export const storeRestaurantReview = async ({ request, auth, params }: HttpContext) => {
     const user = auth.user!

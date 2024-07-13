@@ -9,9 +9,9 @@ import {
 import RestaurantReview from '#app/Models/RestaurantReview'
 import { formatDateToNumber } from '#app/Services/Date'
 import { DateTime } from 'luxon'
-import RestaurantChoice from './RestaurantChoice'
-import RestaurantNote from './RestaurantNote'
-import Tag from './Tag'
+import RestaurantChoice from './RestaurantChoice.js'
+import RestaurantNote from './RestaurantNote.js'
+import Tag from './Tag.js'
 import { HasMany } from "@adonisjs/lucid/types/relations";
 import { ManyToMany } from "@adonisjs/lucid/types/relations";
 import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";

@@ -1,5 +1,5 @@
-import { getModelConfig } from '../routes/models/getModelConfig'
-import { getValidationMessage } from './getValidationMessage'
+import { getModelConfig } from '../routes/models/getModelConfig.js'
+import { getValidationMessage } from './getValidationMessage.js'
 import { CustomMessages } from "@adonisjs/validator/types";
 import { LucidModel } from " @adonisjs/lucid/types/model";
 

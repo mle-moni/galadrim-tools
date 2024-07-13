@@ -1,14 +1,14 @@
 import router from '@adonisjs/core/services/router'
 import { adominLogin } from '#app/Adomin/routes/adominLogin'
-import { adominLogout } from './adominLogout'
-import { getAdominConfig } from './getAdominConfig'
-import { getModelConfigRoute } from './models/getModelConfig'
-import { modelList } from './models/read/modelList'
-import { showModel } from './models/read/showModel'
-import { createModel } from './models/write/createModel'
-import { deleteModel } from './models/write/deleteModel'
-import { updateModel } from './models/write/updateModel'
-import { getStatConfigRoute } from './stats/getStatConfig'
+import { adominLogout } from './adominLogout.js'
+import { getAdominConfig } from './getAdominConfig.js'
+import { getModelConfigRoute } from './models/getModelConfig.js'
+import { modelList } from './models/read/modelList.js'
+import { showModel } from './models/read/showModel.js'
+import { createModel } from './models/write/createModel.js'
+import { deleteModel } from './models/write/deleteModel.js'
+import { updateModel } from './models/write/updateModel.js'
+import { getStatConfigRoute } from './stats/getStatConfig.js'
 
 router.group(() => {
     router.group(() => {

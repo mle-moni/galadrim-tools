@@ -1,9 +1,9 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { string } from '@poppinss/utils/build/helpers'
-import { AdominViewConfig } from '../../adominConfig'
-import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG'
-import { ColumnConfig, ModelConfig } from '../../createModelViewConfig'
-import { AdominStaticRightsConfig, computeRightsCheck } from '../adominRoutesOverridesAndRights'
+import { AdominViewConfig } from '../../adominConfig.js'
+import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG.js'
+import { ColumnConfig, ModelConfig } from '../../createModelViewConfig.js'
+import { AdominStaticRightsConfig, computeRightsCheck } from '../adominRoutesOverridesAndRights.js'
 
 export const DEFAULT_STATIC_RIGHTS: AdominStaticRightsConfig = {
     create: true,

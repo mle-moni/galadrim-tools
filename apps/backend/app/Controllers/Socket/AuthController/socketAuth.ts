@@ -1,7 +1,7 @@
 import { schema, validator } from '@adonisjs/validator'
 import User from '#app/Models/User'
 import { Socket } from 'socket.io'
-import { joinAuthRestrictedEvents } from './authRestrictedEvents'
+import { joinAuthRestrictedEvents } from './authRestrictedEvents.js'
 
 const BAD_AUTH_REQUEST = `Mauvaises données d'authentification`
 

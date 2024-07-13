@@ -1,7 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { getEventsAmountPerGaladrimeurs } from './getEventsAmountPerGaladrimeurs'
-import { getGaladrimeurFavoriteRooms } from './getGaladrimeurFavoriteRooms'
-import { getTimePerGaladrimeurs } from './getTimePerGaladrimeurs'
+import { getEventsAmountPerGaladrimeurs } from './getEventsAmountPerGaladrimeurs.js'
+import { getGaladrimeurFavoriteRooms } from './getGaladrimeurFavoriteRooms.js'
+import { getTimePerGaladrimeurs } from './getTimePerGaladrimeurs.js'
 
 export default class StatisticsController {
     public async favoriteRoom(params: HttpContext) {

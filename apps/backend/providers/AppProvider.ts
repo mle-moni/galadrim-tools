@@ -1,4 +1,4 @@
-import { CamelCaseNamingStrategy } from '../contracts/CamelCaseNamingStrategy'
+import { CamelCaseNamingStrategy } from '../contracts/CamelCaseNamingStrategy.js'
 import { ApplicationService } from "@adonisjs/core/types";
 
 export default class AppProvider {

@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import { showAtopLogs } from './showAtopLogs'
-import { showCaddyLogs } from './showCaddyLogs'
-import { storeAtopLogs } from './storeAtopLogs'
-import { storeCaddyLogs } from './storeCaddyLogs'
+import { showAtopLogs } from './showAtopLogs.js'
+import { showCaddyLogs } from './showCaddyLogs.js'
+import { storeAtopLogs } from './storeAtopLogs.js'
+import { storeCaddyLogs } from './storeCaddyLogs.js'
 
 export default class CaddyLogsController {
     public async showCaddyLogs(ctx: HttpContext) {

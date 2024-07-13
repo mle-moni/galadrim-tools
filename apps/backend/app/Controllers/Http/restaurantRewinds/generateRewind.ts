@@ -1,7 +1,7 @@
 import User from '#app/Models/User'
-import { generateDistanceRanking } from './generateDistanceRanking'
-import { generateRewindForUser } from './generateRewindForUser'
-import { generateWealthRanking } from './generateWealthRanking'
+import { generateDistanceRanking } from './generateDistanceRanking.js'
+import { generateRewindForUser } from './generateRewindForUser.js'
+import { generateWealthRanking } from './generateWealthRanking.js'
 import logger from '@adonisjs/core/services/logger'
 
 export const generateRewind = async () => {

@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io'
-import { setupEvents } from '../app/Controllers/Socket'
-import Ws from '../app/Services/Ws'
+import { setupEvents } from '../app/Controllers/Socket/index.js'
+import Ws from '../app/Services/Ws.js'
 Ws.boot()
 
 function initSocketAuth(socket: Socket) {

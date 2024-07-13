@@ -1,6 +1,6 @@
 import { schema, validator } from '@adonisjs/validator'
 import { Socket } from 'socket.io'
-import { getSocketUser } from '../authRestrictedEvents'
+import { getSocketUser } from '../authRestrictedEvents.js'
 
 export const livePlayers = {}
 

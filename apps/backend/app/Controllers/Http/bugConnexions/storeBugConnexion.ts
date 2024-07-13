@@ -1,6 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import BugConnexion from '#app/Models/BugConnexion'
-import { bugConnexionSchema } from './bugConnexionSchema'
+import { bugConnexionSchema } from './bugConnexionSchema.js'
 
 export const storeBugConnexion = async ({ request, auth }: HttpContext) => {
     const user = auth.user!

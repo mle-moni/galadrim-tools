@@ -7,9 +7,9 @@ import {
     hasMany
 } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
-import IdeaVote from '../../app/Models/IdeaVote'
-import IdeaComment from './IdeaComment'
-import User from './User'
+import IdeaVote from '../../app/Models/IdeaVote.js'
+import IdeaComment from './IdeaComment.js'
+import User from './User.js'
 import { BelongsTo } from "@adonisjs/lucid/types/relations";
 import { HasMany } from "@adonisjs/lucid/types/relations";
 import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";

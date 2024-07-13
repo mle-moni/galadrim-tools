@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { StatsViewConfig } from '#app/Adomin/createStatsViewConfig'
-import { AdominViewConfig } from '../../adominConfig'
-import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG'
-import { computeRightsCheck } from '../adominRoutesOverridesAndRights'
+import { AdominViewConfig } from '../../adominConfig.js'
+import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG.js'
+import { computeRightsCheck } from '../adominRoutesOverridesAndRights.js'
 
 export const isStatConfig = (config: AdominViewConfig): config is StatsViewConfig => {
     return config.type === 'stats'

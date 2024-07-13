@@ -1,7 +1,7 @@
 import { AllRights, hasRights } from '@galadrim-tools/shared'
 import { HttpContext } from '@adonisjs/core/http'
-import ForbiddenException from '../Exceptions/ForbiddenException'
-import UnauthorizedException from '../Exceptions/UnauthorizedException'
+import ForbiddenException from '../Exceptions/ForbiddenException.js'
+import UnauthorizedException from '../Exceptions/UnauthorizedException.js'
 
 // check if users has rights, throw if not
 export default class RightsMiddleware {

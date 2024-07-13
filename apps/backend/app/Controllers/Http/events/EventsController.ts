@@ -1,11 +1,11 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { availableRooms } from '#app/Controllers/Http/events/availableRooms'
-import { destroyRoute } from './destroyEvent'
-import { indexRoute } from './eventsIndex'
-import { getAllEvents } from './getAllEvents'
-import { showRoute } from './showEvent'
-import { storeRoute } from './storeEvent'
-import { updateRoute } from './updateEvent'
+import { destroyRoute } from './destroyEvent.js'
+import { indexRoute } from './eventsIndex.js'
+import { getAllEvents } from './getAllEvents.js'
+import { showRoute } from './showEvent.js'
+import { storeRoute } from './storeEvent.js'
+import { updateRoute } from './updateEvent.js'
 
 export default class EventsController {
     public async index(params: HttpContext) {

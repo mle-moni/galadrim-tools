@@ -4,7 +4,7 @@ import { indexRoute } from '#app/Controllers/Http/restaurants/restaurantsIndex'
 import { showRoute } from '#app/Controllers/Http/restaurants/showRestaurant'
 import { storeRoute } from '#app/Controllers/Http/restaurants/storeRestaurant'
 import { updateRoute } from '#app/Controllers/Http/restaurants/updateRestaurant'
-import { createOrUpdateChoiceRoute } from './createOrUpdateChoice'
+import { createOrUpdateChoiceRoute } from './createOrUpdateChoice.js'
 
 export default class RestaurantsController {
     public async index(params: HttpContext) {

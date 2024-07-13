@@ -1,13 +1,13 @@
 import RestaurantChoice from '#app/Models/RestaurantChoice'
 import RestaurantNote from '#app/Models/RestaurantNote'
 import RestaurantRewind from '#app/Models/RestaurantRewind'
-import { getAdjective } from './utils/getAdjective'
-import { getAnimal } from './utils/getAnimal'
-import { getDistanceTravelled } from './utils/getDistanceTravelled'
-import { getFavoriteRestaurantCount } from './utils/getFavoriteRestaurantCount'
-import { getRestaurantPerTag } from './utils/getRestaurantPerTag'
-import { getRewindRank } from './utils/getRewindRank'
-import { getTotalPrice } from './utils/getTotalPrice'
+import { getAdjective } from './utils/getAdjective.js'
+import { getAnimal } from './utils/getAnimal.js'
+import { getDistanceTravelled } from './utils/getDistanceTravelled.js'
+import { getFavoriteRestaurantCount } from './utils/getFavoriteRestaurantCount.js'
+import { getRestaurantPerTag } from './utils/getRestaurantPerTag.js'
+import { getRewindRank } from './utils/getRewindRank.js'
+import { getTotalPrice } from './utils/getTotalPrice.js'
 
 export const generateRewindForUser = async (
     userId: number,

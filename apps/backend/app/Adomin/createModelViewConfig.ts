@@ -18,8 +18,8 @@ import {
     AdominRightsCheckFunction,
     AdominRouteOverrides,
     AdominStaticRightsConfig,
-} from './routes/adominRoutesOverridesAndRights'
-import { AdominValidation } from './validation/adominValidationHelpers'
+} from './routes/adominRoutesOverridesAndRights.js'
+import { AdominValidation } from './validation/adominValidationHelpers.js'
 import { string } from "@adonisjs/core/helpers/string";
 import { BelongsTo } from "@adonisjs/lucid/types/relations";
 import { HasMany } from "@adonisjs/lucid/types/relations";

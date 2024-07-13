@@ -1,5 +1,5 @@
-import type { ModelConfig } from './createModelViewConfig'
-import { StatsViewConfig } from './createStatsViewConfig'
+import type { ModelConfig } from './createModelViewConfig.js'
+import { StatsViewConfig } from './createStatsViewConfig.js'
 
 export type AdominViewConfig = ModelConfig | StatsViewConfig
 

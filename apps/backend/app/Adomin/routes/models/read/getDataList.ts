@@ -1,12 +1,12 @@
 import { ModelConfig } from '#app/Adomin/createModelViewConfig'
-import { getModelFieldStrs } from '../getModelConfig'
+import { getModelFieldStrs } from '../getModelConfig.js'
 import {
     PaginationSettings,
     applyColumnFilters,
     applyGlobalFilters,
     applySorting,
     loadRelations,
-} from './modelQueryHelpers'
+} from './modelQueryHelpers.js'
 
 interface GetModelListOptions {
     paginationSettings: PaginationSettings

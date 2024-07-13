@@ -1,8 +1,8 @@
 import { IUserData, _assert } from '@galadrim-tools/shared'
 import { Socket } from 'socket.io'
-import { gameChat } from './tournois/gameChat'
-import { livePlayers, livePos } from './tournois/livePos'
-import { scoreTournois } from './tournois/scoreTournois'
+import { gameChat } from './tournois/gameChat.js'
+import { livePlayers, livePos } from './tournois/livePos.js'
+import { scoreTournois } from './tournois/scoreTournois.js'
 
 export const getSocketUser = (socket: Socket) => {
     _assert(socket.data.user, 'socket user should be defined')

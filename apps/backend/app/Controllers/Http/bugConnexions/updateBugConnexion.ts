@@ -1,7 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
 import BugConnexion from '#app/Models/BugConnexion'
 import { validateResourceId } from '#app/Scaffolder/validateResourceId'
-import { bugConnexionSchema } from './bugConnexionSchema'
+import { bugConnexionSchema } from './bugConnexionSchema.js'
 
 export const updateBugConnexion = async ({ params, request, bouncer }: HttpContext) => {
     const { id } = await validateResourceId(params)

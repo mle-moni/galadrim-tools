@@ -1,7 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
-import { validateResourceId } from '../../validateResourceId'
-import { getValidatedModelConfig } from '../validateModelName'
+import { computeRightsCheck } from '../../adominRoutesOverridesAndRights.js'
+import { validateResourceId } from '../../validateResourceId.js'
+import { getValidatedModelConfig } from '../validateModelName.js'
 
 export const deleteModel = async (ctx: HttpContext) => {
     const { params, response } = ctx

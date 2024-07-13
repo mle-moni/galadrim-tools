@@ -1,5 +1,5 @@
 import Bouncer, { BasePolicy } from '@ioc:Adonis/Addons/Bouncer'
-import User from '../Models/User'
+import User from '../Models/User.js'
 
 interface Resource {
     userId: number | null

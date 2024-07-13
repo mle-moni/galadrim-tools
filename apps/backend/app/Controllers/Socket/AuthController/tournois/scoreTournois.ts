@@ -2,7 +2,7 @@ import { schema, validator } from '@adonisjs/validator'
 import PlatformerResult from '#app/Models/PlatformerResult'
 import Ws from '#app/Services/Ws'
 import { Socket } from 'socket.io'
-import { getSocketUser } from '../authRestrictedEvents'
+import { getSocketUser } from '../authRestrictedEvents.js'
 
 const dtoSchema = schema.create({
     jumps: schema.number(),

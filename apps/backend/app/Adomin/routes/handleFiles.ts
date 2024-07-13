@@ -1,5 +1,5 @@
 import { AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import type { ColumnConfig } from '../createModelViewConfig'
+import type { ColumnConfig } from '../createModelViewConfig.js'
 import { LucidRow } from " @adonisjs/lucid/types/model";
 
 export const loadFilesForInstances = async (fields: ColumnConfig[], modelInstances: LucidRow[]) => {

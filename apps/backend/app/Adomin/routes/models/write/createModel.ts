@@ -3,10 +3,10 @@ import { getValidationSchemaFromConfig } from '#app/Adomin/routes/getValidationS
 import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
 import { validateOrThrow } from '#app/Adomin/validation/adominValidationHelpers'
 import { getGenericMessages } from '#app/Adomin/validation/validationMessages'
-import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
-import { getModelData } from '../getModelData'
-import { getValidatedModelConfig } from '../validateModelName'
-import { attachFieldsToModel } from './attachFieldsToModel'
+import { computeRightsCheck } from '../../adominRoutesOverridesAndRights.js'
+import { getModelData } from '../getModelData.js'
+import { getValidatedModelConfig } from '../validateModelName.js'
+import { attachFieldsToModel } from './attachFieldsToModel.js'
 
 export const createModel = async (ctx: HttpContext) => {
     const { params, response, request } = ctx

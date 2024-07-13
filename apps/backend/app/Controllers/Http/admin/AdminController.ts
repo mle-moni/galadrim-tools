@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http'
-import { createNotificationRoute } from './createNotificationRoute'
-import { createUserRoute } from './createUser'
-import { editUserRightsRoute } from './editUserRights'
-import { userRightsRoute } from './userRights'
+import { createNotificationRoute } from './createNotificationRoute.js'
+import { createUserRoute } from './createUser.js'
+import { editUserRightsRoute } from './editUserRights.js'
+import { userRightsRoute } from './userRights.js'
 
 export default class AdminController {
     public async createUser(params: HttpContext) {

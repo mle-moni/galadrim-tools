@@ -1,9 +1,9 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { myRestaurantNotes } from '#app/Controllers/Http/restaurantNotes/myRestaurantNotes'
-import { destroyRoute } from './destroyRestaurantNotes'
-import { indexRoute } from './restaurantNotesIndex'
-import { showRoute } from './showRestaurantNotes'
-import { storeOrUpdateRoute } from './storeOrUpdateRestaurantNotes'
+import { destroyRoute } from './destroyRestaurantNotes.js'
+import { indexRoute } from './restaurantNotesIndex.js'
+import { showRoute } from './showRestaurantNotes.js'
+import { storeOrUpdateRoute } from './storeOrUpdateRestaurantNotes.js'
 
 export default class RestaurantsController {
     public async index(params: HttpContext) {

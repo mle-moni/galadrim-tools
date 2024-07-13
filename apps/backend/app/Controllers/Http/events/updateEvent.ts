@@ -2,7 +2,7 @@ import { hasRights } from '@galadrim-tools/shared'
 import { HttpContext } from '@adonisjs/core/http'
 import Event from '#app/Models/Event'
 import Ws from '#app/Services/Ws'
-import { validateEventsParams } from './storeEvent'
+import { validateEventsParams } from './storeEvent.js'
 
 export const updateRoute = async ({ params, request, auth, response }: HttpContext) => {
     const event = await Event.findOrFail(params.id)

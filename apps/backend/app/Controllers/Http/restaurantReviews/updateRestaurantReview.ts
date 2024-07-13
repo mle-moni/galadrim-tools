@@ -3,7 +3,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import RestaurantReview from '#app/Models/RestaurantReview'
 import { validateResourceId } from '#app/Scaffolder/validateResourceId'
 import Ws from '#app/Services/Ws'
-import { restaurantReviewSchema } from './restaurantReviewSchema'
+import { restaurantReviewSchema } from './restaurantReviewSchema.js'
 
 export const updateRestaurantReview = async ({ params, request, bouncer }: HttpContext) => {
     const { id } = await validateResourceId(params)

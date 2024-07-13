@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io'
-import { getSocketUser } from '../authRestrictedEvents'
+import { getSocketUser } from '../authRestrictedEvents.js'
 
 export const gameChat = (socket: Socket, txt: unknown) => {
     const user = getSocketUser(socket)

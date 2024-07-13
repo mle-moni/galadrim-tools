@@ -24,7 +24,7 @@ import { formatDateToNumber } from '#app/Services/Date'
 import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
 import { URL } from 'url'
-import RestaurantChoice from './RestaurantChoice'
+import RestaurantChoice from './RestaurantChoice.js'
 import { BelongsTo } from "@adonisjs/lucid/types/relations";
 import { HasMany } from "@adonisjs/lucid/types/relations";
 import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";

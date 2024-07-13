@@ -5,8 +5,8 @@ import {
 } from '@adonisjs/lucid/orm'
 import { ColumnConfig } from '#app/Adomin/createModelViewConfig'
 import { AdominFieldConfig } from '#app/Adomin/fields.types'
-import { getSqlColumnToUse } from '../getModelConfig'
-import { EXPORT_TYPES } from './downloadExportFile'
+import { getSqlColumnToUse } from '../getModelConfig.js'
+import { EXPORT_TYPES } from './downloadExportFile.js'
 import { string } from "@adonisjs/core/helpers/string";
 import { LucidModel } from " @adonisjs/lucid/types/model";
 import { LucidRow } from " @adonisjs/lucid/types/model";

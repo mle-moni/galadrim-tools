@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import BaseSeeder from '@adonisjs/lucid/seeders'
-import Idea from '../../app/Models/Idea'
-import IdeaComment from '../../app/Models/IdeaComment'
-import IdeaVote from '../../app/Models/IdeaVote'
+import Idea from '../../app/Models/Idea.js'
+import IdeaComment from '../../app/Models/IdeaComment.js'
+import IdeaVote from '../../app/Models/IdeaVote.js'
 
 const ideas = [
     { id: 1, userId: 1, text: faker.commerce.productDescription() },

@@ -1,7 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
 import { schema, validator } from '@adonisjs/validator'
 import { ADOMIN_CONFIG } from '#app/Adomin/config/ADOMIN_CONFIG'
-import { getModelConfig } from './getModelConfig'
+import { getModelConfig } from './getModelConfig.js'
 
 const isNotNull = <T>(value: T | null): value is T => value !== null
 

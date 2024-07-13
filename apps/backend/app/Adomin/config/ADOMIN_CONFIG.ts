@@ -1,12 +1,12 @@
-import { AdominConfig } from '../adominConfig'
-import { createStatsViewConfig } from '../createStatsViewConfig'
+import { AdominConfig } from '../adominConfig.js'
+import { createStatsViewConfig } from '../createStatsViewConfig.js'
 import {
     groupByDayOfWeek,
     groupByHour,
     groupByMonth,
     groupByStringField,
     groupByYear,
-} from '../routes/stats/groupByHelpers'
+} from '../routes/stats/groupByHelpers.js'
 
 /**
  * This file will contain your Adomin Config
