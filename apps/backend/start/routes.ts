@@ -33,9 +33,11 @@ import { showRestaurantRewind } from '#app/Controllers/Http/restaurantRewinds/sh
 import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
+import CodeNamesGamesController from '#controllers/codeNamesGames/CodeNamesGamesController'
 import EventsController from '#controllers/events/EventsController'
 import GaladrimeursController from '#controllers/galadrimeurs/GaladrimeursController'
 import IdeasController from '#controllers/ideas/IdeasController'
+import MatricesController from '#controllers/matrices/MatricesController'
 import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
 import RestaurantsController from '#controllers/restaurants/RestaurantsController'
 import TagsController from '#controllers/tags/TagsController'
@@ -77,10 +79,11 @@ router
     router.post('/updateNotificationsSettings', [AuthController, 'updateNotificationsSettings'])
     router.post('/readNotifications', [AuthController, 'readNotifications'])
 
-    router.resource('matrices', 'matrices/MatricesController').apiOnly()
+    router.resource('matrices', MatricesController).apiOnly()
 
-    router.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
-    router.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
+    router.post('codeNamesGames/addRound/:id', [CodeNamesGamesController, 'addRound'])
+    router.resource('codeNamesGames', CodeNamesGamesController).apiOnly()
+
     router
       .resource(
         'restaurants/:restaurantId/reviews',

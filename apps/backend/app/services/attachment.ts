@@ -1,7 +1,7 @@
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { IImage } from '@galadrim-tools/shared'
 
-type ImageFolder = 'restaurant'
+type ImageFolder = 'restaurant' | 'codeNames'
 
 export const imageAttachmentFromFile = (
   _file: MultipartFile,
