@@ -7,6 +7,8 @@
 
 import env from '#start/env'
 import { HashConfig } from "@adonisjs/core/hash";
+import { defineConfig } from "@adonisjs/core/hash";
+import { drivers } from "@adonisjs/core/hash";
 
 /*
 |--------------------------------------------------------------------------
@@ -17,59 +19,62 @@ import { HashConfig } from "@adonisjs/core/hash";
 | defined inside `contracts` directory.
 |
 */
-const hashConfig: HashConfig = {
+const hashConfig = defineConfig({
+  /*
+|--------------------------------------------------------------------------
+| Default hasher
+|--------------------------------------------------------------------------
+|
+| By default we make use of the argon hasher to hash values. However, feel
+| free to change the default value
+|
+*/
+  default: env.get('HASH_DRIVER', 'argon'),
+
+  list: {
     /*
-  |--------------------------------------------------------------------------
-  | Default hasher
-  |--------------------------------------------------------------------------
-  |
-  | By default we make use of the argon hasher to hash values. However, feel
-  | free to change the default value
-  |
-  */
-    default: env.get('HASH_DRIVER', 'argon'),
+|--------------------------------------------------------------------------
+| Argon
+|--------------------------------------------------------------------------
+|
+| Argon mapping uses the `argon2` driver to hash values.
+|
+| Make sure you install the underlying dependency for this driver to work.
+| https://www.npmjs.com/package/phc-argon2.
+|
+| npm install phc-argon2
+|
+*/
+    argon: drivers.argon2({
+      variant: 'id',
+      iterations: 3,
+      memory: 4096,
+      parallelism: 1,
+      saltSize: 16,
+    }),
 
-    list: {
-        /*
-    |--------------------------------------------------------------------------
-    | Argon
-    |--------------------------------------------------------------------------
-    |
-    | Argon mapping uses the `argon2` driver to hash values.
-    |
-    | Make sure you install the underlying dependency for this driver to work.
-    | https://www.npmjs.com/package/phc-argon2.
-    |
-    | npm install phc-argon2
-    |
-    */
-        argon: {
-            driver: 'argon2',
-            variant: 'id',
-            iterations: 3,
-            memory: 4096,
-            parallelism: 1,
-            saltSize: 16,
-        },
-
-        /*
-    |--------------------------------------------------------------------------
-    | Bcrypt
-    |--------------------------------------------------------------------------
-    |
-    | Bcrypt mapping uses the `bcrypt` driver to hash values.
-    |
-    | Make sure you install the underlying dependency for this driver to work.
-    | https://www.npmjs.com/package/phc-bcrypt.
-    |
-    | npm install phc-bcrypt
-    |
-    */
-        bcrypt: {
-            driver: 'bcrypt',
-            rounds: 10,
-        },
-    },
-}
+    /*
+|--------------------------------------------------------------------------
+| Bcrypt
+|--------------------------------------------------------------------------
+|
+| Bcrypt mapping uses the `bcrypt` driver to hash values.
+|
+| Make sure you install the underlying dependency for this driver to work.
+| https://www.npmjs.com/package/phc-bcrypt.
+|
+| npm install phc-bcrypt
+|
+*/
+    bcrypt: drivers.bcrypt({
+      rounds: 10,
+    }),
+  },
+})
 
 export default hashConfig
+
+
+declare module '@adonisjs/core/types' {
+  export interface HashersList extends InferHashers<typeof hashConfig> { }
+}
