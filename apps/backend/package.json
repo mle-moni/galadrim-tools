@@ -55,6 +55,7 @@
     "@adonisjs/core": "^6.12.1",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.1.0",
+    "@adonisjs/validator": "^13.0.2",
     "@galadrim-tools/shared": "*",
     "@vinejs/vine": "^2.1.0",
     "luxon": "^3.4.4",

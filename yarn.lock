@@ -271,6 +271,19 @@
   resolved "https://registry.npmjs.org/@adonisjs/tsconfig/-/tsconfig-1.3.0.tgz"
   integrity sha512-+nOykDG44b4JSAdsrTdh5HuZqJpr6F+dHpfNYgHfYsFJIEtZo8plHilZAM7iabCRN5R49SPv5p8Ixcp47Rr50g==
 
+"@adonisjs/validator@^13.0.2":
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/@adonisjs/validator/-/validator-13.0.2.tgz#49aad72c1fc7431c785a3491d1155527b087f1b8"
+  integrity sha512-gec1SiJP6Y/SUbm1Co6Z0kh9euUWZnEioWHKJ/XdoX31rTI6qoET1EYX/NGuzT6axsk/zBWmgENhMv/WwNwZ7Q==
+  dependencies:
+    "@poppinss/utils" "^6.7.1"
+    "@types/luxon" "^3.4.2"
+    "@types/validator" "^13.11.8"
+    luxon "^3.4.4"
+    normalize-url "^8.0.0"
+    tmp-cache "^1.1.0"
+    validator "^13.11.0"
+
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.2.0.tgz"
@@ -1320,7 +1333,7 @@
     "@poppinss/utils" "^6.7.3"
     enquirer "^2.4.1"
 
-"@poppinss/utils@^6.7.0", "@poppinss/utils@^6.7.3":
+"@poppinss/utils@^6.7.0", "@poppinss/utils@^6.7.1", "@poppinss/utils@^6.7.3":
   version "6.7.3"
   resolved "https://registry.npmjs.org/@poppinss/utils/-/utils-6.7.3.tgz"
   integrity sha512-zQnhVG4Q+n6+V1vrL/TF1Oy8ZcVVGUs49Sj5OBgoari/q42UiG/rht1DRvoeWd9bT1BBDwxO2vcfxj6C0u/Dgg==
@@ -1775,7 +1788,7 @@
     "@types/methods" "^1.1.4"
     "@types/node" "*"
 
-"@types/validator@^13.11.9":
+"@types/validator@^13.11.8", "@types/validator@^13.11.9":
   version "13.12.0"
   resolved "https://registry.npmjs.org/@types/validator/-/validator-13.12.0.tgz"
   integrity sha512-nH45Lk7oPIJ1RVOF6JgFI6Dy0QpHEzq4QecZhvguxYPDwT8c93prCMqAtiIttm39voZ+DDR+qkNnMpJmMBRqag==
@@ -5274,7 +5287,7 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-normalize-url@^8.0.1:
+normalize-url@^8.0.0, normalize-url@^8.0.1:
   version "8.0.1"
   resolved "https://registry.npmjs.org/normalize-url/-/normalize-url-8.0.1.tgz"
   integrity sha512-IO9QvjUMWxPQQhs60oOu10CRkWCiZzSUkzbXGGV9pviYl1fXYcvkzQ5jV9z8Y6un8ARoVRl4EtC6v6jNqbaJ/w==
