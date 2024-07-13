@@ -1,8 +1,8 @@
-import mail from '@adonisjs/mail/services/main'
+import User from '#models/user'
 import env from '#start/env'
 import { HttpContext } from '@adonisjs/core/http'
+import mail from '@adonisjs/mail/services/main'
 import { rules, schema } from '@adonisjs/validator'
-import User from '#app/Models/User'
 import { nanoid } from 'nanoid'
 
 const loginSchema = schema.create({

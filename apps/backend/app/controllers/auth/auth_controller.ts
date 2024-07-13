@@ -10,7 +10,7 @@ import { updateNotificationsSettings } from './updateNotificationsSettings.js'
 import { updateProfileRoute } from './updateProfile.js'
 import { updateThemeRoute } from './updateTheme.js'
 
-export default class EventsController {
+export default class AuthController {
   public async login(params: HttpContext) {
     return loginRoute(params)
   }

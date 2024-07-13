@@ -1,5 +1,6 @@
 import { formatDateToNumber } from '#services/date'
 import env from '#start/env'
+import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { compose, cuid } from '@adonisjs/core/helpers'
 import hash from '@adonisjs/core/services/hash'
@@ -165,4 +166,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
   getRightsData() {
     return { id: this.id, username: this.username, rights: this.rights }
   }
+
+  static accessTokens = DbAccessTokensProvider.forModel(User)
 }

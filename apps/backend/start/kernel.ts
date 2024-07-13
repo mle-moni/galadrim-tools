@@ -35,7 +35,7 @@ server.use([
 router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
-  () => import('#middleware/initialize_bouncer_middleware')
+  () => import('#middleware/initialize_bouncer_middleware'),
 ])
 
 /**
@@ -43,6 +43,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  rights: () => import('#middleware/rights_middleware'),
   guest: () => import('#middleware/guest_middleware'),
   auth: () => import('#middleware/auth_middleware'),
 })

@@ -32,7 +32,8 @@ import router from '@adonisjs/core/services/router'
 import { showRestaurantRewind } from '#app/Controllers/Http/restaurantRewinds/showRestaurantRewind'
 import env from '#start/env'
 
-import AuthController from '#controllers/auth/AuthController'
+import AuthController from '#controllers/auth/auth_controller'
+import { middleware } from './kernel.js'
 
 router.get('/', async () => {
   return { service: 'galadrim tools backend' }
@@ -58,11 +59,13 @@ router
     router.resource('ideas', 'ideas/IdeasController').apiOnly()
     router.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')
     router.post('createIdeaComment', 'ideas/IdeasController.createComment')
-    router.get('/me', 'auth/AuthController.me')
-    router.post('/createApiToken', 'auth/AuthController.createApiToken')
-    router.post('/changePassword', 'auth/AuthController.changePassword')
-    router.post('/updateProfile', 'auth/AuthController.updateProfile')
-    router.post('/updateTheme', 'auth/AuthController.updateTheme')
+
+    router.get('/me', [AuthController, 'me'])
+    router.post('/createApiToken', [AuthController, 'createApiToken'])
+    router.post('/changePassword', [AuthController, 'changePassword'])
+    router.post('/updateProfile', [AuthController, 'updateProfile'])
+    router.post('/updateTheme', [AuthController, 'updateTheme'])
+
     router.get('/users', 'galadrimeurs/GaladrimeursController.users')
 
     router.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
@@ -83,7 +86,7 @@ router
     router.get('/caddyLogs/:id', 'logs/LogsController.showCaddyLogs')
     router.get('/atopLogs/:id', 'logs/LogsController.showAtopLogs')
   })
-  .middleware('auth:web,api')
+  .use(middleware.auth())
 
 router.post('/caddyLogs', 'logs/LogsController.storeCaddyLogs')
 router.post('/atopLogs', 'logs/LogsController.storeAtopLogs')
@@ -95,7 +98,7 @@ router
     router.resource('times', 'breakTimes/BreakTimesController').apiOnly()
   })
   .prefix('galabreak')
-  .middleware('auth:web,api')
+  .use(middleware.auth())
 
 router.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
 
@@ -105,22 +108,26 @@ router
     router.get('/time', 'statistics/StatisticsController.time')
     router.get('/amount', 'statistics/StatisticsController.amount')
   })
-  .middleware('auth:web,api')
+  .use(middleware.auth())
   .prefix('statistics')
 
 router
   .group(() => {
-    router.post('/createUser', 'admin/AdminController.createUser').middleware('rights:USER_ADMIN')
-    router.get('/userRights', 'admin/AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
+    router
+      .post('/createUser', 'admin/AdminController.createUser')
+      .use(middleware.rights(['USER_ADMIN']))
+    router
+      .get('/userRights', 'admin/AdminController.userRights')
+      .use(middleware.rights(['RIGHTS_ADMIN']))
     router
       .put('/userRights', 'admin/AdminController.editUserRights')
-      .middleware('rights:RIGHTS_ADMIN')
+      .use(middleware.rights(['RIGHTS_ADMIN']))
     router
       .post('/createNotification', 'admin/AdminController.createNotification')
-      .middleware('rights:NOTIFICATION_ADMIN')
+      .use(middleware.rights(['NOTIFICATION_ADMIN']))
     router.get('/dashboard', 'dashboard/DashboardController.index')
   })
-  .middleware('auth:web,api')
+  .use(middleware.auth())
   .prefix('admin')
 
 router.get('authRedirect/:target', ({ response, request }) => {
@@ -133,4 +140,4 @@ router
     router.get('tournois', 'platformerResults/PlatformerResultsController.index')
   })
   .prefix('games')
-  .middleware('auth:web,api')
+  .use(middleware.auth())

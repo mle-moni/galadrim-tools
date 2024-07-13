@@ -1,6 +1,6 @@
+import Theme from '#models/theme'
 import { HttpContext } from '@adonisjs/core/http'
 import { rules, schema } from '@adonisjs/validator'
-import Theme from '#app/Models/Theme'
 
 const colorRegex = /^#[0-9a-f]{6}$/i
 

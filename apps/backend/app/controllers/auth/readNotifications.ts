@@ -1,5 +1,5 @@
+import Notification from '#models/notification'
 import { HttpContext } from '@adonisjs/core/http'
-import Notification from '#app/Models/Notification'
 
 export const readNotifications = async ({ auth }: HttpContext) => {
   const user = auth.user!

@@ -1,7 +1,8 @@
-import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
+import { CONNECTED_SOCKETS } from '#controllers/socket/socket_constants'
+import { imageAttachmentFromFile } from '#services/attachment'
+import { Ws } from '#services/ws'
 import { HttpContext } from '@adonisjs/core/http'
 import { rules, schema } from '@adonisjs/validator'
-import Ws from '#app/Services/Ws'
 
 const updateProfileSchema = schema.create({
   email: schema.string([rules.trim()]),
@@ -17,7 +18,7 @@ export const updateProfileRoute = async ({ request, auth }: HttpContext) => {
 
   user.email = email
   user.username = username
-  const finalImage = image ? Attachment.fromFile(image) : undefined
+  const finalImage = image ? imageAttachmentFromFile(image) : undefined
 
   if (finalImage) {
     user.image = finalImage
@@ -25,7 +26,7 @@ export const updateProfileRoute = async ({ request, auth }: HttpContext) => {
 
   await user.save()
 
-  Ws.io.to('connectedSockets').emit('updateUser', user.shortData)
+  Ws.io.to(CONNECTED_SOCKETS).emit('updateUser', user.shortData)
 
   await auth.user?.load('notifications')
 
