@@ -29,16 +29,17 @@ import router from '@adonisjs/core/services/router'
 |
 */
 
-import { showRestaurantRewind } from '#app/Controllers/Http/restaurantRewinds/showRestaurantRewind'
 import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
-import CodeNamesGamesController from '#controllers/codeNamesGames/CodeNamesGamesController'
+import CodeNamesGamesController from '#controllers/code_names_games/CodeNamesGamesController'
 import EventsController from '#controllers/events/EventsController'
 import GaladrimeursController from '#controllers/galadrimeurs/GaladrimeursController'
 import IdeasController from '#controllers/ideas/IdeasController'
 import MatricesController from '#controllers/matrices/MatricesController'
 import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
+import RestaurantReviewsController from '#controllers/restaurant_reviews/RestaurantReviewsController'
+import { showRestaurantRewind } from '#controllers/restaurant_rewinds/showRestaurantRewind'
 import RestaurantsController from '#controllers/restaurants/RestaurantsController'
 import TagsController from '#controllers/tags/TagsController'
 import { middleware } from './kernel.js'
@@ -84,12 +85,7 @@ router
     router.post('codeNamesGames/addRound/:id', [CodeNamesGamesController, 'addRound'])
     router.resource('codeNamesGames', CodeNamesGamesController).apiOnly()
 
-    router
-      .resource(
-        'restaurants/:restaurantId/reviews',
-        'restaurantReviews/RestaurantReviewsController'
-      )
-      .apiOnly()
+    router.resource('restaurants/:restaurantId/reviews', RestaurantReviewsController).apiOnly()
     router.get('rewind/:id?', showRestaurantRewind)
     router.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
     router.get('/caddyLogs/:id', 'logs/LogsController.showCaddyLogs')
