@@ -34,6 +34,7 @@ import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
 import EventsController from '#controllers/events/EventsController'
+import GaladrimeursController from '#controllers/galadrimeurs/GaladrimeursController'
 import IdeasController from '#controllers/ideas/IdeasController'
 import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
 import RestaurantsController from '#controllers/restaurants/RestaurantsController'
@@ -71,10 +72,10 @@ router
     router.post('/updateProfile', [AuthController, 'updateProfile'])
     router.post('/updateTheme', [AuthController, 'updateTheme'])
 
-    router.get('/users', 'galadrimeurs/GaladrimeursController.users')
+    router.get('/users', [GaladrimeursController, 'users'])
 
-    router.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
-    router.post('/readNotifications', 'auth/AuthController.readNotifications')
+    router.post('/updateNotificationsSettings', [AuthController, 'updateNotificationsSettings'])
+    router.post('/readNotifications', [AuthController, 'readNotifications'])
 
     router.resource('matrices', 'matrices/MatricesController').apiOnly()
 
