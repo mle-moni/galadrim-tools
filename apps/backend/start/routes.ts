@@ -33,6 +33,7 @@ import { showRestaurantRewind } from '#app/Controllers/Http/restaurantRewinds/sh
 import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
+import EventsController from '#controllers/events/EventsController'
 import { middleware } from './kernel.js'
 
 router.get('/', async () => {
@@ -45,9 +46,10 @@ router.post('/getOtp', [AuthController, 'getOtp'])
 
 router
   .group(() => {
-    router.resource('events', 'events/EventsController').apiOnly()
-    router.get('/allEvents', 'events/EventsController.all')
-    router.get('/availableRooms', 'events/EventsController.availableRooms')
+    router.resource('events', EventsController).apiOnly()
+    router.get('/allEvents', [EventsController, 'all'])
+    router.get('/availableRooms', [EventsController, 'availableRooms'])
+
     router.resource('tags', 'tags/TagsController').apiOnly()
     router.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
     router.post(
