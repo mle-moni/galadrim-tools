@@ -18,7 +18,7 @@ export const updateProfileRoute = async ({ request, auth }: HttpContext) => {
 
   user.email = email
   user.username = username
-  const finalImage = image ? imageAttachmentFromFile(image) : undefined
+  const finalImage = image ? imageAttachmentFromFile(image, 'avatar') : undefined
 
   if (finalImage) {
     user.image = finalImage

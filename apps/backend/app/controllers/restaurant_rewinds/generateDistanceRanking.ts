@@ -2,15 +2,15 @@ import db from '@adonisjs/lucid/services/db'
 import { PARIS_COORDINATES_VALUES } from '@galadrim-tools/shared'
 
 type DistanceRanking = {
-    user_id: number
-    average_distance: number
-    amount: number
-    username: string
+  user_id: number
+  average_distance: number
+  amount: number
+  username: string
 }
 
 export const generateDistanceRanking = async () => {
-    const [distanceRankings]: [DistanceRanking[]] = await db.rawQuery(
-        `
+  const [distanceRankings]: [DistanceRanking[]] = await db.rawQuery(
+    `
   SELECT
   user_id, sum(distance_m)/count(*) as average_distance, count(*) as amount, u.username
 FROM
@@ -35,14 +35,14 @@ GROUP BY user_id
 HAVING amount > 5
 ORDER BY average_distance DESC;
   `,
-        {
-            lat: PARIS_COORDINATES_VALUES[0],
-            lng: PARIS_COORDINATES_VALUES[1],
-        }
-    )
+    {
+      lat: PARIS_COORDINATES_VALUES[0],
+      lng: PARIS_COORDINATES_VALUES[1],
+    }
+  )
 
-    const distanceRankingMap = new Map<number, number>(
-        distanceRankings.map((ranking, index) => [ranking.user_id, index + 1])
-    )
-    return distanceRankingMap
+  const distanceRankingMap = new Map<number, number>(
+    distanceRankings.map((ranking, index) => [ranking.user_id, index + 1])
+  )
+  return distanceRankingMap
 }

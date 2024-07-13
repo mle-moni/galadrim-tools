@@ -1,16 +1,16 @@
 import db from '@adonisjs/lucid/services/db'
 
 type WealthRanking = {
-    user_id: number
-    numberOfChoices: number
-    totalSpend: number
-    averageSpent: number
-    username: string
+  user_id: number
+  numberOfChoices: number
+  totalSpend: number
+  averageSpent: number
+  username: string
 }
 
 export const generateWealthRanking = async () => {
-    const [wealthRankings]: [WealthRanking[]] = await db.rawQuery(
-        `
+  const [wealthRankings]: [WealthRanking[]] = await db.rawQuery(
+    `
         SELECT
         rc.user_id,
         count(*) as numberOfChoices,
@@ -27,9 +27,9 @@ export const generateWealthRanking = async () => {
         numberOfChoices > 5
       ORDER BY averageSpent DESC;
   `
-    )
-    const wealthRankingMap = new Map<number, number>(
-        wealthRankings.map((ranking, index) => [ranking.user_id, index + 1])
-    )
-    return wealthRankingMap
+  )
+  const wealthRankingMap = new Map<number, number>(
+    wealthRankings.map((ranking, index) => [ranking.user_id, index + 1])
+  )
+  return wealthRankingMap
 }

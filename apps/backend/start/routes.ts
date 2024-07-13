@@ -31,16 +31,25 @@ import router from '@adonisjs/core/services/router'
 
 import env from '#start/env'
 
+import AdminController from '#controllers/admin/AdminController'
 import AuthController from '#controllers/auth/auth_controller'
+import BreakActivitiesController from '#controllers/break_activities/BreakActivitiesController'
+import BreakTimesController from '#controllers/break_times/BreakTimesController'
+import BreakVotesController from '#controllers/break_votes/BreakVotesController'
+import BugConnexionsController from '#controllers/bug_connexions/BugConnexionsController'
 import CodeNamesGamesController from '#controllers/code_names_games/CodeNamesGamesController'
+import DashboardController from '#controllers/dashboard/DashboardController'
 import EventsController from '#controllers/events/EventsController'
 import GaladrimeursController from '#controllers/galadrimeurs/GaladrimeursController'
 import IdeasController from '#controllers/ideas/IdeasController'
+import LogsController from '#controllers/logs/LogsController'
 import MatricesController from '#controllers/matrices/MatricesController'
+import PlatformerResultsController from '#controllers/platformer_results/PlatformerResultsController'
 import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
 import RestaurantReviewsController from '#controllers/restaurant_reviews/RestaurantReviewsController'
 import { showRestaurantRewind } from '#controllers/restaurant_rewinds/showRestaurantRewind'
 import RestaurantsController from '#controllers/restaurants/RestaurantsController'
+import StatisticsController from '#controllers/statistics/StatisticsController'
 import TagsController from '#controllers/tags/TagsController'
 import { middleware } from './kernel.js'
 
@@ -87,20 +96,20 @@ router
 
     router.resource('restaurants/:restaurantId/reviews', RestaurantReviewsController).apiOnly()
     router.get('rewind/:id?', showRestaurantRewind)
-    router.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
-    router.get('/caddyLogs/:id', 'logs/LogsController.showCaddyLogs')
-    router.get('/atopLogs/:id', 'logs/LogsController.showAtopLogs')
+    router.resource('bugConnexions', BugConnexionsController).apiOnly()
+    router.get('/caddyLogs/:id', [LogsController, 'showCaddyLogs'])
+    router.get('/atopLogs/:id', [LogsController, 'showAtopLogs'])
   })
   .use(middleware.auth())
 
-router.post('/caddyLogs', 'logs/LogsController.storeCaddyLogs')
-router.post('/atopLogs', 'logs/LogsController.storeAtopLogs')
+router.post('/caddyLogs', [LogsController, 'storeCaddyLogs'])
+router.post('/atopLogs', [LogsController, 'storeAtopLogs'])
 
 router
   .group(() => {
-    router.resource('votes', 'breakVotes/BreakVotesController').apiOnly()
-    router.resource('activities', 'breakActivities/BreakActivitiesController').apiOnly()
-    router.resource('times', 'breakTimes/BreakTimesController').apiOnly()
+    router.resource('votes', BreakVotesController).apiOnly()
+    router.resource('activities', BreakActivitiesController).apiOnly()
+    router.resource('times', BreakTimesController).apiOnly()
   })
   .prefix('galabreak')
   .use(middleware.auth())
@@ -109,9 +118,9 @@ router.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
 
 router
   .group(() => {
-    router.get('/rooms', 'statistics/StatisticsController.favoriteRoom')
-    router.get('/time', 'statistics/StatisticsController.time')
-    router.get('/amount', 'statistics/StatisticsController.amount')
+    router.get('/rooms', [StatisticsController, 'favoriteRoom'])
+    router.get('/time', [StatisticsController, 'time'])
+    router.get('/amount', [StatisticsController, 'amount'])
   })
   .use(middleware.auth())
   .prefix('statistics')
@@ -119,18 +128,18 @@ router
 router
   .group(() => {
     router
-      .post('/createUser', 'admin/AdminController.createUser')
+      .post('/createUser', [AdminController, 'createUser'])
       .use(middleware.rights(['USER_ADMIN']))
     router
-      .get('/userRights', 'admin/AdminController.userRights')
+      .get('/userRights', [AdminController, 'userRights'])
       .use(middleware.rights(['RIGHTS_ADMIN']))
     router
-      .put('/userRights', 'admin/AdminController.editUserRights')
+      .put('/userRights', [AdminController, 'editUserRights'])
       .use(middleware.rights(['RIGHTS_ADMIN']))
     router
-      .post('/createNotification', 'admin/AdminController.createNotification')
+      .post('/createNotification', [AdminController, 'createNotification'])
       .use(middleware.rights(['NOTIFICATION_ADMIN']))
-    router.get('/dashboard', 'dashboard/DashboardController.index')
+    router.get('/dashboard', [DashboardController, 'index'])
   })
   .use(middleware.auth())
   .prefix('admin')
@@ -142,7 +151,7 @@ router.get('authRedirect/:target', ({ response, request }) => {
 
 router
   .group(() => {
-    router.get('tournois', 'platformerResults/PlatformerResultsController.index')
+    router.get('tournois', [PlatformerResultsController, 'index'])
   })
   .prefix('games')
   .use(middleware.auth())
