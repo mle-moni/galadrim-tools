@@ -34,6 +34,7 @@ import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
 import EventsController from '#controllers/events/EventsController'
+import IdeasController from '#controllers/ideas/IdeasController'
 import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
 import RestaurantsController from '#controllers/restaurants/RestaurantsController'
 import TagsController from '#controllers/tags/TagsController'
@@ -60,9 +61,9 @@ router
     router.get('/notes/mine', [RestaurantNotesController, 'mine'])
     router.resource('notes', RestaurantNotesController).apiOnly()
 
-    router.resource('ideas', 'ideas/IdeasController').apiOnly()
-    router.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')
-    router.post('createIdeaComment', 'ideas/IdeasController.createComment')
+    router.resource('ideas', IdeasController).apiOnly()
+    router.post('createOrUpdateIdeaVote', [IdeasController, 'createOrUpdateVote'])
+    router.post('createIdeaComment', [IdeasController, 'createComment'])
 
     router.get('/me', [AuthController, 'me'])
     router.post('/createApiToken', [AuthController, 'createApiToken'])

@@ -7,16 +7,15 @@ interface Resource {
 }
 
 export default class RestaurantPolicy extends BasePolicy {
-  public async before(user: User | null, _resource?: Resource, type?: AllRights) {
-    if (type !== undefined && user && user.hasRights([type])) {
+  public async viewUpdateOrDelete(user: User, resource: Resource, bypassRight?: AllRights) {
+    if (bypassRight !== undefined && user.hasRights([bypassRight])) {
       return true
     }
-  }
 
-  public async viewUpdateOrDelete(user: User, resource: Resource, _type?: AllRights) {
     if (user.id !== resource.userId) {
       return AuthorizationResponse.deny("Vous n'avez pas les droits nécessaires")
     }
+
     return true
   }
 }
