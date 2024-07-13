@@ -34,6 +34,7 @@ import env from '#start/env'
 
 import AuthController from '#controllers/auth/auth_controller'
 import EventsController from '#controllers/events/EventsController'
+import TagsController from '#controllers/tags/TagsController'
 import { middleware } from './kernel.js'
 
 router.get('/', async () => {
@@ -50,7 +51,7 @@ router
     router.get('/allEvents', [EventsController, 'all'])
     router.get('/availableRooms', [EventsController, 'availableRooms'])
 
-    router.resource('tags', 'tags/TagsController').apiOnly()
+    router.resource('tags', TagsController).apiOnly()
     router.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
     router.post(
       'createOrUpdateRestaurantChoice',
