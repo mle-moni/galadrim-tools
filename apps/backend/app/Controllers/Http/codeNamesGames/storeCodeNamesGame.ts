@@ -1,6 +1,6 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import CodeNamesGame from '#app/Models/CodeNamesGame'
 
 const storeCodeNamesGameSchema = schema.create({
@@ -9,7 +9,7 @@ const storeCodeNamesGameSchema = schema.create({
     image: schema.file({ size: '2mb', extnames: ['jpg', 'png', 'jpeg'] }),
 })
 
-export const storeCodeNamesGame = async ({ request }: HttpContextContract) => {
+export const storeCodeNamesGame = async ({ request }: HttpContext) => {
     const { blueSpyMasterId, redSpyMasterId, image } = await request.validate({
         schema: storeCodeNamesGameSchema,
     })

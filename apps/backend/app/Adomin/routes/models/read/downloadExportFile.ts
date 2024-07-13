@@ -1,13 +1,13 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { LucidRow } from '@ioc:Adonis/Lucid/Orm'
+import { HttpContext } from '@adonisjs/core/http'
 import { toCSVString } from '#app/Adomin/utils/csvUtils'
+import { LucidRow } from " @adonisjs/lucid/types/model";
 
 export const EXPORT_TYPES = ['csv', 'xlsx', 'json'] as const
 
 export type ExportType = typeof EXPORT_TYPES[number]
 
 export const downloadExportFile = async (
-    { response }: HttpContextContract,
+    { response }: HttpContext,
     data: LucidRow[],
     exportType: ExportType
 ) => {

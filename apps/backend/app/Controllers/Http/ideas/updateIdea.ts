@@ -1,6 +1,6 @@
 import { IDEAS_STATE } from '@galadrim-tools/shared'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import type { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Idea from '#app/Models/Idea'
 import Ws from '#app/Services/Ws'
 
@@ -10,7 +10,7 @@ const ideaSchema = schema.create({
     state: schema.enum.optional(IDEAS_STATE),
 })
 
-export const updateIdeaRoute = async ({ request, bouncer }: HttpContextContract) => {
+export const updateIdeaRoute = async ({ request, bouncer }: HttpContext) => {
     const { text, ideaId, state } = await request.validate({
         schema: ideaSchema,
     })

@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { schema } from '@adonisjs/validator'
 import User from '#app/Models/User'
 import Ws from '#app/Services/Ws'
 
@@ -8,7 +8,7 @@ const editUserRightsSchema = schema.create({
     rights: schema.number(),
 })
 
-export const editUserRightsRoute = async ({ request, response }: HttpContextContract) => {
+export const editUserRightsRoute = async ({ request, response }: HttpContext) => {
     const { id, rights } = await request.validate({
         schema: editUserRightsSchema,
         messages: {

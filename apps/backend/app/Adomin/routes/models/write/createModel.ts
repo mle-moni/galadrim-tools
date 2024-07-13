@@ -1,4 +1,4 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { getValidationSchemaFromConfig } from '#app/Adomin/routes/getValidationSchemaFromLucidModel'
 import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
 import { validateOrThrow } from '#app/Adomin/validation/adominValidationHelpers'
@@ -8,7 +8,7 @@ import { getModelData } from '../getModelData'
 import { getValidatedModelConfig } from '../validateModelName'
 import { attachFieldsToModel } from './attachFieldsToModel'
 
-export const createModel = async (ctx: HttpContextContract) => {
+export const createModel = async (ctx: HttpContext) => {
     const { params, response, request } = ctx
     const modelConfig = await getValidatedModelConfig(params)
 

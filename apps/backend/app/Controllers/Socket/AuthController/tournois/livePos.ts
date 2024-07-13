@@ -1,4 +1,4 @@
-import { schema, validator } from '@ioc:Adonis/Core/Validator'
+import { schema, validator } from '@adonisjs/validator'
 import { Socket } from 'socket.io'
 import { getSocketUser } from '../authRestrictedEvents'
 

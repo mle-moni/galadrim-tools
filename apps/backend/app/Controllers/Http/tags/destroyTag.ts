@@ -1,9 +1,9 @@
 import { hasRights } from '@galadrim-tools/shared/'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import Tag from '#app/Models/Tag'
 import Ws from '#app/Services/Ws'
 
-export const destroyRoute = async ({ params, auth, response }: HttpContextContract) => {
+export const destroyRoute = async ({ params, auth, response }: HttpContext) => {
     const tag = await Tag.findOrFail(params.id)
     const user = auth.user!
     if (!hasRights(user.rights, ['MIAM_ADMIN'])) {

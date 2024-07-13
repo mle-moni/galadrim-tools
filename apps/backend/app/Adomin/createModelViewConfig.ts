@@ -1,6 +1,4 @@
 import { AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { string } from '@ioc:Adonis/Core/Helpers'
-import { BelongsTo, HasMany, LucidModel, ModelQueryBuilderContract } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 import {
     AdominArrayFieldConfig,
@@ -22,6 +20,11 @@ import {
     AdominStaticRightsConfig,
 } from './routes/adominRoutesOverridesAndRights'
 import { AdominValidation } from './validation/adominValidationHelpers'
+import { string } from "@adonisjs/core/helpers/string";
+import { BelongsTo } from "@adonisjs/lucid/types/relations";
+import { HasMany } from "@adonisjs/lucid/types/relations";
+import { LucidModel } from " @adonisjs/lucid/types/model";
+import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";
 
 export interface ColumnConfig {
     name: string

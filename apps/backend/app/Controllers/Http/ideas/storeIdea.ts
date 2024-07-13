@@ -1,5 +1,5 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import type { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Idea from '#app/Models/Idea'
 import { createNotificationForUsers, cropText } from '#app/Services/notifications'
 import Ws from '#app/Services/Ws'
@@ -9,7 +9,7 @@ const ideaSchema = schema.create({
     isAnonymous: schema.boolean(),
 })
 
-export const storeIdeaRoute = async ({ request, auth }: HttpContextContract) => {
+export const storeIdeaRoute = async ({ request, auth }: HttpContext) => {
     const user = auth.user!
     const { text, isAnonymous } = await request.validate({
         schema: ideaSchema,

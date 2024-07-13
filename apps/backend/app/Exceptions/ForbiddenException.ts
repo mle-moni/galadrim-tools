@@ -1,4 +1,4 @@
-import { Exception } from '@adonisjs/core/build/standalone'
+import { Exception } from "@adonisjs/core/exceptions";
 
 export default class ForbiddenException extends Exception {
     constructor(message?: string) {

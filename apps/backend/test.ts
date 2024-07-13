@@ -14,7 +14,7 @@
 
 process.env.NODE_ENV = 'test'
 
-import { Ignitor } from '@adonisjs/core/build/standalone'
+import { Ignitor } from '@adonisjs/core'
 import { configure, processCliArgs, run, RunnerHooksHandler } from '@japa/runner'
 import 'reflect-metadata'
 import sourceMapSupport from 'source-map-support'

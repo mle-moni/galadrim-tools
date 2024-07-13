@@ -1,7 +1,7 @@
-import { CustomMessages } from '@ioc:Adonis/Core/Validator'
-import { LucidModel } from '@ioc:Adonis/Lucid/Orm'
 import { getModelConfig } from '../routes/models/getModelConfig'
 import { getValidationMessage } from './getValidationMessage'
+import { CustomMessages } from "@adonisjs/validator/types";
+import { LucidModel } from " @adonisjs/lucid/types/model";
 
 // 'test' => 'test'
 // 'arr.0.field' => 'field'

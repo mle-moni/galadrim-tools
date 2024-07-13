@@ -1,4 +1,4 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import { addCodeNamesGameRound } from '#app/Controllers/Http/codeNamesGames/addCodeNamesGameRound'
 import { codeNamesGamesIndex } from '#app/Controllers/Http/codeNamesGames/codeNamesGamesIndex'
 import { destroyCodeNamesGame } from '#app/Controllers/Http/codeNamesGames/destroyCodeNamesGame'
@@ -6,27 +6,27 @@ import { showCodeNamesGame } from '#app/Controllers/Http/codeNamesGames/showCode
 import { storeCodeNamesGame } from '#app/Controllers/Http/codeNamesGames/storeCodeNamesGame'
 
 export default class CodeNamesGamesController {
-    public async index(ctx: HttpContextContract) {
+    public async index(ctx: HttpContext) {
         return codeNamesGamesIndex(ctx)
     }
 
-    public async store(ctx: HttpContextContract) {
+    public async store(ctx: HttpContext) {
         return storeCodeNamesGame(ctx)
     }
 
-    public async show(ctx: HttpContextContract) {
+    public async show(ctx: HttpContext) {
         return showCodeNamesGame(ctx)
     }
 
-    public async update({ response }: HttpContextContract) {
+    public async update({ response }: HttpContext) {
         return response.notImplemented({ error: 'Not implemented yet' })
     }
 
-    public async destroy(ctx: HttpContextContract) {
+    public async destroy(ctx: HttpContext) {
         return destroyCodeNamesGame(ctx)
     }
 
-    public async addRound(ctx: HttpContextContract) {
+    public async addRound(ctx: HttpContext) {
         return addCodeNamesGameRound(ctx)
     }
 }

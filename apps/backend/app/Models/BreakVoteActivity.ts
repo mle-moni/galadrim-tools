@@ -1,4 +1,4 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class BreakVoteActivity extends BaseModel {
     @column({ isPrimary: true })

@@ -1,7 +1,7 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import CodeNamesGame from '#app/Models/CodeNamesGame'
 
-export const codeNamesGamesIndex = async ({}: HttpContextContract) => {
+export const codeNamesGamesIndex = async ({}: HttpContext) => {
     const games = CodeNamesGame.query().preload('rounds')
 
     return games

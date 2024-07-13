@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import CodeNamesGame from '#app/Models/CodeNamesGame'
 import CodeNamesGameRound from '#app/Models/CodeNamesGameRound'
 
@@ -14,7 +14,7 @@ const roundSchema = schema.create({
     black: schema.number(),
 })
 
-export const addCodeNamesGameRound = async ({ params, request }: HttpContextContract) => {
+export const addCodeNamesGameRound = async ({ params, request }: HttpContext) => {
     const roundDto = await request.validate({ schema: roundSchema })
 
     const game = await CodeNamesGame.findOrFail(params.id)

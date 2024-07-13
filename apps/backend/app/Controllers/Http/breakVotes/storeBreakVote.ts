@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
-import Database from '@ioc:Adonis/Lucid/Database'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
+import db from '@adonisjs/lucid/services/db'
 import { TODAY_BREAK_VOTE_FILTER } from '#app/Controllers/Http/breakVotes/breakVotesIndex'
 import BreakVote from '#app/Models/BreakVote'
 import BreakVoteActivity from '#app/Models/BreakVoteActivity'
@@ -15,12 +15,12 @@ const breakVoteSchema = schema.create({
         .members(schema.number([rules.exists({ table: 'break_times', column: 'id' })])),
 })
 
-export const storeBreakVote = async ({ auth, request }: HttpContextContract) => {
+export const storeBreakVote = async ({ auth, request }: HttpContext) => {
     const user = auth.user!
 
     const { activities, times } = await request.validate({ schema: breakVoteSchema })
 
-    const trx = await Database.transaction()
+    const trx = await db.transaction()
 
     await BreakVote.query({ client: trx })
         .where('user_id', user.id)

@@ -1,4 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 import { PARIS_COORDINATES_VALUES } from '@galadrim-tools/shared'
 
 type DistanceRanking = {
@@ -9,7 +9,7 @@ type DistanceRanking = {
 }
 
 export const generateDistanceRanking = async () => {
-    const [distanceRankings]: [DistanceRanking[]] = await Database.rawQuery(
+    const [distanceRankings]: [DistanceRanking[]] = await db.rawQuery(
         `
   SELECT
   user_id, sum(distance_m)/count(*) as average_distance, count(*) as amount, u.username

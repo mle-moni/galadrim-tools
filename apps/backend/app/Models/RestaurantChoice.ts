@@ -1,7 +1,8 @@
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import { IChoice } from 'libs/shared/dist'
 import { DateTime } from 'luxon'
 import Restaurant from './Restaurant'
+import { BelongsTo } from "@adonisjs/lucid/types/relations";
 
 export default class RestaurantChoice extends BaseModel {
     @column({ isPrimary: true })

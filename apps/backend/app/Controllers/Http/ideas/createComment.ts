@@ -1,5 +1,5 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import type { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Idea from '#app/Models/Idea'
 import IdeaComment from '#app/Models/IdeaComment'
 import User from '#app/Models/User'
@@ -20,7 +20,7 @@ const notifyUser = async (ideaId: number, user: User) => {
     Ws.io.to(user.personalSocket).emit('updateIdea', idea.getUserFrontendData(user.id))
 }
 
-export const createCommentRoute = async ({ auth, request }: HttpContextContract) => {
+export const createCommentRoute = async ({ auth, request }: HttpContext) => {
     const user = auth.user!
     const userId = user.id
     const { message, ideaId } = await request.validate({

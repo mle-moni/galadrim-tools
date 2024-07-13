@@ -1,10 +1,10 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import RestaurantRewind from '#app/Models/RestaurantRewind'
-import { schema, validator } from '@ioc:Adonis/Core/Validator'
+import { schema, validator } from '@adonisjs/validator'
 
 const resourceIdSchema = schema.create({ id: schema.number.optional() })
 
-export const showRestaurantRewind = async ({ params, bouncer, auth }: HttpContextContract) => {
+export const showRestaurantRewind = async ({ params, bouncer, auth }: HttpContext) => {
     const { id } = await validator.validate({ schema: resourceIdSchema, data: params })
     const restaurantRewind = await RestaurantRewind.query()
         .where('userId', id ?? auth.user!.id)

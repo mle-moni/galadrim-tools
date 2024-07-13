@@ -1,5 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ParsedTypedSchema, TypedSchema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { ParsedTypedSchema } from "@adonisjs/validator/types";
+import { TypedSchema } from "@adonisjs/validator/types";
 
 export interface ValidationFunctionResult {
     valid: boolean
@@ -19,7 +20,7 @@ export interface ValidationFunctionResult {
  * e.g. with response.badRequest({ error: 'oups' })
  */
 export type AdominCustomFunctionValidation = (
-    ctx: HttpContextContract
+    ctx: HttpContext
 ) => Promise<ValidationFunctionResult>
 
 export type AdominValidationWithSchema = {
@@ -42,7 +43,7 @@ export const isAdonisSchema = (input: unknown): input is ParsedTypedSchema<Typed
     return typeof input === 'object' && input !== null && 'props' in input && 'tree' in input
 }
 
-const validateAtom = async (ctx: HttpContextContract, atom: AdominValidationAtom) => {
+const validateAtom = async (ctx: HttpContext, atom: AdominValidationAtom) => {
     if (typeof atom === 'function') {
         const result = await atom(ctx)
 
@@ -60,7 +61,7 @@ const validateAtom = async (ctx: HttpContextContract, atom: AdominValidationAtom
 }
 
 export const validateOrThrow = async (
-    ctx: HttpContextContract,
+    ctx: HttpContext,
     validationParams: AdominValidation,
     mode: AdominValidationMode
 ) => {

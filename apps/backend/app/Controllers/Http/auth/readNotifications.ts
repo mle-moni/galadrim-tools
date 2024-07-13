@@ -1,7 +1,7 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import Notification from '#app/Models/Notification'
 
-export const readNotifications = async ({ auth }: HttpContextContract) => {
+export const readNotifications = async ({ auth }: HttpContext) => {
     const user = auth.user!
 
     const [notificationsUpdated] = await Notification.query()

@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const adominLogout = async ({ auth }: HttpContextContract) => {
+export const adominLogout = async ({ auth }: HttpContext) => {
     await auth.use('api').logout()
 
     return { message: 'Au revoir !' }

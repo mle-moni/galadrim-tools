@@ -1,5 +1,5 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import type { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Restaurant from '#app/Models/Restaurant'
 import RestaurantChoice from '#app/Models/RestaurantChoice'
 import { formatDateToNumber } from '#app/Services/Date'
@@ -20,7 +20,7 @@ export const createOrUpdateChoiceRoute = async ({
     auth,
     request,
     response,
-}: HttpContextContract) => {
+}: HttpContext) => {
     const user = auth.user!
     const userId = user.id
     const { restaurantId } = await request.validate({

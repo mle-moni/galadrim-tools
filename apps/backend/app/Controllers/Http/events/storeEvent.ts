@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Event from '#app/Models/Event'
 import Ws from '#app/Services/Ws'
 
@@ -10,13 +10,13 @@ const StoreValidationSchema = schema.create({
     title: schema.string.optional([rules.trim(), rules.maxLength(40), rules.minLength(2)]),
 })
 
-export const validateEventsParams = async (request: HttpContextContract['request']) => {
+export const validateEventsParams = async (request: HttpContext['request']) => {
     return request.validate({
         schema: StoreValidationSchema,
     })
 }
 
-export const storeRoute = async ({ request, auth }: HttpContextContract) => {
+export const storeRoute = async ({ request, auth }: HttpContext) => {
     const { start, end, room, title } = await validateEventsParams(request)
     const user = auth.user!
     const event = await Event.create({

@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const createApiTokenRoute = async ({ auth }: HttpContextContract) => {
+export const createApiTokenRoute = async ({ auth }: HttpContext) => {
     return auth.use('api').generate(auth.user!)
 }

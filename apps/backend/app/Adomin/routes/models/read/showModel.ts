@@ -1,11 +1,11 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
 import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
 import { validateResourceId } from '../../validateResourceId'
 import { getModelData } from '../getModelData'
 import { getValidatedModelConfig } from '../validateModelName'
 
-export const showModel = async (ctx: HttpContextContract) => {
+export const showModel = async (ctx: HttpContext) => {
     const { params, response } = ctx
     const { id } = await validateResourceId(params)
     const modelConfig = await getValidatedModelConfig(params)

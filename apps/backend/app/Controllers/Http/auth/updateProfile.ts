@@ -1,6 +1,6 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Ws from '#app/Services/Ws'
 
 const updateProfileSchema = schema.create({
@@ -9,7 +9,7 @@ const updateProfileSchema = schema.create({
     image: schema.file.optional({ extnames: ['jpg', 'png', 'jpeg'], size: '1mb' }),
 })
 
-export const updateProfileRoute = async ({ request, auth }: HttpContextContract) => {
+export const updateProfileRoute = async ({ request, auth }: HttpContext) => {
     const user = auth.user!
     const { email, username, image } = await request.validate({
         schema: updateProfileSchema,

@@ -1,4 +1,4 @@
-import { schema, validator } from '@ioc:Adonis/Core/Validator'
+import { schema, validator } from '@adonisjs/validator'
 import PlatformerResult from '#app/Models/PlatformerResult'
 import Ws from '#app/Services/Ws'
 import { Socket } from 'socket.io'

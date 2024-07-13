@@ -1,5 +1,5 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { validateRestaurantsParams } from '#app/Controllers/Http/restaurants/storeRestaurant'
 import Restaurant from '#app/Models/Restaurant'
 import RestaurantTag from '#app/Models/RestaurantTag'
@@ -47,7 +47,7 @@ const updateRestaurantTags = async (restaurant: Restaurant, newTags: number[]) =
         .delete()
 }
 
-export const updateRoute = async ({ params, request, bouncer }: HttpContextContract) => {
+export const updateRoute = async ({ params, request, bouncer }: HttpContext) => {
     const restaurant = await Restaurant.findOrFail(params.id)
 
     await bouncer.with('RestaurantsPolicy').authorize('viewUpdateOrDelete', restaurant)

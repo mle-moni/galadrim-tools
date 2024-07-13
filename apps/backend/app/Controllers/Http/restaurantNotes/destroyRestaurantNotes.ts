@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const destroyRoute = async ({ response }: HttpContextContract) => {
+export const destroyRoute = async ({ response }: HttpContext) => {
     return response.notImplemented({ error: `Cette fonctionnalité n'est pas implémentée` })
 }

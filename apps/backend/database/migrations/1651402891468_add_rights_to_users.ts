@@ -1,5 +1,5 @@
 import { RIGHTS } from '@galadrim-tools/shared'
-import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { BaseSchema } from "@adonisjs/lucid/schema";
 
 export default class Users extends BaseSchema {
     protected tableName = 'users'

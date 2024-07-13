@@ -1,4 +1,4 @@
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import BaseSeeder from '@adonisjs/lucid/seeders'
 import { generateRestaurants } from '../factories/generateRestaurant'
 
 export default class RestaurantSeeder extends BaseSeeder {

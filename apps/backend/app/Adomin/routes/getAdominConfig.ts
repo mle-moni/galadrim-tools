@@ -1,4 +1,4 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { ADOMIN_CONFIG } from '../config/ADOMIN_CONFIG'
 import type { ModelConfig } from '../createModelViewConfig'
 import { StatsViewConfig } from '../createStatsViewConfig'
@@ -6,7 +6,7 @@ import { computeRightsCheck } from './adominRoutesOverridesAndRights'
 
 export const defaultFooterText = 'Made with ❤️ by Galadrim'
 
-const getModelViewConfig = async (ctx: HttpContextContract, conf: ModelConfig) => {
+const getModelViewConfig = async (ctx: HttpContext, conf: ModelConfig) => {
     const { label, labelPluralized, name, isHidden, visibilityCheck } = conf
 
     const visibilityCheckResult = await computeRightsCheck(ctx, visibilityCheck, false)
@@ -21,7 +21,7 @@ const getModelViewConfig = async (ctx: HttpContextContract, conf: ModelConfig) =
     }
 }
 
-const getStatViewConfig = async (ctx: HttpContextContract, conf: StatsViewConfig) => {
+const getStatViewConfig = async (ctx: HttpContext, conf: StatsViewConfig) => {
     const { path, label, visibilityCheck, isHidden } = conf
 
     const visibilityCheckResult = await computeRightsCheck(ctx, visibilityCheck, false)
@@ -35,7 +35,7 @@ const getStatViewConfig = async (ctx: HttpContextContract, conf: StatsViewConfig
     }
 }
 
-export const getAdominConfig = async (ctx: HttpContextContract) => {
+export const getAdominConfig = async (ctx: HttpContext) => {
     const { auth } = ctx
     const user = auth.user!
     const viewsPromises = ADOMIN_CONFIG.views.map(async (conf) => {

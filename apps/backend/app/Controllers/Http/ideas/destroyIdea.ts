@@ -1,8 +1,8 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import Idea from '#app/Models/Idea'
 import Ws from '#app/Services/Ws'
 
-export const destroyIdeaRoute = async ({ params, bouncer }: HttpContextContract) => {
+export const destroyIdeaRoute = async ({ params, bouncer }: HttpContext) => {
     const idea = await Idea.findOrFail(params.id)
     await bouncer.with('IdeasPolicy').authorize('viewUpdateOrDelete', idea)
 

@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import Tag from '#app/Models/Tag'
 
-export const showRoute = ({ params }: HttpContextContract) => {
+export const showRoute = ({ params }: HttpContext) => {
     return Tag.findOrFail(params.id)
 }

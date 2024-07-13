@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Restaurant from '#app/Models/Restaurant'
 import RestaurantNote from '#app/Models/RestaurantNote'
 import Ws from '#app/Services/Ws'
@@ -9,7 +9,7 @@ const noteValidationSchema = schema.create({
     note: schema.enum(['1', '2', '3', '4', '5'] as const),
 })
 
-export const validateNoteParams = async (request: HttpContextContract['request']) => {
+export const validateNoteParams = async (request: HttpContext['request']) => {
     return request.validate({
         schema: noteValidationSchema,
         messages: {
@@ -19,7 +19,7 @@ export const validateNoteParams = async (request: HttpContextContract['request']
     })
 }
 
-export const storeOrUpdateRoute = async ({ request, auth }: HttpContextContract) => {
+export const storeOrUpdateRoute = async ({ request, auth }: HttpContext) => {
     const user = auth.user!
 
     const { restaurant_id: restaurantId, note } = await validateNoteParams(request)

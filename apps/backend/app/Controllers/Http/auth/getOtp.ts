@@ -1,7 +1,7 @@
-import Mail from '@ioc:Adonis/Addons/Mail'
-import Env from '@ioc:Adonis/Core/Env'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import mail from '@adonisjs/mail/services/main'
+import env from '#start/env'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import User from '#app/Models/User'
 import { nanoid } from 'nanoid'
 
@@ -10,7 +10,7 @@ const loginSchema = schema.create({
 })
 
 // generate one time password for user and send it in email
-export const getOtpRoute = async ({ request, response }: HttpContextContract) => {
+export const getOtpRoute = async ({ request, response }: HttpContext) => {
     const { email } = await request.validate({
         schema: loginSchema,
     })
@@ -20,9 +20,9 @@ export const getOtpRoute = async ({ request, response }: HttpContextContract) =>
     }
     user.otpToken = nanoid()
     await user.save()
-    await Mail.use('mailgun').send((message) => {
+    await mail.use('mailgun').send((message) => {
         message
-            .from(`<noreply@${Env.get('MAILGUN_DOMAIN')}>`)
+            .from(`<noreply@${env.get('MAILGUN_DOMAIN')}>`)
             .to(user.email)
             .subject('Mot de passe oublié')
             .htmlView('emails/get_otp', {

@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { validator } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { validator } from '@adonisjs/validator'
 import { loadFilesForInstances } from '#app/Adomin/routes/handleFiles'
 import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
 import { getValidatedModelConfig } from '../validateModelName'
@@ -17,7 +17,7 @@ const prepareQsObject = (input?: string) => {
     return JSON.parse(decoded)
 }
 
-export const modelList = async (ctx: HttpContextContract) => {
+export const modelList = async (ctx: HttpContext) => {
     const { params, request, response } = ctx
     const modelConfig = await getValidatedModelConfig(params)
 

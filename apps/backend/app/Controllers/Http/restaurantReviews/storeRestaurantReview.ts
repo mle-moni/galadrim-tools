@@ -1,5 +1,5 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { validateRestaurantId } from '#app/Controllers/Http/restaurantReviews/validateRestaurantId'
 import Restaurant from '#app/Models/Restaurant'
 import RestaurantReview from '#app/Models/RestaurantReview'
@@ -7,7 +7,7 @@ import Ws from '#app/Services/Ws'
 import { createNotificationForUsers, cropText } from '#app/Services/notifications'
 import { restaurantReviewSchema } from './restaurantReviewSchema'
 
-export const storeRestaurantReview = async ({ request, auth, params }: HttpContextContract) => {
+export const storeRestaurantReview = async ({ request, auth, params }: HttpContext) => {
     const user = auth.user!
     const { restaurantId } = await validateRestaurantId(params)
     const { comment, image } = await request.validate({

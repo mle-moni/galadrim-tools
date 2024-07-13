@@ -18,101 +18,101 @@
 |
 */
 
-import Env from '@ioc:Adonis/Core/Env'
-import Route from '@ioc:Adonis/Core/Route'
+import env from '#start/env'
+import router from '@adonisjs/core/services/router'
 import { showRestaurantRewind } from '#app/Controllers/Http/restaurantRewinds/showRestaurantRewind'
 
 import '#app/Adomin/routes/adominRouter'
 
-Route.get('/', async () => {
+router.get('/', async () => {
     return { service: 'galadrim tools backend' }
 })
 
-Route.post('/login', 'auth/AuthController.login')
-Route.post('/logout', 'auth/AuthController.logout')
-Route.post('/getOtp', 'auth/AuthController.getOtp')
+router.post('/login', 'auth/AuthController.login')
+router.post('/logout', 'auth/AuthController.logout')
+router.post('/getOtp', 'auth/AuthController.getOtp')
 
-Route.group(() => {
-    Route.resource('events', 'events/EventsController').apiOnly()
-    Route.get('/allEvents', 'events/EventsController.all')
-    Route.get('/availableRooms', 'events/EventsController.availableRooms')
-    Route.resource('tags', 'tags/TagsController').apiOnly()
-    Route.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
-    Route.post(
+router.group(() => {
+    router.resource('events', 'events/EventsController').apiOnly()
+    router.get('/allEvents', 'events/EventsController.all')
+    router.get('/availableRooms', 'events/EventsController.availableRooms')
+    router.resource('tags', 'tags/TagsController').apiOnly()
+    router.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
+    router.post(
         'createOrUpdateRestaurantChoice',
         'restaurants/RestaurantsController.createOrUpdateChoice'
     )
-    Route.get('/notes/mine', 'restaurantNotes/RestaurantNotesController.mine')
-    Route.resource('notes', 'restaurantNotes/RestaurantNotesController').apiOnly()
-    Route.resource('ideas', 'ideas/IdeasController').apiOnly()
-    Route.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')
-    Route.post('createIdeaComment', 'ideas/IdeasController.createComment')
-    Route.get('/me', 'auth/AuthController.me')
-    Route.post('/createApiToken', 'auth/AuthController.createApiToken')
-    Route.post('/changePassword', 'auth/AuthController.changePassword')
-    Route.post('/updateProfile', 'auth/AuthController.updateProfile')
-    Route.post('/updateTheme', 'auth/AuthController.updateTheme')
-    Route.get('/users', 'galadrimeurs/GaladrimeursController.users')
+    router.get('/notes/mine', 'restaurantNotes/RestaurantNotesController.mine')
+    router.resource('notes', 'restaurantNotes/RestaurantNotesController').apiOnly()
+    router.resource('ideas', 'ideas/IdeasController').apiOnly()
+    router.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')
+    router.post('createIdeaComment', 'ideas/IdeasController.createComment')
+    router.get('/me', 'auth/AuthController.me')
+    router.post('/createApiToken', 'auth/AuthController.createApiToken')
+    router.post('/changePassword', 'auth/AuthController.changePassword')
+    router.post('/updateProfile', 'auth/AuthController.updateProfile')
+    router.post('/updateTheme', 'auth/AuthController.updateTheme')
+    router.get('/users', 'galadrimeurs/GaladrimeursController.users')
 
-    Route.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
-    Route.post('/readNotifications', 'auth/AuthController.readNotifications')
+    router.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
+    router.post('/readNotifications', 'auth/AuthController.readNotifications')
 
-    Route.resource('matrices', 'matrices/MatricesController').apiOnly()
+    router.resource('matrices', 'matrices/MatricesController').apiOnly()
 
-    Route.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
-    Route.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
-    Route.resource(
+    router.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
+    router.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
+    router.resource(
         'restaurants/:restaurantId/reviews',
         'restaurantReviews/RestaurantReviewsController'
     ).apiOnly()
-    Route.get('rewind/:id?', showRestaurantRewind)
-    Route.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
-    Route.get('/caddyLogs/:id', 'logs/LogsController.showCaddyLogs')
-    Route.get('/atopLogs/:id', 'logs/LogsController.showAtopLogs')
+    router.get('rewind/:id?', showRestaurantRewind)
+    router.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
+    router.get('/caddyLogs/:id', 'logs/LogsController.showCaddyLogs')
+    router.get('/atopLogs/:id', 'logs/LogsController.showAtopLogs')
 }).middleware('auth:web,api')
 
-Route.post('/caddyLogs', 'logs/LogsController.storeCaddyLogs')
-Route.post('/atopLogs', 'logs/LogsController.storeAtopLogs')
+router.post('/caddyLogs', 'logs/LogsController.storeCaddyLogs')
+router.post('/atopLogs', 'logs/LogsController.storeAtopLogs')
 
-Route.group(() => {
-    Route.resource('votes', 'breakVotes/BreakVotesController').apiOnly()
-    Route.resource('activities', 'breakActivities/BreakActivitiesController').apiOnly()
-    Route.resource('times', 'breakTimes/BreakTimesController').apiOnly()
+router.group(() => {
+    router.resource('votes', 'breakVotes/BreakVotesController').apiOnly()
+    router.resource('activities', 'breakActivities/BreakActivitiesController').apiOnly()
+    router.resource('times', 'breakTimes/BreakTimesController').apiOnly()
 })
     .prefix('galabreak')
     .middleware('auth:web,api')
 
-Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
+router.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
 
-Route.group(() => {
-    Route.get('/rooms', 'statistics/StatisticsController.favoriteRoom')
-    Route.get('/time', 'statistics/StatisticsController.time')
-    Route.get('/amount', 'statistics/StatisticsController.amount')
+router.group(() => {
+    router.get('/rooms', 'statistics/StatisticsController.favoriteRoom')
+    router.get('/time', 'statistics/StatisticsController.time')
+    router.get('/amount', 'statistics/StatisticsController.amount')
 })
     .middleware('auth:web,api')
     .prefix('statistics')
 
-Route.group(() => {
-    Route.post('/createUser', 'admin/AdminController.createUser').middleware('rights:USER_ADMIN')
-    Route.get('/userRights', 'admin/AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
-    Route.put('/userRights', 'admin/AdminController.editUserRights').middleware(
+router.group(() => {
+    router.post('/createUser', 'admin/AdminController.createUser').middleware('rights:USER_ADMIN')
+    router.get('/userRights', 'admin/AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
+    router.put('/userRights', 'admin/AdminController.editUserRights').middleware(
         'rights:RIGHTS_ADMIN'
     )
-    Route.post('/createNotification', 'admin/AdminController.createNotification').middleware(
+    router.post('/createNotification', 'admin/AdminController.createNotification').middleware(
         'rights:NOTIFICATION_ADMIN'
     )
-    Route.get('/dashboard', 'dashboard/DashboardController.index')
+    router.get('/dashboard', 'dashboard/DashboardController.index')
 })
     .middleware('auth:web,api')
     .prefix('admin')
 
-Route.get('authRedirect/:target', ({ response, request }) => {
+router.get('authRedirect/:target', ({ response, request }) => {
     const target = request.param('target')
-    return response.redirect(`${Env.get('FRONTEND_URL')}/login?redirect=${target}`)
+    return response.redirect(`${env.get('FRONTEND_URL')}/login?redirect=${target}`)
 })
 
-Route.group(() => {
-    Route.get('tournois', 'platformerResults/PlatformerResultsController.index')
+router.group(() => {
+    router.get('tournois', 'platformerResults/PlatformerResultsController.index')
 })
     .prefix('games')
     .middleware('auth:web,api')

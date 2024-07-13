@@ -1,12 +1,5 @@
-/**
- * Config source: https://git.io/JvgAf
- *
- * Feel free to let us know via PR, if you find something broken in this contract
- * file.
- */
-
-import { MailConfig } from '@ioc:Adonis/Addons/Mail'
-import Env from '@ioc:Adonis/Core/Env'
+import env from '#start/env'
+import { MailConfig } from "@adonisjs/mail";
 
 const mailConfig: MailConfig = {
     /*
@@ -48,8 +41,8 @@ const mailConfig: MailConfig = {
         mailgun: {
             driver: 'mailgun',
             baseUrl: 'https://api.eu.mailgun.net/v3',
-            key: Env.get('MAILGUN_API_KEY'),
-            domain: Env.get('MAILGUN_DOMAIN'),
+            key: env.get('MAILGUN_API_KEY'),
+            domain: env.get('MAILGUN_DOMAIN'),
         },
     },
 }

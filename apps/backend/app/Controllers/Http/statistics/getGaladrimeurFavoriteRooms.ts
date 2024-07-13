@@ -1,10 +1,10 @@
-import Database from '@ioc:Adonis/Lucid/Database'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import db from '@adonisjs/lucid/services/db'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const getGaladrimeurFavoriteRooms = async ({ request }: HttpContextContract) => {
+export const getGaladrimeurFavoriteRooms = async ({ request }: HttpContext) => {
     const { days } = request.qs()
     const filterQuery = days ? 'WHERE created_at > DATE_SUB(NOW(), INTERVAL ? DAY)' : ''
-    const result = await Database.rawQuery(
+    const result = await db.rawQuery(
         `
     SELECT
       room as id,

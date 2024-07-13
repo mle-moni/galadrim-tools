@@ -1,7 +1,7 @@
 import { DEFAULT_NOTIFICATION_SETTINGS } from '@galadrim-tools/shared'
-import Env from '@ioc:Adonis/Core/Env'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Logger from '@ioc:Adonis/Core/Logger'
+import env from '#start/env'
+import { HttpContext } from '@adonisjs/core/http'
+import logger from '@adonisjs/core/services/logger'
 import User from '#app/Models/User'
 import axios from 'axios'
 import crypto from 'crypto'
@@ -30,7 +30,7 @@ const unlockEmail = (email: string) => {
 const ALGORITHM = 'aes-256-cbc'
 
 export const galadrimEncrypt = (data: string) => {
-    const secretKey = Env.get('GALADRIM_SECRET_KEY')
+    const secretKey = env.get('GALADRIM_SECRET_KEY')
 
     if (!secretKey) return null
 
@@ -46,7 +46,7 @@ export const galadrimEncrypt = (data: string) => {
 }
 
 export const galadrimDecrypt = (encryptedData: string): string | null => {
-    const secretKey = Env.get('GALADRIM_SECRET_KEY')
+    const secretKey = env.get('GALADRIM_SECRET_KEY')
 
     if (!secretKey) return null
 
@@ -64,7 +64,7 @@ export const galadrimDecrypt = (encryptedData: string): string | null => {
     return decrypted.toString('utf8')
 }
 
-const getUserEmailFromGaladrimCookie = async ({ request }: HttpContextContract) => {
+const getUserEmailFromGaladrimCookie = async ({ request }: HttpContext) => {
     const emailCookie: string | null = request.cookiesList()['email-token']
 
     if (!emailCookie) return null
@@ -98,12 +98,12 @@ const createUserFromEmail = async (email: string) => {
         return user
     }
 
-    Logger.error('Error while creating user from email (forest responded non 200 code)', res.data)
+    logger.error('Error while creating user from email (forest responded non 200 code)', res.data)
 
     return null
 }
 
-export const getUserToAuthenticate = async (ctx: HttpContextContract) => {
+export const getUserToAuthenticate = async (ctx: HttpContext) => {
     const email = await getUserEmailFromGaladrimCookie(ctx)
 
     if (!email) return null

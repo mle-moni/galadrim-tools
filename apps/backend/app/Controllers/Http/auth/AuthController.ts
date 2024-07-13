@@ -1,4 +1,4 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { readNotifications } from '#app/Controllers/Http/auth/readNotifications'
 import { updateNotificationsSettings } from '#app/Controllers/Http/auth/updateNotificationsSettings'
 import { updateThemeRoute } from '#app/Controllers/Http/auth/updateTheme'
@@ -11,43 +11,43 @@ import { meRoute } from './me'
 import { updateProfileRoute } from './updateProfile'
 
 export default class EventsController {
-    public async login(params: HttpContextContract) {
+    public async login(params: HttpContext) {
         return loginRoute(params)
     }
 
-    public async logout(params: HttpContextContract) {
+    public async logout(params: HttpContext) {
         return logoutRoute(params)
     }
 
-    public async me(params: HttpContextContract) {
+    public async me(params: HttpContext) {
         return meRoute(params)
     }
 
-    public async createApiToken(params: HttpContextContract) {
+    public async createApiToken(params: HttpContext) {
         return createApiTokenRoute(params)
     }
 
-    public async getOtp(params: HttpContextContract) {
+    public async getOtp(params: HttpContext) {
         return getOtpRoute(params)
     }
 
-    public async changePassword(params: HttpContextContract) {
+    public async changePassword(params: HttpContext) {
         return changePasswordRoute(params)
     }
 
-    public async updateProfile(params: HttpContextContract) {
+    public async updateProfile(params: HttpContext) {
         return updateProfileRoute(params)
     }
 
-    public async updateNotificationsSettings(params: HttpContextContract) {
+    public async updateNotificationsSettings(params: HttpContext) {
         return updateNotificationsSettings(params)
     }
 
-    public async readNotifications(params: HttpContextContract) {
+    public async readNotifications(params: HttpContext) {
         return readNotifications(params)
     }
 
-    public async updateTheme(params: HttpContextContract) {
+    public async updateTheme(params: HttpContext) {
         return updateThemeRoute(params)
     }
 }

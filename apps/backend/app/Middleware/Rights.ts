@@ -1,11 +1,11 @@
 import { AllRights, hasRights } from '@galadrim-tools/shared'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import ForbiddenException from '../Exceptions/ForbiddenException'
 import UnauthorizedException from '../Exceptions/UnauthorizedException'
 
 // check if users has rights, throw if not
 export default class RightsMiddleware {
-    protected async hasRights(auth: HttpContextContract['auth'], rightsWanted: AllRights[]) {
+    protected async hasRights(auth: HttpContext['auth'], rightsWanted: AllRights[]) {
         if (auth.user === undefined) {
             throw new UnauthorizedException()
         }
@@ -16,7 +16,7 @@ export default class RightsMiddleware {
     }
 
     public async handle(
-        { auth }: HttpContextContract,
+        { auth }: HttpContext,
         next: () => Promise<void>,
         rightsWanted: AllRights[]
     ) {

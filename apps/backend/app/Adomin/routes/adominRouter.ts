@@ -1,4 +1,4 @@
-import Route from '@ioc:Adonis/Core/Route'
+import router from '@adonisjs/core/services/router'
 import { adominLogin } from '#app/Adomin/routes/adominLogin'
 import { adominLogout } from './adominLogout'
 import { getAdominConfig } from './getAdominConfig'
@@ -10,24 +10,24 @@ import { deleteModel } from './models/write/deleteModel'
 import { updateModel } from './models/write/updateModel'
 import { getStatConfigRoute } from './stats/getStatConfig'
 
-Route.group(() => {
-    Route.group(() => {
-        Route.get('config/stats/:view', getStatConfigRoute)
+router.group(() => {
+    router.group(() => {
+        router.get('config/stats/:view', getStatConfigRoute)
 
-        Route.get('config', getAdominConfig)
-        Route.get('config/:model', getModelConfigRoute)
+        router.get('config', getAdominConfig)
+        router.get('config/:model', getModelConfigRoute)
 
-        Route.post('crud/export/:model', modelList)
-        Route.get('crud/:model', modelList)
-        Route.get('crud/:model/:id', showModel)
-        Route.put('crud/:model/:id', updateModel)
-        Route.delete('crud/:model/:id', deleteModel)
-        Route.post('crud/:model', createModel)
-        Route.post('logout', adominLogout)
+        router.post('crud/export/:model', modelList)
+        router.get('crud/:model', modelList)
+        router.get('crud/:model/:id', showModel)
+        router.put('crud/:model/:id', updateModel)
+        router.delete('crud/:model/:id', deleteModel)
+        router.post('crud/:model', createModel)
+        router.post('logout', adominLogout)
     }).middleware('auth')
     // ! please restrict this route group for only admins of your app
 
-    Route.post('login', adominLogin)
+    router.post('login', adominLogin)
 }).prefix('adomin/api')
 
 // if you want to host your backoffice on the same domain as your backend:

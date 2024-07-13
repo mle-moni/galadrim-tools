@@ -1,7 +1,8 @@
-import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, manyToMany } from '@adonisjs/lucid/orm'
 import BreakActivity from '#app/Models/BreakActivity'
 import BreakTime from '#app/Models/BreakTime'
 import { DateTime } from 'luxon'
+import { ManyToMany } from "@adonisjs/lucid/types/relations";
 
 export default class BreakVote extends BaseModel {
     @column({ isPrimary: true })

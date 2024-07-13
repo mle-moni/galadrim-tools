@@ -1,10 +1,10 @@
-import Database from '@ioc:Adonis/Lucid/Database'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import db from '@adonisjs/lucid/services/db'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const getEventsAmountPerGaladrimeurs = async ({ request }: HttpContextContract) => {
+export const getEventsAmountPerGaladrimeurs = async ({ request }: HttpContext) => {
     const { days } = request.qs()
     const filterQuery = days ? 'WHERE events.created_at > DATE_SUB(NOW(), INTERVAL ? DAY)' : ''
-    const result = await Database.rawQuery(
+    const result = await db.rawQuery(
         `
     SELECT
       count(events.id) as amount,

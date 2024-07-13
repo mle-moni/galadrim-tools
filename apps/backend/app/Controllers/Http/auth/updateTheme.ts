@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Theme from '#app/Models/Theme'
 
 const colorRegex = /^#[0-9a-f]{6}$/i
@@ -14,7 +14,7 @@ const updateThemeSchema = schema.create({
     otherEventsText: schema.string([rules.trim(), rules.regex(colorRegex)]),
 })
 
-export const updateThemeRoute = async ({ request, auth }: HttpContextContract) => {
+export const updateThemeRoute = async ({ request, auth }: HttpContext) => {
     const user = auth.user!
     const newTheme = await request.validate({
         schema: updateThemeSchema,

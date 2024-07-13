@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 
-export type AdominRouteOverrideFunction = (ctx: HttpContextContract) => Promise<unknown>
+export type AdominRouteOverrideFunction = (ctx: HttpContext) => Promise<unknown>
 
 export type AdominRouteOverrides = {
     create?: AdominRouteOverrideFunction
@@ -16,7 +16,7 @@ export interface AdominRightsCheckResult {
 }
 
 export type AdominRightsCheckFunction = (
-    ctx: HttpContextContract
+    ctx: HttpContext
 ) => Promise<AdominRightsCheckResult>
 
 export type AdominRightsCheckConfig = {
@@ -31,7 +31,7 @@ export type ComputRightsCheckResult = 'OK' | 'STOP'
 
 /** when computeRightsCheck returns **STOP**, caller should stop execution too */
 export const computeRightsCheck = async (
-    ctx: HttpContextContract,
+    ctx: HttpContext,
     fn?: AdominRightsCheckFunction,
     sendBadRequestWithErrorMessage = true
 ): Promise<ComputRightsCheckResult> => {

@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import BreakActivity from '#app/Models/BreakActivity'
 
-export const breakActivitiesIndex = async ({}: HttpContextContract) => {
+export const breakActivitiesIndex = async ({}: HttpContext) => {
     return BreakActivity.all()
 }

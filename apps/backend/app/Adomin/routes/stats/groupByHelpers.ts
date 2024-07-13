@@ -1,8 +1,8 @@
-import Env from '@ioc:Adonis/Core/Env'
-import Database from '@ioc:Adonis/Lucid/Database'
+import env from '#start/env'
+import db from '@adonisjs/lucid/services/db'
 
 const getDayOfWeekSql = (column: string) => {
-    const dbType = Env.get('DB_CONNECTION')
+    const dbType = env.get('DB_CONNECTION')
     switch (dbType) {
         case 'mysql':
             return `DAYOFWEEK(${column}) - 1`
@@ -22,8 +22,8 @@ const DAY_LABELS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
 export async function groupByDayOfWeek(table: string, column: string): Promise<[string, number][]> {
     const dayOfWeekSql = getDayOfWeekSql(column)
 
-    const results = await Database.from(table)
-        .select(Database.raw(`${dayOfWeekSql} as day_of_week`))
+    const results = await db.from(table)
+        .select(db.raw(`${dayOfWeekSql} as day_of_week`))
         .count('* as count')
         .groupBy('day_of_week')
         .orderBy('day_of_week', 'asc')
@@ -41,7 +41,7 @@ export async function groupByDayOfWeek(table: string, column: string): Promise<[
 }
 
 const getDateSql = (column: string) => {
-    const dbType = Env.get('DB_CONNECTION')
+    const dbType = env.get('DB_CONNECTION')
     switch (dbType) {
         case 'mysql':
             return `DATE(${column})`
@@ -58,8 +58,8 @@ const getDateSql = (column: string) => {
 
 export async function groupByDate(table: string, column: string): Promise<[string, number][]> {
     const dateSql = getDateSql(column)
-    const results = await Database.from(table)
-        .select(Database.raw(`${dateSql} as date`))
+    const results = await db.from(table)
+        .select(db.raw(`${dateSql} as date`))
         .count('* as count')
         .groupBy('date')
         .orderBy('date', 'asc')
@@ -74,7 +74,7 @@ export async function groupByDate(table: string, column: string): Promise<[strin
 }
 
 const getHourSql = (column: string) => {
-    const dbType = Env.get('DB_CONNECTION')
+    const dbType = env.get('DB_CONNECTION')
     switch (dbType) {
         case 'mysql':
             return `HOUR(CONVERT_TZ(${column}, 'UTC', 'Europe/Paris'))`
@@ -100,8 +100,8 @@ export async function groupByHour(
 ): Promise<[string, number][]> {
     const hourSql = getHourSql(column)
 
-    const results = await Database.from(table)
-        .select(Database.raw(`${hourSql} as hour`))
+    const results = await db.from(table)
+        .select(db.raw(`${hourSql} as hour`))
         .count('* as count')
         .groupBy('hour')
         .orderBy('hour', 'asc')
@@ -128,8 +128,8 @@ export async function groupByHour(
 }
 
 export const groupByYear = async (table: string, column: string): Promise<[string, number][]> => {
-    const results = await Database.from(table)
-        .select(Database.raw(`YEAR(${column}) as year`))
+    const results = await db.from(table)
+        .select(db.raw(`YEAR(${column}) as year`))
         .count('* as count')
         .groupBy('year')
         .orderBy('year', 'asc')
@@ -141,8 +141,8 @@ export const groupByStringField = async (
     table: string,
     column: string
 ): Promise<[string, number][]> => {
-    const results = await Database.from(table)
-        .select(Database.raw(`${column} as string_field`))
+    const results = await db.from(table)
+        .select(db.raw(`${column} as string_field`))
         .count('* as count')
         .groupBy('string_field')
         .orderBy('string_field', 'asc')
@@ -166,11 +166,11 @@ const MONTH_LABELS = [
 ]
 
 export const groupByMonth = async (table: string, column: string): Promise<[string, number][]> => {
-    const dbType = Env.get('DB_CONNECTION')
+    const dbType = env.get('DB_CONNECTION')
     const monthSql = dbType === 'pg' ? `EXTRACT(MONTH FROM ${column})` : `MONTH(${column})`
 
-    const results = await Database.from(table)
-        .select(Database.raw(`${monthSql} as month`))
+    const results = await db.from(table)
+        .select(db.raw(`${monthSql} as month`))
         .count('* as count')
         .groupBy('month')
         .orderBy('month', 'asc')

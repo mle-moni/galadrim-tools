@@ -1,4 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 
 type WealthRanking = {
     user_id: number
@@ -9,7 +9,7 @@ type WealthRanking = {
 }
 
 export const generateWealthRanking = async () => {
-    const [wealthRankings]: [WealthRanking[]] = await Database.rawQuery(
+    const [wealthRankings]: [WealthRanking[]] = await db.rawQuery(
         `
         SELECT
         rc.user_id,

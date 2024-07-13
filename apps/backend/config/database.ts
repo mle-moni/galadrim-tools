@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
+import env from '#start/env'
+import { DatabaseConfig } from "@adonisjs/lucid/database";
 
 const databaseConfig: DatabaseConfig = {
     /*
@@ -19,7 +19,7 @@ const databaseConfig: DatabaseConfig = {
   | file.
   |
   */
-    connection: Env.get('DB_CONNECTION'),
+    connection: env.get('DB_CONNECTION'),
 
     connections: {
         /*
@@ -36,11 +36,11 @@ const databaseConfig: DatabaseConfig = {
         mysql: {
             client: 'mysql',
             connection: {
-                host: Env.get('MYSQL_HOST'),
-                port: Env.get('MYSQL_PORT'),
-                user: Env.get('MYSQL_USER'),
-                password: Env.get('MYSQL_PASSWORD', ''),
-                database: Env.get('MYSQL_DB_NAME'),
+                host: env.get('MYSQL_HOST'),
+                port: env.get('MYSQL_PORT'),
+                user: env.get('MYSQL_USER'),
+                password: env.get('MYSQL_PASSWORD', ''),
+                database: env.get('MYSQL_DB_NAME'),
                 charset: 'utf8mb4',
             },
             migrations: {

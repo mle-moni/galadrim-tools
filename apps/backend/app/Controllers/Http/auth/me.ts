@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const meRoute = async ({ auth, response }: HttpContextContract) => {
+export const meRoute = async ({ auth, response }: HttpContext) => {
     const user = auth.user
 
     if (user === undefined) {

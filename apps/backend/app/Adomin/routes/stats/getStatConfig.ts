@@ -1,4 +1,4 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { StatsViewConfig } from '#app/Adomin/createStatsViewConfig'
 import { AdominViewConfig } from '../../adominConfig'
 import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG'
@@ -34,7 +34,7 @@ const getFrontendStatConfig = async (config: StatsViewConfig) => {
     return Promise.all(promises)
 }
 
-export const getStatConfigRoute = async (ctx: HttpContextContract) => {
+export const getStatConfigRoute = async (ctx: HttpContext) => {
     const { params, response } = ctx
     const viewString = params.view
 

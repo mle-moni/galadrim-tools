@@ -6,9 +6,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-import { LucidModel, ModelRelations, NamingStrategyContract } from '@ioc:Adonis/Lucid/Orm'
 import { string } from '@poppinss/utils/build/helpers'
+import { LucidModel } from " @adonisjs/lucid/types/model";
+import { ModelRelations } from "@adonisjs/lucid/types/relations";
+import { NamingStrategyContract } from " @adonisjs/lucid/types/model";
 
 /**
  * Uses snake case as the naming strategy for different model properties

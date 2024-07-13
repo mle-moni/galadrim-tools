@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, validator } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { schema, validator } from '@adonisjs/validator'
 import { ADOMIN_CONFIG } from '#app/Adomin/config/ADOMIN_CONFIG'
 import { getModelConfig } from './getModelConfig'
 
@@ -18,7 +18,7 @@ export const validateModelName = (data: unknown) => {
     return validator.validate({ schema: modelNameSchema, data })
 }
 
-export const getValidatedModelConfig = async (params: HttpContextContract['params']) => {
+export const getValidatedModelConfig = async (params: HttpContext['params']) => {
     const { model } = await validateModelName(params)
 
     return getModelConfig(model)

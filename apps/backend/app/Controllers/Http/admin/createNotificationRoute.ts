@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import User from '#app/Models/User'
 import {
     NotificationParams,
@@ -14,7 +14,7 @@ const createNotificationSchema = schema.create({
     link: schema.string.optional([rules.minLength(2), rules.maxLength(800)]),
 })
 
-export const createNotificationRoute = async ({ request, auth }: HttpContextContract) => {
+export const createNotificationRoute = async ({ request, auth }: HttpContext) => {
     const user = auth.user!
     const { link, text, title, userIds } = await request.validate({
         schema: createNotificationSchema,

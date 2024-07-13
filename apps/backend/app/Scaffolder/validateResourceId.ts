@@ -1,4 +1,4 @@
-import { schema, validator } from '@ioc:Adonis/Core/Validator'
+import { schema, validator } from '@adonisjs/validator'
 
 const resourceIdSchema = schema.create({ id: schema.number() })
 

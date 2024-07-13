@@ -1,5 +1,5 @@
 import { generateRights, RIGHTS } from '@galadrim-tools/shared'
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import BaseSeeder from '@adonisjs/lucid/seeders'
 import User from '../../app/Models/User'
 
 export default class UserSeeder extends BaseSeeder {

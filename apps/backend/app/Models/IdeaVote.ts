@@ -1,5 +1,5 @@
 import { IIdeaNote } from '@galadrim-tools/shared'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export default class IdeaVote extends BaseModel {

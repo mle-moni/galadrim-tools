@@ -1,9 +1,9 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { computeRightsCheck } from '../../adominRoutesOverridesAndRights'
 import { validateResourceId } from '../../validateResourceId'
 import { getValidatedModelConfig } from '../validateModelName'
 
-export const deleteModel = async (ctx: HttpContextContract) => {
+export const deleteModel = async (ctx: HttpContext) => {
     const { params, response } = ctx
     const { id } = await validateResourceId(params)
     const modelConfig = await getValidatedModelConfig(params)

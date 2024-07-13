@@ -1,6 +1,6 @@
 import { Attachment } from '@ioc:Adonis/Addons/AttachmentLite'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import Restaurant from '#app/Models/Restaurant'
 import RestaurantTag from '#app/Models/RestaurantTag'
 import { createNotificationForUsers } from '#app/Services/notifications'
@@ -17,7 +17,7 @@ const StoreValidationSchema = schema.create({
     averagePrice: schema.number.optional(),
 })
 
-export const validateRestaurantsParams = async (request: HttpContextContract['request']) => {
+export const validateRestaurantsParams = async (request: HttpContext['request']) => {
     return request.validate({
         schema: StoreValidationSchema,
         messages: {
@@ -40,7 +40,7 @@ export const validateRestaurantsParams = async (request: HttpContextContract['re
     })
 }
 
-export const storeRoute = async ({ request, auth }: HttpContextContract) => {
+export const storeRoute = async ({ request, auth }: HttpContext) => {
     const user = auth.user!
     const { name, description, lat, lng, tags, image, averagePrice, websiteLink } =
         await validateRestaurantsParams(request)

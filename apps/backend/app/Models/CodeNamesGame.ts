@@ -1,7 +1,8 @@
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import CodeNamesGameRound from '#app/Models/CodeNamesGameRound'
 import { DateTime } from 'luxon'
+import { HasMany } from "@adonisjs/lucid/types/relations";
 
 export default class CodeNamesGame extends BaseModel {
     @column({ isPrimary: true })

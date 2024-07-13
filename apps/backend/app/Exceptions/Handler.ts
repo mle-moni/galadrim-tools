@@ -12,12 +12,11 @@
 | properly.
 |
 */
+import logger from '@adonisjs/core/services/logger'
+import { ExceptionHandler } from "@adonisjs/core/http";
 
-import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
-import Logger from '@ioc:Adonis/Core/Logger'
-
-export default class ExceptionHandler extends HttpExceptionHandler {
+export default class ExceptionHandler extends ExceptionHandler {
     constructor() {
-        super(Logger)
+        super(logger)
     }
 }

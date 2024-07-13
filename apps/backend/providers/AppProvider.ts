@@ -1,8 +1,8 @@
-import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import { CamelCaseNamingStrategy } from '../contracts/CamelCaseNamingStrategy'
+import { ApplicationService } from "@adonisjs/core/types";
 
 export default class AppProvider {
-    constructor(protected app: ApplicationContract) {}
+    constructor(protected app: ApplicationService) {}
 
     public register() {
         // Register your own bindings

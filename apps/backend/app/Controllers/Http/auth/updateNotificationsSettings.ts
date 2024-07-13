@@ -1,11 +1,11 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { schema } from '@adonisjs/validator'
 
 const notificationsSettingsSchema = schema.create({
     notificationsSettings: schema.number(),
 })
 
-export const updateNotificationsSettings = async ({ auth, request }: HttpContextContract) => {
+export const updateNotificationsSettings = async ({ auth, request }: HttpContext) => {
     const user = auth.user!
 
     const { notificationsSettings } = await request.validate({

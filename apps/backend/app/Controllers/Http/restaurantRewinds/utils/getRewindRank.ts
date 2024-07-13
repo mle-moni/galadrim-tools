@@ -1,4 +1,4 @@
-import Database from '@ioc:Adonis/Lucid/Database'
+import db from '@adonisjs/lucid/services/db'
 
 interface UserRankResult {
     userRank: number | null
@@ -7,7 +7,7 @@ interface UserRankResult {
 
 export const getRewindRank = async (userId: number): Promise<UserRankResult> => {
     // Requête pour obtenir le user_rank de l'utilisateur spécifique
-    const userRankData = await Database.rawQuery(
+    const userRankData = await db.rawQuery(
         `
         WITH UserRanks AS (
             SELECT
@@ -35,7 +35,7 @@ export const getRewindRank = async (userId: number): Promise<UserRankResult> => 
         userRankData.length > 0 && userRankData[0].length > 0 ? userRankData[0][0].user_rank : null
 
     // Requête pour obtenir le rank_max en se basant sur le nombre d'utilisateurs ayant au moins un choix de restaurant
-    const rankMaxData = await Database.from('restaurant_choices')
+    const rankMaxData = await db.from('restaurant_choices')
         .countDistinct('user_id as user_count')
         .first()
 

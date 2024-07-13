@@ -1,4 +1,4 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { string } from '@poppinss/utils/build/helpers'
 import { AdominViewConfig } from '../../adominConfig'
 import { ADOMIN_CONFIG } from '../../config/ADOMIN_CONFIG'
@@ -39,7 +39,7 @@ export const getModelConfig = (modelName: string) => {
     return foundConfig
 }
 
-export const getModelConfigRoute = async (ctx: HttpContextContract) => {
+export const getModelConfigRoute = async (ctx: HttpContext) => {
     const { params, response } = ctx
     const modelString = params.model
 

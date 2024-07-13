@@ -5,9 +5,9 @@
  * file.
  */
 
-import Application from '@ioc:Adonis/Core/Application'
+import app from '@adonisjs/core/services/app'
 import { DriveConfig } from '@ioc:Adonis/Core/Drive'
-import Env from '@ioc:Adonis/Core/Env'
+import env from '#start/env'
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ const driveConfig: DriveConfig = {
   | the `DRIVE_DISK` environment variable.
   |
   */
-    disk: Env.get('DRIVE_DISK'),
+    disk: env.get('DRIVE_DISK'),
 
     disks: {
         /*
@@ -53,7 +53,7 @@ const driveConfig: DriveConfig = {
       | files.
       |
       */
-            root: Application.tmpPath('uploads'),
+            root: app.tmpPath('uploads'),
 
             /*
       |--------------------------------------------------------------------------

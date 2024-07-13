@@ -1,10 +1,10 @@
 import { hasRights } from '@galadrim-tools/shared'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import Event from '#app/Models/Event'
 import Ws from '#app/Services/Ws'
 import { validateEventsParams } from './storeEvent'
 
-export const updateRoute = async ({ params, request, auth, response }: HttpContextContract) => {
+export const updateRoute = async ({ params, request, auth, response }: HttpContext) => {
     const event = await Event.findOrFail(params.id)
     const user = auth.user!
     if (event.userId !== user.id && !hasRights(user.rights, ['EVENT_ADMIN'])) {

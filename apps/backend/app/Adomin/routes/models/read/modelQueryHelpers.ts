@@ -1,16 +1,16 @@
-import Env from '@ioc:Adonis/Core/Env'
-import { string } from '@ioc:Adonis/Core/Helpers'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import env from '#start/env'
+import { schema } from '@adonisjs/validator'
 import {
-    LucidModel,
-    LucidRow,
-    ModelQueryBuilderContract,
     RelationSubQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+} from '@adonisjs/lucid/orm'
 import { ColumnConfig } from '#app/Adomin/createModelViewConfig'
 import { AdominFieldConfig } from '#app/Adomin/fields.types'
 import { getSqlColumnToUse } from '../getModelConfig'
 import { EXPORT_TYPES } from './downloadExportFile'
+import { string } from "@adonisjs/core/helpers/string";
+import { LucidModel } from " @adonisjs/lucid/types/model";
+import { LucidRow } from " @adonisjs/lucid/types/model";
+import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";
 
 export const paginationSchema = schema.create({
     pageIndex: schema.number(),
@@ -190,7 +190,7 @@ const whereClause = (
         return
     }
 
-    const isPostgres = Env.get('DB_CONNECTION') === 'pg'
+    const isPostgres = env.get('DB_CONNECTION') === 'pg'
 
     if (exact && isPostgres) {
         const method = type === 'or' ? 'orWhereRaw' : 'andWhereRaw'

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
+import BaseSeeder from '@adonisjs/lucid/seeders'
 import Idea from '../../app/Models/Idea'
 import IdeaComment from '../../app/Models/IdeaComment'
 import IdeaVote from '../../app/Models/IdeaVote'

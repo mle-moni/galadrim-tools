@@ -1,9 +1,9 @@
-import Application from '@ioc:Adonis/Core/Application'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import app from '@adonisjs/core/services/app'
+import type { HttpContext } from '@adonisjs/core/http'
 import { createReadStream, statSync } from 'node:fs'
 
-export const showAtopLogs = async ({ params, response }: HttpContextContract) => {
-    const directory = Application.tmpPath('uploads/atop')
+export const showAtopLogs = async ({ params, response }: HttpContext) => {
+    const directory = app.tmpPath('uploads/atop')
     const filePath = `${directory}/${params.id}`
 
     try {

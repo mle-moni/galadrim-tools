@@ -1,4 +1,4 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { ITag } from 'libs/shared/dist'
 import { DateTime } from 'luxon'
 

@@ -7,19 +7,16 @@ import {
     IUserData,
 } from '@galadrim-tools/shared'
 import { attachment, AttachmentContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import Env from '@ioc:Adonis/Core/Env'
-import Hash from '@ioc:Adonis/Core/Hash'
+import env from '#start/env'
+import hash from '@adonisjs/core/services/hash'
 import {
     BaseModel,
     beforeFind,
     beforeSave,
-    BelongsTo,
     belongsTo,
     column,
-    hasMany,
-    HasMany,
-    ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+    hasMany
+} from '@adonisjs/lucid/orm'
 import Notification from '#app/Models/Notification'
 import RestaurantNote from '#app/Models/RestaurantNote'
 import Theme from '#app/Models/Theme'
@@ -28,6 +25,9 @@ import { DateTime } from 'luxon'
 import { nanoid } from 'nanoid'
 import { URL } from 'url'
 import RestaurantChoice from './RestaurantChoice'
+import { BelongsTo } from "@adonisjs/lucid/types/relations";
+import { HasMany } from "@adonisjs/lucid/types/relations";
+import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";
 
 export default class User extends BaseModel {
     @column({ isPrimary: true })
@@ -95,13 +95,13 @@ export default class User extends BaseModel {
     @beforeSave()
     public static async hashPassword(user: User) {
         if (user.$dirty.password) {
-            user.password = await Hash.make(user.password)
+            user.password = await hash.make(user.password)
         }
     }
 
     get imageSrc() {
         if (this.image) {
-            const backendUrl = Env.get('BACKEND_URL')
+            const backendUrl = env.get('BACKEND_URL')
             const joinedPath = new URL(this.image.url, backendUrl).toString()
             return joinedPath
         }

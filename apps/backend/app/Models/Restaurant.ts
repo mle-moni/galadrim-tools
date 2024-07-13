@@ -3,18 +3,18 @@ import {
     BaseModel,
     beforeFetch,
     column,
-    HasMany,
     hasMany,
-    ManyToMany,
-    manyToMany,
-    ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+    manyToMany
+} from '@adonisjs/lucid/orm'
 import RestaurantReview from '#app/Models/RestaurantReview'
 import { formatDateToNumber } from '#app/Services/Date'
 import { DateTime } from 'luxon'
 import RestaurantChoice from './RestaurantChoice'
 import RestaurantNote from './RestaurantNote'
 import Tag from './Tag'
+import { HasMany } from "@adonisjs/lucid/types/relations";
+import { ManyToMany } from "@adonisjs/lucid/types/relations";
+import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";
 
 export default class Restaurant extends BaseModel {
     @column({ isPrimary: true })

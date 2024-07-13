@@ -2,17 +2,17 @@ import { IIdea } from '@galadrim-tools/shared'
 import {
     BaseModel,
     beforeFetch,
-    BelongsTo,
     belongsTo,
     column,
-    HasMany,
-    hasMany,
-    ModelQueryBuilderContract,
-} from '@ioc:Adonis/Lucid/Orm'
+    hasMany
+} from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 import IdeaVote from '../../app/Models/IdeaVote'
 import IdeaComment from './IdeaComment'
 import User from './User'
+import { BelongsTo } from "@adonisjs/lucid/types/relations";
+import { HasMany } from "@adonisjs/lucid/types/relations";
+import { ModelQueryBuilderContract } from " @adonisjs/lucid/types/model";
 
 export default class Idea extends BaseModel {
     @column({ isPrimary: true })

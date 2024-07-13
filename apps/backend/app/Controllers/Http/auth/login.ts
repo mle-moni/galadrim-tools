@@ -1,5 +1,5 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import User from '#app/Models/User'
 
 const loginSchema = schema.create({
@@ -7,7 +7,7 @@ const loginSchema = schema.create({
     password: schema.string([rules.trim()]),
 })
 
-export const loginRoute = async ({ request, auth }: HttpContextContract) => {
+export const loginRoute = async ({ request, auth }: HttpContext) => {
     const { email, password } = await request.validate({
         schema: loginSchema,
     })

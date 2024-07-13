@@ -1,8 +1,8 @@
 import { DEFAULT_NOTIFICATION_SETTINGS } from '@galadrim-tools/shared'
-import Mail from '@ioc:Adonis/Addons/Mail'
-import Env from '@ioc:Adonis/Core/Env'
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { rules, schema } from '@ioc:Adonis/Core/Validator'
+import mail from '@adonisjs/mail/services/main'
+import env from '#start/env'
+import { HttpContext } from '@adonisjs/core/http'
+import { rules, schema } from '@adonisjs/validator'
 import User from '#app/Models/User'
 import { nanoid } from 'nanoid'
 
@@ -15,7 +15,7 @@ const createUserSchema = schema.create({
     username: schema.string([rules.trim(), rules.unique({ table: 'users', column: 'username' })]),
 })
 
-export const createUserRoute = async ({ request }: HttpContextContract) => {
+export const createUserRoute = async ({ request }: HttpContext) => {
     const { email, username } = await request.validate({
         schema: createUserSchema,
         messages: {
@@ -39,9 +39,9 @@ export const createUserRoute = async ({ request }: HttpContextContract) => {
             'https://res.cloudinary.com/forest2/image/fetch/f_auto,w_150,h_150/https://forest.galadrim.fr/img/users/0.jpg',
     })
 
-    await Mail.use('mailgun').send((message) => {
+    await mail.use('mailgun').send((message) => {
         message
-            .from(`<noreply@${Env.get('MAILGUN_DOMAIN')}>`)
+            .from(`<noreply@${env.get('MAILGUN_DOMAIN')}>`)
             .to(user.email)
             .subject('Initialisation du mot de passe')
             .htmlView('emails/get_otp', {

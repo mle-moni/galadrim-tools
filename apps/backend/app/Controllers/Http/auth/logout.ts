@@ -1,6 +1,6 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 
-export const logoutRoute = async ({ auth, response }: HttpContextContract) => {
+export const logoutRoute = async ({ auth, response }: HttpContext) => {
     if (!auth.user) {
         return response.badRequest({ error: `Vous n'êtes pas connecté` })
     }

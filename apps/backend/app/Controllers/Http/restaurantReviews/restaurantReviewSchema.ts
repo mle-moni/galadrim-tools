@@ -1,4 +1,4 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@adonisjs/validator'
 
 export const restaurantReviewSchema = schema.create({
     comment: schema.string(),

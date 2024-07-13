@@ -5,8 +5,8 @@
  * file.
  */
 
-import Env from '@ioc:Adonis/Core/Env'
-import { HashConfig } from '@ioc:Adonis/Core/Hash'
+import env from '#start/env'
+import { HashConfig } from "@adonisjs/core/hash";
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +27,7 @@ const hashConfig: HashConfig = {
   | free to change the default value
   |
   */
-    default: Env.get('HASH_DRIVER', 'argon'),
+    default: env.get('HASH_DRIVER', 'argon'),
 
     list: {
         /*

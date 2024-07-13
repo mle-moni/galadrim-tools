@@ -1,24 +1,24 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import { breakTimesIndex } from '#app/Controllers/Http/breakTimes/breakTimesIndex'
 
 export default class BreakTimesController {
-    public async index(ctx: HttpContextContract) {
+    public async index(ctx: HttpContext) {
         return breakTimesIndex(ctx)
     }
 
-    public async store(ctx: HttpContextContract) {
+    public async store(ctx: HttpContext) {
         return ctx.response.notImplemented({ error: 'not implemented' })
     }
 
-    public async show(ctx: HttpContextContract) {
+    public async show(ctx: HttpContext) {
         return ctx.response.notImplemented({ error: 'not implemented' })
     }
 
-    public async updat(ctx: HttpContextContract) {
+    public async updat(ctx: HttpContext) {
         return ctx.response.notImplemented({ error: 'not implemented' })
     }
 
-    public async destro(ctx: HttpContextContract) {
+    public async destro(ctx: HttpContext) {
         return ctx.response.notImplemented({ error: 'not implemented' })
     }
 }

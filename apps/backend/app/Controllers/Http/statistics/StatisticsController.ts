@@ -1,16 +1,16 @@
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContext } from '@adonisjs/core/http'
 import { getEventsAmountPerGaladrimeurs } from './getEventsAmountPerGaladrimeurs'
 import { getGaladrimeurFavoriteRooms } from './getGaladrimeurFavoriteRooms'
 import { getTimePerGaladrimeurs } from './getTimePerGaladrimeurs'
 
 export default class StatisticsController {
-    public async favoriteRoom(params: HttpContextContract) {
+    public async favoriteRoom(params: HttpContext) {
         return getGaladrimeurFavoriteRooms(params)
     }
-    public async time(params: HttpContextContract) {
+    public async time(params: HttpContext) {
         return getTimePerGaladrimeurs(params)
     }
-    public async amount(params: HttpContextContract) {
+    public async amount(params: HttpContext) {
         return getEventsAmountPerGaladrimeurs(params)
     }
 }

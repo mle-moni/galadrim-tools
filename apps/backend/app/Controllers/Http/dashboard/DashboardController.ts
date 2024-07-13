@@ -1,9 +1,9 @@
 import { hasRights } from '@galadrim-tools/shared'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import { getDashboardInfos } from './getDashboardInfos'
 
 export default class DashboardController {
-    public index({ auth, response }: HttpContextContract) {
+    public index({ auth, response }: HttpContext) {
         const user = auth.user!
 
         if (!hasRights(user.rights, ['DASHBOARD_ADMIN'])) {

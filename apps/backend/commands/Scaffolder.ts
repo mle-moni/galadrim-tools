@@ -1,11 +1,12 @@
-import { BaseCommand, args } from '@adonisjs/core/build/standalone'
-import { string } from '@ioc:Adonis/Core/Helpers'
-import View from '@ioc:Adonis/Core/View'
-import { BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import edge from 'edge.js'
+import { BaseModel } from '@adonisjs/lucid/orm'
 import { filterUndefinedOrNullValues } from '#app/Scaffolder/array'
 import { FieldToScaffold, getFieldValidationRules } from '#app/Scaffolder/scaffolder'
 
 import fs from 'fs/promises'
+import { BaseCommand } from "@adonisjs/core/ace";
+import { args } from "@adonisjs/core/ace";
+import { string } from "@adonisjs/core/helpers/string";
 
 const ROOT_PATH = '..'
 const VIEWS_PATH = `scaffolder`
@@ -123,7 +124,7 @@ export default class Scaffolder extends BaseCommand {
     private async createController() {
         const filePath = `${this.folderPath}/${this.controllerFileName}.ts`
 
-        const text = await View.render(`${VIEWS_PATH}/controller`, { crudNames: this.crudNames })
+        const text = await edge.render(`${VIEWS_PATH}/controller`, { crudNames: this.crudNames })
 
         await fs.mkdir(this.folderPath, { recursive: true })
         await fs.writeFile(filePath, text, { encoding: 'utf-8', mode: FILE_RIGHTS })
@@ -136,7 +137,7 @@ export default class Scaffolder extends BaseCommand {
         const filePath = `${this.folderPath}/${fileName}.ts`
         const dtoFields = fieldsToValidate.map((field) => field.name).join(',\n    ')
 
-        const text = await View.render(`${VIEWS_PATH}/${crudName}`, {
+        const text = await edge.render(`${VIEWS_PATH}/${crudName}`, {
             fileName,
             model: this.modelName,
             modelCamelCaseName: this.modelCamelCaseName,
@@ -158,7 +159,7 @@ export default class Scaffolder extends BaseCommand {
 
         if (fieldsToValidate.length > 0) fields += ','
 
-        const text = await View.render(`${VIEWS_PATH}/schema`, {
+        const text = await edge.render(`${VIEWS_PATH}/schema`, {
             fileName,
             fields,
         })
@@ -182,7 +183,7 @@ export default class Scaffolder extends BaseCommand {
 
     private async createAuthApiFile(fileName: string) {
         const filePath = `app/Controllers/Http/auth/${fileName}.ts`
-        const text = await View.render(`${VIEWS_PATH}/auth/${fileName}`)
+        const text = await edge.render(`${VIEWS_PATH}/auth/${fileName}`)
 
         await fs.writeFile(filePath, text, { encoding: 'utf-8', mode: FILE_RIGHTS })
         this.logger.action('create').succeeded(filePath)

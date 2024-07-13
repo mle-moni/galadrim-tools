@@ -1,4 +1,4 @@
-import { BaseCommand } from '@adonisjs/core/build/standalone'
+import { BaseCommand } from "@adonisjs/core/ace";
 
 export default class GenerateRewind extends BaseCommand {
     /**

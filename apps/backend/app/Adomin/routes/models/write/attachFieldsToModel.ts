@@ -1,7 +1,7 @@
 import { Attachment, AttachmentConstructorContract } from '@ioc:Adonis/Addons/AttachmentLite'
-import { LucidRow } from '@ioc:Adonis/Lucid/Orm'
 import { ColumnConfig, PASSWORD_SERIALIZED_FORM } from '#app/Adomin/createModelViewConfig'
 import { getSqlColumnToUse } from '../getModelConfig'
+import { LucidRow } from " @adonisjs/lucid/types/model";
 
 type MultipartFileContract = Parameters<AttachmentConstructorContract['fromFile']>[0]
 

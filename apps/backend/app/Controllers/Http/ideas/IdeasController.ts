@@ -1,4 +1,4 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContext } from '@adonisjs/core/http'
 import { createOrUpdateVoteRoute } from '#app/Controllers/Http/ideas/createOrUpdateVote'
 import { createCommentRoute } from '#app/Controllers/Http/ideas/createComment'
 import { destroyIdeaRoute } from '#app/Controllers/Http/ideas/destroyIdea'
@@ -8,7 +8,7 @@ import { updateIdeaRoute } from '#app/Controllers/Http/ideas/updateIdea'
 import Idea from '#app/Models/Idea'
 
 export default class IdeasController {
-    public async index({ auth }: HttpContextContract) {
+    public async index({ auth }: HttpContext) {
         const user = auth.user!
 
         const ideas = await Idea.all()
@@ -17,27 +17,27 @@ export default class IdeasController {
         return data
     }
 
-    public async store(params: HttpContextContract) {
+    public async store(params: HttpContext) {
         return storeIdeaRoute(params)
     }
 
-    public async show(params: HttpContextContract) {
+    public async show(params: HttpContext) {
         return showIdeaRoute(params)
     }
 
-    public async update(params: HttpContextContract) {
+    public async update(params: HttpContext) {
         return updateIdeaRoute(params)
     }
 
-    public async destroy(params: HttpContextContract) {
+    public async destroy(params: HttpContext) {
         return destroyIdeaRoute(params)
     }
 
-    public async createOrUpdateVote(params: HttpContextContract) {
+    public async createOrUpdateVote(params: HttpContext) {
         return createOrUpdateVoteRoute(params)
     }
 
-    public async createComment(params: HttpContextContract) {
+    public async createComment(params: HttpContext) {
         return createCommentRoute(params)
     }
 }
