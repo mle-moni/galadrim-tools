@@ -22,7 +22,7 @@ const updateRestaurantScalars = async (restaurant: Restaurant, input: Restaurant
   restaurant.averagePrice = averagePrice ?? null
 
   if (image) {
-    restaurant.image = imageAttachmentFromFile(image, 'restaurant')
+    restaurant.image = await imageAttachmentFromFile(image, 'restaurant')
   }
 
   await restaurant.save()

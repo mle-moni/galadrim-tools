@@ -8,9 +8,6 @@ export interface ITag {
 export interface IImage {
     url: string
     name: string
-    extname: 'png' | 'jpg' | 'jpeg'
-    size: number
-    mimeType: 'image/png' | 'image/jpeg'
 }
 
 export interface IRestaurant {
@@ -56,10 +53,10 @@ export interface IChoice {
 }
 
 const REWIND_ANIMALS = ['GAZELLE', 'BLAIREAU', 'PARESSEUX', 'MICROBE'] as const
-export type RewindAnimal = typeof REWIND_ANIMALS[number]
+export type RewindAnimal = (typeof REWIND_ANIMALS)[number]
 
 const REWIND_ADJECTIVES = ['RICHE', 'MOYEN', 'PAUVRE', 'INSIGNIFIANT'] as const
-export type RewindAdjective = typeof REWIND_ADJECTIVES[number]
+export type RewindAdjective = (typeof REWIND_ADJECTIVES)[number]
 
 export interface IRewind {
     id: number

@@ -1,7 +1,7 @@
 import Tag from '#models/tag'
 import { Ws } from '#services/ws'
 import { HttpContext } from '@adonisjs/core/http'
-import { hasRights } from '@galadrim-tools/shared/'
+import { hasRights } from '@galadrim-tools/shared'
 
 export const destroyRoute = async ({ params, auth, response }: HttpContext) => {
   const tag = await Tag.findOrFail(params.id)

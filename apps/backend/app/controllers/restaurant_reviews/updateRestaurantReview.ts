@@ -19,7 +19,7 @@ export const updateRestaurantReview = async ({ params, request, bouncer }: HttpC
 
   restaurantReview.comment = comment
   if (image) {
-    restaurantReview.image = imageAttachmentFromFile(image, 'restaurantReviews')
+    restaurantReview.image = await imageAttachmentFromFile(image, 'restaurantReviews')
   }
 
   await restaurantReview.save()

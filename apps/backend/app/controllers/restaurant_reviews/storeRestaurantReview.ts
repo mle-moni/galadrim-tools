@@ -20,7 +20,7 @@ export const storeRestaurantReview = async ({ request, auth, params }: HttpConte
     restaurantId,
     userId: user.id,
     comment,
-    image: image ? imageAttachmentFromFile(image, 'restaurantReviews') : null,
+    image: image ? await imageAttachmentFromFile(image, 'restaurantReviews') : null,
   })
 
   Ws.io.to('connectedSockets').emit('createRestaurantReview', restaurantReview.toJSON())

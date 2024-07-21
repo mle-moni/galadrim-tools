@@ -61,7 +61,7 @@ export const storeRoute = async ({ request, auth, response }: HttpContext) => {
     websiteLink,
     averagePrice,
     userId: user.id,
-    image: image ? imageAttachmentFromFile(image, 'restaurant') : undefined,
+    image: image ? await imageAttachmentFromFile(image, 'restaurant') : undefined,
   })
 
   await RestaurantTag.createMany(tags.map((tagId) => ({ restaurantId: restaurant.id, tagId })))

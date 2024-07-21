@@ -20,7 +20,7 @@ export const storeCodeNamesGame = async ({ request }: HttpContext) => {
   const game = await CodeNamesGame.create({
     blueSpyMasterId,
     redSpyMasterId,
-    image: imageAttachmentFromFile(image, 'codeNames'),
+    image: await imageAttachmentFromFile(image, 'codeNames'),
   })
 
   return { message: 'Partie créée', game }

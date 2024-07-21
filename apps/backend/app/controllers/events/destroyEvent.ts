@@ -1,7 +1,7 @@
 import Event from '#models/event'
 import { Ws } from '#services/ws'
 import { HttpContext } from '@adonisjs/core/http'
-import { hasRights } from '@galadrim-tools/shared/'
+import { hasRights } from '@galadrim-tools/shared'
 
 export const destroyRoute = async ({ params, auth, response }: HttpContext) => {
   const event = await Event.findOrFail(params.id)
