@@ -23,8 +23,8 @@ jobs:
             - name: Build shared library
               run: yarn build:shared
 
-            - name: Run tsc in backend
-              run: cd apps/backend && yarn tsc
+            - name: typecheck backend
+              run: cd apps/backend && yarn typecheck
 
-            - name: Run tsc in frontend
-              run: cd apps/frontend && yarn tsc
+            - name: typecheck frontend
+              run: cd apps/frontend && yarn typecheck
