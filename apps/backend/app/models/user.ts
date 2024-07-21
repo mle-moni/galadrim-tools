@@ -1,7 +1,9 @@
+import { ATTACHMENT_COLUMN } from '#services/attachment'
 import { formatDateToNumber } from '#services/date'
 import env from '#start/env'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { DbRememberMeTokensProvider } from '@adonisjs/auth/session'
 import { compose, cuid } from '@adonisjs/core/helpers'
 import hash from '@adonisjs/core/services/hash'
 import { BaseModel, beforeFind, beforeSave, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
@@ -22,8 +24,8 @@ import RestaurantChoice from './restaurant_choice.js'
 import RestaurantNote from './restaurant_note.js'
 import Theme from './theme.js'
 
-const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email'],
+const AuthFinder = withAuthFinder(() => hash.use('argon'), {
+  uids: ['username', 'email'],
   passwordColumnName: 'password',
 })
 
@@ -64,8 +66,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare themeId: number | null
 
-  // @attachment({ folder: 'avatar', preComputeUrl: true })
-  @column()
+  @column(ATTACHMENT_COLUMN)
   declare image: IImage | null
 
   @belongsTo(() => Theme)
@@ -168,4 +169,5 @@ export default class User extends compose(BaseModel, AuthFinder) {
   }
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
+  static rememberMeTokens = DbRememberMeTokensProvider.forModel(User)
 }

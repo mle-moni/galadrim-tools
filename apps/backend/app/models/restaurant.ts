@@ -1,3 +1,4 @@
+import { ATTACHMENT_COLUMN } from '#services/attachment'
 import { formatDateToNumber } from '#services/date'
 import { BaseModel, beforeFetch, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
@@ -34,8 +35,7 @@ export default class Restaurant extends BaseModel {
   @column()
   declare userId: number
 
-  // @attachment({ folder: 'restaurant', preComputeUrl: true })
-  @column()
+  @column(ATTACHMENT_COLUMN)
   declare image: IImage | null
 
   @manyToMany(() => Tag)

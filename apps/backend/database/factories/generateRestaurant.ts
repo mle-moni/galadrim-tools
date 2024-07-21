@@ -3,7 +3,7 @@ import RestaurantNote from '#models/restaurant_note'
 import RestaurantTag from '#models/restaurant_tag'
 import Tag from '#models/tag'
 import User from '#models/user'
-import { imageAttachmentFromBuffer } from '#services/attachment'
+import { imageAttachmentFromBufferOrStream } from '#services/attachment'
 import { cuid } from '@adonisjs/core/helpers'
 import { faker } from '@faker-js/faker'
 import { IImage } from '@galadrim-tools/shared'
@@ -23,7 +23,7 @@ const getRestaurantDto = async () => {
   )
   const buffer = res.data
 
-  await imageAttachmentFromBuffer(buffer, imageName)
+  await imageAttachmentFromBufferOrStream(buffer, imageName)
 
   return {
     name: faker.commerce.productName(),

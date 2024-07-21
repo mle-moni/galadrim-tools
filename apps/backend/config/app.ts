@@ -1,7 +1,7 @@
 import env from '#start/env'
-import app from '@adonisjs/core/services/app'
 import { Secret } from '@adonisjs/core/helpers'
 import { defineConfig } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
 
 /**
  * The app key is used for encrypting cookies, generating signed URLs,
@@ -30,11 +30,11 @@ export const http = defineConfig({
    * defined inside the "config/session.ts" file.
    */
   cookie: {
-    domain: '',
+    domain: env.get('COOKIE_DOMAIN'),
     path: '/',
     maxAge: '2h',
     httpOnly: true,
     secure: app.inProduction,
-    sameSite: 'lax',
+    sameSite: false,
   },
 })

@@ -1,3 +1,4 @@
+import { ATTACHMENT_COLUMN } from '#services/attachment'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { IImage } from '@galadrim-tools/shared'
 import { DateTime } from 'luxon'
@@ -15,8 +16,7 @@ export default class RestaurantReview extends BaseModel {
   @column()
   declare comment: string
 
-  // @attachment({ folder: 'restaurantReviews', preComputeUrl: true })
-  @column()
+  @column(ATTACHMENT_COLUMN)
   declare image: IImage | null
 
   @column.dateTime({ autoCreate: true })

@@ -30,6 +30,7 @@ import router from '@adonisjs/core/services/router'
 */
 
 import env from '#start/env'
+import './routes/file_uploads.js'
 
 import AdminController from '#controllers/admin/AdminController'
 import AuthController from '#controllers/auth/auth_controller'

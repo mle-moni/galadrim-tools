@@ -36,4 +36,12 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   MAILGUN_API_KEY: Env.schema.string(),
   MAILGUN_DOMAIN: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring session package
+  |----------------------------------------------------------
+  */
+  SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const),
+  COOKIE_DOMAIN: Env.schema.string(),
 })

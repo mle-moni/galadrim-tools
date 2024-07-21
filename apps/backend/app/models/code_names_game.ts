@@ -1,3 +1,4 @@
+import { ATTACHMENT_COLUMN } from '#services/attachment'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { IImage } from '@galadrim-tools/shared'
@@ -20,7 +21,7 @@ export default class CodeNamesGame extends BaseModel {
   })
   declare isOver: boolean
 
-  // @attachment({ folder: 'codeNames', preComputeUrl: true })
+  @column(ATTACHMENT_COLUMN)
   declare image: IImage | null
 
   @hasMany(() => CodeNamesGameRound, { foreignKey: 'gameId' })
