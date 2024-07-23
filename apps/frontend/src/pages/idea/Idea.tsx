@@ -69,9 +69,11 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean; areCommen
         )
         const isMobile = useIsMobile()
         const [, setSearchParams] = useSearchParams()
-        const showComments = () => {
-            modalStore.setModalOpen(true)
-            setSearchParams({ ideaId: idea.id.toString() })
+
+        const toggleShowComments = () => {
+            const newState = !modalStore.modalOpen
+            modalStore.setModalOpen(newState)
+            setSearchParams(newState ? { ideaId: idea.id.toString() } : undefined)
         }
 
         const author_username = idea.createdBy ? users.get(idea.createdBy)?.username : ''
@@ -106,7 +108,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean; areCommen
                         >
                             <Typography>{idea.comments.length}</Typography>
                             <Tooltip title={'Commentaires'}>
-                                <IconButton onClick={showComments}>
+                                <IconButton onClick={toggleShowComments}>
                                     <Comment />
                                 </IconButton>
                             </Tooltip>
@@ -179,12 +181,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean; areCommen
                             >
                                 <IconReactionWrapper>
                                     <IconButton onClick={() => ideaStore.update(idea.id)}>
-                                        {
-                                            idea.state === "DONE" ?
-                                                <Clear/> :
-                                                <Done />
-
-                                        }
+                                        {idea.state === 'DONE' ? <Clear /> : <Done />}
                                     </IconButton>
                                 </IconReactionWrapper>
                             </Tooltip>
@@ -211,7 +208,7 @@ const Idea = observer<{ idea: IIdea; user: IUserData; isBad?: boolean; areCommen
                 <SimpleModal
                     open={modalStore.modalOpen}
                     width={isMobile ? '80%' : 800}
-                    onClose={() => modalStore.setModalOpen(false)}
+                    onClose={toggleShowComments}
                 >
                     <CommentIdeaModal idea={idea} userId={user.id} />
                 </SimpleModal>
