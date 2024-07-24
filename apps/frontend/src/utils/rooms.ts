@@ -135,7 +135,7 @@ const WorkplaceSvgRoomToFullRoomName: {
     Nantes_Placard: "Nantes - Le placard",
     SaintPaul_Amesh: "Salle Amesh",
     SaintPaul_Lovelace: "Salle Lovelace",
-    SaintPaul_Turing: "Salle Turing",
+    SaintPaul_Turing: "Salle \u200bTuring", // same as Turing but with a zero-width space to prevent duplicate name
     SaintPaul_Manguier: "Salle du manguier (ultra)-massif",
     SaintPaul_Tresor: 'Salle du Trésor',
     SaintPaul_Olympe: "L'Olympe",
