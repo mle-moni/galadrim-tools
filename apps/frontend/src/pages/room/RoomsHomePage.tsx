@@ -8,10 +8,18 @@ import { useWindowDimensions } from '../../hooks/useWindowDimensions'
 import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
 import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
 import MainLayout from '../../reusableComponents/layouts/MainLayout'
-import { WorkplaceSaintPaulSvg, WorkplaceSvg } from '../../reusableComponents/WorkplaceSvg/WorkplaceSvg'
-import { WorkplaceWorkersSvg } from '../../reusableComponents/WorkplaceSvg/WorkplaceWorkersSvg'
+import { Floor2, Floor3, Floor4, AllFloors } from '../../reusableComponents/WorkplaceSvg/WorkplaceSvg'
 import { RoomsHomePageStore } from './RoomsHomePageStore'
 import { WorkspaceLocation } from '../../utils/rooms'
+
+const locationToComponent: Record<WorkspaceLocation, typeof Floor2 | (() => null)> = {
+    'saintPaul': AllFloors,
+    'saintPaul2': Floor2,
+    'saintPaul3': Floor3,
+    'saintPaul4': Floor4,
+    'nantes': () => null,
+    'bonneNouvelle': () => null,
+}
 
 const RoomsHomePage = observer(() => {
     const homePageStore = useMemo(() => new RoomsHomePageStore(), [])
@@ -25,6 +33,8 @@ const RoomsHomePage = observer(() => {
     const { width, height } = useWindowDimensions()
     const shortestEdge = width < height ? width : height
     const svgSize = Math.round(shortestEdge * 0.8)
+
+    const WorkplaceComponent = locationToComponent[location];
 
     return (
         <MainLayout fullscreen>
@@ -61,40 +71,23 @@ const RoomsHomePage = observer(() => {
                     }}
                     sx={{ my: 2 }}
                 >
-                    <FormControlLabel value="bonneNouvelle" control={<Radio />} label="Bonne Nouvelle" />
                     <FormControlLabel value="saintPaul" control={<Radio />} label="Saint Paul" />
+                    <FormControlLabel value="saintPaul2" control={<Radio />} label="Étage 2" />
+                    <FormControlLabel value="saintPaul3" control={<Radio />} label="Étage 3" />
+                    <FormControlLabel value="saintPaul4" control={<Radio />} label="Étage 4" />
                 </RadioGroup>
             </Box>
             <CenteredDiv>
-                {location === 'bonneNouvelle' ? (
-                    <>
-                        <WorkplaceSvg
-                            width={svgSize}
-                            height={svgSize}
-                            onClick={(room) => homePageStore.onClick(room)}
-                            backgroundColor={(room) => homePageStore.getRoomColor(room)}
-                            backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
-                            onMouseOut={() => homePageStore.onMouseOut()}
-                            key={homePageStore.svgKey}
-                        />
-                        <WorkplaceWorkersSvg
-                            width={svgSize}
-                            height={svgSize}
-                            getUserPictureUrl={(room) => homePageStore.getRoomUser(room)}
-                        />
-                    </>
-                ) : (
-                    <WorkplaceSaintPaulSvg
-                        width={svgSize}
-                        height={svgSize}
-                        onClick={(room) => homePageStore.onClick(room)}
-                        backgroundColor={(room) => homePageStore.getRoomColor(room)}
-                        backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
-                        onMouseOut={() => homePageStore.onMouseOut()}
-                        key={homePageStore.svgKey}
-                        getUserPictureUrl={(room) => homePageStore.getRoomUser(room)}
-                    />
-                )}
+                <WorkplaceComponent
+                    width={svgSize}
+                    height={svgSize}
+                    onClick={(room) => homePageStore.onClick(room)}
+                    backgroundColor={(room) => homePageStore.getRoomColor(room)}
+                    backgroundColorHover={(room) => homePageStore.getRoomMouseOverColor(room)}
+                    onMouseOut={() => homePageStore.onMouseOut()}
+                    key={homePageStore.svgKey}
+                    getUserPictureUrl={(room) => homePageStore.getRoomUser(room)}
+                />
             </CenteredDiv>
             <Typography
                 variant="h5"

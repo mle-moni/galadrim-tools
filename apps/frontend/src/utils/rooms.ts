@@ -22,13 +22,14 @@ export const RESERVABLE_ROOMS = [
     "SaintPaul_Foret",
     "SaintPaul_Mediterranee",
     "SaintPaul_Vador",
+    "SaintPaul_SuperPhoneBox"
 ] as const
 
 export type ReservableWorkplaceSvgRoom = typeof RESERVABLE_ROOMS[number]
 
 export type RoomFullName = typeof AllRooms[number]['name']
 
-export type WorkspaceLocation = 'bonneNouvelle' | 'saintPaul' | 'nantes'
+export type WorkspaceLocation = 'bonneNouvelle' | 'saintPaul2' | 'saintPaul3' | 'saintPaul4' | 'saintPaul' | 'nantes'
 
 export const ValidLocations = [
     'bonneNouvelle',
@@ -106,6 +107,9 @@ export const SaintPaulRooms = [
     {
         name: 'Salle Méditerranée'
     },
+    {
+        name: 'Super Phone Box'
+    }
 ] as const
 
 
@@ -141,7 +145,8 @@ const WorkplaceSvgRoomToFullRoomName: {
     SaintPaul_Olympe: "L'Olympe",
     SaintPaul_Foret: 'La Forêt',
     SaintPaul_Mediterranee: 'Salle Méditerranée',
-    SaintPaul_Vador: 'Salle Vador'
+    SaintPaul_Vador: 'Salle Vador',
+    SaintPaul_SuperPhoneBox: 'Super Phone Box'
 }
 
 export function isReservableRoom(room: WorkplaceSvgRoom): room is ReservableWorkplaceSvgRoom {

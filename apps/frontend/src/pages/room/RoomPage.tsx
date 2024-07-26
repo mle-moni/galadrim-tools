@@ -9,7 +9,7 @@ import { RoomCalendar } from './RoomCalendar'
 import { ValidLocations, WorkspaceLocation } from '../../utils/rooms'
 
 const RoomPage = () => {
-    const defaultLocation = 'bonneNouvelle'
+    const defaultLocation = 'saintPaul'
     const [fiveMinutesSlotMode, setFiveMinutesSlotMode] = useState(false)
     const params = useParams()
 
@@ -72,7 +72,6 @@ const RoomPage = () => {
                                 localStorage.setItem('selectedLocation', newValue)
                             }}
                         >
-                            <FormControlLabel value="bonneNouvelle" control={<Radio />} label="Bonne Nouvelle" />
                             <FormControlLabel value="saintPaul" control={<Radio />} label="Saint Paul" />
                             <FormControlLabel value="nantes" control={<Radio />} label="Nantes" />
                         </RadioGroup>
