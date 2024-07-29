@@ -46,5 +46,13 @@ export const imageAttachmentFromBufferOrStream = async (
 
 export const ATTACHMENT_COLUMN = {
   prepare: (value: IImage | null) => (value ? JSON.stringify(value) : null),
-  consume: (value: string | null) => (value ? JSON.parse(value) : null),
+  consume: (value: string | object | null) => {
+    if (value === null) {
+      return null
+    }
+    if (typeof value === 'string') {
+      return JSON.parse(value)
+    }
+    return value
+  },
 }
