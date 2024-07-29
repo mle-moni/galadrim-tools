@@ -1,24 +1,24 @@
-import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-    protected tableName = 'matrices'
+  protected tableName = 'matrices'
 
-    public async up() {
-        this.schema.createTable(this.tableName, (table) => {
-            table.increments('id')
+  public async up() {
+    this.schema.createTable(this.tableName, (table) => {
+      table.increments('id')
 
-            table.integer('red').notNullable()
-            table.integer('blue').notNullable()
-            table.integer('white').notNullable()
+      table.integer('red').notNullable()
+      table.integer('blue').notNullable()
+      table.integer('white').notNullable()
 
-            table.integer('black').notNullable()
+      table.integer('black').notNullable()
 
-            table.timestamp('created_at', { useTz: true })
-            table.timestamp('updated_at', { useTz: true })
-        })
-    }
+      table.timestamp('created_at', { useTz: true })
+      table.timestamp('updated_at', { useTz: true })
+    })
+  }
 
-    public async down() {
-        this.schema.dropTable(this.tableName)
-    }
+  public async down() {
+    this.schema.dropTable(this.tableName)
+  }
 }

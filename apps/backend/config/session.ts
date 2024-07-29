@@ -1,117 +1,48 @@
-/**
- * Config source: https://git.io/JeYHp
- *
- * Feel free to let us know via PR, if you find something broken in this config
- * file.
- */
-import { SessionConfig } from '@ioc:Adonis/Addons/Session'
-import Application from '@ioc:Adonis/Core/Application'
-import Env from '@ioc:Adonis/Core/Env'
+import env from '#start/env'
+import app from '@adonisjs/core/services/app'
+import { defineConfig, stores } from '@adonisjs/session'
 
-const sessionConfig: SessionConfig = {
-    /*
-  |--------------------------------------------------------------------------
-  | Enable/Disable sessions
-  |--------------------------------------------------------------------------
-  |
-  | Setting the following property to "false" will disable the session for the
-  | entire application
-  |
-  */
-    enabled: true,
+const sessionConfig = defineConfig({
+  enabled: true,
+  cookieName: 'galadrim-tools-session',
 
-    /*
-  |--------------------------------------------------------------------------
-  | Driver
-  |--------------------------------------------------------------------------
-  |
-  | The session driver to use. You can choose between one of the following
-  | drivers.
-  |
-  | - cookie (Uses signed cookies to store session values)
-  | - file (Uses filesystem to store session values)
-  | - redis (Uses redis. Make sure to install "@adonisjs/redis" as well)
-  |
-  | Note: Switching drivers will make existing sessions invalid.
-  |
-  */
-    driver: Env.get('SESSION_DRIVER'),
+  /**
+   * When set to true, the session id cookie will be deleted
+   * once the user closes the browser.
+   */
+  clearWithBrowser: false,
 
-    /*
-  |--------------------------------------------------------------------------
-  | Cookie name
-  |--------------------------------------------------------------------------
-  |
-  | The name of the cookie that will hold the session id.
-  |
-  */
-    cookieName: 'galadrim-tools-session',
+  /**
+   * Define how long to keep the session data alive without
+   * any activity.
+   */
+  age: '2h',
 
-    /*
-  |--------------------------------------------------------------------------
-  | Clear session when browser closes
-  |--------------------------------------------------------------------------
-  |
-  | Whether or not you want to destroy the session when browser closes. Setting
-  | this value to `true` will ignore the `age`.
-  |
-  */
-    clearWithBrowser: false,
+  /**
+   * Configuration for session cookie and the
+   * cookie store
+   */
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    secure: app.inProduction,
+    sameSite: false,
+  },
 
-    /*
-  |--------------------------------------------------------------------------
-  | Session age
-  |--------------------------------------------------------------------------
-  |
-  | The duration for which session stays active after no activity. A new HTTP
-  | request to the server is considered as activity.
-  |
-  | The value can be a number in milliseconds or a string that must be valid
-  | as per https://npmjs.org/package/ms package.
-  |
-  | Example: `2 days`, `2.5 hrs`, `1y`, `5s` and so on.
-  |
-  */
-    age: '2h',
+  /**
+   * The store to use. Make sure to validate the environment
+   * variable in order to infer the store name without any
+   * errors.
+   */
+  store: env.get('SESSION_DRIVER'),
 
-    /*
-  |--------------------------------------------------------------------------
-  | Cookie values
-  |--------------------------------------------------------------------------
-  |
-  | The cookie settings are used to setup the session id cookie and also the
-  | driver will use the same values.
-  |
-  */
-    cookie: {
-        path: '/',
-        httpOnly: true,
-        sameSite: false,
-    },
-
-    /*
-  |--------------------------------------------------------------------------
-  | Configuration for the file driver
-  |--------------------------------------------------------------------------
-  |
-  | The file driver needs absolute path to the directory in which sessions
-  | must be stored.
-  |
-  */
-    file: {
-        location: Application.tmpPath('sessions'),
-    },
-
-    /*
-  |--------------------------------------------------------------------------
-  | Redis driver
-  |--------------------------------------------------------------------------
-  |
-  | The redis connection you want session driver to use. The same connection
-  | must be defined inside `config/redis.ts` file as well.
-  |
-  */
-    redisConnection: 'local',
-}
+  /**
+   * List of configured stores. Refer documentation to see
+   * list of available stores and their config.
+   */
+  stores: {
+    cookie: stores.cookie(),
+  },
+})
 
 export default sessionConfig

@@ -8,11 +8,14 @@ jobs:
     tests:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - name: Set up Node.js ⚙️
-              uses: actions/setup-node@v2
+            - name: Checkout source code
+              uses: actions/checkout@v4
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
               with:
-                  node-version: '16.x'
+                  node-version: '20.x'
+                  cache: 'yarn'
 
             - name: Install dependencies 📦
               run: yarn install --frozen-lockfile
@@ -20,8 +23,8 @@ jobs:
             - name: Build shared library
               run: yarn build:shared
 
-            - name: Run tsc in backend
-              run: cd apps/backend && yarn tsc
+            - name: typecheck backend
+              run: cd apps/backend && yarn typecheck
 
-            - name: Run tsc in frontend
-              run: cd apps/frontend && yarn tsc
+            - name: typecheck frontend
+              run: cd apps/frontend && yarn typecheck

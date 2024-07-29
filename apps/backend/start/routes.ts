@@ -1,5 +1,16 @@
 /*
 |--------------------------------------------------------------------------
+| Routes file
+|--------------------------------------------------------------------------
+|
+| The routes file is used for defining the HTTP routes.
+|
+*/
+
+import router from '@adonisjs/core/services/router'
+
+/*
+|--------------------------------------------------------------------------
 | Routes
 |--------------------------------------------------------------------------
 |
@@ -18,101 +29,130 @@
 |
 */
 
-import Env from '@ioc:Adonis/Core/Env'
-import Route from '@ioc:Adonis/Core/Route'
-import { showRestaurantRewind } from 'App/Controllers/Http/restaurantRewinds/showRestaurantRewind'
+import env from '#start/env'
+import './routes/file_uploads.js'
 
-import 'App/Adomin/routes/adominRouter'
+import AdminController from '#controllers/admin/AdminController'
+import AuthController from '#controllers/auth/auth_controller'
+import BreakActivitiesController from '#controllers/break_activities/BreakActivitiesController'
+import BreakTimesController from '#controllers/break_times/BreakTimesController'
+import BreakVotesController from '#controllers/break_votes/BreakVotesController'
+import BugConnexionsController from '#controllers/bug_connexions/BugConnexionsController'
+import CodeNamesGamesController from '#controllers/code_names_games/CodeNamesGamesController'
+import DashboardController from '#controllers/dashboard/DashboardController'
+import EventsController from '#controllers/events/EventsController'
+import GaladrimeursController from '#controllers/galadrimeurs/GaladrimeursController'
+import IdeasController from '#controllers/ideas/IdeasController'
+import LogsController from '#controllers/logs/LogsController'
+import MatricesController from '#controllers/matrices/MatricesController'
+import PlatformerResultsController from '#controllers/platformer_results/PlatformerResultsController'
+import RestaurantNotesController from '#controllers/restaurant_notes/RestaurantNotesController'
+import RestaurantReviewsController from '#controllers/restaurant_reviews/RestaurantReviewsController'
+import { showRestaurantRewind } from '#controllers/restaurant_rewinds/showRestaurantRewind'
+import RestaurantsController from '#controllers/restaurants/RestaurantsController'
+import StatisticsController from '#controllers/statistics/StatisticsController'
+import TagsController from '#controllers/tags/TagsController'
+import { middleware } from './kernel.js'
 
-Route.get('/', async () => {
-    return { service: 'galadrim tools backend' }
+router.get('/', async () => {
+  return { service: 'galadrim tools backend' }
 })
 
-Route.post('/login', 'auth/AuthController.login')
-Route.post('/logout', 'auth/AuthController.logout')
-Route.post('/getOtp', 'auth/AuthController.getOtp')
+router.post('/login', [AuthController, 'login'])
+router.post('/logout', [AuthController, 'logout'])
+router.post('/getOtp', [AuthController, 'getOtp'])
 
-Route.group(() => {
-    Route.resource('events', 'events/EventsController').apiOnly()
-    Route.get('/allEvents', 'events/EventsController.all')
-    Route.get('/availableRooms', 'events/EventsController.availableRooms')
-    Route.resource('tags', 'tags/TagsController').apiOnly()
-    Route.resource('restaurants', 'restaurants/RestaurantsController').apiOnly()
-    Route.post(
-        'createOrUpdateRestaurantChoice',
-        'restaurants/RestaurantsController.createOrUpdateChoice'
-    )
-    Route.get('/notes/mine', 'restaurantNotes/RestaurantNotesController.mine')
-    Route.resource('notes', 'restaurantNotes/RestaurantNotesController').apiOnly()
-    Route.resource('ideas', 'ideas/IdeasController').apiOnly()
-    Route.post('createOrUpdateIdeaVote', 'ideas/IdeasController.createOrUpdateVote')
-    Route.post('createIdeaComment', 'ideas/IdeasController.createComment')
-    Route.get('/me', 'auth/AuthController.me')
-    Route.post('/createApiToken', 'auth/AuthController.createApiToken')
-    Route.post('/changePassword', 'auth/AuthController.changePassword')
-    Route.post('/updateProfile', 'auth/AuthController.updateProfile')
-    Route.post('/updateTheme', 'auth/AuthController.updateTheme')
-    Route.get('/users', 'galadrimeurs/GaladrimeursController.users')
+router
+  .group(() => {
+    router.resource('events', EventsController).apiOnly()
+    router.get('/allEvents', [EventsController, 'all'])
+    router.get('/availableRooms', [EventsController, 'availableRooms'])
 
-    Route.post('/updateNotificationsSettings', 'auth/AuthController.updateNotificationsSettings')
-    Route.post('/readNotifications', 'auth/AuthController.readNotifications')
+    router.resource('tags', TagsController).apiOnly()
+    router.resource('restaurants', RestaurantsController).apiOnly()
+    router.post('createOrUpdateRestaurantChoice', [RestaurantsController, 'createOrUpdateChoice'])
 
-    Route.resource('matrices', 'matrices/MatricesController').apiOnly()
+    router.get('/notes/mine', [RestaurantNotesController, 'mine'])
+    router.resource('notes', RestaurantNotesController).apiOnly()
 
-    Route.post('codeNamesGames/addRound/:id', 'codeNamesGames/CodeNamesGamesController.addRound')
-    Route.resource('codeNamesGames', 'codeNamesGames/CodeNamesGamesController').apiOnly()
-    Route.resource(
-        'restaurants/:restaurantId/reviews',
-        'restaurantReviews/RestaurantReviewsController'
-    ).apiOnly()
-    Route.get('rewind/:id?', showRestaurantRewind)
-    Route.resource('bugConnexions', 'bugConnexions/BugConnexionsController').apiOnly()
-    Route.get('/caddyLogs/:id', 'logs/LogsController.showCaddyLogs')
-    Route.get('/atopLogs/:id', 'logs/LogsController.showAtopLogs')
-}).middleware('auth:web,api')
+    router.resource('ideas', IdeasController).apiOnly()
+    router.post('createOrUpdateIdeaVote', [IdeasController, 'createOrUpdateVote'])
+    router.post('createIdeaComment', [IdeasController, 'createComment'])
 
-Route.post('/caddyLogs', 'logs/LogsController.storeCaddyLogs')
-Route.post('/atopLogs', 'logs/LogsController.storeAtopLogs')
+    router.get('/me', [AuthController, 'me'])
+    router.post('/createApiToken', [AuthController, 'createApiToken'])
+    router.post('/changePassword', [AuthController, 'changePassword'])
+    router.post('/updateProfile', [AuthController, 'updateProfile'])
+    router.post('/updateTheme', [AuthController, 'updateTheme'])
 
-Route.group(() => {
-    Route.resource('votes', 'breakVotes/BreakVotesController').apiOnly()
-    Route.resource('activities', 'breakActivities/BreakActivitiesController').apiOnly()
-    Route.resource('times', 'breakTimes/BreakTimesController').apiOnly()
+    router.get('/users', [GaladrimeursController, 'users'])
+
+    router.post('/updateNotificationsSettings', [AuthController, 'updateNotificationsSettings'])
+    router.post('/readNotifications', [AuthController, 'readNotifications'])
+
+    router.resource('matrices', MatricesController).apiOnly()
+
+    router.post('codeNamesGames/addRound/:id', [CodeNamesGamesController, 'addRound'])
+    router.resource('codeNamesGames', CodeNamesGamesController).apiOnly()
+
+    router.resource('restaurants/:restaurantId/reviews', RestaurantReviewsController).apiOnly()
+    router.get('rewind/:id?', showRestaurantRewind)
+    router.resource('bugConnexions', BugConnexionsController).apiOnly()
+    router.get('/caddyLogs/:id', [LogsController, 'showCaddyLogs'])
+    router.get('/atopLogs/:id', [LogsController, 'showAtopLogs'])
+  })
+  .use(middleware.auth())
+
+router.post('/caddyLogs', [LogsController, 'storeCaddyLogs'])
+router.post('/atopLogs', [LogsController, 'storeAtopLogs'])
+
+router
+  .group(() => {
+    router.resource('votes', BreakVotesController).apiOnly()
+    router.resource('activities', BreakActivitiesController).apiOnly()
+    router.resource('times', BreakTimesController).apiOnly()
+  })
+  .prefix('galabreak')
+  .use(middleware.auth())
+
+router.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
+
+router
+  .group(() => {
+    router.get('/rooms', [StatisticsController, 'favoriteRoom'])
+    router.get('/time', [StatisticsController, 'time'])
+    router.get('/amount', [StatisticsController, 'amount'])
+  })
+  .use(middleware.auth())
+  .prefix('statistics')
+
+router
+  .group(() => {
+    router
+      .post('/createUser', [AdminController, 'createUser'])
+      .use(middleware.rights(['USER_ADMIN']))
+    router
+      .get('/userRights', [AdminController, 'userRights'])
+      .use(middleware.rights(['RIGHTS_ADMIN']))
+    router
+      .put('/userRights', [AdminController, 'editUserRights'])
+      .use(middleware.rights(['RIGHTS_ADMIN']))
+    router
+      .post('/createNotification', [AdminController, 'createNotification'])
+      .use(middleware.rights(['NOTIFICATION_ADMIN']))
+    router.get('/dashboard', [DashboardController, 'index'])
+  })
+  .use(middleware.auth())
+  .prefix('admin')
+
+router.get('authRedirect/:target', ({ response, request }) => {
+  const target = request.param('target')
+  return response.redirect(`${env.get('FRONTEND_URL')}/login?redirect=${target}`)
 })
-    .prefix('galabreak')
-    .middleware('auth:web,api')
 
-Route.get('/galadrimeurs', 'galadrimeurs/GaladrimeursController.index')
-
-Route.group(() => {
-    Route.get('/rooms', 'statistics/StatisticsController.favoriteRoom')
-    Route.get('/time', 'statistics/StatisticsController.time')
-    Route.get('/amount', 'statistics/StatisticsController.amount')
-})
-    .middleware('auth:web,api')
-    .prefix('statistics')
-
-Route.group(() => {
-    Route.post('/createUser', 'admin/AdminController.createUser').middleware('rights:USER_ADMIN')
-    Route.get('/userRights', 'admin/AdminController.userRights').middleware('rights:RIGHTS_ADMIN')
-    Route.put('/userRights', 'admin/AdminController.editUserRights').middleware(
-        'rights:RIGHTS_ADMIN'
-    )
-    Route.post('/createNotification', 'admin/AdminController.createNotification').middleware(
-        'rights:NOTIFICATION_ADMIN'
-    )
-    Route.get('/dashboard', 'dashboard/DashboardController.index')
-})
-    .middleware('auth:web,api')
-    .prefix('admin')
-
-Route.get('authRedirect/:target', ({ response, request }) => {
-    const target = request.param('target')
-    return response.redirect(`${Env.get('FRONTEND_URL')}/login?redirect=${target}`)
-})
-
-Route.group(() => {
-    Route.get('tournois', 'platformerResults/PlatformerResultsController.index')
-})
-    .prefix('games')
-    .middleware('auth:web,api')
+router
+  .group(() => {
+    router.get('tournois', [PlatformerResultsController, 'index'])
+  })
+  .prefix('games')
+  .use(middleware.auth())
