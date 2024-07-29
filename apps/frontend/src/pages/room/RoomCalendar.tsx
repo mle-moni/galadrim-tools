@@ -41,7 +41,7 @@ export const RoomCalendar = observer<{
     location?: WorkspaceLocation
     height?: string | number
     isAbsolute?: boolean
-}>(({ step, location = 'bonneNouvelle', height, isAbsolute = true }) => (
+}>(({ step, location = 'saintPaul', height, isAbsolute = true }) => (
     <div
         style={{
             height: height ?? '100%',
@@ -89,7 +89,6 @@ export const RoomCalendar = observer<{
                 {...(AppStore.eventsStore.roomName === '*' && {
                     resources: AllRooms.filter(({ name }) => {
                         const rooms = location === 'nantes' ? NantesRooms :
-                                      location === 'bonneNouvelle' ? BonneNouvelleRooms : 
                                       SaintPaulRooms;
                         return Object.values(rooms).some(room => room.name === name);
                     }),

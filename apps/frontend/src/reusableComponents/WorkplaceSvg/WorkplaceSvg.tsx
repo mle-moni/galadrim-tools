@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export type WorkplaceSvgRoom =
     | 'Work1'
@@ -32,6 +32,7 @@ export type WorkplaceSvgRoom =
     | 'SaintPaul_Foret'
     | 'SaintPaul_Mediterranee'
     | 'SaintPaul_Vador'
+    | 'SaintPaul_SuperPhoneBox'
 
 export interface WorkplaceSvgProps {
     width: number
@@ -43,7 +44,9 @@ export interface WorkplaceSvgProps {
     onMouseOut: (room: WorkplaceSvgRoom) => void
     onMouseOver: (room: WorkplaceSvgRoom) => void
     style: (room: WorkplaceSvgRoom) => React.CSSProperties
-    key: string | undefined
+    key: string | undefined,
+    getUserPictureUrl: (room: WorkplaceSvgRoom) => string | null
+
 }
 
 const defaultProps: Required<WorkplaceSvgProps> = {
@@ -57,10 +60,11 @@ const defaultProps: Required<WorkplaceSvgProps> = {
     onMouseOver: () => ({}),
     style: () => ({}),
     key: undefined,
+    getUserPictureUrl: () => null,
 }
 
 
-const useRoom = (room: WorkplaceSvgRoom, {
+const useRoom = (room: Extract<WorkplaceSvgRoom, keyof typeof roomToId>, {
     backgroundColor,
     backgroundColorHover,
     onClick,
@@ -93,446 +97,70 @@ const useRoom = (room: WorkplaceSvgRoom, {
             transition: 'all 0.2s',
             ...style(room),
         },
+        id: roomToId[room]
     }
 }
 
-export const WorkplaceSvg = (props: Partial<WorkplaceSvgProps>) => {
-    const {
-        width,
-        height,
-        wallsColor,
-        key,
-        ...roomsProps
-    } = {
-        ...defaultProps,
-        ...props,
-    }
-
-    const { backgroundColor } = roomsProps;
-    const Doors = () => (
-        <>
-            <rect x="202" y="348" width="4" height="12" fill={backgroundColor('Other')} />
-            <rect x="259" y="385" width="4" height="13" fill={backgroundColor('Other')} />
-            <rect x="329" y="395" width="4" height="26" fill={backgroundColor('Other')} />
-            <rect x="112" y="391" width="2" height="22" fill={backgroundColor('Other')} />
-            <rect x="97" y="520" width="12" height="4" fill={backgroundColor('Other')} />
-            <rect x="129" y="520" width="21" height="4" fill={backgroundColor('Other')} />
-            <rect x="87" y="569" width="4" height="25" fill={backgroundColor('Other')} />
-            <rect x="106" y="605" width="13" height="4" fill={backgroundColor('Other')} />
-            <rect x="129" y="757" width="4" height="28" fill={backgroundColor('Other')} />
-            <rect x="335" y="778" width="4" height="16" fill={backgroundColor('Other')} />
-            <rect x="502" y="772" width="4" height="16" fill={backgroundColor('Other')} />
-            <rect x="414" y="610" width="38" height="4" fill={backgroundColor('Other')} />
-            <rect x="335" y="574" width="4" height="19" fill={backgroundColor('Other')} />
-            <rect x="535" y="610" width="11" height="4" fill={backgroundColor('Other')} />
-            <rect x="523" y="532" width="4" height="21" fill={backgroundColor('Other')} />
-            <rect x="532" y="565" width="14" height="4" fill={backgroundColor('Other')} />
-            <rect x="544" y="522" width="19" height="4" fill={backgroundColor('Other')} />
-            <rect x="771" y="524" width="11" height="34" fill={backgroundColor('Other')} />
-            <rect x="686" y="522" width="19" height="4" fill={backgroundColor('Other')} />
-            <rect x="603" y="578" width="4" height="11" fill={backgroundColor('Other')} />
-            <rect x="506" y="401" width="4" height="24" fill={backgroundColor('Other')} />
-            <rect x="286" y="555" width="26" height="4" fill={backgroundColor('Other')} />
-            <rect
-                id="Rectangle 103"
-                x="455"
-                y="567"
-                width="2"
-                height="43"
-                fill={backgroundColor('Other')}
-            />
-            <rect
-                id="Rectangle 104"
-                x="457"
-                y="567"
-                width="45"
-                height="2"
-                fill={backgroundColor('Other')}
-            />
-        </>
-    )
-
-    const Work23Walls = () => (
-        <path
-            // this key could be set on any path but why not here
-            key={key}
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M3.05176e-05 609L0 808V812H502.001V808H339V794H338V793H336V794H335V808H133V785H132V784H130V785H129V808H4.00003V609H3.05176e-05ZM129 757L129.007 609L133.007 609L133 757L132 757V758H130V757H129ZM329 764V614H345V764H339V778H338V779H336V778H335V764H329ZM336 783H338V781H336V783ZM336 785V787H338V785H336ZM336 789V791H338V789H336ZM130 762V760H132V762H130ZM130 766V764H132V766H130ZM130 770V768H132V770H130ZM130 774V772H132V774H130ZM130 778V776H132V778H130ZM130 782V780H132V782H130ZM503 772V773H505V772H503ZM505 775H503V777H505V775ZM505 779H503V781H505V779ZM505 783H503V785H505V783ZM503 787V788H505V787H503Z"
-            fill={wallsColor}
-        />
-    )
-
-    const KitchenDoor = () => (
-        <line
-            x1="239"
-            y1="159"
-            x2="206"
-            y2="159"
-            stroke={wallsColor}
-            strokeWidth="2"
-            strokeDasharray="2 2"
-        />
-    )
-
-    const Work2 = () => {
-        const svgProps = useRoom('Work2', roomsProps)
-        return <rect x="4" y="609" width="125" height="199" {...svgProps} />
-    }
-
-    const Work3 = () => {
-        const svgProps = useRoom('Work3', roomsProps)
-        return (
-            <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M133 558H286V559H335V606V808H286H133V558Z"
-                {...svgProps}
-            />
-        )
-    }
-
-    const Work4 = () => {
-        const svgProps = useRoom('Work4', roomsProps)
-        return <rect x="339" y="614" width="163" height="194" {...svgProps} />
-    }
-
-    const Toilets = () => {
-        const svgProps = useRoom('Toilets', roomsProps)
-        return (
-            <>
-                <path d="M170 312H202V375H170V312Z" {...svgProps} />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M171 374.998V313H201V305H171H166H163V379H171L206 378L205.971 377H206V360H205V359H203V360H202V374.113L171 374.998ZM206 333V348H205V349H203V348H202V333H206ZM203 353V351H205V353H203ZM203 357V355H205V357H203Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Kitchen = () => {
-        const svgProps = useRoom('Kitchen', roomsProps)
-        return (
-            <>
-                <path d="M205 6H349V158H205V6Z" {...svgProps} />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M205 7.99999L348 8V158H239V166H348H356V158V8V0H197V8L205 7.99999ZM205 7.99999L206 158L198 158.053L197 8.05333L205 7.99999Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Adier = () => {
-        const svgProps = useRoom('Adier', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M259 376H247H230V377H206V378H171V379H114V520H247V478H259V376Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M163 375H112V379H112V390V391H114V390V379H163V375ZM114 520V414V413H112V414V520H114ZM114 411V409H112V411H114ZM114 407V405H112V407H114ZM114 403V401H112V403H114ZM114 399V397H112V399H114ZM114 395V393H112V395H114Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Corridor = () => {
-        const svgProps = useRoom('Corridor', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M206 158H230H235H239V172H235V187H230V333H263H341V377H329V555H263H129V605H91V555V524H263V377V374H230H206V333V158Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M198 158V333H206V158H198ZM345 329H233V199.877L246.347 161.116L238.782 158.511L225.185 198H225V333H233H341V377H329V387V395H330V395.929H332V395H333V387H345V377V333V329ZM204 374L263 372L263.136 375.998L263 376.002V385H262V386.083H260V385H259V376.138L204.136 377.998L204 374ZM263 478V398H262V396.917H260V398H259V478H247V520H150V521H148.95V523H150V524H247H263V478ZM260 390.417V388.25H262V390.417H260ZM260 394.75V392.583H262V394.75H260ZM129 520H109V521H108V523H109V524H129V523H130.05V521H129V520ZM144.75 521H146.85V523H144.75V521ZM140.55 521H142.65V523H140.55V521ZM136.35 521H138.45V523H136.35V521ZM132.15 521H134.25V523H132.15V521ZM106 521H104V523H106V521ZM102 521H100V523H102V521ZM98 521H97V520H91H75V546H87V569H88V570.042H90V569H91V546V524H97V523H98V521ZM87 594V609H90H91H106V608H107.083V606H106V605H91V594H90V592.958H88V594H87ZM88 574.208V572.125H90V574.208H88ZM88 578.375V576.292H90V578.375H88ZM88 582.542V580.458H90V582.542H88ZM88 586.708V584.625H90V586.708H88ZM88 590.875V588.792H90V590.875H88ZM129 609H119V608H117.917V606H119V605H129V558V556H129.013L129.025 554L286.025 555L286.019 556H286.929V558H286.006L286 559L133 558.025V609H131H129ZM312 559H329H345V433H333V421H332V420.071H330V421H329V433V555H312V556H311.071V558H312V559ZM111.417 608H109.25V606H111.417V608ZM115.75 608H113.583V606H115.75V608ZM288.786 558H290.643V556H288.786V558ZM292.5 558H294.357V556H292.5V558ZM296.214 558H298.071V556H296.214V558ZM299.929 558H301.786V556H299.929V558ZM303.643 558H305.5V556H303.643V558ZM307.357 558H309.214V556H307.357V558ZM332 416.357V418.214H330V416.357H332ZM332 412.643V414.5H330V412.643H332ZM332 408.929V410.786H330V408.929H332ZM332 405.214V407.071H330V405.214H332ZM332 401.5V403.357H330V401.5H332ZM332 397.786V399.643H330V397.786H332Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Vador = () => {
-        const svgProps = useRoom('Vador', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M0 375H112V379H4V605H88V609H4H2H0V379V375Z"
-                    fill={wallsColor}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M4 379H112V520H75V546H87V605H4V546V520V379Z"
-                    {...svgProps}
-                />
-            </>
-        )
-    }
-
-    const Work1 = () => {
-        const svgProps = useRoom('Work1', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M345 387H506V401H507V402H509V401H510V383H508H506H345V387ZM339 559V574H338V574.95H336V574H335V559H339ZM339 593V606H345V610H414V611H414.95V613H414V614H345H329V606H335V593H336V592.05H338V593H339ZM452 614H502H506V576H527V562V560V553H526V551.95H524V553H523V560H502V564V576V610H452V611H451.05V613H452V614ZM506 425V438H510H523V532H524V533.05H526V532H527V434H526H523H510V425H509V424H507V425H506ZM524 537.25V535.15H526V537.25H524ZM524 541.45V539.35H526V541.45H524ZM524 545.65V543.55H526V545.65H524ZM524 549.85V547.75H526V549.85H524ZM507 404V406H509V404H507ZM507 408V410H509V408H507ZM507 412V414H509V412H507ZM507 416V418H509V416H507ZM507 420V422H509V420H507ZM336 578.75V576.85H338V578.75H336ZM336 582.55V580.65H338V582.55H336ZM336 586.35V584.45H338V586.35H336ZM336 590.15V588.25H338V590.15H336ZM416.85 613H418.75V611H416.85V613ZM420.65 613H422.55V611H420.65V613ZM424.45 613H426.35V611H424.45V613ZM428.25 613H430.15V611H428.25V613ZM432.05 613H433.95V611H432.05V613ZM435.85 613H437.75V611H435.85V613ZM439.65 613H441.55V611H439.65V613ZM443.45 613H445.35V611H443.45V613ZM447.25 613H449.15V611H447.25V613Z"
-                    fill={wallsColor}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M333 387H506V433V438H523V560H502V610H345V606H339V559H345V438V433H333V387Z"
-                    {...svgProps}
-                />
-            </>
-        )
-    }
-
-    const Turing = () => {
-        const svgProps = useRoom('Turing', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M654 387H510V434L527 434V522H654V434V387Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M654 387.986L510 387L510.027 383L656.014 384H658V526H654H563V525H562.05V523H563V522H654V387.986ZM544 526H527V522H544V523H544.95V525H544V526ZM546.85 525H548.75V523H546.85V525ZM550.65 525H552.55V523H550.65V525ZM554.45 525H556.35V523H554.45V525ZM558.25 525H560.15V523H558.25V525Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Coffre = () => {
-        const svgProps = useRoom('Coffre', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M506 614H554V648H558V662H560V674H562V678H564V689H567V702H570V714H573V727H575V739V770H585V781H588V795H591V808H554H506V614Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M528 626H506V772H502V626V610H528H535V614H528V626ZM546 614H554V648L575.189 740.199L563 743L571.527 780.112L583.717 777.311L590.77 808H506V788H502V812H506H595V808H594.874L558 647.546V610H554H546V614Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Debarras = () => {
-        const svgProps = useRoom('Debarras', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M649 575H658V603H626V607H658V636H612.182L607 613.544V607H612V603H607V589H606V588.083H604V589H603V598H558V588H554V610H558V614H603L609 640H658H662V575H670V559H649V565H607H558H555H554H546V566H545.125V568H546V569H554V576H558V569H603V578H604V578.917H606V578H607V569H649V575ZM527 569H532V568H532.875V566H532V565H527V569ZM535 613H535.917V611H535V613ZM537.75 613H539.583V611H537.75V613ZM541.417 613H543.25V611H541.417V613ZM545.083 613H546V611H545.083V613ZM536.375 568H534.625V566H536.375V568ZM539.875 568H538.125V566H539.875V568ZM543.375 568H541.625V566H543.375V568ZM604 580.75V582.583H606V580.75H604ZM604 584.417V586.25H606V584.417H604Z"
-                    fill={wallsColor}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M527 569H554H603V598H554V610H527H506V576H527V569ZM607 569H658V603H626V607H658V636H610V627H607V607H610H611H612V603H607V569Z"
-                    {...svgProps}
-                />
-            </>
-        )
-    }
-
-    const PetitCouloir = () => {
-        const svgProps = useRoom('PetitCouloir', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M707.281 525.736L707.368 526H670H527V565H670V571H771H781V559H778.305L771 524.37V514H769.163L769.644 513.167L765.644 514H761V514.967L743.374 518.635L743.644 518.167L707.281 525.736Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M769 514L771.086 525.209L772.008 525.038L772.194 525.972L774.156 525.58L773.974 524.672L775.018 524.478L772.933 513.268L769 514ZM670 575H785V571H784.877L781.911 557.162L778 558L780.786 571H670V575ZM772.583 527.917L772.972 529.861L774.933 529.469L774.544 527.524L772.583 527.917ZM773.361 531.806L773.75 533.75L775.711 533.358L775.322 531.413L773.361 531.806ZM774.139 535.694L774.528 537.639L776.489 537.247L776.1 535.302L774.139 535.694ZM774.917 539.583L775.306 541.528L777.267 541.136L776.878 539.191L774.917 539.583ZM775.694 543.472L776.083 545.417L778.044 545.024L777.656 543.08L775.694 543.472ZM776.472 547.361L776.861 549.306L778.822 548.913L778.433 546.969L776.472 547.361ZM777.25 551.25L777.639 553.194L779.6 552.802L779.211 550.858L777.25 551.25ZM778.028 555.139L778.417 557.083L780.378 556.691L779.989 554.747L778.028 555.139Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Manguier = () => {
-        const svgProps = useRoom('Manguier', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M658 388H749V407H752V423H755V439H757V449H760V464H763V481H766V499H769V512H761V514H750V517H736V520H721V522H670V430H658V388Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M745.558 388H658V384H749V384.631L772.933 513.268L769 514L745.558 388ZM769 514L768.228 510.075L707.61 522H705V523H704.05V525H705V526H708L769 514ZM654 526V430H670V522H686V523H686.95V525H686V526H670H654ZM690.75 525H688.85V523H690.75V525ZM694.55 525H692.65V523H694.55V525ZM698.35 525H696.45V523H698.35V525ZM702.15 525H700.25V523H702.15V525Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Babyfoot = () => {
-        const svgProps = useRoom('Babyfoot', roomsProps)
-        return (
-            <>
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M926 466.383L960.44 460L964.295 480.796L962.567 481.116L964.156 489.69L963.718 489.771L973.984 545.163L972.952 545.354L981.984 594.087L981 594.269L988.725 635.95L936.085 645.706L933.087 629.533L819.243 645.532L805.386 648.988L791.113 591.743L789.377 592.112L782.149 558.105L782.117 558.112L774.888 524.104L774.823 524.116L772.709 512.711L886.86 491.554L886.979 492.196L929.329 484.347L926 466.383Z"
-                    {...svgProps}
-                />
-                <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M963 462L962.293 458.063L923.293 465.063L924 469L924.111 468.98L926.365 481.755L771.306 509.061L772 513L927.061 485.694L927.061 485.695L931 485L930.306 481.061L930.305 481.061L928.048 468.273L959.062 462.707L986.045 635.597L937.107 642.984L934 629L933.281 629.16L805.958 645.683L782.856 561.936L779 563L802.975 649.911L803 650.1L930.903 633.502L934.095 647.868L938 647L937.977 646.898L990.597 638.955L990 635L963 462Z"
-                    fill={wallsColor}
-                />
-            </>
-        )
-    }
-
-    const Cube = () => {
-        const svgProps = useRoom('Cube', roomsProps)
-
-        return (
-            <>
-                <line
-                    id="Line 128"
-                    x1="180"
-                    y1="559"
-                    x2="180"
-                    y2="600"
-                    stroke={wallsColor}
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                />
-                <line
-                    id="Line 129"
-                    x1="134"
-                    y1="600"
-                    x2="180"
-                    y2="600"
-                    stroke={wallsColor}
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                />
-                <rect id="Rectangle 102" x="133" y="558" width="46" height="41" {...svgProps} />
-            </>
-        )
-    }
-
-    const Arche = () => {
-        const svgProps = useRoom('Arche', roomsProps)
-        return (
-            <>
-                <line
-                    id="Line 130"
-                    x1="392"
-                    y1="434"
-                    x2="392"
-                    y2="475"
-                    stroke={wallsColor}
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                />
-                <line
-                    id="Line 131"
-                    x1="346"
-                    y1="475"
-                    x2="392"
-                    y2="475"
-                    stroke={wallsColor}
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                />
-                <line
-                    id="Line 132"
-                    x1="346"
-                    y1="432"
-                    x2="392"
-                    y2="432"
-                    stroke={wallsColor}
-                    strokeWidth="2"
-                    strokeDasharray="4 4"
-                />
-                <rect id="Rectangle 102" x="345" y="433" width="46" height="41" {...svgProps} />
-            </>
-        )
-    }
-
-    return (
-        <svg
-            width={width}
-            height={height}
-            viewBox="0 0 991 812"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <Doors />
-            <Work2 />
-            <Work3 />
-            <Work4 />
-            <Toilets />
-            <Kitchen />
-            <Adier />
-            <Corridor />
-            <Vador />
-            <Work1 />
-            <Turing />
-            <Coffre />
-            <Debarras />
-            <PetitCouloir />
-            <Manguier />
-            <Babyfoot />
-            <Work23Walls />
-            <KitchenDoor />
-            <Cube />
-            <Arche />
-        </svg>
-    )
-}
+export const WorkplaceSvg = () => null;
 
 const PORTRAIT_SIZE = 60;
 
-export const WorkplaceSaintPaulSvg = (props: Partial<WorkplaceSvgProps> & {
-    getUserPictureUrl: (room: WorkplaceSvgRoom) => string | null
-}) => {
+
+export const roomToId: Record<Extract<WorkplaceSvgRoom, `SaintPaul${string}`>, string> = {
+    SaintPaul_Amesh: 'amesh',
+    SaintPaul_Lovelace: 'lovelace',
+    SaintPaul_Turing: 'turing',
+    SaintPaul_Manguier: 'manguier',
+    SaintPaul_Tresor: 'tresor',
+    SaintPaul_Olympe: 'olympe',
+    SaintPaul_Foret: 'foret',
+    SaintPaul_Mediterranee: 'mediterranee',
+    SaintPaul_Vador: 'vador',
+    SaintPaul_SuperPhoneBox: 'superPhoneBox'
+}
+
+const WorkplaceWorkers = ({ getUserPictureUrl }: Pick<WorkplaceSvgProps, 'getUserPictureUrl'>) => {
+    const [elementByRoomId, setElementByRoomId] = useState<Record<string, SVGGraphicsElement | null | undefined>>({});
+
+    useEffect(() => {
+        const newElementByRoomId = Object.fromEntries(Object.entries(roomToId).map(([roomName, roomId]) => {
+            return [roomId, document.getElementById(roomId) as SVGGraphicsElement | null]
+        }));
+
+        setElementByRoomId(newElementByRoomId);
+    }, [])
+
+    return <>
+        {Object.entries(roomToId).map(([roomName, roomId]) => {
+            const userPicture = getUserPictureUrl(roomName as WorkplaceSvgRoom);
+
+            if (!userPicture) {
+                return null;
+            }
+
+            const roomElement = elementByRoomId[roomId];
+            if (roomElement === null || roomElement === undefined) {
+                return null;
+            }
+
+            const boundingBox = roomElement.getBBox()
+
+            return (
+                <foreignObject key={roomId} x={boundingBox.x + boundingBox.width / 2 - PORTRAIT_SIZE / 2} y={boundingBox.y + boundingBox.height / 2 - PORTRAIT_SIZE / 2} width={`${PORTRAIT_SIZE}px`} height={`${PORTRAIT_SIZE}px`} pointerEvents='none'>
+                    <img
+                        width={`${PORTRAIT_SIZE}px`}
+                        height={`${PORTRAIT_SIZE}px`}
+                        src={userPicture}
+                        style={{ borderRadius: '50%' }}
+                    />
+                </foreignObject>
+            )
+        })}
+    </>
+}
+
+
+export const Floor2 = (props: Partial<WorkplaceSvgProps>) => {
     const {
         width,
         height,
@@ -545,17 +173,139 @@ export const WorkplaceSaintPaulSvg = (props: Partial<WorkplaceSvgProps> & {
         ...props,
     }
 
-    const roomToId = {
-        SaintPaul_Amesh: 'amesh',
-        SaintPaul_Lovelace: 'lovelace',
-        SaintPaul_Turing: 'turing',
-        SaintPaul_Manguier: 'manguier',
-        SaintPaul_Tresor: 'tresor',
-        SaintPaul_Olympe: 'olympe',
-        SaintPaul_Foret: 'foret',
-        SaintPaul_Mediterranee: 'mediterranee',
-        SaintPaul_Vador: 'vador',
+    const svgPropsLovelace = useRoom('SaintPaul_Lovelace', roomsProps);
+    const svgPropsTuring = useRoom('SaintPaul_Turing', roomsProps);
+
+    return <svg width={width} height={height} viewBox="0 0 773 534" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="floor-2-without-background">
+            <path id="floor2background" d="M259 517L241 198L445 178L476.5 227.5V504L773 489V0.5L0 73L9 222L25 534L259 522V517Z" fill="#EEEEEE" />
+            <path id="Vector 32" d="M271.5 515L253 203L443.5 186.5L467.5 226.5V492.5H463V504L271.5 515Z" fill="#DEB887" stroke="#259D59" />
+            <path {...svgPropsTuring} d="M679.5 304V253.5H747.5V255.5H761V264.5H772.5V299.5H761V332.5H772.5V334.5V369.5H761V415.5H765.5V417.5H772.5V454H761V455V479.5H760.5H760H759.5H709V480V487.5H672.5V483.5L619.5 484.5V304H620.5H679.5Z" stroke="black" />
+            <path {...svgPropsLovelace} d="M620.5 21.5V239.5H633.5V249H746.5V242H759.5V233.5V232.5L766 232V195.5H761L760.5 163.5V162.5H766L766.5 128.5H760.5V80H766.5V42.5H760.5V5.5L620.5 19V21.5Z" stroke="black" />
+            <path id="Vector 25" d="M12 96V74.5L108 71.5L169.5 63.5L174 193L47.5 198V200.5H19V196.5L14 195L12 153H16.5L15.5 137H10.5L9 97.5L12 96Z" stroke="black" />
+            <path id="Vector 26" d="M20.5 232V205.5L111 202.5V197.5H138.5V200H175V204L229.5 202.5V204H237.5V208.5H242L243.5 210L245 254.5H242V284H248.5L249.5 329.5L245 331.5L247 361H252L255 404.5L249.5 407.5V434.5L257.5 438V479.5L255 484V504.5L38 515.5V511.5L28 509.5V489.5H36L31.5 400.5H20.5V372.5H28V349L83.5 346L79.5 284L24 287.5V273.5H15L12 232H20.5Z" stroke="black" />
+            <path id="Vector 27" d="M28 344.5L25 292L75 289.5L78 342L28 344.5Z" stroke="black" />
+            <path id="Vector 28" d="M479 301H570H609.5H612V485L565 487V491H529.5V489L479 491V466.5H472.5V431H479V382H475.5V367H479V348.5H472.5V313H479V301Z" stroke="black" />
+            <path id="Vector 29" d="M558 92.5V24.5L612 20V92.5H558Z" stroke="black" />
+            <path id="Vector 30" d="M513 92.5H553.5V38.5H513V92.5Z" stroke="black" />
+            <g id="Vector 31">
+                <path d="M453.5 35.5V93.5H509V92.5V30.5L453.5 35.5Z" stroke="black" />
+                <path d="M294.5 53V75H306V96.5L298 97.5L301 186.5H309.5V191.5L345 188V183L370.5 181V186.5L406.5 183V176.5L439.5 174V161H447.5V151H550.5L570 171V294.5H573V300.5H618.5V255.5H609V243.5H611.5V97.5H449V53L440 50.5V38L294.5 53Z" stroke="black" />
+            </g>
+        </g>
+        <WorkplaceWorkers getUserPictureUrl={getUserPictureUrl} />
+    </svg>
+
+}
+
+
+export const Floor3 = (props: Partial<WorkplaceSvgProps>) => {
+    const {
+        width,
+        height,
+        wallsColor,
+        key,
+        getUserPictureUrl,
+        ...roomsProps
+    } = {
+        ...defaultProps,
+        ...props,
     }
+
+
+    const svgPropsAmesh = useRoom('SaintPaul_Amesh', roomsProps);
+    const svgPropsManguier = useRoom('SaintPaul_Manguier', roomsProps);
+    const svgPropsForet = useRoom('SaintPaul_Foret', roomsProps);
+    const svgPropsVador = useRoom('SaintPaul_Vador', roomsProps);
+
+    return (
+        <svg width={width} height={height} viewBox="0 0 516 513" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="floor3-without-background">
+                <path id="floor3background" d="M219.5 229.5L193 182L39.5 196L34.5 45.5L512.5 0.5V247.5V486L219.5 501.5V229.5Z" fill="#EEEEEE" />
+                <path {...svgPropsAmesh} d="M423.5 253.5H503.5V264.5H515.5V299.5H503.5V333H515.5V368.5H503.5V415.5H515.5V452.5H503V476.5L453 478.5V481.5L417 483V480.5L364 483V304H423.5V253.5Z" stroke="#333333" />
+                <path {...svgPropsManguier} d="M222.5 300V312H216.5V348H222.5V366H219.5V382H222.5V429.5H216.5V464.5H222.5V490L273 488.5V491.5L309 490V485.5L356.5 484V300H222.5Z" stroke="#333333" />
+                <path {...svgPropsForet} d="M365 19L404.5 15V22L468.5 16.5V8.5L503.5 4.5V41.5H515.5V79H503.5V126.5H515.5V163H503.5V195.5H515.5V231.5H503.5V240H364.5V19H365Z" stroke="#333333" />
+                <path {...svgPropsVador} d="M39.5 51.5L45 184.5H53.5V189.5L88 187V181L113.5 179L115.5 184.5L151 181V176.5L176 174V170.5H191.5V149H192.5H193.5V35.5L39.5 50.5V51.5Z" stroke="#333333" />
+                <g id="Vector 33">
+                    <path d="M302 91V22.5L356 18.5V91H302Z" stroke="black" />
+                    <path d="M256.5 91V27.5L298 22.5V91H256.5Z" stroke="black" />
+                    <path d="M252.5 91V28.5L198 33V91H252.5Z" stroke="black" />
+                </g>
+                <path id="Vector 32" d="M18.5 512.5L0 200.5L190.5 184L214.5 224V490H210V501.5L18.5 512.5Z" fill="#DEB887" fill-opacity="0.5" />
+                <path id="Vector 41" d="M198 149V97V96.5H357V241H353V242V252.5H365V254V299.5H315V170.5L295 149H198Z" stroke="black" />
+            </g>
+            <defs>
+                <clipPath id="clip0_338_502">
+                    <rect width="53" height="34" fill="white" transform="translate(251 28)" />
+                </clipPath>
+            </defs>
+            <WorkplaceWorkers getUserPictureUrl={getUserPictureUrl} />
+        </svg>
+    )
+}
+
+
+export const Floor4 = (props: Partial<WorkplaceSvgProps>) => {
+    const {
+        width,
+        height,
+        wallsColor,
+        key,
+        getUserPictureUrl,
+        ...roomsProps
+    } = {
+        ...defaultProps,
+        ...props,
+    }
+
+
+    const svgPropsTresor = useRoom('SaintPaul_Tresor', roomsProps);
+    const svgPropsOlympe = useRoom('SaintPaul_Olympe', roomsProps);
+    const svgPropsMediterranee = useRoom('SaintPaul_Mediterranee', roomsProps);
+    const svgPropsPhoneBox = useRoom('SaintPaul_SuperPhoneBox', roomsProps);
+
+    return (
+        <svg width={width} height={height} viewBox="0 0 1219 566" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="floor4-without-background">
+                <path id="floor3-background" d="M19.5 566L1 284.5L292 249.5V236L436 221L428.5 80L1212 1V499.5L916 510.5V228.5L884 180.5L675.5 205.5L694 519L19.5 566Z" fill="#EEEEEE" />
+                <path {...svgPropsTresor} d="M0.5 285L10 411.5L56.5 406.5L126 330.5L120 305H110.5L105.5 273L0.5 285Z" stroke="black" />
+                <path {...svgPropsMediterranee} d="M121.5 273H125.5V267L147.5 265L148.5 269L201 262.5V267H207L210 311H207V316.5V318H212.5H215.5V364L144.5 368.5L113.5 402.5L86.5 380L125.5 335.5L121.5 273Z" stroke="black" />
+                <path {...svgPropsPhoneBox} d="M217 315L217.5 364L272.5 361L270.5 312.5L217 315Z" stroke="black" />
+                <path {...svgPropsOlympe} d="M117 407L147 374.5L208 371L218.5 546H214V551.5L174 552.5V555.5L126 558.5V555.5L118 440H119.5V427.5L117 426.5V407Z" stroke="black" />
+                <path id="Vector 35" d="M951 94.5V27L993.5 20V94.5H951Z" stroke="black" />
+                <path id="Vector 36" d="M997 94.5V20.5L1053.5 15.5V94.5H997Z" stroke="black" />
+                <path id="Vector 37" d="M1062 244.5V19.5L1130 9.5V17.5L1144 15.5L1142.5 7.5L1195.5 1V3H1205.5V42H1217.5C1219.1 42 1218.17 67.3333 1217.5 80H1205.5V130H1217.5V166.5H1205.5V168.5V200H1217.5V237.5H1204V246H1192V254.5H1154.5V246H1144V254.5H1075.5V244.5H1062Z" stroke="black" />
+                <path id="Vector 38" d="M1122 310.5V259V257.5H1191V260H1192.5H1204V269H1211.5V271H1217.5V305L1204 307.5V338.5L1217.5 340.5V375L1204 378V423.5L1217.5 425.5V461.5L1204 464.5V487.5L1153.5 489.5V494.5H1116.5V492L1061.5 494.5V310.5H1122Z" stroke="black" />
+                <path id="Vector 39" d="M1053.5 495.5V311.5H1006.5V308.5H916.5V320H914.5V357H916.5V375H914.5V390.5H916.5V440H914.5V477H916.5V494H927V501.5H968.5V503L1004.5 501.5V498L1053.5 495.5Z" stroke="black" />
+                <g id="Vector 40">
+                    <path d="M1062.5 306V260H1054.5V211H1050V203H1054.5V98.5H885.5V45.5H877.5V34L729.5 51V74.5H739.5V116.5H731.5L735.5 189.5L877.5 177.5V163H885.5V153H927H990L1011.5 174V306H1062.5Z" stroke="black" />
+                    <path d="M213 311L211 264L271 258V267.5H286V254H304V240.5H309.5V237L352.5 233.5V240.5L367.5 239.5V233.5L409.5 231V237H433V240.5L448 239.5L445.5 197H437V154.5H443V137.5H435.5L434 96.5H440.5V74.5L540.5 71.5L599.5 64.5L605.5 208.5L658.5 205.5V208.5H668.5V212H675.5V214L679.5 258L671 259.5L672 288C674.833 288.833 680.7 290.5 681.5 290.5C682.3 290.5 682.167 321.167 682 336.5L675.5 338.5L677 368.5L685.5 369.5L687.5 413.5L680.5 415.5L682 447.5H690L692.5 492.5H684L685.5 513.5L646 516V519.5L603.5 522L604.5 518L537 521V525L493.5 527.5V525H464L458 415.5L436.5 417.5V424.5H443.5L448 527.5H422.5V532L382 535.5V532L296.5 537V547.5L248 551.5V541H226V501H221L219.5 467L222.5 465.5V440L296.5 435.5V427.5L221 433L217 369L274.5 365L276.5 392.5H294L290 329H276.5L274.5 308.5L213 311Z" stroke="black" />
+                </g>
+                <path id="Vector 32" d="M709.5 518.5L691 206.5L881.5 190L905.5 230V496H901V507.5L709.5 518.5Z" fill="#DEB887" fill-opacity="0.2" />
+            </g>
+            <WorkplaceWorkers getUserPictureUrl={getUserPictureUrl} />
+        </svg>
+
+    )
+
+}
+
+
+
+
+export const AllFloors = (props: Partial<WorkplaceSvgProps>) => {
+    const {
+        width,
+        height,
+        wallsColor,
+        key,
+        getUserPictureUrl,
+        ...roomsProps
+    } = {
+        ...defaultProps,
+        ...props,
+    }
+
 
     const svgPropsAmesh = useRoom('SaintPaul_Amesh', roomsProps);
     const svgPropsLovelace = useRoom('SaintPaul_Lovelace', roomsProps);
@@ -566,81 +316,66 @@ export const WorkplaceSaintPaulSvg = (props: Partial<WorkplaceSvgProps> & {
     const svgPropsForet = useRoom('SaintPaul_Foret', roomsProps);
     const svgPropsMediterranee = useRoom('SaintPaul_Mediterranee', roomsProps);
     const svgPropsVador = useRoom('SaintPaul_Vador', roomsProps);
+    const svgPropsPhoneBox = useRoom('SaintPaul_SuperPhoneBox', roomsProps);
+
 
     return (
-        <svg width={width} height={height} viewBox="0 0 2000 2660" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g id="floor4">
-                <path id="floor3-background" d="M389.5 2362L371 2080.5L662 2045.5V2032L806 2017L798.5 1876L1582 1797V2295.5L1286 2306.5V2024.5L1254 1976.5L1045.5 2001.5L1064 2315L389.5 2362Z" fill="#EEEEEE" />
-                <path id={roomToId['SaintPaul_Olympe']} d="M482.5 2204L493 2355L595.5 2347.5L581 2162.5L517.5 2166L482.5 2204Z" {...svgPropsOlympe} />
-                <path id={roomToId['SaintPaul_Mediterranee']} d="M482 2100.5L475.5 2068.5L578 2055L585 2162.5L516 2165.5L484 2201.5L455 2176L496 2128L491.5 2100.5H482Z" {...svgPropsMediterranee} />
-                <path id={roomToId['SaintPaul_Tresor']} d="M370.5 2081L380 2207.5L426.5 2202.5L496 2126.5L490 2101H480.5L475.5 2069L370.5 2081Z" {...svgPropsTresor} />
-                <g id="floor3-walls">
-                    <path id="floor3-walls_2" d="M389.5 2362L371 2080.5L662 2045.5V2032L806 2017L798.5 1876L1582 1797V2295.5L1286 2306.5V2024.5L1254 1976.5L1045.5 2001.5L1064 2315L389.5 2362Z" stroke="black" stroke-width="6" />
-                    <path id="Vector 2" d="M476.5 2070L481.5 2100H489.5L494.5 2127.5L481.5 2140.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 1" d="M380 2208.5L425.5 2204L462 2167" stroke="black" stroke-width="6" />
-                    <path id="Vector 3" d="M492.5 2355.5L482.5 2203L516 2165.5L643.5 2158.5V2107H581.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 4" d="M582.5 2200.5L585 2231M587.5 2261.5L585 2231M585 2231H621" stroke="black" stroke-width="6" />
-                    <path id="Vector 5" d="M589 2300.5L594.5 2346" stroke="black" stroke-width="6" />
-                    <path id="Vector 6" d="M819 2217L826.5 2330.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 7" d="M699.5 2099L704.5 2171.5L810.5 2164.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 8" d="M853.5 2087H873L879 2148H825" stroke="black" stroke-width="6" />
-                    <path id="Vector 9" d="M879 2072.5L1045.5 2061" stroke="black" stroke-width="6" />
-                    <path id="Vector 10" d="M1426 2228V2301.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 11" d="M1429 2176.5V2195.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 12" d="M1429 2130V2102.5H1490.5V2051H1474" stroke="black" stroke-width="6" />
-                    <path id="Vector 20" d="M1491 2051.5H1426.5V1952.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 13" d="M1287 2098H1381V1973.5L1358 1952.5H1298.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 14" d="M1427.5 1815V1921.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 15" d="M1365.5 1821V1893.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 17" d="M1258 1828V1891.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 18" d="M1320.5 1829V1898H1292.5H1325.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 19" d="M1356.5 1892H1392" stroke="black" stroke-width="6" />
-                    <path id="Vector 21" d="M1491 2051H1529" stroke="black" stroke-width="6" />
-                    <path id="Vector 22" d="M1581.5 2051H1567" stroke="black" stroke-width="6" />
-                    <path id="Vector 23" d="M1093.5 1847.5L1099.5 1942.5" stroke="black" stroke-width="6" />
-                    <path id="Vector 24" d="M972 1859L976.5 1948.5M976.5 1948.5L1060 1942.5M976.5 1948.5L981 2002" stroke="black" stroke-width="6" />
+        <svg width={width} height={height} viewBox="0 0 2000 2360" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+            <g id="floor3">
+                <g id="floor3-without-background">
+                    <path id="floor3background" d="M1302.5 1106.5L1276 1059L1122.5 1073L1117.5 922.5L1595.5 877.5V1124.5V1363L1302.5 1378.5V1106.5Z" fill="#EEEEEE" />
+                    <path {...svgPropsAmesh} d="M1506.5 1130.5H1586.5V1141.5H1598.5V1176.5H1586.5V1210H1598.5V1245.5H1586.5V1292.5H1598.5V1329.5H1586V1353.5L1536 1355.5V1358.5L1500 1360V1357.5L1447 1360V1181H1506.5V1130.5Z" stroke="#333333" />
+                    <path {...svgPropsManguier} d="M1305.5 1177V1189H1299.5V1225H1305.5V1243H1302.5V1259H1305.5V1306.5H1299.5V1341.5H1305.5V1367L1356 1365.5V1368.5L1392 1367V1362.5L1439.5 1361V1177H1305.5Z" stroke="#333333" />
+                    <path {...svgPropsForet} d="M1448 896L1487.5 892V899L1551.5 893.5V885.5L1586.5 881.5V918.5H1598.5V956H1586.5V1003.5H1598.5V1040H1586.5V1072.5H1598.5V1108.5H1586.5V1117H1447.5V896H1448Z" stroke="#333333" />
+                    <path {...svgPropsVador} d="M1122.5 928.5L1128 1061.5H1136.5V1066.5L1171 1064V1058L1196.5 1056L1198.5 1061.5L1234 1058V1053.5L1259 1051V1047.5H1274.5V1026H1275.5H1276.5V912.5L1122.5 927.5V928.5Z" stroke="#333333" />
+                    <g id="Vector 33">
+                        <path d="M1385 968V899.5L1439 895.5V968H1385Z" stroke="black" />
+                        <path d="M1339.5 968V904.5L1381 899.5V968H1339.5Z" stroke="black" />
+                        <path d="M1335.5 968V905.5L1281 910V968H1335.5Z" stroke="black" />
+                    </g>
+                    <path id="Vector 32" d="M1101.5 1389.5L1083 1077.5L1273.5 1061L1297.5 1101V1367H1293V1378.5L1101.5 1389.5Z" fill="#DEB887" fill-opacity="0.5" />
+                    <path id="Vector 41" d="M1281 1026V974V973.5H1440V1118H1436V1119V1129.5H1448V1131V1176.5H1398V1047.5L1378 1026H1281Z" stroke="black" />
                 </g>
             </g>
-            <g id="floor3">
-                <path id="floor3background" d="M432.5 1549.5L410.5 1273.5L609 1246L695 1237.5V1226.5L839 1216.5L826.5 1071L1595.5 997.5V1483L1302.5 1498.5V1226.5L1276 1179L1071 1198.5L1090.5 1513.5L432.5 1549.5Z" fill="#EEEEEE" />
-                <path id={roomToId['SaintPaul_Foret']} d="M1596 997.5V1244.5H1442.5V1011L1596 997.5Z" {...svgPropsForet} />
-                <path id={roomToId['SaintPaul_Amesh']} d="M1504.5 1243.5V1298H1442L1445 1491L1596 1483.5V1243.5H1504.5Z" {...svgPropsAmesh} />
-                <path id={roomToId['SaintPaul_Manguier']} d="M1302.5 1292.5V1500L1442 1492V1297L1302.5 1292.5Z" {...svgPropsManguier} />
-                <path id={roomToId['SaintPaul_Vador']} d="M1126 1193.5L1118.5 1043L1278 1026.5V1179.5L1126 1193.5Z" {...svgPropsVador} />
-                <path id="floor3walls" d="M1444.5 1013V1088M1444 1414.5V1491M1443 1364.5V1389.5M1504.5 1245V1297.5H1443V1327.5M1442 1161V1244.5H1595.5M1303.5 1292.5H1395.5V1167L1373 1149H1318M410.5 1273.5L432.5 1549.5L1090.5 1513.5L1071 1198.5L1276 1179L1302.5 1226.5V1498.5L1595.5 1483V997.5L826.5 1071L839 1216.5L695 1226.5V1237.5L609 1246L410.5 1273.5Z" stroke="black" stroke-width="6" />
-            </g>
             <g id="floor2">
-                <path id="floor2background" d="M412 840L390.5 558L590 537V530L679 522V509.5L818 504L809 355L1582 282.5V771L1285.5 786V509.5L1254 460L1050 480L1068 799L412 840Z" fill="#EEEEEE" />
-                <path id={roomToId['SaintPaul_Turing']} d="M1428 779L1581 771V531H1485V587H1428V779Z" stroke="black" stroke-width="6" {...svgPropsTuring} />
-                <path id={roomToId['SaintPaul_Lovelace']} d="M1426 297V531H1581V281L1426 297Z" stroke="black" stroke-width="6" {...svgPropsLovelace} />
-                <path id="floor2walls" d="M412 840L390.5 558L590 537V530L679 522V509.5L818 504L809 355L1582 282.5V771L1285.5 786V509.5L1254 460L1050 480L1068 799L412 840Z" stroke="black" stroke-width="6" />
+                <g id="floor-2-without-background">
+                    <path id="floor2background" d="M1068 1999L1050 1680L1254 1660L1285.5 1709.5V1986L1582 1971V1482.5L809 1555L818 1704L834 2016L1068 2004V1999Z" fill="#EEEEEE" />
+                    <path id="Vector 32_2" d="M1080.5 1997L1062 1685L1252.5 1668.5L1276.5 1708.5V1974.5H1272V1986L1080.5 1997Z" fill="#DEB887" stroke="#259D59" />
+                    <path {...svgPropsTuring} d="M1488.5 1786V1735.5H1556.5V1737.5H1570V1746.5H1581.5V1781.5H1570V1814.5H1581.5V1816.5V1851.5H1570V1897.5H1574.5V1899.5H1581.5V1936H1570V1937V1961.5H1569.5H1569H1568.5H1518V1962V1969.5H1481.5V1965.5L1428.5 1966.5V1786H1429.5H1488.5Z" stroke="black" />
+                    <path {...svgPropsLovelace} d="M1429.5 1503.5V1721.5H1442.5V1731H1555.5V1724H1568.5V1715.5V1714.5L1575 1714V1677.5H1570L1569.5 1645.5V1644.5H1575L1575.5 1610.5H1569.5V1562H1575.5V1524.5H1569.5V1487.5L1429.5 1501V1503.5Z" stroke="black" />
+                    <path id="Vector 25" d="M821 1578V1556.5L917 1553.5L978.5 1545.5L983 1675L856.5 1680V1682.5H828V1678.5L823 1677L821 1635H825.5L824.5 1619H819.5L818 1579.5L821 1578Z" stroke="black" />
+                    <path id="Vector 26" d="M829.5 1714V1687.5L920 1684.5V1679.5H947.5V1682H984V1686L1038.5 1684.5V1686H1046.5V1690.5H1051L1052.5 1692L1054 1736.5H1051V1766H1057.5L1058.5 1811.5L1054 1813.5L1056 1843H1061L1064 1886.5L1058.5 1889.5V1916.5L1066.5 1920V1961.5L1064 1966V1986.5L847 1997.5V1993.5L837 1991.5V1971.5H845L840.5 1882.5H829.5V1854.5H837V1831L892.5 1828L888.5 1766L833 1769.5V1755.5H824L821 1714H829.5Z" stroke="black" />
+                    <path id="Vector 27" d="M837 1826.5L834 1774L884 1771.5L887 1824L837 1826.5Z" stroke="black" />
+                    <path id="Vector 28" d="M1288 1783H1379H1418.5H1421V1967L1374 1969V1973H1338.5V1971L1288 1973V1948.5H1281.5V1913H1288V1864H1284.5V1849H1288V1830.5H1281.5V1795H1288V1783Z" stroke="black" />
+                    <path id="Vector 29" d="M1367 1574.5V1506.5L1421 1502V1574.5H1367Z" stroke="black" />
+                    <path id="Vector 30" d="M1322 1574.5H1362.5V1520.5H1322V1574.5Z" stroke="black" />
+                    <g id="Vector 31">
+                        <path d="M1262.5 1517.5V1575.5H1318V1574.5V1512.5L1262.5 1517.5Z" stroke="black" />
+                        <path d="M1103.5 1535V1557H1115V1578.5L1107 1579.5L1110 1668.5H1118.5V1673.5L1154 1670V1665L1179.5 1663V1668.5L1215.5 1665V1658.5L1248.5 1656V1643H1256.5V1633H1359.5L1379 1653V1776.5H1382V1782.5H1427.5V1737.5H1418V1725.5H1420.5V1579.5H1258V1535L1249 1532.5V1520L1103.5 1535Z" stroke="black" />
+                    </g>
+                </g>
             </g>
-
-            {Object.entries(roomToId).map(([roomName, roomId]) => {
-                const userPicture = getUserPictureUrl(roomName as WorkplaceSvgRoom);
-
-                if (!userPicture) {
-                    return null;
-                }
-
-                const roomElement = document.getElementById(roomId) as SVGGraphicsElement | null;
-                if (roomElement === null) {
-                    return null;
-                }
-
-                const boundingBox = roomElement.getBBox()
-
-                return (
-                    <foreignObject x={boundingBox.x + boundingBox.width / 2 - PORTRAIT_SIZE/2} y={boundingBox.y + boundingBox.height / 2 - PORTRAIT_SIZE/2} width={`${PORTRAIT_SIZE}px`} height={`${PORTRAIT_SIZE}px`}>
-                        <img
-                            width={`${PORTRAIT_SIZE}px`}
-                            height={`${PORTRAIT_SIZE}px`}
-                            src={userPicture}
-                            style={{ borderRadius: '50%' }}
-                        />
-                    </foreignObject>
-                )
-            })}
+            <g id="floor4">
+                <g id="floor4-without-background">
+                    <path id="floor3-background" d="M389.5 862L371 580.5L662 545.5V532L806 517L798.5 376L1582 297V795.5L1286 806.5V524.5L1254 476.5L1045.5 501.5L1064 815L389.5 862Z" fill="#EEEEEE" />
+                    <path {...svgPropsTresor} d="M370.5 581L380 707.5L426.5 702.5L496 626.5L490 601H480.5L475.5 569L370.5 581Z" stroke="black" />
+                    <path {...svgPropsMediterranee} d="M491.5 569H495.5V563L517.5 561L518.5 565L571 558.5V563H577L580 607H577V612.5V614H582.5H585.5V660L514.5 664.5L483.5 698.5L456.5 676L495.5 631.5L491.5 569Z" stroke="black" />
+                    <path {...svgPropsPhoneBox} d="M587 611L587.5 660L642.5 657L640.5 608.5L587 611Z" stroke="black" />
+                    <path {...svgPropsOlympe} d="M487 703L517 670.5L578 667L588.5 842H584V847.5L544 848.5V851.5L496 854.5V851.5L488 736H489.5V723.5L487 722.5V703Z" stroke="black" />
+                    <path id="Vector 35" d="M1321 390.5V323L1363.5 316V390.5H1321Z" stroke="black" />
+                    <path id="Vector 36" d="M1367 390.5V316.5L1423.5 311.5V390.5H1367Z" stroke="black" />
+                    <path id="Vector 37" d="M1432 540.5V315.5L1500 305.5V313.5L1514 311.5L1512.5 303.5L1565.5 297V299H1575.5V338H1587.5C1589.1 338 1588.17 363.333 1587.5 376H1575.5V426H1587.5V462.5H1575.5V464.5V496H1587.5V533.5H1574V542H1562V550.5H1524.5V542H1514V550.5H1445.5V540.5H1432Z" stroke="black" />
+                    <path id="Vector 38" d="M1492 606.5V555V553.5H1561V556H1562.5H1574V565H1581.5V567H1587.5V601L1574 603.5V634.5L1587.5 636.5V671L1574 674V719.5L1587.5 721.5V757.5L1574 760.5V783.5L1523.5 785.5V790.5H1486.5V788L1431.5 790.5V606.5H1492Z" stroke="black" />
+                    <path id="Vector 39" d="M1423.5 791.5V607.5H1376.5V604.5H1286.5V616H1284.5V653H1286.5V671H1284.5V686.5H1286.5V736H1284.5V773H1286.5V790H1297V797.5H1338.5V799L1374.5 797.5V794L1423.5 791.5Z" stroke="black" />
+                    <g id="Vector 40">
+                        <path d="M1432.5 602V556H1424.5V507H1420V499H1424.5V394.5H1255.5V341.5H1247.5V330L1099.5 347V370.5H1109.5V412.5H1101.5L1105.5 485.5L1247.5 473.5V459H1255.5V449H1297H1360L1381.5 470V602H1432.5Z" stroke="black" />
+                        <path d="M583 607L581 560L641 554V563.5H656V550H674V536.5H679.5V533L722.5 529.5V536.5L737.5 535.5V529.5L779.5 527V533H803V536.5L818 535.5L815.5 493H807V450.5H813V433.5H805.5L804 392.5H810.5V370.5L910.5 367.5L969.5 360.5L975.5 504.5L1028.5 501.5V504.5H1038.5V508H1045.5V510L1049.5 554L1041 555.5L1042 584C1044.83 584.833 1050.7 586.5 1051.5 586.5C1052.3 586.5 1052.17 617.167 1052 632.5L1045.5 634.5L1047 664.5L1055.5 665.5L1057.5 709.5L1050.5 711.5L1052 743.5H1060L1062.5 788.5H1054L1055.5 809.5L1016 812V815.5L973.5 818L974.5 814L907 817V821L863.5 823.5V821H834L828 711.5L806.5 713.5V720.5H813.5L818 823.5H792.5V828L752 831.5V828L666.5 833V843.5L618 847.5V837H596V797H591L589.5 763L592.5 761.5V736L666.5 731.5V723.5L591 729L587 665L644.5 661L646.5 688.5H664L660 625H646.5L644.5 604.5L583 607Z" stroke="black" />
+                    </g>
+                    <path id="Vector 32_3" d="M1079.5 814.5L1061 502.5L1251.5 486L1275.5 526V792H1271V803.5L1079.5 814.5Z" fill="#DEB887" fill-opacity="0.2" />
+                </g>
+            </g>
+            <WorkplaceWorkers getUserPictureUrl={getUserPictureUrl} />
         </svg>
     )
 }
