@@ -11,6 +11,8 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "migrate-prod": "node ace migration:run --force",
+    "deploy": "./scripts/deploy.sh",
     "typecheck": "tsc --noEmit"
   },
   "imports": {
