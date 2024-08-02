@@ -46,7 +46,9 @@ export class NotificationsAdminStore {
         this.loadingState.setIsLoading(false);
 
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, "Impossible de créer la notification, bizarre"));
+            return notifyError(
+                getErrorMessage(res.json, "Impossible de créer la notification, bizarre"),
+            );
         }
         notifySuccess("La notification a bien été envoyée !");
     }

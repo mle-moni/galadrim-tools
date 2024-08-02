@@ -1,6 +1,15 @@
 import { OpenInNew } from "@mui/icons-material";
 import BackIcon from "@mui/icons-material/ChevronLeft";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    Typography,
+} from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
@@ -62,7 +71,11 @@ const TournoisPage = observer(() => {
         <MainLayout fullscreen={false}>
             <Stack direction="column" sx={{ p: 4 }}>
                 <Box sx={{ mb: 2 }}>
-                    <Button startIcon={<BackIcon />} variant="contained" onClick={() => AppStore.navigate("/")}>
+                    <Button
+                        startIcon={<BackIcon />}
+                        variant="contained"
+                        onClick={() => AppStore.navigate("/")}
+                    >
                         Retour
                     </Button>
                     <Button

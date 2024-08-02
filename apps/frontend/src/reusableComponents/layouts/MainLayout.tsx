@@ -26,33 +26,35 @@ const Root = styled(Box, {
     }),
 );
 
-export const MainLayout = observer(({ fullscreen, children, noDisconnect }: ComponentProps<FC<MainLayoutProps>>) => {
-    const { authStore } = AppStore;
+export const MainLayout = observer(
+    ({ fullscreen, children, noDisconnect }: ComponentProps<FC<MainLayoutProps>>) => {
+        const { authStore } = AppStore;
 
-    useCheckConnection(authStore);
+        useCheckConnection(authStore);
 
-    return (
-        <Root fullscreen={fullscreen}>
-            <div
-                style={{
-                    width: "100%",
-                }}
-            >
-                <Box
-                    sx={{
-                        position: "absolute",
-                        top: 32,
-                        right: 32,
-                        zIndex: 10,
+        return (
+            <Root fullscreen={fullscreen}>
+                <div
+                    style={{
+                        width: "100%",
                     }}
                 >
-                    {authStore.connected && <Whoami noDisconnect={noDisconnect} />}
-                </Box>
-                {children}
-            </div>
-            <PatchNotes />
-        </Root>
-    );
-});
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: 32,
+                            right: 32,
+                            zIndex: 10,
+                        }}
+                    >
+                        {authStore.connected && <Whoami noDisconnect={noDisconnect} />}
+                    </Box>
+                    {children}
+                </div>
+                <PatchNotes />
+            </Root>
+        );
+    },
+);
 
 export default MainLayout;

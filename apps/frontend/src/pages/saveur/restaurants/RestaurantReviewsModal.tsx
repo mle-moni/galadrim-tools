@@ -75,82 +75,101 @@ const ReviewDiv = observer<{
     );
 });
 
-export const RestaurantReviewsModal = observer<RestaurantReviewsModalProps>(({ restaurant, saveurStore }) => {
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    const scrollCommentsRef = useRef<any>();
-    const isMobile = useIsMobile();
+export const RestaurantReviewsModal = observer<RestaurantReviewsModalProps>(
+    ({ restaurant, saveurStore }) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        const scrollCommentsRef = useRef<any>();
+        const isMobile = useIsMobile();
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        setTimeout(() => {
-            scrollCommentsRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-    }, [restaurant.reviews.length]);
+        // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+        useEffect(() => {
+            setTimeout(() => {
+                scrollCommentsRef.current?.scrollIntoView({ behavior: "smooth" });
+            }, 100);
+        }, [restaurant.reviews.length]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-        saveurStore.restaurantsStore.reviewsStore.addReview();
-    };
+        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+            saveurStore.restaurantsStore.reviewsStore.addReview();
+        };
 
-    return (
-        <SimpleModal
-            width={"80%"}
-            open={saveurStore.restaurantsStore.reviewsStore.restaurantId !== null}
-            onClose={() => saveurStore.restaurantsStore.reviewsStore.showReviewsForRestaurant(null)}
-        >
-            <Typography sx={{ fontSize: 22, textAlign: "center" }}>
-                Avis pour <b>{restaurant.name}</b>
-            </Typography>
+        return (
+            <SimpleModal
+                width={"80%"}
+                open={saveurStore.restaurantsStore.reviewsStore.restaurantId !== null}
+                onClose={() =>
+                    saveurStore.restaurantsStore.reviewsStore.showReviewsForRestaurant(null)
+                }
+            >
+                <Typography sx={{ fontSize: 22, textAlign: "center" }}>
+                    Avis pour <b>{restaurant.name}</b>
+                </Typography>
 
-            <form onSubmit={handleSubmit}>
-                <Box sx={{ maxHeight: "60vh", overflowY: "auto" }}>
-                    {restaurant.reviews.map((review) => {
-                        return <ReviewDiv review={review} key={review.id} />;
-                    })}
-                    <Box key={"bottomRef"} ref={scrollCommentsRef} />
-                </Box>
-                <Box
-                    style={{
-                        display: "flex",
-                        flex: 1,
-                        alignItems: "center",
-                    }}
-                    sx={{ marginTop: ["6px", "15px"] }}
-                >
-                    <OutlinedInput
-                        value={saveurStore.restaurantsStore.reviewsStore.comment.text}
-                        onChange={(e) => saveurStore.restaurantsStore.reviewsStore.comment.setText(e.target.value)}
-                        placeholder={`Exprimez-vous sur ${restaurant.name}...`}
-                        sx={{ flex: 1, marginRight: [1, 2] }}
-                        multiline
-                    />
-                    <Box sx={{ my: 2 }}>
-                        <Button variant="contained" component="label" sx={{ my: 2 }}>
-                            Ajouter une image
-                            <input
-                                key={saveurStore.restaurantsStore.reviewsStore.loadingStore.isLoading.toString()}
-                                type="file"
-                                hidden
-                                accept="image/*"
-                                id="image"
-                                multiple
-                                onChange={(e) =>
-                                    saveurStore.restaurantsStore.reviewsStore.imageStore.setUploadedImage(e.target)
-                                }
-                            />
-                        </Button>
-                        {saveurStore.restaurantsStore.reviewsStore.imageStore.image !== null && (
-                            <span style={{ marginLeft: "12px" }}>
-                                ({saveurStore.restaurantsStore.reviewsStore.imageStore.image.name})
-                            </span>
-                        )}
+                <form onSubmit={handleSubmit}>
+                    <Box sx={{ maxHeight: "60vh", overflowY: "auto" }}>
+                        {restaurant.reviews.map((review) => {
+                            return <ReviewDiv review={review} key={review.id} />;
+                        })}
+                        <Box key={"bottomRef"} ref={scrollCommentsRef} />
                     </Box>
-                    <Button disabled={saveurStore.restaurantsStore.reviewsStore.submitDisabled} type="submit">
-                        <Send fontSize={isMobile ? "medium" : "large"} />
-                    </Button>
-                </Box>
-            </form>
-        </SimpleModal>
-    );
-});
+                    <Box
+                        style={{
+                            display: "flex",
+                            flex: 1,
+                            alignItems: "center",
+                        }}
+                        sx={{ marginTop: ["6px", "15px"] }}
+                    >
+                        <OutlinedInput
+                            value={saveurStore.restaurantsStore.reviewsStore.comment.text}
+                            onChange={(e) =>
+                                saveurStore.restaurantsStore.reviewsStore.comment.setText(
+                                    e.target.value,
+                                )
+                            }
+                            placeholder={`Exprimez-vous sur ${restaurant.name}...`}
+                            sx={{ flex: 1, marginRight: [1, 2] }}
+                            multiline
+                        />
+                        <Box sx={{ my: 2 }}>
+                            <Button variant="contained" component="label" sx={{ my: 2 }}>
+                                Ajouter une image
+                                <input
+                                    key={saveurStore.restaurantsStore.reviewsStore.loadingStore.isLoading.toString()}
+                                    type="file"
+                                    hidden
+                                    accept="image/*"
+                                    id="image"
+                                    multiple
+                                    onChange={(e) =>
+                                        saveurStore.restaurantsStore.reviewsStore.imageStore.setUploadedImage(
+                                            e.target,
+                                        )
+                                    }
+                                />
+                            </Button>
+                            {saveurStore.restaurantsStore.reviewsStore.imageStore.image !==
+                                null && (
+                                <span style={{ marginLeft: "12px" }}>
+                                    (
+                                    {
+                                        saveurStore.restaurantsStore.reviewsStore.imageStore.image
+                                            .name
+                                    }
+                                    )
+                                </span>
+                            )}
+                        </Box>
+                        <Button
+                            disabled={saveurStore.restaurantsStore.reviewsStore.submitDisabled}
+                            type="submit"
+                        >
+                            <Send fontSize={isMobile ? "medium" : "large"} />
+                        </Button>
+                    </Box>
+                </form>
+            </SimpleModal>
+        );
+    },
+);

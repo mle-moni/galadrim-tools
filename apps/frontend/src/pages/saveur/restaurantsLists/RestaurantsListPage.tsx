@@ -65,46 +65,57 @@ const RestaurantsListPage = observer(() => {
             </Typography>
             <CenteredDiv style={{ backgroundColor: "var(--main-color)" }}>
                 <List sx={{ width: "80vw" }}>
-                    {params.list.map(({ id, name, image, description, tags, averagePrice }, index) => {
-                        return (
-                            <Box
-                                key={id}
-                                sx={{
-                                    padding: 4,
-                                    cursor: "pointer",
-                                }}
-                                onClick={() => {
-                                    const pathname = "/saveur";
-                                    const searchParams = new URLSearchParams({
-                                        "restaurant-id": id.toString(),
-                                    });
-                                    AppStore.navigate(`${pathname}?${searchParams}`);
-                                }}
-                            >
-                                <ListItem
+                    {params.list.map(
+                        ({ id, name, image, description, tags, averagePrice }, index) => {
+                            return (
+                                <Box
+                                    key={id}
                                     sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        backgroundColor: "white",
-                                        borderRadius: "4px",
+                                        padding: 4,
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() => {
+                                        const pathname = "/saveur";
+                                        const searchParams = new URLSearchParams({
+                                            "restaurant-id": id.toString(),
+                                        });
+                                        AppStore.navigate(`${pathname}?${searchParams}`);
                                     }}
                                 >
-                                    <Typography sx={{ fontSize: "x-large" }}>{`${index + 1} ➝ ${name}`}</Typography>
-                                    <RestaurantTags saveurStore={AppStore.saveurStore} tags={tags} />
-                                    <Typography>{description}</Typography>
+                                    <ListItem
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            backgroundColor: "white",
+                                            borderRadius: "4px",
+                                        }}
+                                    >
+                                        <Typography
+                                            sx={{ fontSize: "x-large" }}
+                                        >{`${index + 1} ➝ ${name}`}</Typography>
+                                        <RestaurantTags
+                                            saveurStore={AppStore.saveurStore}
+                                            tags={tags}
+                                        />
+                                        <Typography>{description}</Typography>
 
-                                    {averagePrice !== null && <Typography>prix moyen ➝ {`${averagePrice} €`}</Typography>}
-                                    <br />
-                                    <CardMedia
-                                        component="img"
-                                        height={300}
-                                        src={getImageUrl(image)}
-                                        sx={{ borderRadius: "4px" }}
-                                    />
-                                </ListItem>
-                            </Box>
-                        );
-                    })}
+                                        {averagePrice !== null && (
+                                            <Typography>
+                                                prix moyen ➝ {`${averagePrice} €`}
+                                            </Typography>
+                                        )}
+                                        <br />
+                                        <CardMedia
+                                            component="img"
+                                            height={300}
+                                            src={getImageUrl(image)}
+                                            sx={{ borderRadius: "4px" }}
+                                        />
+                                    </ListItem>
+                                </Box>
+                            );
+                        },
+                    )}
                 </List>
             </CenteredDiv>
         </Box>

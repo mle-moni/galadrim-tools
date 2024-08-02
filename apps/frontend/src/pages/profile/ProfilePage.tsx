@@ -16,8 +16,14 @@ import MainLayout from "../../reusableComponents/layouts/MainLayout";
 
 export const ProfilePage = observer(() => {
     const { authStore } = AppStore;
-    const userNameStore = useMemo(() => new TextFieldStore(authStore.user.username), [authStore.user.username]);
-    const emailStore = useMemo(() => new TextFieldStore(authStore.user.email), [authStore.user.email]);
+    const userNameStore = useMemo(
+        () => new TextFieldStore(authStore.user.username),
+        [authStore.user.username],
+    );
+    const emailStore = useMemo(
+        () => new TextFieldStore(authStore.user.email),
+        [authStore.user.email],
+    );
 
     const [createTokenLoading, setCreateTokenLoading] = useState(false);
 
@@ -32,7 +38,9 @@ export const ProfilePage = observer(() => {
             <CenteredDiv>
                 <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600, mt: 4 }}>
                     <GaladrimLogo align="center" sx={{ mb: 2 }} />
-                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>Modifier vos informations</Typography>
+                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>
+                        Modifier vos informations
+                    </Typography>
                     <form
                         style={{ marginBottom: 20 }}
                         onSubmit={(e) => {
@@ -80,7 +88,13 @@ export const ProfilePage = observer(() => {
                         </CenteredDiv>
                         <br />
 
-                        <Button fullWidth variant="contained" type="submit" size="large" sx={{ my: 2 }}>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            type="submit"
+                            size="large"
+                            sx={{ my: 2 }}
+                        >
                             Mettre à jour le profil
                         </Button>
                     </form>
@@ -89,7 +103,10 @@ export const ProfilePage = observer(() => {
                         Generer un API token
                     </GaladrimButton>
 
-                    <CustomLink to="/changePassword" style={{ marginBottom: "20px", marginTop: "40px" }}>
+                    <CustomLink
+                        to="/changePassword"
+                        style={{ marginBottom: "20px", marginTop: "40px" }}
+                    >
                         <Key sx={{ mr: 1 }} /> Changer votre mot de passe
                     </CustomLink>
 
@@ -97,7 +114,10 @@ export const ProfilePage = observer(() => {
                         <ColorLens sx={{ mr: 1 }} /> Thème
                     </CustomLink>
 
-                    <CustomLink to="/profile/notificationsSettings" style={{ marginBottom: "20px" }}>
+                    <CustomLink
+                        to="/profile/notificationsSettings"
+                        style={{ marginBottom: "20px" }}
+                    >
                         <Settings sx={{ mr: 1 }} /> Paramètres de notifications
                     </CustomLink>
 

@@ -101,7 +101,10 @@ export const checkMatrix = (matrix: MatrixDto, matrixToCheck: MatrixDto): boolea
     return checkRed && checkBlue && checkWhite;
 };
 
-export const getMatrixCandidates = (matrixToCheck: MatrixDto, matrices: MatrixDto[]): MatrixDto[] => {
+export const getMatrixCandidates = (
+    matrixToCheck: MatrixDto,
+    matrices: MatrixDto[],
+): MatrixDto[] => {
     const filteredMatrices = matrices.filter((matrix) => checkMatrix(matrix, matrixToCheck));
 
     return filteredMatrices;

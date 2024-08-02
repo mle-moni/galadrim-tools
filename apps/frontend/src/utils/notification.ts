@@ -15,7 +15,11 @@ export const notifyError = (text: string, autoHideDuration = 3000) => {
     });
 };
 
-export const notifyUser = (text: string, variant: VariantType = "default", autoHideDuration = 3000) => {
+export const notifyUser = (
+    text: string,
+    variant: VariantType = "default",
+    autoHideDuration = 3000,
+) => {
     AppStore.notification.push(text, {
         variant,
         autoHideDuration,

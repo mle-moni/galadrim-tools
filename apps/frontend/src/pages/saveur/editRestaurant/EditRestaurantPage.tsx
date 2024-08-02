@@ -19,7 +19,11 @@ export const EditRestaurantPage = observer(() => {
     return (
         <MainLayout fullscreen>
             <div style={{ display: "flex", justifyContent: "center" }}>
-                <EditRestaurant mode="edit" restaurant={restaurantFound} saveurStore={saveurStore} />
+                <EditRestaurant
+                    mode="edit"
+                    restaurant={restaurantFound}
+                    saveurStore={saveurStore}
+                />
             </div>
         </MainLayout>
     );

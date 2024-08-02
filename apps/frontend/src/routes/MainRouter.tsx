@@ -8,12 +8,20 @@ import { RenouvArtWait } from "../reusableComponents/animations/RenouvArtWait/Re
 
 const TournoisPage = React.lazy(() => import("../pages/games/tournois/TournoisPage"));
 const StatisticsPage = React.lazy(() => import("../pages/statistics/StatisticsPage"));
-const NotificationsSettingsPage = React.lazy(() => import("../pages/profile/notifications/NotificationsSettingsPage"));
+const NotificationsSettingsPage = React.lazy(
+    () => import("../pages/profile/notifications/NotificationsSettingsPage"),
+);
 const ThemePage = React.lazy(() => import("../pages/profile/theme/ThemePage"));
-const CreateRestaurantPage = React.lazy(() => import("../pages/saveur/createRestaurant/CreateRestaurantPage"));
-const EditRestaurantPage = React.lazy(() => import("../pages/saveur/editRestaurant/EditRestaurantPage"));
+const CreateRestaurantPage = React.lazy(
+    () => import("../pages/saveur/createRestaurant/CreateRestaurantPage"),
+);
+const EditRestaurantPage = React.lazy(
+    () => import("../pages/saveur/editRestaurant/EditRestaurantPage"),
+);
 const SaveurPage = React.lazy(() => import("../pages/saveur/SaveurPage"));
-const RestaurantsListPage = React.lazy(() => import("../pages/saveur/restaurantsLists/RestaurantsListPage"));
+const RestaurantsListPage = React.lazy(
+    () => import("../pages/saveur/restaurantsLists/RestaurantsListPage"),
+);
 const RewindRecapPage = React.lazy(() => import("../pages/saveur/rewind/RewindRecapPage"));
 const RewindPage = React.lazy(() => import("../pages/saveur/rewind/RewindPage"));
 const HomePage = React.lazy(() => import("../pages/HomePage"));
@@ -24,13 +32,17 @@ const GetOtpPage = React.lazy(() => import("../pages/getOtp/GetOtpPage"));
 const ChangePasswordPage = React.lazy(() => import("../pages/changePassword/ChangePasswordPage"));
 const CreateUserPage = React.lazy(() => import("../pages/admin/createUser/CreateUserPage"));
 const AdminRightsPage = React.lazy(() => import("../pages/admin/rights/AdminRightsPage"));
-const NotificationsAdminPage = React.lazy(() => import("../pages/admin/notifications/NotificationsAdminPage"));
+const NotificationsAdminPage = React.lazy(
+    () => import("../pages/admin/notifications/NotificationsAdminPage"),
+);
 const DashboardPage = React.lazy(() => import("../pages/admin/dashboard/DashboardPage"));
 const AdminPage = React.lazy(() => import("../pages/admin/AdminPage"));
 const RoomPage = React.lazy(() => import("../pages/room/RoomPage"));
 const NotFoundPage = React.lazy(() => import("../pages/errors/404/NotFoundPage"));
 const ProfilePage = React.lazy(() => import("../pages/profile/ProfilePage"));
-const MyRestaurantNotesPage = React.lazy(() => import("../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage"));
+const MyRestaurantNotesPage = React.lazy(
+    () => import("../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage"),
+);
 const NewCodeNamesGamePage = React.lazy(() => import("../pages/codeNames/NewCodeNamesGamePage"));
 const CodeNamesGamePage = React.lazy(() => import("../pages/codeNames/CodeNamesGamePage"));
 const ScamWinnerPage = React.lazy(() => import("../pages/scam/ScamWinnerPage"));
@@ -52,7 +64,10 @@ const MainRouter = () => {
                     </React.Suspense>
                 </BrowserRouter>
             ) : (
-                <div className="flex h-100vh justify-center align-center main-bg" style={{ boxSizing: "border-box" }}>
+                <div
+                    className="flex h-100vh justify-center align-center main-bg"
+                    style={{ boxSizing: "border-box" }}
+                >
                     <RenouvArtWait />
                 </div>
             )}
@@ -96,7 +111,10 @@ const AppRoutes = () => {
                 <Route path="/codeNames" element={<Navigate to={"/codeNamesGame"} />} />
                 <Route path="/codeNamesGame" element={<NewCodeNamesGamePage />} />
                 <Route path="/codeNamesGame/:id" element={<CodeNamesGamePage />} />
-                <Route path="/profile/notificationsSettings" element={<NotificationsSettingsPage />} />
+                <Route
+                    path="/profile/notificationsSettings"
+                    element={<NotificationsSettingsPage />}
+                />
                 <Route path="/profile/theme" element={<ThemePage />} />
                 <Route path="/ideas" element={<IdeaPage />} />
                 <Route path="/galabreak" element={<GalabreakPage />} />

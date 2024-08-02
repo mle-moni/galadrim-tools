@@ -9,7 +9,10 @@ import { NotificationSettingsStore } from "./NotificationsSettingsStore";
 
 export const NotificationsSettingsPage = observer(() => {
     const { authStore } = AppStore;
-    const notificationsSettingsStore = useMemo(() => new NotificationSettingsStore(authStore), [authStore]);
+    const notificationsSettingsStore = useMemo(
+        () => new NotificationSettingsStore(authStore),
+        [authStore],
+    );
 
     return (
         <MainLayout fullscreen>
@@ -27,11 +30,15 @@ export const NotificationsSettingsPage = observer(() => {
                         maxWidth: 800,
                     }}
                 >
-                    <Typography sx={{ fontSize: 20, mb: 2 }}>Recevoir une notification lorsque :</Typography>
+                    <Typography sx={{ fontSize: 20, mb: 2 }}>
+                        Recevoir une notification lorsque :
+                    </Typography>
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={notificationsSettingsStore.hasNotificationEnabled("NEW_RESTAURANT")}
+                                checked={notificationsSettingsStore.hasNotificationEnabled(
+                                    "NEW_RESTAURANT",
+                                )}
                                 onChange={() => {
                                     notificationsSettingsStore.toggleNotification("NEW_RESTAURANT");
                                 }}
@@ -42,7 +49,9 @@ export const NotificationsSettingsPage = observer(() => {
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={notificationsSettingsStore.hasNotificationEnabled("NEW_IDEA")}
+                                checked={notificationsSettingsStore.hasNotificationEnabled(
+                                    "NEW_IDEA",
+                                )}
                                 onChange={() => {
                                     notificationsSettingsStore.toggleNotification("NEW_IDEA");
                                 }}
@@ -53,7 +62,9 @@ export const NotificationsSettingsPage = observer(() => {
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={notificationsSettingsStore.hasNotificationEnabled("NEW_REVIEW")}
+                                checked={notificationsSettingsStore.hasNotificationEnabled(
+                                    "NEW_REVIEW",
+                                )}
                                 onChange={() => {
                                     notificationsSettingsStore.toggleNotification("NEW_REVIEW");
                                 }}
@@ -64,9 +75,13 @@ export const NotificationsSettingsPage = observer(() => {
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={notificationsSettingsStore.hasNotificationEnabled("NEW_IDEA_COMMENT")}
+                                checked={notificationsSettingsStore.hasNotificationEnabled(
+                                    "NEW_IDEA_COMMENT",
+                                )}
                                 onChange={() => {
-                                    notificationsSettingsStore.toggleNotification("NEW_IDEA_COMMENT");
+                                    notificationsSettingsStore.toggleNotification(
+                                        "NEW_IDEA_COMMENT",
+                                    );
                                 }}
                             />
                         }

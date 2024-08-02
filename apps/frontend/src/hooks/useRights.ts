@@ -7,7 +7,12 @@ import { notifyError } from "../utils/notification";
 
 export type RightsMode = "some" | "all";
 
-const checkAccess = (connected: boolean, authStore: AuthStore, mode: RightsMode, rightsWanted: AllRights[]) => {
+const checkAccess = (
+    connected: boolean,
+    authStore: AuthStore,
+    mode: RightsMode,
+    rightsWanted: AllRights[],
+) => {
     if (!connected) {
         return false;
     }
@@ -17,7 +22,11 @@ const checkAccess = (connected: boolean, authStore: AuthStore, mode: RightsMode,
     return hasSomeRights(authStore.user.rights, rightsWanted);
 };
 
-export const useRights = (mode: RightsMode, rightsWanted: AllRights[], redirectPath?: string): boolean => {
+export const useRights = (
+    mode: RightsMode,
+    rightsWanted: AllRights[],
+    redirectPath?: string,
+): boolean => {
     const { authStore } = AppStore;
     const message = useRef<string | null>(null);
 

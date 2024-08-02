@@ -35,9 +35,17 @@ const Gift = ({ rewindStore }: GiftProps) => {
                                 zIndex: 10000,
                             }}
                         >
-                            <ConfettiExplosion particleCount={200} duration={2500} force={0.8} zIndex={10001} />
+                            <ConfettiExplosion
+                                particleCount={200}
+                                duration={2500}
+                                force={0.8}
+                                zIndex={10001}
+                            />
                         </div>
-                        <Tooltip title={<Typography>{rewindStore.rewindPersonalityString}</Typography>} placement="top">
+                        <Tooltip
+                            title={<Typography>{rewindStore.rewindPersonalityString}</Typography>}
+                            placement="top"
+                        >
                             <img
                                 src={`/assets/images/rewind/${rewindStore.rewindImageName}`}
                                 style={{

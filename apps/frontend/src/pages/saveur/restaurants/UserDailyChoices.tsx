@@ -135,7 +135,9 @@ export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveur
                     </Box>
                 ) : (
                     <Box sx={{ p: 1 }}>
-                        <Typography sx={{ textAlign: "center" }}>Aucun choix pour le moment</Typography>
+                        <Typography sx={{ textAlign: "center" }}>
+                            Aucun choix pour le moment
+                        </Typography>
                     </Box>
                 ))}
         </Box>

@@ -133,7 +133,9 @@ export class CaddyLogsStore {
             }
         }
 
-        const data = Array.from(minutesMap).map(([key, value]) => [new Date(key).toISOString(), value] as [string, number]);
+        const data = Array.from(minutesMap).map(
+            ([key, value]) => [new Date(key).toISOString(), value] as [string, number],
+        );
 
         return data;
     }

@@ -22,7 +22,8 @@ export const NotificationsAdmin = observer(() => {
                 }}
             >
                 <Alert severity="info">
-                    Si vous ne sélectionnez aucun utilisateur, la notification sera envoyée à tous les utilisateurs
+                    Si vous ne sélectionnez aucun utilisateur, la notification sera envoyée à tous
+                    les utilisateurs
                 </Alert>
                 <br />
                 <Autocomplete

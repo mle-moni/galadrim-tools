@@ -29,7 +29,10 @@ export class WhoamiStore {
     }
 }
 
-export async function clipboardCopy(text: string, { success, error }: { success: () => void; error: () => void }) {
+export async function clipboardCopy(
+    text: string,
+    { success, error }: { success: () => void; error: () => void },
+) {
     const permissions = await navigator.permissions.query({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

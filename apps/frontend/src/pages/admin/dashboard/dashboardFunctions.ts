@@ -75,7 +75,10 @@ export const getUptimeInfos = (uptime: number): DashboardElementProps["options"]
     };
 };
 
-export const getMemoryUsedInfos = (memoryUsed: number, totalMemory: number): DashboardElementProps["options"] => {
+export const getMemoryUsedInfos = (
+    memoryUsed: number,
+    totalMemory: number,
+): DashboardElementProps["options"] => {
     const value = getGBFromBytes(memoryUsed);
     const maxValue = getGBFromBytes(totalMemory);
     const percent = (value / maxValue) * 100;

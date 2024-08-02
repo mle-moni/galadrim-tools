@@ -1,4 +1,8 @@
-import { hasNotificationEnabled, type NotificationName, NOTIFICATIONS } from "@galadrim-tools/shared";
+import {
+    hasNotificationEnabled,
+    type NotificationName,
+    NOTIFICATIONS,
+} from "@galadrim-tools/shared";
 import { makeAutoObservable } from "mobx";
 import { fetchBackendJson, getErrorMessage } from "../../../api/fetch";
 import type { AuthStore } from "../../../globalStores/AuthStore";
@@ -15,7 +19,9 @@ export class NotificationSettingsStore {
 
     async toggleNotification(notification: NotificationName) {
         const shouldAddSetting = !hasNotificationEnabled(this.settings, notification);
-        const notificationInteger = shouldAddSetting ? NOTIFICATIONS[notification] : -NOTIFICATIONS[notification];
+        const notificationInteger = shouldAddSetting
+            ? NOTIFICATIONS[notification]
+            : -NOTIFICATIONS[notification];
         const newNotificationsSettings = this.settings + notificationInteger;
 
         closeAllSnackbars();
@@ -23,9 +29,15 @@ export class NotificationSettingsStore {
         const body = new FormData();
         body.append("notificationsSettings", newNotificationsSettings.toString());
 
-        const res = await fetchBackendJson<{ message: string }, unknown>("/updateNotificationsSettings", "POST", { body });
+        const res = await fetchBackendJson<{ message: string }, unknown>(
+            "/updateNotificationsSettings",
+            "POST",
+            { body },
+        );
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, "Impossible de mettre à jour ce paramétre, bizarre"));
+            return notifyError(
+                getErrorMessage(res.json, "Impossible de mettre à jour ce paramétre, bizarre"),
+            );
         }
 
         this.authStore.setUserNotificationSetting(newNotificationsSettings);

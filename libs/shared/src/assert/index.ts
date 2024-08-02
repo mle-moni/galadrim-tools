@@ -8,6 +8,8 @@ export function _assert<T>(value: T, message?: string): asserts value is NonNull
 
 export function _assertTrue(value: boolean, message?: string): asserts value {
     if (!value) {
-        throw new Error(message ?? `assertion failed for value '${value}' : it should not be false`);
+        throw new Error(
+            message ?? `assertion failed for value '${value}' : it should not be false`,
+        );
     }
 }

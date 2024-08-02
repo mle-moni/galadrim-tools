@@ -35,7 +35,9 @@ export const ThemePage = observer(() => {
                         maxWidth: 800,
                     }}
                 >
-                    <Typography sx={{ fontSize: 20, mb: 2 }}>Customiser le thème de l'application :</Typography>
+                    <Typography sx={{ fontSize: 20, mb: 2 }}>
+                        Customiser le thème de l'application :
+                    </Typography>
 
                     <FormControl fullWidth sx={{ my: 4 }}>
                         <InputLabel id="theme-select-label">Thème pré-configuré</InputLabel>
@@ -43,7 +45,9 @@ export const ThemePage = observer(() => {
                             labelId="theme-select-label"
                             value={themeStore.themeKey ?? ""}
                             label="Theme pré-configuré"
-                            onChange={(e) => themeStore.setThemeKey((e.target.value || null) as ThemeName | null)}
+                            onChange={(e) =>
+                                themeStore.setThemeKey((e.target.value || null) as ThemeName | null)
+                            }
                         >
                             {THEME_OPTIONS_KEYS.map((themeName) => (
                                 <MenuItem key={themeName} value={themeName}>

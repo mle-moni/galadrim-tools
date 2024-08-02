@@ -14,7 +14,9 @@ export const createApiToken = async () => {
                 console.log("%c*********** API TOKEN ***********", "color: #4287f5");
                 console.log(`%c${res.json.token}`, "color: #a442f5");
                 console.log("%c*********************************", "color: #4287f5");
-                notifyError("Impossible de copier dans le presse papier, ouvrez la console pour récupérer le token");
+                notifyError(
+                    "Impossible de copier dans le presse papier, ouvrez la console pour récupérer le token",
+                );
             },
         });
     }

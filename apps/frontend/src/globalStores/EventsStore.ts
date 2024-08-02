@@ -43,7 +43,9 @@ export class EventsStore {
     }
 
     async fetchEvents(all = false) {
-        const events: RoomEvent[] = (await fetchEvents(all)).map((rawEvent: RawRoomEvent) => getEventFromApi(rawEvent));
+        const events: RoomEvent[] = (await fetchEvents(all)).map((rawEvent: RawRoomEvent) =>
+            getEventFromApi(rawEvent),
+        );
         this.setEvents(events);
     }
 
@@ -87,7 +89,10 @@ export class EventsStore {
     async removeEvent(id: number) {
         if (this.waiting) return;
         this.setWaiting(true);
-        const res = await fetchBackendJson<{ id: number; deleted: boolean }, ApiError>(`/events/${id}`, "DELETE");
+        const res = await fetchBackendJson<{ id: number; deleted: boolean }, ApiError>(
+            `/events/${id}`,
+            "DELETE",
+        );
         this.setWaiting(false);
         if (!res.ok || !res.json.deleted) {
             return notifyError("Erreur lors de la suppression de la réservation");

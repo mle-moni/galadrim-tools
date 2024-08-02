@@ -107,7 +107,10 @@ export class CodeNamesStore {
     }
 
     async fetchGame(id: number) {
-        const res = await fetchBackendJson<ApiCodeNamesGame, unknown>(`/codeNamesGames/${id}`, "GET");
+        const res = await fetchBackendJson<ApiCodeNamesGame, unknown>(
+            `/codeNamesGames/${id}`,
+            "GET",
+        );
         if (!res.ok) {
             notifyError("Impossible de récupérer la partie, bizarre");
             return;

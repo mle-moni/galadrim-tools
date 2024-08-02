@@ -1,5 +1,13 @@
 import type { IRestaurant } from "@galadrim-tools/shared";
-import { Euro, LinkOutlined, LocationOn, Message, Storefront, Style, Tag } from "@mui/icons-material";
+import {
+    Euro,
+    LinkOutlined,
+    LocationOn,
+    Message,
+    Storefront,
+    Style,
+    Tag,
+} from "@mui/icons-material";
 import BackIcon from "@mui/icons-material/ChevronLeft";
 import { Autocomplete, Button, Modal, Paper, TextField } from "@mui/material";
 import { toJS } from "mobx";
@@ -29,7 +37,8 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const createRestaurantStore = useMemo(
-        () => (props.mode === "edit" ? new RestaurantStore(props.restaurant) : new RestaurantStore()),
+        () =>
+            props.mode === "edit" ? new RestaurantStore(props.restaurant) : new RestaurantStore(),
         [],
     );
 
@@ -79,7 +88,11 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     onChange={(value) => createRestaurantStore.setCoordinates(value)}
                     Icon={LocationOn}
                 />
-                <Button sx={{ mt: 2 }} variant="contained" onClick={() => tagsStore.setCreationModalVisible(true)}>
+                <Button
+                    sx={{ mt: 2 }}
+                    variant="contained"
+                    onClick={() => tagsStore.setCreationModalVisible(true)}
+                >
                     Ajouter un tag
                 </Button>
                 <Modal
@@ -151,15 +164,16 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     <span style={{ marginLeft: "12px" }}>({createRestaurantStore.image.name})</span>
                 )}
                 <br />
-                {createRestaurantStore.imageSrc !== null && createRestaurantStore.image === null && (
-                    <div className="flex justify-center">
-                        <img
-                            src={getApiUrl() + createRestaurantStore.imageSrc}
-                            alt={createRestaurantStore.description}
-                            style={{ maxWidth: 300, maxHeight: 300 }}
-                        />
-                    </div>
-                )}
+                {createRestaurantStore.imageSrc !== null &&
+                    createRestaurantStore.image === null && (
+                        <div className="flex justify-center">
+                            <img
+                                src={getApiUrl() + createRestaurantStore.imageSrc}
+                                alt={createRestaurantStore.description}
+                                style={{ maxWidth: 300, maxHeight: 300 }}
+                            />
+                        </div>
+                    )}
                 <Button
                     fullWidth
                     variant="contained"

@@ -40,7 +40,9 @@ export const CaddyLogsPage = observer(() => {
                         px: 2,
                     }}
                 >
-                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>Logs Caddy</Typography>
+                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>
+                        Logs Caddy
+                    </Typography>
                     <Tabs
                         variant={isMobile ? "scrollable" : "fullWidth"}
                         value={tab}

@@ -19,7 +19,11 @@ export const HTTP_METHODS_OPTIONS = HTTP_METHODS.map((value) => ({
 }));
 export type HTTPMethod = (typeof HTTP_METHODS)[number];
 
-export const fetchBackend = (endpoint: string, method: HTTPMethod = "GET", request?: RequestInit) => {
+export const fetchBackend = (
+    endpoint: string,
+    method: HTTPMethod = "GET",
+    request?: RequestInit,
+) => {
     return fetch(getApiUrl() + endpoint, {
         ...request,
         method,
@@ -31,7 +35,9 @@ export const fetchBackendJson = async <TSuccess, TError>(
     endpoint: string,
     method: HTTPMethod = "GET",
     request?: RequestInit,
-): Promise<{ ok: true; status: number; json: TSuccess } | { ok: false; status: number; json: TError }> => {
+): Promise<
+    { ok: true; status: number; json: TSuccess } | { ok: false; status: number; json: TError }
+> => {
     const data = await fetchBackend(endpoint, method, request);
     const json = await data.json();
     return { ok: data.ok, status: data.status, json };
@@ -50,7 +56,10 @@ export const isAdonisApiError = (error: unknown): error is AdonisApiError => {
     return typeof errorCast?.code === "string" && typeof errorCast?.message === "string";
 };
 
-export const getErrorMessage = (error: unknown, backupMessage = "Une erreur imprévue est survenue") => {
+export const getErrorMessage = (
+    error: unknown,
+    backupMessage = "Une erreur imprévue est survenue",
+) => {
     if (isApiError(error)) {
         return error.error;
     }

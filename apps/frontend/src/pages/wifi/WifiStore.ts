@@ -41,7 +41,9 @@ export class WifiStore {
         this.loadingState.setIsLoading(false);
 
         if (!res.ok) {
-            notifyError(getErrorMessage(res.json, "Erreur lors de la publication du bug de connexion"));
+            notifyError(
+                getErrorMessage(res.json, "Erreur lors de la publication du bug de connexion"),
+            );
             return;
         }
 

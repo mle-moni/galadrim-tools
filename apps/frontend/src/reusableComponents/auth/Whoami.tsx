@@ -35,14 +35,24 @@ export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) =>
                         sx={{ width: 56, height: 56, mb: 1 }}
                     />
                 </Box>
-                <Typography variant="caption" fontSize={16} onClick={() => store.onClick()} gutterBottom>
+                <Typography
+                    variant="caption"
+                    fontSize={16}
+                    onClick={() => store.onClick()}
+                    gutterBottom
+                >
                     {authStore.user.username}
                 </Typography>
             </Box>
             {noDisconnect ? (
                 <div style={{ width: 120 }} />
             ) : (
-                <Button size="small" variant="outlined" color="error" onClick={() => authStore.logout()}>
+                <Button
+                    size="small"
+                    variant="outlined"
+                    color="error"
+                    onClick={() => authStore.logout()}
+                >
                     Déconnexion
                 </Button>
             )}

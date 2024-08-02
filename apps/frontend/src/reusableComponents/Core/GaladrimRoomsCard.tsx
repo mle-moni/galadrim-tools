@@ -1,4 +1,9 @@
-import { Card as MuiCard, type CardProps as MuiCardProps, experimental_sx as sx, styled } from "@mui/material";
+import {
+    Card as MuiCard,
+    type CardProps as MuiCardProps,
+    experimental_sx as sx,
+    styled,
+} from "@mui/material";
 
 interface CardProps extends MuiCardProps {
     size?: "large" | "normal";

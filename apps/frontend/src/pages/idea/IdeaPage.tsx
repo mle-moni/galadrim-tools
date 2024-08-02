@@ -92,7 +92,10 @@ const IdeaPage = observer(() => {
     return (
         <>
             <RoundedLinks linkInfos={[{ Icon: BackIcon, link: "/" }]} />
-            <Typography style={{ textAlign: "center", fontSize: 32 }} sx={{ paddingTop: [10, null, "30px"] }}>
+            <Typography
+                style={{ textAlign: "center", fontSize: 32 }}
+                sx={{ paddingTop: [10, null, "30px"] }}
+            >
                 Proposer une idée pour améliorer Galadrim
             </Typography>
 
@@ -113,7 +116,15 @@ const IdeaPage = observer(() => {
                 scrollButtons={false}
             >
                 {IDEA_PAGE_STATES.map(({ value, label }) => (
-                    <Tab key={value} label={<TabTitle label={label} badgeNumber={ideaStore.ideasByState[value].length} />} />
+                    <Tab
+                        key={value}
+                        label={
+                            <TabTitle
+                                label={label}
+                                badgeNumber={ideaStore.ideasByState[value].length}
+                            />
+                        }
+                    />
                 ))}
             </Tabs>
             {IDEA_PAGE_STATES.map((state, index) => (

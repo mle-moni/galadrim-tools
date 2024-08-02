@@ -54,7 +54,9 @@ export class CodeNamesFormStore {
     }
 
     get gameSpyMasterOptions() {
-        return AppStore.userOptions.filter(({ value }) => value === this.blueSpyMaster || value === this.redSpyMaster);
+        return AppStore.userOptions.filter(
+            ({ value }) => value === this.blueSpyMaster || value === this.redSpyMaster,
+        );
     }
 
     getPayload() {
@@ -75,9 +77,13 @@ export class CodeNamesFormStore {
     async submitNewGame() {
         const data = this.getPayload();
 
-        const res = await fetchBackendJson<{ game: { id: number } }, unknown>("/codeNamesGames", "POST", {
-            body: data,
-        });
+        const res = await fetchBackendJson<{ game: { id: number } }, unknown>(
+            "/codeNamesGames",
+            "POST",
+            {
+                body: data,
+            },
+        );
 
         if (res.ok) {
             notifySuccess("Une nouvelle partie a été créée !");

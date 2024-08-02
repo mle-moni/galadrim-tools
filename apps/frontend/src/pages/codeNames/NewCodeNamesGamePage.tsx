@@ -32,7 +32,9 @@ export const NewCodeNamesGamePage = observer(() => {
                         disablePortal
                         options={AppStore.userOptions}
                         value={codeNamesFormStore.blueSpyMasterOption}
-                        renderInput={(params) => <TextField {...params} required label="Blue Spy Master" />}
+                        renderInput={(params) => (
+                            <TextField {...params} required label="Blue Spy Master" />
+                        )}
                         onChange={(_e, option) => {
                             if (option) {
                                 codeNamesFormStore.setBlueSpyMaster(option.value);
@@ -46,7 +48,9 @@ export const NewCodeNamesGamePage = observer(() => {
                         disablePortal
                         options={AppStore.userOptions}
                         value={codeNamesFormStore.redSpyMasterOption}
-                        renderInput={(params) => <TextField {...params} required label="Red Spy Master" />}
+                        renderInput={(params) => (
+                            <TextField {...params} required label="Red Spy Master" />
+                        )}
                         onChange={(_e, option) => {
                             if (option) {
                                 codeNamesFormStore.setRedSpyMaster(option.value);
@@ -56,13 +60,19 @@ export const NewCodeNamesGamePage = observer(() => {
                         filterSelectedOptions
                     />
                     {codeNamesFormStore.imageStore.imageSrc !== null && (
-                        <img src={codeNamesFormStore.imageStore.imageSrc} alt="code names" style={{ width: "400px" }} />
+                        <img
+                            src={codeNamesFormStore.imageStore.imageSrc}
+                            alt="code names"
+                            style={{ width: "400px" }}
+                        />
                     )}
                     <Box sx={{ my: 2 }}>
                         <input
                             type="file"
                             accept="image/*"
-                            onChange={(e) => codeNamesFormStore.imageStore.setUploadedImage(e.target)}
+                            onChange={(e) =>
+                                codeNamesFormStore.imageStore.setUploadedImage(e.target)
+                            }
                         />
                     </Box>
 

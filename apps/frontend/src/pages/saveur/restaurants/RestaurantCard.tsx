@@ -62,18 +62,30 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
     const choosen = AppStore.authStore.user.dailyChoice === restaurant.id;
 
     return (
-        <Card key={restaurant.name} sx={{ maxWidth: 400 }} style={{ boxShadow: "1px 5px 5px grey" }}>
+        <Card
+            key={restaurant.name}
+            sx={{ maxWidth: 400 }}
+            style={{ boxShadow: "1px 5px 5px grey" }}
+        >
             <CardMedia component="img" height="180" image={getImageUrl(restaurant.image)} />
             <CardContent>
                 <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                     <Typography sx={{ flex: 1 }} variant="h5" component="div">
                         {restaurant.name}
                     </Typography>
-                    <Typography variant="caption" gutterBottom sx={{ fontSize: 16, marginLeft: 2, marginTop: 0.5 }}>
+                    <Typography
+                        variant="caption"
+                        gutterBottom
+                        sx={{ fontSize: 16, marginLeft: 2, marginTop: 0.5 }}
+                    >
                         {restaurant.averagePrice && `${restaurant.averagePrice}€`}
                     </Typography>
                     {restaurant.websiteLink && (
-                        <IconButton LinkComponent={"a"} href={restaurant.websiteLink} target="_blank">
+                        <IconButton
+                            LinkComponent={"a"}
+                            href={restaurant.websiteLink}
+                            target="_blank"
+                        >
                             <OpenInNewOutlined />
                         </IconButton>
                     )}
@@ -104,7 +116,9 @@ export const RestaurantCard = observer<RestaurantCardProps>(({ restaurant, saveu
                     size="small"
                     title="Voir les commentaires"
                     onClick={() => {
-                        saveurStore.restaurantsStore.reviewsStore.showReviewsForRestaurant(restaurant.id);
+                        saveurStore.restaurantsStore.reviewsStore.showReviewsForRestaurant(
+                            restaurant.id,
+                        );
                     }}
                 >
                     <Comment />

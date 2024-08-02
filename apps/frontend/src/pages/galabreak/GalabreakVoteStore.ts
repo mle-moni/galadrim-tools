@@ -47,10 +47,14 @@ export class GalabreakVoteStore {
     }
 
     async submitVote() {
-        const res = await fetchBackendJson<{ message: string }, unknown>("/galabreak/votes", "POST", {
-            headers: APPLICATION_JSON_HEADERS,
-            body: JSON.stringify(this.voteData),
-        });
+        const res = await fetchBackendJson<{ message: string }, unknown>(
+            "/galabreak/votes",
+            "POST",
+            {
+                headers: APPLICATION_JSON_HEADERS,
+                body: JSON.stringify(this.voteData),
+            },
+        );
 
         if (!res.ok) {
             notifyError(getErrorMessage(res.json));

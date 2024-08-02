@@ -73,7 +73,9 @@ export class RewindStore {
             },
             {
                 label: "Et pour manger, vous avez parcouru",
-                value: this.rewind.totalDistanceTravelled ? this.rewind.totalDistanceTravelled / 1000 : 0,
+                value: this.rewind.totalDistanceTravelled
+                    ? this.rewind.totalDistanceTravelled / 1000
+                    : 0,
                 average: this.rewind.averageDistanceTravelled,
                 position: this.rewind.distanceRank,
                 total: this.rewind.maxRank,
@@ -103,7 +105,17 @@ export class RewindStore {
             return null;
         }
 
-        const colors = ["#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#897eb9"];
+        const colors = [
+            "#d53e4f",
+            "#f46d43",
+            "#fdae61",
+            "#fee08b",
+            "#e6f598",
+            "#abdda4",
+            "#66c2a5",
+            "#3288bd",
+            "#897eb9",
+        ];
 
         const tagsWithCount = Object.entries(this.rewind.restaurantPerTag);
 

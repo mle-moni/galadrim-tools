@@ -64,7 +64,10 @@ const CommentIdeaModal = observer<{
     idea: IIdea;
     userId: IIdeaComment["userId"];
 }>(({ idea, userId }) => {
-    const ideaCommentStore = useMemo(() => new CreateIdeaCommentStore(idea.id, userId), [idea, userId]);
+    const ideaCommentStore = useMemo(
+        () => new CreateIdeaCommentStore(idea.id, userId),
+        [idea, userId],
+    );
     const scrollCommentsRef = useRef<HTMLDivElement>();
     const isMobile = useIsMobile();
 

@@ -34,24 +34,33 @@ export const ScamWinnerPage = observer(() => {
 
                         <h4>Jean-Paul Dubost</h4>
                         <p>
-                            Au début, je pensais que c'était une blague, mais j'ai finalement eu mon GATEAU GRATUIT ! J'en ai
-                            parlé à des amis, pour qu'ils puissent aussi participer
+                            Au début, je pensais que c'était une blague, mais j'ai finalement eu mon
+                            GATEAU GRATUIT ! J'en ai parlé à des amis, pour qu'ils puissent aussi
+                            participer
                         </p>
 
                         <h4>Natanaël Baugé</h4>
                         <p>
-                            Je me suis inscrit, j'ai gagné et j'ai reçu mon GATEAU GRATUIT au bout de 5 jours. Merci beaucoup
-                            les gars !
+                            Je me suis inscrit, j'ai gagné et j'ai reçu mon GATEAU GRATUIT au bout
+                            de 5 jours. Merci beaucoup les gars !
                         </p>
 
                         <h4>Jennifer Ballesdens</h4>
-                        <p>Fantastique ! Je n'ai jamais rien gagné, mais ici j'ai eu de la chance :)</p>
+                        <p>
+                            Fantastique ! Je n'ai jamais rien gagné, mais ici j'ai eu de la chance
+                            :)
+                        </p>
 
                         <h4>Hugo Montgomery</h4>
-                        <p>J'ai gagné, j'ai gagné! Quelle belle surprise en ces temps difficiles!</p>
+                        <p>
+                            J'ai gagné, j'ai gagné! Quelle belle surprise en ces temps difficiles!
+                        </p>
 
                         <h4>Nicolette Lambert</h4>
-                        <p>Je n'ai rien gagné ! Les prix n'étaient pas disponibles lorsque j'ai terminé l'enquête</p>
+                        <p>
+                            Je n'ai rien gagné ! Les prix n'étaient pas disponibles lorsque j'ai
+                            terminé l'enquête
+                        </p>
                     </div>
                 </div>
             </CenteredDiv>

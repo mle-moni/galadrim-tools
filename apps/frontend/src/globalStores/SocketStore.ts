@@ -49,8 +49,12 @@ export class SocketStore {
         this.socket.on("createIdea", (idea) => this.createOrUpdateIdea(idea));
         this.socket.on("updateIdea", (idea) => this.createOrUpdateIdea(idea));
         this.socket.on("deleteIdea", (ideaId) => this.deleteIdea(ideaId));
-        this.socket.on("createRestaurantReview", (idea) => this.createOrUpdateRestaurantReview(idea));
-        this.socket.on("updateRestaurantReview", (idea) => this.createOrUpdateRestaurantReview(idea));
+        this.socket.on("createRestaurantReview", (idea) =>
+            this.createOrUpdateRestaurantReview(idea),
+        );
+        this.socket.on("updateRestaurantReview", (idea) =>
+            this.createOrUpdateRestaurantReview(idea),
+        );
         this.socket.on("deleteRestaurantReview", (ideaId) => this.deleteRestaurantReview(ideaId));
         this.socket.on("notification", (notification) => this.addNotification(notification));
         this.socket.on("game.tournois.newResult", (newResult) => this.addTournoisResult(newResult));

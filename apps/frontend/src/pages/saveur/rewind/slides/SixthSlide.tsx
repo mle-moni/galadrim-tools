@@ -15,7 +15,10 @@ export const SixthSlide = ({ rewindStore }: SixthSlideProps) => {
             {
                 component: (
                     <TextCard>
-                        <h2>Et maintenant, regardons les saveurs culinaires qui enflamment vos papilles</h2>
+                        <h2>
+                            Et maintenant, regardons les saveurs culinaires qui enflamment vos
+                            papilles
+                        </h2>
                     </TextCard>
                 ),
                 duration: 4000,

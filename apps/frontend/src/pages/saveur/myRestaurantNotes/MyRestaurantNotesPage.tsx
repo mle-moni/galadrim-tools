@@ -53,7 +53,10 @@ const NOTES_COLUMNS: GridColDef[] = [
 ];
 
 export const MyRestaurantNotesPage = observer(() => {
-    const store = useMemo(() => new MyRestaurantNotesStore(AppStore.saveurStore.restaurantsStore), []);
+    const store = useMemo(
+        () => new MyRestaurantNotesStore(AppStore.saveurStore.restaurantsStore),
+        [],
+    );
 
     useEffect(() => {
         if (!store.loadingState.isLoading) {
@@ -65,7 +68,11 @@ export const MyRestaurantNotesPage = observer(() => {
         <MainLayout fullscreen>
             <Stack direction="column" sx={{ p: 4, height: "80vh" }}>
                 <Box sx={{ mb: 2 }}>
-                    <Button startIcon={<BackIcon />} variant="contained" onClick={() => AppStore.navigate("/saveur")}>
+                    <Button
+                        startIcon={<BackIcon />}
+                        variant="contained"
+                        onClick={() => AppStore.navigate("/saveur")}
+                    >
                         Retour
                     </Button>
                 </Box>
@@ -79,7 +86,12 @@ export const MyRestaurantNotesPage = observer(() => {
                         backgroundColor: "rgba(255,255,255,0.5)",
                     }}
                 >
-                    <DataGrid rows={store.rows.slice()} columns={NOTES_COLUMNS} pageSize={10} rowsPerPageOptions={[10]} />
+                    <DataGrid
+                        rows={store.rows.slice()}
+                        columns={NOTES_COLUMNS}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
+                    />
                 </div>
             </Stack>
         </MainLayout>

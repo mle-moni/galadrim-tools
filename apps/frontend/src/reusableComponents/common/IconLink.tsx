@@ -19,7 +19,13 @@ export const IconLink = observer<IconLinkProps>(({ Icon, link, title, hidden }) 
     }
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" minWidth={200} sx={{ padding: [2, 4] }}>
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            minWidth={200}
+            sx={{ padding: [2, 4] }}
+        >
             <Fab size="large" variant="circular" color="primary" onClick={() => handleClick(link)}>
                 <Icon />
             </Fab>

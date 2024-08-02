@@ -1,4 +1,9 @@
-import { type INotes, type IRestaurant, type NotesOption, NOTES_VALUES } from "@galadrim-tools/shared";
+import {
+    type INotes,
+    type IRestaurant,
+    type NotesOption,
+    NOTES_VALUES,
+} from "@galadrim-tools/shared";
 import { makeAutoObservable } from "mobx";
 import { fetchBackendJson } from "../../../api/fetch";
 import { AppStore } from "../../../globalStores/AppStore";
@@ -19,7 +24,9 @@ export class RestaurantCardStore {
     constructor(private restaurant: IRestaurant) {
         makeAutoObservable(this);
 
-        const ratingFound = restaurant.notes.find((item) => item.userId === AppStore.authStore.user.id);
+        const ratingFound = restaurant.notes.find(
+            (item) => item.userId === AppStore.authStore.user.id,
+        );
         this.rating = ratingFound?.note ?? null;
     }
 

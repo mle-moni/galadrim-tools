@@ -25,7 +25,9 @@ export const GalabreakVotePage = observer(() => {
             <CenteredDiv>
                 <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600, mt: 4 }}>
                     <GaladrimLogo align="center" sx={{ mb: 2 }} />
-                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>Une pause s'impose !</Typography>
+                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>
+                        Une pause s'impose !
+                    </Typography>
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
@@ -41,7 +43,9 @@ export const GalabreakVotePage = observer(() => {
                             multiple
                             fullWidth
                             value={store.activitiesValue}
-                            renderInput={(params) => <TextField {...params} label="Choisir une/des activités" />}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Choisir une/des activités" />
+                            )}
                             onChange={(_e, value) => {
                                 if (value) {
                                     store.setActivitiesValue(value);
@@ -58,7 +62,9 @@ export const GalabreakVotePage = observer(() => {
                             multiple
                             fullWidth
                             value={store.timesValue}
-                            renderInput={(params) => <TextField {...params} label="Choisir une/des disponibilités" />}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Choisir une/des disponibilités" />
+                            )}
                             onChange={(_e, value) => {
                                 if (value) {
                                     store.setTimesValue(value);

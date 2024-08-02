@@ -78,7 +78,9 @@ export const RestaurantMarkers = observer<{
                     console.log("%c*********** POS *****************", "color: #4287f5");
                     console.log(`%c${posStr}`, "color: #a442f5");
                     console.log("%c*********************************", "color: #4287f5");
-                    notifyError("Impossible de copier dans le presse papier, ouvrez la console pour récupérer la position");
+                    notifyError(
+                        "Impossible de copier dans le presse papier, ouvrez la console pour récupérer la position",
+                    );
                 },
                 success: () => {
                     notifySuccess("Position copiée dans le presse papier");

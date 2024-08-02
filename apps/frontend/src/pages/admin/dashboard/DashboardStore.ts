@@ -3,7 +3,12 @@ import { action, makeAutoObservable } from "mobx";
 import { fetchBackendJson, getErrorMessage } from "../../../api/fetch";
 import { notifyError } from "../../../utils/notification";
 import type { DashboardElementProps } from "./Dashboard";
-import { getAllMemoryInfos, getLoadInfos, getMemoryUsedInfos, getUptimeInfos } from "./dashboardFunctions";
+import {
+    getAllMemoryInfos,
+    getLoadInfos,
+    getMemoryUsedInfos,
+    getUptimeInfos,
+} from "./dashboardFunctions";
 
 type IntervalId = ReturnType<typeof setInterval>;
 
@@ -42,7 +47,9 @@ export class DashboardStore {
         const res = await fetchBackendJson<DashboardInfos, ApiError>("/admin/dashboard");
 
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, `Impossible d'envoyer un mail à cette adresse, bizarre`));
+            return notifyError(
+                getErrorMessage(res.json, `Impossible d'envoyer un mail à cette adresse, bizarre`),
+            );
         }
 
         this.setInfos(res.json);

@@ -7,5 +7,10 @@ export const RestaurantDisplay = observer<{ saveurStore: SaveurStore }>(({ saveu
         return null;
     }
 
-    return <RestaurantCard restaurant={saveurStore.restaurantsStore.restaurantClicked} saveurStore={saveurStore} />;
+    return (
+        <RestaurantCard
+            restaurant={saveurStore.restaurantsStore.restaurantClicked}
+            saveurStore={saveurStore}
+        />
+    );
 });

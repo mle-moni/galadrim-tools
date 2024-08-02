@@ -53,16 +53,23 @@ export class IdeasStore {
             (idea) =>
                 SHOULD_NOT_PASS_ACTIVATED === false ||
                 idea.state !== "TODO" ||
-                !(this.hasUserDownVote(idea.reactions, 7) && this.hasUserDownVote(idea.reactions, 20)),
+                !(
+                    this.hasUserDownVote(idea.reactions, 7) &&
+                    this.hasUserDownVote(idea.reactions, 20)
+                ),
         );
     }
 
     get badIdeas() {
-        return this.shouldPassIdeas.filter((idea) => idea.state === "TODO" && this.isIdeaBad(idea.reactions));
+        return this.shouldPassIdeas.filter(
+            (idea) => idea.state === "TODO" && this.isIdeaBad(idea.reactions),
+        );
     }
 
     get notBadIdeas() {
-        return this.shouldPassIdeas.filter((idea) => idea.state !== "TODO" || !this.isIdeaBad(idea.reactions));
+        return this.shouldPassIdeas.filter(
+            (idea) => idea.state !== "TODO" || !this.isIdeaBad(idea.reactions),
+        );
     }
 
     get ideasByState(): {
@@ -152,17 +159,23 @@ export class IdeasStore {
         if (res.ok) {
             notifySuccess(`L'idée a été mise à jour`);
         } else {
-            notifyError(getErrorMessage(res.json, `impossible de mettre à jour l'idée numéro ${id}`));
+            notifyError(
+                getErrorMessage(res.json, `impossible de mettre à jour l'idée numéro ${id}`),
+            );
         }
     }
 
     async deleteReaction(idea: IIdea, userId: IIdeaNote["userId"]) {
-        const result = await fetchBackendJson<{ message: string }, unknown>("/createOrUpdateIdeaVote", "POST", {
-            body: JSON.stringify({
-                ideaId: idea.id,
-            }),
-            headers: APPLICATION_JSON_HEADERS,
-        });
+        const result = await fetchBackendJson<{ message: string }, unknown>(
+            "/createOrUpdateIdeaVote",
+            "POST",
+            {
+                body: JSON.stringify({
+                    ideaId: idea.id,
+                }),
+                headers: APPLICATION_JSON_HEADERS,
+            },
+        );
 
         if (result.ok) {
             this.setReactions(
@@ -222,16 +235,17 @@ export class IdeasStore {
     async saveComment(comment: Omit<IIdeaComment, "id">) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { userId: _, ...rest } = comment;
-        const result = await fetchBackendJson<{ message: string; ideaComment: IIdeaComment }, unknown>(
-            "/createIdeaComment",
-            "POST",
-            {
-                body: JSON.stringify(rest),
-                headers: APPLICATION_JSON_HEADERS,
-            },
-        );
+        const result = await fetchBackendJson<
+            { message: string; ideaComment: IIdeaComment },
+            unknown
+        >("/createIdeaComment", "POST", {
+            body: JSON.stringify(rest),
+            headers: APPLICATION_JSON_HEADERS,
+        });
         if (!result.ok) {
-            notifyError(getErrorMessage(result.json, "Votre commentaire n'a pas pu être pris en compte"));
+            notifyError(
+                getErrorMessage(result.json, "Votre commentaire n'a pas pu être pris en compte"),
+            );
         }
     }
 

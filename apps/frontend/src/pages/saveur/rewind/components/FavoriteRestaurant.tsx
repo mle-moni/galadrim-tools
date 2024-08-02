@@ -7,10 +7,15 @@ type FavoriteRestaurantProps = {
     favoriteRestaurantCount?: number | null;
 };
 
-export const FavoriteRestaurant = ({ favoriteRestaurantId, favoriteRestaurantCount }: FavoriteRestaurantProps) => {
+export const FavoriteRestaurant = ({
+    favoriteRestaurantId,
+    favoriteRestaurantCount,
+}: FavoriteRestaurantProps) => {
     const restaurantsStore = AppStore.saveurStore.restaurantsStore;
 
-    const favoriteRestaurant = restaurantsStore.restaurants.find((restaurant) => restaurant.id === favoriteRestaurantId);
+    const favoriteRestaurant = restaurantsStore.restaurants.find(
+        (restaurant) => restaurant.id === favoriteRestaurantId,
+    );
 
     if (!favoriteRestaurant || !favoriteRestaurantCount) {
         return <h2>Bah nan t'as rien rempli</h2>;

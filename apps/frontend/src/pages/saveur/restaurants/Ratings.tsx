@@ -1,5 +1,13 @@
 import type { NotesOption } from "@galadrim-tools/shared";
-import { Box, CardContent, LinearProgress, linearProgressClasses, styled, Tooltip, Typography } from "@mui/material";
+import {
+    Box,
+    CardContent,
+    LinearProgress,
+    linearProgressClasses,
+    styled,
+    Tooltip,
+    Typography,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { AppStore } from "../../../globalStores/AppStore";
 import { getNameOfUsers } from "./ratingsFunctions";

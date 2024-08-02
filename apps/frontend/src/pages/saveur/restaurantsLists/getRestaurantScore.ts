@@ -28,7 +28,9 @@ const getRestaurantScore = (
     const numberOfVotes = restaurant.notes.length;
     const part1 = (numberOfVotes / (numberOfVotes + MINIMUM_VOTES_BEFORE_RELEVANT)) * average;
     const part2 =
-        MINIMUM_VOTES_BEFORE_RELEVANT / (numberOfVotes + MINIMUM_VOTES_BEFORE_RELEVANT) / allRestaurantsNotesAverage;
+        MINIMUM_VOTES_BEFORE_RELEVANT /
+        (numberOfVotes + MINIMUM_VOTES_BEFORE_RELEVANT) /
+        allRestaurantsNotesAverage;
 
     return part1 + part2;
 };

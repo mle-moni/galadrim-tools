@@ -71,7 +71,9 @@ export class StatisticsStore {
 
     async fetchAmountPerUser() {
         const qs = this.showStatsFromAllTime ? "" : "?days=30";
-        const res = await fetchBackendJson<ApiAmountStatistic[], unknown>(`/statistics/amount${qs}`);
+        const res = await fetchBackendJson<ApiAmountStatistic[], unknown>(
+            `/statistics/amount${qs}`,
+        );
         if (res.ok) this.setAmountPerUserData(res.json);
     }
 
@@ -90,7 +92,11 @@ export class StatisticsStore {
 
     async fetchStats() {
         this.loadingState.setIsLoading(true);
-        await Promise.all([this.fetchAmountPerUser(), this.fetchRoomData(), this.fetchTimePerUser()]);
+        await Promise.all([
+            this.fetchAmountPerUser(),
+            this.fetchRoomData(),
+            this.fetchTimePerUser(),
+        ]);
         this.loadingState.setIsLoading(false);
     }
 

@@ -26,7 +26,9 @@ const sendEvent = async (
     return getEventFromApi(rawEvent);
 };
 
-export const postEvent = async (params: Omit<RoomEvent, "id" | "title" | "userId">): Promise<RoomEvent> => {
+export const postEvent = async (
+    params: Omit<RoomEvent, "id" | "title" | "userId">,
+): Promise<RoomEvent> => {
     return sendEvent(params, "POST");
 };
 

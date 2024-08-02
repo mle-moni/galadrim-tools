@@ -11,7 +11,11 @@ const VoteUserAvatars = observer<{ votes: ApiBreakVote[] }>(({ votes }) => (
 
             return (
                 <div key={vote.id} className="flex justify-center" style={{ marginTop: "24px" }}>
-                    <Avatar alt={user.username} src={user.imageUrl ?? undefined} sx={{ width: 64, height: 64, mb: 1 }} />
+                    <Avatar
+                        alt={user.username}
+                        src={user.imageUrl ?? undefined}
+                        sx={{ width: 64, height: 64, mb: 1 }}
+                    />
                 </div>
             );
         })}
@@ -20,12 +24,16 @@ const VoteUserAvatars = observer<{ votes: ApiBreakVote[] }>(({ votes }) => (
 
 const H2_STYLE = { marginRight: 20, minWidth: 200 };
 
-const Activity = observer<{ activityId: number; votes: ApiBreakVote[] }>(({ activityId, votes }) => (
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-        <h2 style={H2_STYLE}>{votes[0].activities.find(({ id }) => id === activityId)?.name}</h2>
-        <VoteUserAvatars votes={votes} />
-    </Box>
-));
+const Activity = observer<{ activityId: number; votes: ApiBreakVote[] }>(
+    ({ activityId, votes }) => (
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+            <h2 style={H2_STYLE}>
+                {votes[0].activities.find(({ id }) => id === activityId)?.name}
+            </h2>
+            <VoteUserAvatars votes={votes} />
+        </Box>
+    ),
+);
 
 const getVoteTime = (vote: ApiBreakVote, timeId: number) => {
     const timeObj = vote.times.find(({ id }) => id === timeId);

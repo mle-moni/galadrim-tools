@@ -54,7 +54,9 @@ export const CodeNamesGamePage = observer(() => {
                         disablePortal
                         options={AppStore.userOptions}
                         value={codeNamesFormStore.blueSpyMasterOption}
-                        renderInput={(params) => <TextField {...params} required label="Blue Spy Master" />}
+                        renderInput={(params) => (
+                            <TextField {...params} required label="Blue Spy Master" />
+                        )}
                         onChange={(_e, option) => {
                             if (option) {
                                 codeNamesFormStore.setBlueSpyMaster(option.value);
@@ -70,7 +72,9 @@ export const CodeNamesGamePage = observer(() => {
                         disablePortal
                         options={AppStore.userOptions}
                         value={codeNamesFormStore.redSpyMasterOption}
-                        renderInput={(params) => <TextField {...params} required label="Red Spy Master" />}
+                        renderInput={(params) => (
+                            <TextField {...params} required label="Red Spy Master" />
+                        )}
                         onChange={(_e, option) => {
                             if (option) {
                                 codeNamesFormStore.setRedSpyMaster(option.value);
@@ -82,7 +86,11 @@ export const CodeNamesGamePage = observer(() => {
                     />
 
                     {codeNamesFormStore.imageStore.imageSrc !== null && (
-                        <img src={codeNamesFormStore.imageStore.imageSrc} alt="code names" style={{ width: "400px" }} />
+                        <img
+                            src={codeNamesFormStore.imageStore.imageSrc}
+                            alt="code names"
+                            style={{ width: "400px" }}
+                        />
                     )}
 
                     <canvas
@@ -91,7 +99,9 @@ export const CodeNamesGamePage = observer(() => {
                         id="canvas"
                         width={CANVAS_WIDTH}
                         height={CANVAS_HEIGHT}
-                        onClick={(e) => store?.onClick(e.nativeEvent.offsetX, e.nativeEvent.offsetY)}
+                        onClick={(e) =>
+                            store?.onClick(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
+                        }
                     />
 
                     {store !== null && store.filteredMatrices.length === 1 && (
@@ -111,7 +121,9 @@ export const CodeNamesGamePage = observer(() => {
                         disablePortal
                         options={codeNamesFormStore.gameSpyMasterOptions}
                         value={codeNamesFormStore.roundSpyMasterOption}
-                        renderInput={(params) => <TextField {...params} required label="Round Spy Master" />}
+                        renderInput={(params) => (
+                            <TextField {...params} required label="Round Spy Master" />
+                        )}
                         onChange={(_e, option) => {
                             if (option) {
                                 codeNamesFormStore.setRoundSpyMaster(option.value);

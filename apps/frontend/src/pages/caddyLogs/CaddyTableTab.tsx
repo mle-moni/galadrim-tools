@@ -1,6 +1,10 @@
 import "./tableOverrides.css";
 
-import { type MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+    type MRT_ColumnDef,
+    MaterialReactTable,
+    useMaterialReactTable,
+} from "material-react-table";
 import { observer } from "mobx-react-lite";
 import { HTTP_METHODS_OPTIONS } from "../../api/fetch";
 import type { CaddyLog, CaddyLogsStore } from "./CaddyLogsStore";

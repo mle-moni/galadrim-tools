@@ -16,7 +16,9 @@ import { IconLink } from "../reusableComponents/common/IconLink";
 import MainLayout from "../reusableComponents/layouts/MainLayout";
 
 const HomePage = observer(() => {
-    const canSeeAdminPage = AppStore.authStore.connected ? AppStore.authStore.user.rights !== 0 : false;
+    const canSeeAdminPage = AppStore.authStore.connected
+        ? AppStore.authStore.user.rights !== 0
+        : false;
 
     return (
         <MainLayout fullscreen>
@@ -35,14 +37,23 @@ const HomePage = observer(() => {
                 <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
                 <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
                 <IconLink Icon={Pause} link="/galabreak" title="Pause ?" />
-                <IconLink Icon={GitHub} link="https://github.com/mle-moni/galadrim-tools" title="Participer" />
+                <IconLink
+                    Icon={GitHub}
+                    link="https://github.com/mle-moni/galadrim-tools"
+                    title="Participer"
+                />
                 <IconLink
                     Icon={BugReport}
                     link="https://github.com/mle-moni/galadrim-tools/issues"
                     title="Reporter un bug"
                 />
                 <IconLink Icon={SignalWifiBad} link="/wifi" title="Problème de connexion ?" />
-                <IconLink Icon={AdminPanelSettings} link="/admin" title="Administration" hidden={!canSeeAdminPage} />
+                <IconLink
+                    Icon={AdminPanelSettings}
+                    link="/admin"
+                    title="Administration"
+                    hidden={!canSeeAdminPage}
+                />
             </Box>
         </MainLayout>
     );

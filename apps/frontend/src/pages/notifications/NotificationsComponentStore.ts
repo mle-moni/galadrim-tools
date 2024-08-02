@@ -25,7 +25,12 @@ export class NotificationsComponentStore {
     async readNotifications() {
         const res = await fetchBackendJson("/readNotifications", "POST");
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, "Impossible de mettre les notifications comme lues, bizarre"));
+            return notifyError(
+                getErrorMessage(
+                    res.json,
+                    "Impossible de mettre les notifications comme lues, bizarre",
+                ),
+            );
         }
     }
 

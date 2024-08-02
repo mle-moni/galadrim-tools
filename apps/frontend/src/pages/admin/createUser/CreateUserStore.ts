@@ -35,7 +35,9 @@ export class CreateUserStore {
             this.setEmail("");
             this.setUsername("");
         } else {
-            notifyError(getErrorMessage(res.json, `Impossible de créer l'utilisateur ${this.username}`));
+            notifyError(
+                getErrorMessage(res.json, `Impossible de créer l'utilisateur ${this.username}`),
+            );
         }
     }
 }

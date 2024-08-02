@@ -27,13 +27,19 @@ const RoomPage = () => {
         AppStore.eventsStore.setRoomName(params.roomName ?? "*");
     }, []);
 
-    const [selectedLocation, setSelectedLocation] = useState<WorkspaceLocation>(preselectLocation());
+    const [selectedLocation, setSelectedLocation] = useState<WorkspaceLocation>(
+        preselectLocation(),
+    );
 
     return (
         <MainLayout fullscreen noDisconnect>
             <div>
                 <Box sx={{ position: "absolute", top: 32, left: 32, zIndex: 10 }}>
-                    <Button startIcon={<BackIcon />} variant="contained" onClick={() => AppStore.navigate("/rooms")}>
+                    <Button
+                        startIcon={<BackIcon />}
+                        variant="contained"
+                        onClick={() => AppStore.navigate("/rooms")}
+                    >
                         Retour
                     </Button>
                 </Box>
@@ -68,7 +74,11 @@ const RoomPage = () => {
                                 localStorage.setItem("selectedLocation", newValue);
                             }}
                         >
-                            <FormControlLabel value="saintPaul" control={<Radio />} label="Saint Paul" />
+                            <FormControlLabel
+                                value="saintPaul"
+                                control={<Radio />}
+                                label="Saint Paul"
+                            />
                             <FormControlLabel value="nantes" control={<Radio />} label="Nantes" />
                         </RadioGroup>
                     </Box>

@@ -42,7 +42,9 @@ export const AtopLogsPage = observer(() => {
                         minHeight: "100vh",
                     }}
                 >
-                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>Logs Atop</Typography>
+                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>
+                        Logs Atop
+                    </Typography>
                     <Tabs
                         variant={isMobile ? "scrollable" : "fullWidth"}
                         value={tab}
@@ -70,21 +72,49 @@ export const AtopLogsPage = observer(() => {
 
                     <Box sx={{ minHeight: "40vh" }}>
                         {tab === 0 && (
-                            <LineChart data={atopLogsStore.memoryData} download ytitle="Memory used (%)" max={100} min={0} />
+                            <LineChart
+                                data={atopLogsStore.memoryData}
+                                download
+                                ytitle="Memory used (%)"
+                                max={100}
+                                min={0}
+                            />
                         )}
                         {tab === 1 && (
-                            <LineChart data={atopLogsStore.cpuData} download ytitle="Cpu usage (%)" max={100} min={0} />
+                            <LineChart
+                                data={atopLogsStore.cpuData}
+                                download
+                                ytitle="Cpu usage (%)"
+                                max={100}
+                                min={0}
+                            />
                         )}
                         {tab === 2 && (
                             <>
-                                <LineChart data={atopLogsStore.ioTimeDiskData} download ytitle="I/O Time (ms)" />
-                                <LineChart data={atopLogsStore.readWriteDiskData} download ytitle="Read/Write Operations" />
+                                <LineChart
+                                    data={atopLogsStore.ioTimeDiskData}
+                                    download
+                                    ytitle="I/O Time (ms)"
+                                />
+                                <LineChart
+                                    data={atopLogsStore.readWriteDiskData}
+                                    download
+                                    ytitle="Read/Write Operations"
+                                />
                             </>
                         )}
                         {tab === 3 && (
                             <>
-                                <LineChart data={atopLogsStore.inOutNetworkData} download ytitle="Network in/out (bytes)" />
-                                <LineChart data={atopLogsStore.networkErrorsData} download ytitle="Network in/out errors" />
+                                <LineChart
+                                    data={atopLogsStore.inOutNetworkData}
+                                    download
+                                    ytitle="Network in/out (bytes)"
+                                />
+                                <LineChart
+                                    data={atopLogsStore.networkErrorsData}
+                                    download
+                                    ytitle="Network in/out errors"
+                                />
                             </>
                         )}
                     </Box>

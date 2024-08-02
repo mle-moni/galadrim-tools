@@ -29,7 +29,13 @@ export type ReservableWorkplaceSvgRoom = (typeof RESERVABLE_ROOMS)[number];
 
 export type RoomFullName = (typeof AllRooms)[number]["name"];
 
-export type WorkspaceLocation = "bonneNouvelle" | "saintPaul2" | "saintPaul3" | "saintPaul4" | "saintPaul" | "nantes";
+export type WorkspaceLocation =
+    | "bonneNouvelle"
+    | "saintPaul2"
+    | "saintPaul3"
+    | "saintPaul4"
+    | "saintPaul"
+    | "nantes";
 
 export const ValidLocations = ["bonneNouvelle", "saintPaul", "nantes"];
 

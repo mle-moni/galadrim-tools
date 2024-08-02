@@ -15,7 +15,16 @@ type CategoryInfoProps = {
 };
 
 export const CategoryInfo = observer(
-    ({ label, value, average, position, total, unit, averageUnit, conditionalLabel }: CategoryInfoProps) => {
+    ({
+        label,
+        value,
+        average,
+        position,
+        total,
+        unit,
+        averageUnit,
+        conditionalLabel,
+    }: CategoryInfoProps) => {
         return (
             <div className="category-info">
                 <p className="label">
@@ -34,7 +43,8 @@ export const CategoryInfo = observer(
                     </div>
                 )}
                 <div className="position">
-                    Ce qui vous place en <strong>{getRewindPositionLabel(position, total)}</strong> parmi les Galagourmets
+                    Ce qui vous place en <strong>{getRewindPositionLabel(position, total)}</strong>{" "}
+                    parmi les Galagourmets
                 </div>
                 {conditionalLabel && (
                     <div className="conditional-label">

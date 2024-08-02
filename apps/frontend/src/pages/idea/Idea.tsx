@@ -2,7 +2,16 @@ import { hasRights, type IdeaState, type IIdea, type IUserData } from "@galadrim
 import { Comment, Delete, Done, Clear } from "@mui/icons-material";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Box, type BoxProps, Card, CardActions, CardContent, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+    Box,
+    type BoxProps,
+    Card,
+    CardActions,
+    CardContent,
+    IconButton,
+    Tooltip,
+    Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { observer } from "mobx-react-lite";
 import { useMemo } from "react";
@@ -81,7 +90,11 @@ const Idea = observer<{
                 }}
             >
                 <CardContent>
-                    <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "break-spaces" }}>
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ whiteSpace: "break-spaces" }}
+                    >
                         {idea.text}
                     </Typography>
                 </CardContent>
@@ -101,9 +114,13 @@ const Idea = observer<{
                             </IconButton>
                         </Tooltip>
                     </Box>
-                    <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}>
+                    <Tooltip
+                        title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, true), users)}
+                    >
                         <IconReactionWrapper>
-                            <IconButton onClick={() => ideaStore.setReaction(idea.id, user.id, true)}>
+                            <IconButton
+                                onClick={() => ideaStore.setReaction(idea.id, user.id, true)}
+                            >
                                 <ThumbUpIcon
                                     sx={{
                                         color: currentUserReaction === true ? "#5bb65f" : undefined,
@@ -113,12 +130,17 @@ const Idea = observer<{
                             {numberOfUpvote}
                         </IconReactionWrapper>
                     </Tooltip>
-                    <Tooltip title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}>
+                    <Tooltip
+                        title={getNameOfUsers(getUsersIdWithSpecificReaction(idea, false), users)}
+                    >
                         <IconReactionWrapper sx={{ display: "flex", alignItems: "center" }}>
-                            <IconButton onClick={() => ideaStore.setReaction(idea.id, user.id, false)}>
+                            <IconButton
+                                onClick={() => ideaStore.setReaction(idea.id, user.id, false)}
+                            >
                                 <ThumbDownIcon
                                     sx={{
-                                        color: currentUserReaction === false ? "#f0625f" : undefined,
+                                        color:
+                                            currentUserReaction === false ? "#f0625f" : undefined,
                                     }}
                                 />
                             </IconButton>
@@ -142,7 +164,9 @@ const Idea = observer<{
                                 </IconButton>
                             </IconReactionWrapper>
                         </Tooltip>
-                        <Tooltip title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(idea.state)}`}>
+                        <Tooltip
+                            title={`Marquer comme ${ideaStore.getUiNextIdeaStateString(idea.state)}`}
+                        >
                             <IconReactionWrapper>
                                 <IconButton onClick={() => ideaStore.update(idea.id)}>
                                     {idea.state === "DONE" ? <Clear /> : <Done />}
@@ -173,7 +197,11 @@ const Idea = observer<{
                     </Tooltip>
                 </CardActions>
             </Card>
-            <SimpleModal open={modalStore.modalOpen} width={isMobile ? "80%" : 800} onClose={toggleShowComments}>
+            <SimpleModal
+                open={modalStore.modalOpen}
+                width={isMobile ? "80%" : 800}
+                onClose={toggleShowComments}
+            >
                 <CommentIdeaModal idea={idea} userId={user.id} />
             </SimpleModal>
         </>

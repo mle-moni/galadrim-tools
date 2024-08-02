@@ -1,4 +1,11 @@
-import type { ApiError, ApiNotification, INotification, IRestaurant, ITheme, IUserData } from "@galadrim-tools/shared";
+import type {
+    ApiError,
+    ApiNotification,
+    INotification,
+    IRestaurant,
+    ITheme,
+    IUserData,
+} from "@galadrim-tools/shared";
 import { makeAutoObservable } from "mobx";
 import { fetchBackendJson, getErrorMessage } from "../api/fetch";
 import { notifyError, notifySuccess } from "../utils/notification";
@@ -114,7 +121,9 @@ export class AuthStore {
             body: data,
         });
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, `Impossible d'envoyer un mail a cette adresse, bizarre`));
+            return notifyError(
+                getErrorMessage(res.json, `Impossible d'envoyer un mail a cette adresse, bizarre`),
+            );
         }
         notifySuccess(res.json.notification);
         AppStore.navigate(`/login?intent=${CHANGE_PASSWORD_INTENT}`);
@@ -127,7 +136,9 @@ export class AuthStore {
             body: data,
         });
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, "Impossible de mettre à jour le mot de passe, bizarre"));
+            return notifyError(
+                getErrorMessage(res.json, "Impossible de mettre à jour le mot de passe, bizarre"),
+            );
         }
         notifySuccess(res.json.notification);
         this.setPassword("");
@@ -172,7 +183,9 @@ export class AuthStore {
             body: data,
         });
         if (!res.ok) {
-            return notifyError(getErrorMessage(res.json, "Impossible de mettre à jour le profil, bizarre..."));
+            return notifyError(
+                getErrorMessage(res.json, "Impossible de mettre à jour le profil, bizarre..."),
+            );
         }
         this.updateProfileData(username, email);
         notifySuccess("Profil mis à jour !");

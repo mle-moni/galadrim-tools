@@ -1,4 +1,10 @@
-import { Box, CircularProgress, type CircularProgressProps, Typography, styled } from "@mui/material";
+import {
+    Box,
+    CircularProgress,
+    type CircularProgressProps,
+    Typography,
+    styled,
+} from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
 import { RenouvArtWait } from "../../../reusableComponents/animations/RenouvArtWait/RenouvArtWait";
@@ -14,45 +20,52 @@ export interface DashboardElementProps {
     };
 }
 
-const DashboardElement = observer<DashboardElementProps>(({ options: { value, label, maxValue, unit, color } }) => {
-    const valuePercent = (value / maxValue) * 100;
+const DashboardElement = observer<DashboardElementProps>(
+    ({ options: { value, label, maxValue, unit, color } }) => {
+        const valuePercent = (value / maxValue) * 100;
 
-    return (
-        <div>
-            <div style={{ flexDirection: "column", justifyContent: "space-evenly" }}>
-                <Box sx={{ position: "relative", display: "inline-flex" }}>
-                    <CircularProgress
-                        sx={{ position: "absolute" }}
-                        size="100px"
-                        value={100}
-                        variant="determinate"
-                        color="secondary"
-                    />
-                    <CircularProgress size="100px" value={valuePercent} variant="determinate" color={color} />
-                    <Box
-                        sx={{
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                            position: "absolute",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <Typography
-                            variant="caption"
-                            component="div"
-                            color="text.secondary"
-                        >{`${value} ${unit}`}</Typography>
+        return (
+            <div>
+                <div style={{ flexDirection: "column", justifyContent: "space-evenly" }}>
+                    <Box sx={{ position: "relative", display: "inline-flex" }}>
+                        <CircularProgress
+                            sx={{ position: "absolute" }}
+                            size="100px"
+                            value={100}
+                            variant="determinate"
+                            color="secondary"
+                        />
+                        <CircularProgress
+                            size="100px"
+                            value={valuePercent}
+                            variant="determinate"
+                            color={color}
+                        />
+                        <Box
+                            sx={{
+                                top: 0,
+                                left: 0,
+                                bottom: 0,
+                                right: 0,
+                                position: "absolute",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Typography
+                                variant="caption"
+                                component="div"
+                                color="text.secondary"
+                            >{`${value} ${unit}`}</Typography>
+                        </Box>
                     </Box>
-                </Box>
-                <Typography>{label}</Typography>
+                    <Typography>{label}</Typography>
+                </div>
             </div>
-        </div>
-    );
-});
+        );
+    },
+);
 
 const flexCenterCss = {
     display: "flex",

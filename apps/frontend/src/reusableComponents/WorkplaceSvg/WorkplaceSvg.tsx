@@ -74,7 +74,12 @@ const useRoom = (
         style,
     }: Pick<
         WorkplaceSvgProps,
-        "backgroundColor" | "backgroundColorHover" | "onClick" | "onMouseOut" | "onMouseOver" | "style"
+        | "backgroundColor"
+        | "backgroundColorHover"
+        | "onClick"
+        | "onMouseOut"
+        | "onMouseOver"
+        | "style"
     >,
 ) => {
     const [color, setColor] = useState(backgroundColor(room));
@@ -117,7 +122,9 @@ export const roomToId: Record<Extract<WorkplaceSvgRoom, `SaintPaul${string}`>, s
 };
 
 const WorkplaceWorkers = ({ getUserPictureUrl }: Pick<WorkplaceSvgProps, "getUserPictureUrl">) => {
-    const [elementByRoomId, setElementByRoomId] = useState<Record<string, SVGGraphicsElement | null | undefined>>({});
+    const [elementByRoomId, setElementByRoomId] = useState<
+        Record<string, SVGGraphicsElement | null | undefined>
+    >({});
 
     useEffect(() => {
         const newElementByRoomId = Object.fromEntries(
@@ -177,7 +184,13 @@ export const Floor2 = (props: Partial<WorkplaceSvgProps>) => {
     const svgPropsTuring = useRoom("SaintPaul_Turing", roomsProps);
 
     return (
-        <svg width={width} height={height} viewBox="0 0 773 534" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 773 534"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <g id="floor-2-without-background">
                 <path
                     id="floor2background"
@@ -210,7 +223,11 @@ export const Floor2 = (props: Partial<WorkplaceSvgProps>) => {
                     d="M20.5 232V205.5L111 202.5V197.5H138.5V200H175V204L229.5 202.5V204H237.5V208.5H242L243.5 210L245 254.5H242V284H248.5L249.5 329.5L245 331.5L247 361H252L255 404.5L249.5 407.5V434.5L257.5 438V479.5L255 484V504.5L38 515.5V511.5L28 509.5V489.5H36L31.5 400.5H20.5V372.5H28V349L83.5 346L79.5 284L24 287.5V273.5H15L12 232H20.5Z"
                     stroke="black"
                 />
-                <path id="Vector 27" d="M28 344.5L25 292L75 289.5L78 342L28 344.5Z" stroke="black" />
+                <path
+                    id="Vector 27"
+                    d="M28 344.5L25 292L75 289.5L78 342L28 344.5Z"
+                    stroke="black"
+                />
                 <path
                     id="Vector 28"
                     d="M479 301H570H609.5H612V485L565 487V491H529.5V489L479 491V466.5H472.5V431H479V382H475.5V367H479V348.5H472.5V313H479V301Z"
@@ -243,7 +260,13 @@ export const Floor3 = (props: Partial<WorkplaceSvgProps>) => {
     const svgPropsVador = useRoom("SaintPaul_Vador", roomsProps);
 
     return (
-        <svg width={width} height={height} viewBox="0 0 516 513" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 516 513"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <g id="floor3-without-background">
                 <path
                     id="floor3background"
@@ -309,7 +332,13 @@ export const Floor4 = (props: Partial<WorkplaceSvgProps>) => {
     const svgPropsPhoneBox = useRoom("SaintPaul_SuperPhoneBox", roomsProps);
 
     return (
-        <svg width={width} height={height} viewBox="0 0 1219 566" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 1219 566"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <g id="floor4-without-background">
                 <path
                     id="floor3-background"
@@ -326,7 +355,11 @@ export const Floor4 = (props: Partial<WorkplaceSvgProps>) => {
                     d="M121.5 273H125.5V267L147.5 265L148.5 269L201 262.5V267H207L210 311H207V316.5V318H212.5H215.5V364L144.5 368.5L113.5 402.5L86.5 380L125.5 335.5L121.5 273Z"
                     stroke="black"
                 />
-                <path {...svgPropsPhoneBox} d="M217 315L217.5 364L272.5 361L270.5 312.5L217 315Z" stroke="black" />
+                <path
+                    {...svgPropsPhoneBox}
+                    d="M217 315L217.5 364L272.5 361L270.5 312.5L217 315Z"
+                    stroke="black"
+                />
                 <path
                     {...svgPropsOlympe}
                     d="M117 407L147 374.5L208 371L218.5 546H214V551.5L174 552.5V555.5L126 558.5V555.5L118 440H119.5V427.5L117 426.5V407Z"
@@ -389,7 +422,13 @@ export const AllFloors = (props: Partial<WorkplaceSvgProps>) => {
     const svgPropsPhoneBox = useRoom("SaintPaul_SuperPhoneBox", roomsProps);
 
     return (
-        <svg width={width} height={height} viewBox="0 0 2000 2360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            height={height}
+            viewBox="0 0 2000 2360"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <g id="floor3">
                 <g id="floor3-without-background">
                     <path
@@ -468,16 +507,31 @@ export const AllFloors = (props: Partial<WorkplaceSvgProps>) => {
                         d="M829.5 1714V1687.5L920 1684.5V1679.5H947.5V1682H984V1686L1038.5 1684.5V1686H1046.5V1690.5H1051L1052.5 1692L1054 1736.5H1051V1766H1057.5L1058.5 1811.5L1054 1813.5L1056 1843H1061L1064 1886.5L1058.5 1889.5V1916.5L1066.5 1920V1961.5L1064 1966V1986.5L847 1997.5V1993.5L837 1991.5V1971.5H845L840.5 1882.5H829.5V1854.5H837V1831L892.5 1828L888.5 1766L833 1769.5V1755.5H824L821 1714H829.5Z"
                         stroke="black"
                     />
-                    <path id="Vector 27" d="M837 1826.5L834 1774L884 1771.5L887 1824L837 1826.5Z" stroke="black" />
+                    <path
+                        id="Vector 27"
+                        d="M837 1826.5L834 1774L884 1771.5L887 1824L837 1826.5Z"
+                        stroke="black"
+                    />
                     <path
                         id="Vector 28"
                         d="M1288 1783H1379H1418.5H1421V1967L1374 1969V1973H1338.5V1971L1288 1973V1948.5H1281.5V1913H1288V1864H1284.5V1849H1288V1830.5H1281.5V1795H1288V1783Z"
                         stroke="black"
                     />
-                    <path id="Vector 29" d="M1367 1574.5V1506.5L1421 1502V1574.5H1367Z" stroke="black" />
-                    <path id="Vector 30" d="M1322 1574.5H1362.5V1520.5H1322V1574.5Z" stroke="black" />
+                    <path
+                        id="Vector 29"
+                        d="M1367 1574.5V1506.5L1421 1502V1574.5H1367Z"
+                        stroke="black"
+                    />
+                    <path
+                        id="Vector 30"
+                        d="M1322 1574.5H1362.5V1520.5H1322V1574.5Z"
+                        stroke="black"
+                    />
                     <g id="Vector 31">
-                        <path d="M1262.5 1517.5V1575.5H1318V1574.5V1512.5L1262.5 1517.5Z" stroke="black" />
+                        <path
+                            d="M1262.5 1517.5V1575.5H1318V1574.5V1512.5L1262.5 1517.5Z"
+                            stroke="black"
+                        />
                         <path
                             d="M1103.5 1535V1557H1115V1578.5L1107 1579.5L1110 1668.5H1118.5V1673.5L1154 1670V1665L1179.5 1663V1668.5L1215.5 1665V1658.5L1248.5 1656V1643H1256.5V1633H1359.5L1379 1653V1776.5H1382V1782.5H1427.5V1737.5H1418V1725.5H1420.5V1579.5H1258V1535L1249 1532.5V1520L1103.5 1535Z"
                             stroke="black"
@@ -502,14 +556,26 @@ export const AllFloors = (props: Partial<WorkplaceSvgProps>) => {
                         d="M491.5 569H495.5V563L517.5 561L518.5 565L571 558.5V563H577L580 607H577V612.5V614H582.5H585.5V660L514.5 664.5L483.5 698.5L456.5 676L495.5 631.5L491.5 569Z"
                         stroke="black"
                     />
-                    <path {...svgPropsPhoneBox} d="M587 611L587.5 660L642.5 657L640.5 608.5L587 611Z" stroke="black" />
+                    <path
+                        {...svgPropsPhoneBox}
+                        d="M587 611L587.5 660L642.5 657L640.5 608.5L587 611Z"
+                        stroke="black"
+                    />
                     <path
                         {...svgPropsOlympe}
                         d="M487 703L517 670.5L578 667L588.5 842H584V847.5L544 848.5V851.5L496 854.5V851.5L488 736H489.5V723.5L487 722.5V703Z"
                         stroke="black"
                     />
-                    <path id="Vector 35" d="M1321 390.5V323L1363.5 316V390.5H1321Z" stroke="black" />
-                    <path id="Vector 36" d="M1367 390.5V316.5L1423.5 311.5V390.5H1367Z" stroke="black" />
+                    <path
+                        id="Vector 35"
+                        d="M1321 390.5V323L1363.5 316V390.5H1321Z"
+                        stroke="black"
+                    />
+                    <path
+                        id="Vector 36"
+                        d="M1367 390.5V316.5L1423.5 311.5V390.5H1367Z"
+                        stroke="black"
+                    />
                     <path
                         id="Vector 37"
                         d="M1432 540.5V315.5L1500 305.5V313.5L1514 311.5L1512.5 303.5L1565.5 297V299H1575.5V338H1587.5C1589.1 338 1588.17 363.333 1587.5 376H1575.5V426H1587.5V462.5H1575.5V464.5V496H1587.5V533.5H1574V542H1562V550.5H1524.5V542H1514V550.5H1445.5V540.5H1432Z"

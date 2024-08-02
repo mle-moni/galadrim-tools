@@ -18,7 +18,9 @@ export const WifiPage = observer(() => {
             <div style={{ display: "flex", justifyContent: "center" }}>
                 <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
                     <GaladrimLogo align="center" sx={{ mb: 8 }} />
-                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>Reporter un problème d'internet</Typography>
+                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>
+                        Reporter un problème d'internet
+                    </Typography>
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();

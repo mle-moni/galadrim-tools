@@ -91,7 +91,11 @@ export class GalabreakStore {
     }
 
     get isLoading() {
-        return this.activitiesLoadingStore.isLoading || this.timesLoadingStore.isLoading || this.votesLoadingStore.isLoading;
+        return (
+            this.activitiesLoadingStore.isLoading ||
+            this.timesLoadingStore.isLoading ||
+            this.votesLoadingStore.isLoading
+        );
     }
 
     get activitiesOptions() {

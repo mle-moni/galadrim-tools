@@ -1,5 +1,11 @@
 import { type AllRights, hasRights } from "@galadrim-tools/shared";
-import { ChevronLeft, Dashboard, NotificationAdd, PersonAddAlt, Settings } from "@mui/icons-material";
+import {
+    ChevronLeft,
+    Dashboard,
+    NotificationAdd,
+    PersonAddAlt,
+    Settings,
+} from "@mui/icons-material";
 import { styled, type SvgIconTypeMap } from "@mui/material";
 import type { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useMemo } from "react";
@@ -51,7 +57,10 @@ const StyledDiv = styled("div")({
 
 export const AdminPage = () => {
     const user = AppStore.authStore.user;
-    const links = useMemo(() => allLinks.filter(({ right }) => hasRights(user.rights, [right])), [user.rights]);
+    const links = useMemo(
+        () => allLinks.filter(({ right }) => hasRights(user.rights, [right])),
+        [user.rights],
+    );
 
     if (user.rights === 0) {
         return <Navigate to={"/"} />;

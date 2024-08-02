@@ -35,7 +35,9 @@ export class RestaurantReviewsStore {
     }
 
     get submitDisabled() {
-        return this.comment.text === "" || this.loadingStore.isLoading || this.restaurantId === null;
+        return (
+            this.comment.text === "" || this.loadingStore.isLoading || this.restaurantId === null
+        );
     }
 
     async addReview() {

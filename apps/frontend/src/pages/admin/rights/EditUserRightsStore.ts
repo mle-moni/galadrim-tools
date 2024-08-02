@@ -1,4 +1,10 @@
-import { type AllRights, type ApiNotification, hasRights, RIGHTS, _assert } from "@galadrim-tools/shared";
+import {
+    type AllRights,
+    type ApiNotification,
+    hasRights,
+    RIGHTS,
+    _assert,
+} from "@galadrim-tools/shared";
 import { makeAutoObservable } from "mobx";
 import { fetchBackendJson, getErrorMessage } from "../../../api/fetch";
 import { notifyError, notifySuccess } from "../../../utils/notification";
@@ -39,7 +45,12 @@ export class EditUserRightsStore {
         const res = await fetchBackendJson<UserRights[], unknown>("/admin/userRights");
         this.setLoading(false);
         if (!res.ok) {
-            notifyError(getErrorMessage(res.json, "Impossible de récupérer les droits des utilisateurs, bizarre"));
+            notifyError(
+                getErrorMessage(
+                    res.json,
+                    "Impossible de récupérer les droits des utilisateurs, bizarre",
+                ),
+            );
             return;
         }
         this.setUsers(res.json);
@@ -80,7 +91,12 @@ export class EditUserRightsStore {
             body: form,
         });
         if (!res.ok) {
-            notifyError(getErrorMessage(res.json, `Impossible d'éditer les droits de cet utilisateur, bizarre`));
+            notifyError(
+                getErrorMessage(
+                    res.json,
+                    `Impossible d'éditer les droits de cet utilisateur, bizarre`,
+                ),
+            );
             return;
         }
         notifySuccess(res.json.notification);

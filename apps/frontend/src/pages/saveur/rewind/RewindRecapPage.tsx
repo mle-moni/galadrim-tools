@@ -62,16 +62,24 @@ const RewindRecapPage = observer(() => {
                     >
                         <List>
                             <ListItemText>
-                                • Vous avez mangé <strong>{userRewindStore.rewind?.dailyChoiceCount || 0} fois</strong> au
-                                restaurant
+                                • Vous avez mangé{" "}
+                                <strong>
+                                    {userRewindStore.rewind?.dailyChoiceCount || 0} fois
+                                </strong>{" "}
+                                au restaurant
                             </ListItemText>
                             <ListItemText>
-                                • Vous avez dépensé en moyenne <strong>{userRewindStore.rewind?.averagePrice || 0} €</strong>{" "}
-                                pour un total de <strong>{userRewindStore.rewind?.totalPrice || 0} €</strong>
+                                • Vous avez dépensé en moyenne{" "}
+                                <strong>{userRewindStore.rewind?.averagePrice || 0} €</strong> pour
+                                un total de{" "}
+                                <strong>{userRewindStore.rewind?.totalPrice || 0} €</strong>
                             </ListItemText>
                             <ListItemText>
                                 • Vous avez parcouru en moyenne{" "}
-                                <strong>{userRewindStore.rewind?.averageDistanceTravelled || 0} m</strong> pour un total de{" "}
+                                <strong>
+                                    {userRewindStore.rewind?.averageDistanceTravelled || 0} m
+                                </strong>{" "}
+                                pour un total de{" "}
                                 <strong>
                                     {userRewindStore.rewind?.totalDistanceTravelled
                                         ? userRewindStore.rewind.totalDistanceTravelled / 1000
@@ -84,14 +92,17 @@ const RewindRecapPage = observer(() => {
                             {(userRewindStore.threeBestCategories || []).map(([label, count]) => (
                                 // biome-ignore lint/correctness/useJsxKeyInIterable: <explanation>
                                 <ListItemText>
-                                    • Vous avez mangé <strong>{count} fois</strong> au restaurant dans la catégorie{" "}
-                                    <strong>{label}</strong>
+                                    • Vous avez mangé <strong>{count} fois</strong> au restaurant
+                                    dans la catégorie <strong>{label}</strong>
                                 </ListItemText>
                             ))}
                         </List>
                         {favoriteRestaurant && (
                             <Typography typography={"body1"}>
-                                • Vous avez mangé <strong>{userRewindStore.rewind?.favoriteRestaurantCount} fois</strong>{" "}
+                                • Vous avez mangé{" "}
+                                <strong>
+                                    {userRewindStore.rewind?.favoriteRestaurantCount} fois
+                                </strong>{" "}
                                 chez <strong>{favoriteRestaurant.name}</strong>
                             </Typography>
                         )}

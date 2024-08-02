@@ -48,7 +48,12 @@ const Sparkles = ({ color = DEFAULT_COLOR, children }: SparklesProps) => {
     return (
         <>
             {sparkles.map((sparkle) => (
-                <Sparkle key={sparkle.id} color={sparkle.color} size={sparkle.size} style={sparkle.style} />
+                <Sparkle
+                    key={sparkle.id}
+                    color={sparkle.color}
+                    size={sparkle.size}
+                    style={sparkle.style}
+                />
             ))}
             <ChildWrapper>{children}</ChildWrapper>
         </>

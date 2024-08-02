@@ -3,7 +3,10 @@ import Fuse from "fuse.js";
 import { makeAutoObservable } from "mobx";
 import { fetchBackendJson, getErrorMessage } from "../api/fetch";
 import { APPLICATION_JSON_HEADERS } from "../pages/idea/createIdea/CreateIdeaStore";
-import { MINIMUM_VOTES_BEFORE_RELEVANT, getRestaurantsScore } from "../pages/saveur/restaurantsLists/getRestaurantScore";
+import {
+    MINIMUM_VOTES_BEFORE_RELEVANT,
+    getRestaurantsScore,
+} from "../pages/saveur/restaurantsLists/getRestaurantScore";
 import { LoadingStateStore } from "../reusableComponents/form/LoadingStateStore";
 import { notifyError } from "../utils/notification";
 import { RestaurantReviewsStore } from "./RestaurantReviewsStore";
@@ -64,7 +67,9 @@ export class RestaurantsStore {
     }
 
     removeReviewById(reviewId: number) {
-        const foundRestaurant = this.restaurants.find(({ reviews }) => reviews.find(({ id }) => id === reviewId));
+        const foundRestaurant = this.restaurants.find(({ reviews }) =>
+            reviews.find(({ id }) => id === reviewId),
+        );
 
         if (!foundRestaurant) return;
 
@@ -107,13 +112,15 @@ export class RestaurantsStore {
             id,
             name,
         }));
-        restaurantFound.notes = restaurant.notes.map(({ id, note, restaurantId, userId, updatedAt }) => ({
-            id,
-            note,
-            restaurantId,
-            userId,
-            updatedAt,
-        }));
+        restaurantFound.notes = restaurant.notes.map(
+            ({ id, note, restaurantId, userId, updatedAt }) => ({
+                id,
+                note,
+                restaurantId,
+                userId,
+                updatedAt,
+            }),
+        );
         restaurantFound.choices = restaurant.choices;
         if (restaurant.image === null) {
             restaurantFound.image = null;
@@ -137,7 +144,9 @@ export class RestaurantsStore {
     }
 
     get bestRestaurants() {
-        const sortedScores = this.scores.sort((restaurantA, restaurantB) => restaurantB.score - restaurantA.score);
+        const sortedScores = this.scores.sort(
+            (restaurantA, restaurantB) => restaurantB.score - restaurantA.score,
+        );
         const bestFive = sortedScores.slice(0, 5);
 
         return bestFive.map(({ restaurant }) => restaurant);
@@ -161,14 +170,18 @@ export class RestaurantsStore {
     }
 
     get leastExpensiveRestaurants(): IRestaurant[] {
-        const restaurants = [...this.restaurants.filter(({ averagePrice }) => averagePrice !== null)];
+        const restaurants = [
+            ...this.restaurants.filter(({ averagePrice }) => averagePrice !== null),
+        ];
         const sortedRestaurants = restaurants.sort((a, b) => a.averagePrice! - b.averagePrice!);
 
         return sortedRestaurants;
     }
 
     get mostExpensiveRestaurants(): IRestaurant[] {
-        const restaurants = [...this.restaurants.filter(({ averagePrice }) => averagePrice !== null)];
+        const restaurants = [
+            ...this.restaurants.filter(({ averagePrice }) => averagePrice !== null),
+        ];
         const sortedRestaurants = restaurants.sort((a, b) => b.averagePrice! - a.averagePrice!);
 
         return sortedRestaurants;
@@ -181,12 +194,16 @@ export class RestaurantsStore {
     }
 
     async chooseRestaurant(id: number) {
-        const res = await fetchBackendJson<IRestaurant, unknown>("/createOrUpdateRestaurantChoice", "POST", {
-            body: JSON.stringify({
-                restaurantId: id,
-            }),
-            headers: APPLICATION_JSON_HEADERS,
-        });
+        const res = await fetchBackendJson<IRestaurant, unknown>(
+            "/createOrUpdateRestaurantChoice",
+            "POST",
+            {
+                body: JSON.stringify({
+                    restaurantId: id,
+                }),
+                headers: APPLICATION_JSON_HEADERS,
+            },
+        );
         if (res.ok) {
             return;
         }

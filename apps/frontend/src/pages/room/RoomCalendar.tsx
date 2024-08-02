@@ -6,7 +6,13 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AppStore } from "../../globalStores/AppStore";
 import type { RoomEvent } from "../../globalStores/EventsStore";
-import { AllRooms, NantesRooms, BonneNouvelleRooms, SaintPaulRooms, type WorkspaceLocation } from "../../utils/rooms";
+import {
+    AllRooms,
+    NantesRooms,
+    BonneNouvelleRooms,
+    SaintPaulRooms,
+    type WorkspaceLocation,
+} from "../../utils/rooms";
 import { MomentFrLocales } from "./setFrLocales";
 
 moment.locale("fr", MomentFrLocales);
@@ -79,7 +85,11 @@ export const RoomCalendar = observer<{
                     AppStore.eventsStore.onEventDrop(args);
                 }}
                 onSelectSlot={({ start, end, resourceId }) => {
-                    AppStore.eventsStore.newEvent(new Date(start), new Date(end), resourceId?.toString() ?? null);
+                    AppStore.eventsStore.newEvent(
+                        new Date(start),
+                        new Date(end),
+                        resourceId?.toString() ?? null,
+                    );
                 }}
                 onDoubleClickEvent={(args) => AppStore.eventsStore.onDoubleClickEvent(args)}
                 {...(AppStore.eventsStore.roomName === "*" && {

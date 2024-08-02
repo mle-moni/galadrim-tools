@@ -9,15 +9,27 @@ export const NOTIFICATIONS = {
 
 export type NotificationName = keyof typeof NOTIFICATIONS;
 
-export const hasNotificationEnabled = (notificationsSettings: number, notification: NotificationName) => {
-    return notification === "DEFAULT" || (notificationsSettings & NOTIFICATIONS[notification]) !== 0;
+export const hasNotificationEnabled = (
+    notificationsSettings: number,
+    notification: NotificationName,
+) => {
+    return (
+        notification === "DEFAULT" || (notificationsSettings & NOTIFICATIONS[notification]) !== 0
+    );
 };
 
 export const generateNotificationsSettings = (notificationSettingsWanted: NotificationName[]) => {
     const notificationsSet = new Set(notificationSettingsWanted);
     const notificationsArray = Array.from(notificationsSet);
 
-    return notificationsArray.reduce<number>((acc, curr) => acc + NOTIFICATIONS[curr], NOTIFICATIONS.DEFAULT);
+    return notificationsArray.reduce<number>(
+        (acc, curr) => acc + NOTIFICATIONS[curr],
+        NOTIFICATIONS.DEFAULT,
+    );
 };
 
-export const DEFAULT_NOTIFICATION_SETTINGS = generateNotificationsSettings(["NEW_IDEA", "NEW_RESTAURANT", "SENT_BY_ADMIN"]);
+export const DEFAULT_NOTIFICATION_SETTINGS = generateNotificationsSettings([
+    "NEW_IDEA",
+    "NEW_RESTAURANT",
+    "SENT_BY_ADMIN",
+]);

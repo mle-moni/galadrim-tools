@@ -5,7 +5,12 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
 import { AppStore } from "../../globalStores/AppStore";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
-import { AllFloors, Floor2, Floor3, Floor4 } from "../../reusableComponents/WorkplaceSvg/WorkplaceSvg";
+import {
+    AllFloors,
+    Floor2,
+    Floor3,
+    Floor4,
+} from "../../reusableComponents/WorkplaceSvg/WorkplaceSvg";
 import { CenteredDiv } from "../../reusableComponents/common/CenteredDiv";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
@@ -97,7 +102,9 @@ const RoomsHomePage = observer(() => {
                     textAlign: "center",
                 }}
             >
-                {homePageStore.focusedRoomName ?? <span style={{ visibility: "hidden" }}>____</span>}
+                {homePageStore.focusedRoomName ?? (
+                    <span style={{ visibility: "hidden" }}>____</span>
+                )}
             </Typography>
         </MainLayout>
     );
