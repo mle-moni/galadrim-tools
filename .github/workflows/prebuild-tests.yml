@@ -20,6 +20,9 @@ jobs:
             - name: Install dependencies 📦
               run: yarn install --frozen-lockfile
 
+            - name: Biome lint check
+              run: yarn biome:check
+
             - name: Build shared library
               run: yarn build:shared
 

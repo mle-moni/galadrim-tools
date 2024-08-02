@@ -17,13 +17,14 @@
         "migrate-prod": "cd ./apps/backend && yarn migrate-prod",
         "deploy:backend": "cd ./apps/backend && yarn deploy",
         "deploy:frontend:nobuild": "cd ./apps/frontend && yarn deploy",
-        "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && cd ./apps/frontend && yarn deploy"
+        "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && cd ./apps/frontend && yarn deploy",
+        "biome:backend:check": "cd ./apps/backend && yarn lint-check && yarn format-check",
+        "biome:shared:check": "cd ./libs/shared && yarn lint-check && yarn format-check",
+        "biome:frontend:check": "cd ./apps/frontend && yarn lint-check && yarn format-check",
+        "biome:check": "yarn biome:backend:check && yarn biome:shared:check && yarn biome:frontend:check"
     },
     "private": true,
-    "workspaces": [
-        "apps/*",
-        "libs/*"
-    ],
+    "workspaces": ["apps/*", "libs/*"],
     "author": "LE MONIES DE SAGAZAN Mayeul",
     "devDependencies": {
         "@biomejs/biome": "1.8.3",
