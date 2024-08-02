@@ -9,6 +9,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "tsc": "tsc",
+        "format": "biome format --write",
         "typecheck": "tsc --noEmit",
         "preview": "vite preview"
     },
