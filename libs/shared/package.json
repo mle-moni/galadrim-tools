@@ -11,6 +11,10 @@
     "scripts": {
         "build": "rm -rf ./dist && tsc",
         "build:watch": "tsc -w",
+        "format": "biome format --write",
+        "format-check": "biome format",
+        "lint": "biome lint --write",
+        "lint-check": "biome lint",
         "dev": "npm run build:watch"
     }
 }
