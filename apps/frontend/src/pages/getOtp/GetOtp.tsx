@@ -1,23 +1,23 @@
-import MailIcon from '@mui/icons-material/AlternateEmail'
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { AppStore } from '../../globalStores/AppStore'
-import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
-import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
+import MailIcon from "@mui/icons-material/AlternateEmail";
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Button } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { AppStore } from "../../globalStores/AppStore";
+import { GaladrimLogo } from "../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../reusableComponents/Core/GaladrimRoomsCard";
+import { TextInputWithIcon } from "../../reusableComponents/form/TextInputWithIcon";
 
 export const GetOtp = observer(() => {
-    const { authStore } = AppStore
+    const { authStore } = AppStore;
 
     return (
-        <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
+        <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    authStore.getOtp()
+                    e.preventDefault();
+                    authStore.getOtp();
                 }}
             >
                 <TextInputWithIcon
@@ -34,5 +34,5 @@ export const GetOtp = observer(() => {
                 </CustomLink>
             </form>
         </GaladrimRoomsCard>
-    )
-})
+    );
+});

@@ -1,55 +1,43 @@
-import { observer } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import { AppStore } from '../globalStores/AppStore'
-import IdeaPage from '../pages/idea/IdeaPage'
-import LoadingPage from '../pages/loading/LoadingPage'
-import { RenouvArtWait } from '../reusableComponents/animations/RenouvArtWait/RenouvArtWait'
+import { observer } from "mobx-react-lite";
+import React, { useEffect } from "react";
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { AppStore } from "../globalStores/AppStore";
+import IdeaPage from "../pages/idea/IdeaPage";
+import LoadingPage from "../pages/loading/LoadingPage";
+import { RenouvArtWait } from "../reusableComponents/animations/RenouvArtWait/RenouvArtWait";
 
-const TournoisPage = React.lazy(() => import('../pages/games/tournois/TournoisPage'))
-const StatisticsPage = React.lazy(() => import('../pages/statistics/StatisticsPage'))
-const NotificationsSettingsPage = React.lazy(
-    () => import('../pages/profile/notifications/NotificationsSettingsPage')
-)
-const ThemePage = React.lazy(() => import('../pages/profile/theme/ThemePage'))
-const CreateRestaurantPage = React.lazy(
-    () => import('../pages/saveur/createRestaurant/CreateRestaurantPage')
-)
-const EditRestaurantPage = React.lazy(
-    () => import('../pages/saveur/editRestaurant/EditRestaurantPage')
-)
-const SaveurPage = React.lazy(() => import('../pages/saveur/SaveurPage'))
-const RestaurantsListPage = React.lazy(
-    () => import('../pages/saveur/restaurantsLists/RestaurantsListPage')
-)
-const RewindRecapPage = React.lazy(() => import('../pages/saveur/rewind/RewindRecapPage'))
-const RewindPage = React.lazy(() => import('../pages/saveur/rewind/RewindPage'))
-const HomePage = React.lazy(() => import('../pages/HomePage'))
-const RoomsHomePage = React.lazy(() => import('../pages/room/RoomsHomePage'))
-const WifiPage = React.lazy(() => import('../pages/wifi/WifiPage'))
-const LoginPage = React.lazy(() => import('../pages/login/LoginPage'))
-const GetOtpPage = React.lazy(() => import('../pages/getOtp/GetOtpPage'))
-const ChangePasswordPage = React.lazy(() => import('../pages/changePassword/ChangePasswordPage'))
-const CreateUserPage = React.lazy(() => import('../pages/admin/createUser/CreateUserPage'))
-const AdminRightsPage = React.lazy(() => import('../pages/admin/rights/AdminRightsPage'))
-const NotificationsAdminPage = React.lazy(
-    () => import('../pages/admin/notifications/NotificationsAdminPage')
-)
-const DashboardPage = React.lazy(() => import('../pages/admin/dashboard/DashboardPage'))
-const AdminPage = React.lazy(() => import('../pages/admin/AdminPage'))
-const RoomPage = React.lazy(() => import('../pages/room/RoomPage'))
-const NotFoundPage = React.lazy(() => import('../pages/errors/404/NotFoundPage'))
-const ProfilePage = React.lazy(() => import('../pages/profile/ProfilePage'))
-const MyRestaurantNotesPage = React.lazy(
-    () => import('../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage')
-)
-const NewCodeNamesGamePage = React.lazy(() => import('../pages/codeNames/NewCodeNamesGamePage'))
-const CodeNamesGamePage = React.lazy(() => import('../pages/codeNames/CodeNamesGamePage'))
-const ScamWinnerPage = React.lazy(() => import('../pages/scam/ScamWinnerPage'))
-const GalabreakPage = React.lazy(() => import('../pages/galabreak/GalabreakPage'))
-const GalabreakVotePage = React.lazy(() => import('../pages/galabreak/GalabreakVotePage'))
-const CaddyLogsPage = React.lazy(() => import('../pages/caddyLogs/CaddyLogsPage'))
-const AtopLogsPage = React.lazy(() => import('../pages/atopLogs/AtopLogsPage'))
+const TournoisPage = React.lazy(() => import("../pages/games/tournois/TournoisPage"));
+const StatisticsPage = React.lazy(() => import("../pages/statistics/StatisticsPage"));
+const NotificationsSettingsPage = React.lazy(() => import("../pages/profile/notifications/NotificationsSettingsPage"));
+const ThemePage = React.lazy(() => import("../pages/profile/theme/ThemePage"));
+const CreateRestaurantPage = React.lazy(() => import("../pages/saveur/createRestaurant/CreateRestaurantPage"));
+const EditRestaurantPage = React.lazy(() => import("../pages/saveur/editRestaurant/EditRestaurantPage"));
+const SaveurPage = React.lazy(() => import("../pages/saveur/SaveurPage"));
+const RestaurantsListPage = React.lazy(() => import("../pages/saveur/restaurantsLists/RestaurantsListPage"));
+const RewindRecapPage = React.lazy(() => import("../pages/saveur/rewind/RewindRecapPage"));
+const RewindPage = React.lazy(() => import("../pages/saveur/rewind/RewindPage"));
+const HomePage = React.lazy(() => import("../pages/HomePage"));
+const RoomsHomePage = React.lazy(() => import("../pages/room/RoomsHomePage"));
+const WifiPage = React.lazy(() => import("../pages/wifi/WifiPage"));
+const LoginPage = React.lazy(() => import("../pages/login/LoginPage"));
+const GetOtpPage = React.lazy(() => import("../pages/getOtp/GetOtpPage"));
+const ChangePasswordPage = React.lazy(() => import("../pages/changePassword/ChangePasswordPage"));
+const CreateUserPage = React.lazy(() => import("../pages/admin/createUser/CreateUserPage"));
+const AdminRightsPage = React.lazy(() => import("../pages/admin/rights/AdminRightsPage"));
+const NotificationsAdminPage = React.lazy(() => import("../pages/admin/notifications/NotificationsAdminPage"));
+const DashboardPage = React.lazy(() => import("../pages/admin/dashboard/DashboardPage"));
+const AdminPage = React.lazy(() => import("../pages/admin/AdminPage"));
+const RoomPage = React.lazy(() => import("../pages/room/RoomPage"));
+const NotFoundPage = React.lazy(() => import("../pages/errors/404/NotFoundPage"));
+const ProfilePage = React.lazy(() => import("../pages/profile/ProfilePage"));
+const MyRestaurantNotesPage = React.lazy(() => import("../pages/saveur/myRestaurantNotes/MyRestaurantNotesPage"));
+const NewCodeNamesGamePage = React.lazy(() => import("../pages/codeNames/NewCodeNamesGamePage"));
+const CodeNamesGamePage = React.lazy(() => import("../pages/codeNames/CodeNamesGamePage"));
+const ScamWinnerPage = React.lazy(() => import("../pages/scam/ScamWinnerPage"));
+const GalabreakPage = React.lazy(() => import("../pages/galabreak/GalabreakPage"));
+const GalabreakVotePage = React.lazy(() => import("../pages/galabreak/GalabreakVotePage"));
+const CaddyLogsPage = React.lazy(() => import("../pages/caddyLogs/CaddyLogsPage"));
+const AtopLogsPage = React.lazy(() => import("../pages/atopLogs/AtopLogsPage"));
 
 // ? this was the old cheat page
 // const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
@@ -64,23 +52,20 @@ const MainRouter = () => {
                     </React.Suspense>
                 </BrowserRouter>
             ) : (
-                <div
-                    className="flex h-100vh justify-center align-center main-bg"
-                    style={{ boxSizing: 'border-box' }}
-                >
+                <div className="flex h-100vh justify-center align-center main-bg" style={{ boxSizing: "border-box" }}>
                     <RenouvArtWait />
                 </div>
             )}
         </>
-    )
-}
+    );
+};
 
 const AppRoutes = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
-        AppStore.setNavigation(navigate)
-    }, [])
+        AppStore.setNavigation(navigate);
+    }, [navigate]);
 
     return (
         <>
@@ -108,13 +93,10 @@ const AppRoutes = () => {
                 <Route path="/saveur" element={<SaveurPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/games/tournois" element={<TournoisPage />} />
-                <Route path="/codeNames" element={<Navigate to={'/codeNamesGame'} />} />
+                <Route path="/codeNames" element={<Navigate to={"/codeNamesGame"} />} />
                 <Route path="/codeNamesGame" element={<NewCodeNamesGamePage />} />
                 <Route path="/codeNamesGame/:id" element={<CodeNamesGamePage />} />
-                <Route
-                    path="/profile/notificationsSettings"
-                    element={<NotificationsSettingsPage />}
-                />
+                <Route path="/profile/notificationsSettings" element={<NotificationsSettingsPage />} />
                 <Route path="/profile/theme" element={<ThemePage />} />
                 <Route path="/ideas" element={<IdeaPage />} />
                 <Route path="/galabreak" element={<GalabreakPage />} />
@@ -127,7 +109,7 @@ const AppRoutes = () => {
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>
-    )
-}
+    );
+};
 
-export default observer(MainRouter)
+export default observer(MainRouter);

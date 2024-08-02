@@ -1,17 +1,17 @@
-import { InputAdornment, OutlinedInput, SvgIconTypeMap } from '@mui/material'
-import { OverridableComponent } from '@mui/material/OverridableComponent'
-import { observer } from 'mobx-react-lite'
+import { InputAdornment, OutlinedInput, type SvgIconTypeMap } from "@mui/material";
+import type { OverridableComponent } from "@mui/material/OverridableComponent";
+import { observer } from "mobx-react-lite";
 
 export interface TextInputWithIconProps {
-    value: string
-    placeholder: string
-    Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
-        muiName: string
-    }
-    onChange: (value: string) => void
-    error?: boolean
-    required?: boolean
-    multiline?: boolean
+    value: string;
+    placeholder: string;
+    Icon: OverridableComponent<SvgIconTypeMap<unknown, "svg">> & {
+        muiName: string;
+    };
+    onChange: (value: string) => void;
+    error?: boolean;
+    required?: boolean;
+    multiline?: boolean;
 }
 
 export const TextInputWithIcon = observer<TextInputWithIconProps>(
@@ -32,6 +32,6 @@ export const TextInputWithIcon = observer<TextInputWithIconProps>(
                 required={required}
                 multiline={multiline}
             />
-        )
-    }
-)
+        );
+    },
+);

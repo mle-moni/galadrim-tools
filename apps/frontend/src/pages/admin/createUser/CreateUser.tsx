@@ -1,24 +1,24 @@
-import { Mail, Person } from '@mui/icons-material'
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
-import { GaladrimLogo } from '../../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../../reusableComponents/Core/GaladrimRoomsCard'
-import { TextInputWithIcon } from '../../../reusableComponents/form/TextInputWithIcon'
-import { CreateUserStore } from './CreateUserStore'
+import { Mail, Person } from "@mui/icons-material";
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Button } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
+import { GaladrimLogo } from "../../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../../reusableComponents/Core/GaladrimRoomsCard";
+import { TextInputWithIcon } from "../../../reusableComponents/form/TextInputWithIcon";
+import { CreateUserStore } from "./CreateUserStore";
 
 export const CreateUser = observer(() => {
-    const createUserStore = useMemo(() => new CreateUserStore(), [])
+    const createUserStore = useMemo(() => new CreateUserStore(), []);
 
     return (
-        <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
+        <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    createUserStore.createUser()
+                    e.preventDefault();
+                    createUserStore.createUser();
                 }}
             >
                 <TextInputWithIcon
@@ -48,5 +48,5 @@ export const CreateUser = observer(() => {
                 </CustomLink>
             </form>
         </GaladrimRoomsCard>
-    )
-})
+    );
+});

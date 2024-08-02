@@ -1,5 +1,5 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,10 +7,10 @@ export default defineConfig({
     server: {
         port: 3000,
         proxy: {
-            '/api/': {
-                target: 'http://127.0.0.1:3333/',
+            "/api/": {
+                target: "http://127.0.0.1:3333/",
                 changeOrigin: true,
-                rewrite: (path: string) => path.replace(/^\/api/, ''),
+                rewrite: (path: string) => path.replace(/^\/api/, ""),
             },
             // '/uploads': {
             //     target: 'http://127.0.0.1:3333',
@@ -19,13 +19,13 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        include: ['@galadrim-tools/shared'],
+        include: ["@galadrim-tools/shared"],
     },
     build: {
-        outDir: 'dist',
+        outDir: "dist",
         chunkSizeWarningLimit: 3000,
         commonjsOptions: {
             include: [/libs\/shared/, /node_modules/],
         },
     },
-})
+});

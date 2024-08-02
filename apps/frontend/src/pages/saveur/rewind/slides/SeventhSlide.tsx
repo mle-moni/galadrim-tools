@@ -1,14 +1,15 @@
-import { useMemo } from 'react'
-import { RewindStore } from '../../../../globalStores/RewindStore'
-import Gift from '../components/OpeningBox'
-import { TextCard } from '../components/TextCard'
-import { TimerSlides } from '../../../../reusableComponents/common/TimerSlides'
+import { useMemo } from "react";
+import type { RewindStore } from "../../../../globalStores/RewindStore";
+import { TimerSlides } from "../../../../reusableComponents/common/TimerSlides";
+import Gift from "../components/OpeningBox";
+import { TextCard } from "../components/TextCard";
 
 type SeventhSlideProps = {
-    rewindStore: RewindStore
-}
+    rewindStore: RewindStore;
+};
 
 export const SeventhSlide = ({ rewindStore }: SeventhSlideProps) => {
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const childrens = useMemo(
         () => [
             {
@@ -21,11 +22,11 @@ export const SeventhSlide = ({ rewindStore }: SeventhSlideProps) => {
             },
             {
                 component: <Gift rewindStore={rewindStore} />,
-                duration: Infinity,
+                duration: Number.POSITIVE_INFINITY,
             },
         ],
-        [rewindStore.loadingState.isLoading]
-    )
+        [rewindStore.loadingState.isLoading],
+    );
 
-    return <TimerSlides slides={childrens} isSubSlide />
-}
+    return <TimerSlides slides={childrens} isSubSlide />;
+};

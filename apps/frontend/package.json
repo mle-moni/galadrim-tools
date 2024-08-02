@@ -10,6 +10,9 @@
         "test:watch": "vitest",
         "tsc": "tsc",
         "format": "biome format --write",
+        "format-check": "biome format",
+        "lint": "biome lint --write",
+        "lint-check": "biome lint",
         "typecheck": "tsc --noEmit",
         "preview": "vite preview"
     },

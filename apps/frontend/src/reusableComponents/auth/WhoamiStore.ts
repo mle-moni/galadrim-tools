@@ -1,47 +1,44 @@
-import { makeAutoObservable } from 'mobx'
-import { createApiToken } from './createApiToken'
+import { makeAutoObservable } from "mobx";
+import { createApiToken } from "./createApiToken";
 
 export type ApiToken = {
-    type: 'bearer'
-    token: string
-}
+    type: "bearer";
+    token: string;
+};
 
 export class WhoamiStore {
-    public clickCount = 0
+    public clickCount = 0;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
     }
 
     incrementClickCount() {
-        ++this.clickCount
+        ++this.clickCount;
     }
 
     onClick() {
-        this.incrementClickCount()
+        this.incrementClickCount();
         if (this.clickCount === 5) {
-            this.createApiToken()
+            this.createApiToken();
         }
     }
 
     async createApiToken() {
-        return createApiToken()
+        return createApiToken();
     }
 }
 
-export async function clipboardCopy(
-    text: string,
-    { success, error }: { success: () => void; error: () => void }
-) {
+export async function clipboardCopy(text: string, { success, error }: { success: () => void; error: () => void }) {
     const permissions = await navigator.permissions.query({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        name: 'clipboard-write',
-    })
-    if (permissions.state === 'granted' || permissions.state === 'prompt') {
-        await navigator.clipboard.writeText(text)
-        success()
-        return
+        name: "clipboard-write",
+    });
+    if (permissions.state === "granted" || permissions.state === "prompt") {
+        await navigator.clipboard.writeText(text);
+        success();
+        return;
     }
-    error()
+    error();
 }

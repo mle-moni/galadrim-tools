@@ -1,31 +1,27 @@
-import { VariantType } from 'notistack'
-import { AppStore } from '../globalStores/AppStore'
+import type { VariantType } from "notistack";
+import { AppStore } from "../globalStores/AppStore";
 
 export const notifySuccess = (text: string, autoHideDuration = 3000) => {
     AppStore.notification.push(text, {
-        variant: 'success',
+        variant: "success",
         autoHideDuration,
-    })
-}
+    });
+};
 
 export const notifyError = (text: string, autoHideDuration = 3000) => {
     AppStore.notification.push(text, {
-        variant: 'error',
+        variant: "error",
         autoHideDuration,
-    })
-}
+    });
+};
 
-export const notifyUser = (
-    text: string,
-    variant: VariantType = 'default',
-    autoHideDuration = 3000
-) => {
+export const notifyUser = (text: string, variant: VariantType = "default", autoHideDuration = 3000) => {
     AppStore.notification.push(text, {
         variant,
         autoHideDuration,
-    })
-}
+    });
+};
 
 export const closeAllSnackbars = () => {
-    AppStore.notification.close()
-}
+    AppStore.notification.close();
+};

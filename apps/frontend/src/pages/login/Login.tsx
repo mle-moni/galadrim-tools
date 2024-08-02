@@ -1,33 +1,33 @@
-import MailIcon from '@mui/icons-material/AlternateEmail'
-import { Button } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { AppStore } from '../../globalStores/AppStore'
-import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
-import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
-import { PasswordInput } from './PasswordInput'
+import MailIcon from "@mui/icons-material/AlternateEmail";
+import { Button } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppStore } from "../../globalStores/AppStore";
+import { GaladrimLogo } from "../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../reusableComponents/Core/GaladrimRoomsCard";
+import { TextInputWithIcon } from "../../reusableComponents/form/TextInputWithIcon";
+import { PasswordInput } from "./PasswordInput";
 
 export const Login = observer(() => {
-    const { authStore } = AppStore
+    const { authStore } = AppStore;
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (authStore.connected) {
-            navigate('/')
+            navigate("/");
         }
-    }, [])
+    }, [authStore, navigate]);
 
     return (
-        <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
+        <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    authStore.login()
+                    e.preventDefault();
+                    authStore.login();
                 }}
             >
                 <TextInputWithIcon
@@ -50,5 +50,5 @@ export const Login = observer(() => {
                 <CustomLink to="/getOtp">Mot de passe oublié ?</CustomLink>
             </form>
         </GaladrimRoomsCard>
-    )
-})
+    );
+});

@@ -1,54 +1,46 @@
-import { AlternateEmail, ColorLens, Key, Person, Settings } from '@mui/icons-material'
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Avatar, Button, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo, useState } from 'react'
-import { AppStore } from '../../globalStores/AppStore'
-import { GaladrimLogo } from '../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../reusableComponents/Core/GaladrimRoomsCard'
-import { createApiToken } from '../../reusableComponents/auth/createApiToken'
-import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
-import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
-import { TextFieldStore } from '../../reusableComponents/form/TextFieldStore'
-import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
-import MainLayout from '../../reusableComponents/layouts/MainLayout'
+import { AlternateEmail, ColorLens, Key, Person, Settings } from "@mui/icons-material";
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Avatar, Button, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo, useState } from "react";
+import { AppStore } from "../../globalStores/AppStore";
+import { GaladrimLogo } from "../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../reusableComponents/Core/GaladrimRoomsCard";
+import { createApiToken } from "../../reusableComponents/auth/createApiToken";
+import { CenteredDiv } from "../../reusableComponents/common/CenteredDiv";
+import { GaladrimButton } from "../../reusableComponents/common/GaladrimButton";
+import { TextFieldStore } from "../../reusableComponents/form/TextFieldStore";
+import { TextInputWithIcon } from "../../reusableComponents/form/TextInputWithIcon";
+import MainLayout from "../../reusableComponents/layouts/MainLayout";
 
 export const ProfilePage = observer(() => {
-    const { authStore } = AppStore
-    const userNameStore = useMemo(
-        () => new TextFieldStore(authStore.user.username),
-        [authStore.user.username]
-    )
-    const emailStore = useMemo(
-        () => new TextFieldStore(authStore.user.email),
-        [authStore.user.email]
-    )
+    const { authStore } = AppStore;
+    const userNameStore = useMemo(() => new TextFieldStore(authStore.user.username), [authStore.user.username]);
+    const emailStore = useMemo(() => new TextFieldStore(authStore.user.email), [authStore.user.email]);
 
-    const [createTokenLoading, setCreateTokenLoading] = useState(false)
+    const [createTokenLoading, setCreateTokenLoading] = useState(false);
 
     const handleCreateToken = async () => {
-        setCreateTokenLoading(true)
-        await createApiToken()
-        setCreateTokenLoading(false)
-    }
+        setCreateTokenLoading(true);
+        await createApiToken();
+        setCreateTokenLoading(false);
+    };
 
     return (
         <MainLayout fullscreen={false}>
             <CenteredDiv>
-                <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600, mt: 4 }}>
+                <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600, mt: 4 }}>
                     <GaladrimLogo align="center" sx={{ mb: 2 }} />
-                    <Typography sx={{ fontSize: 26, textAlign: 'center', m: 2 }}>
-                        Modifier vos informations
-                    </Typography>
+                    <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>Modifier vos informations</Typography>
                     <form
                         style={{ marginBottom: 20 }}
                         onSubmit={(e) => {
-                            e.preventDefault()
-                            authStore.updateProfile(userNameStore.text, emailStore.text)
+                            e.preventDefault();
+                            authStore.updateProfile(userNameStore.text, emailStore.text);
                         }}
                     >
-                        <CenteredDiv style={{ flexDirection: 'column' }}>
+                        <CenteredDiv style={{ flexDirection: "column" }}>
                             <TextInputWithIcon
                                 value={userNameStore.text}
                                 placeholder="Nom d'utilisateur"
@@ -63,7 +55,7 @@ export const ProfilePage = observer(() => {
                             />
                         </CenteredDiv>
 
-                        <div className="flex justify-center" style={{ marginTop: '24px' }}>
+                        <div className="flex justify-center" style={{ marginTop: "24px" }}>
                             <Avatar
                                 alt={authStore.user.username}
                                 src={authStore.imageSrc ?? authStore.user.imageUrl}
@@ -83,18 +75,12 @@ export const ProfilePage = observer(() => {
                                 />
                             </Button>
                             {authStore.image !== null && (
-                                <span style={{ marginLeft: '12px' }}>({authStore.image.name})</span>
+                                <span style={{ marginLeft: "12px" }}>({authStore.image.name})</span>
                             )}
                         </CenteredDiv>
                         <br />
 
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            type="submit"
-                            size="large"
-                            sx={{ my: 2 }}
-                        >
+                        <Button fullWidth variant="contained" type="submit" size="large" sx={{ my: 2 }}>
                             Mettre à jour le profil
                         </Button>
                     </form>
@@ -103,21 +89,15 @@ export const ProfilePage = observer(() => {
                         Generer un API token
                     </GaladrimButton>
 
-                    <CustomLink
-                        to="/changePassword"
-                        style={{ marginBottom: '20px', marginTop: '40px' }}
-                    >
+                    <CustomLink to="/changePassword" style={{ marginBottom: "20px", marginTop: "40px" }}>
                         <Key sx={{ mr: 1 }} /> Changer votre mot de passe
                     </CustomLink>
 
-                    <CustomLink to="/profile/theme" style={{ marginBottom: '20px' }}>
+                    <CustomLink to="/profile/theme" style={{ marginBottom: "20px" }}>
                         <ColorLens sx={{ mr: 1 }} /> Thème
                     </CustomLink>
 
-                    <CustomLink
-                        to="/profile/notificationsSettings"
-                        style={{ marginBottom: '20px' }}
-                    >
+                    <CustomLink to="/profile/notificationsSettings" style={{ marginBottom: "20px" }}>
                         <Settings sx={{ mr: 1 }} /> Paramètres de notifications
                     </CustomLink>
 
@@ -127,7 +107,7 @@ export const ProfilePage = observer(() => {
                 </GaladrimRoomsCard>
             </CenteredDiv>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default ProfilePage
+export default ProfilePage;

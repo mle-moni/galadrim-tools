@@ -1,19 +1,19 @@
-import { IRestaurant } from '@galadrim-tools/shared'
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { Box, Button, Chip, Tooltip, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
-import { AppStore } from '../../../globalStores/AppStore'
-import { SaveurStore } from '../../../globalStores/SaveurStore'
-import { SimpleModalStore } from '../../../reusableComponents/modal/SimpleModalStore'
-import { getNameOfUsers } from './ratingsFunctions'
-import { Link } from 'react-router-dom'
+import type { IRestaurant } from "@galadrim-tools/shared";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { Box, Button, Chip, Tooltip, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
+import { AppStore } from "../../../globalStores/AppStore";
+import type { SaveurStore } from "../../../globalStores/SaveurStore";
+import { SimpleModalStore } from "../../../reusableComponents/modal/SimpleModalStore";
+import { getNameOfUsers } from "./ratingsFunctions";
+import { Link } from "react-router-dom";
 
 const topColors = [
-    ['#FEE101', '#D6AF36', 'black'],
-    ['#D7D7D7', '#A7A7AD', 'black'],
-    ['#A77044', '#824A02', 'white'],
-]
+    ["#FEE101", "#D6AF36", "black"],
+    ["#D7D7D7", "#A7A7AD", "black"],
+    ["#A77044", "#824A02", "white"],
+];
 
 const getBadgeStyleFromIndex = (index: number) => {
     return index < 3
@@ -22,33 +22,33 @@ const getBadgeStyleFromIndex = (index: number) => {
               border: `1px solid ${topColors[index][1]}`,
               color: topColors[index][2],
           }
-        : {}
-}
+        : {};
+};
 
 const RestaurantChoices = observer<{
-    restaurant: IRestaurant
-    index: number
-    saveurStore: SaveurStore
+    restaurant: IRestaurant;
+    index: number;
+    saveurStore: SaveurStore;
 }>(({ restaurant, index, saveurStore }) => {
     const chooseRestaurant = () => {
-        saveurStore.restaurantsStore.chooseRestaurant(restaurant.id)
-    }
+        saveurStore.restaurantsStore.chooseRestaurant(restaurant.id);
+    };
 
-    const choosen = restaurant.choices.includes(AppStore.authStore.user.id)
+    const choosen = restaurant.choices.includes(AppStore.authStore.user.id);
 
     return (
         <Box
             sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                cursor: "pointer",
                 gap: 1,
             }}
         >
             <Link
-                style={{ color: choosen ? '#4BB543' : 'black', textDecoration: 'none' }}
+                style={{ color: choosen ? "#4BB543" : "black", textDecoration: "none" }}
                 to={`/saveur?zoom=18&restaurant-id=${restaurant.id}`}
             >
                 {restaurant.name}
@@ -65,17 +65,17 @@ const RestaurantChoices = observer<{
                     label={restaurant.choices.length}
                     sx={{
                         ...getBadgeStyleFromIndex(index),
-                        cursor: 'pointer',
+                        cursor: "pointer",
                     }}
                 />
             </Tooltip>
         </Box>
-    )
-})
+    );
+});
 
 export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
-    const restaurants = saveurStore.restaurantsStore.restaurantChoices
-    const store = useMemo(() => new SimpleModalStore(restaurants.length !== 0), [restaurants])
+    const restaurants = saveurStore.restaurantsStore.restaurantChoices;
+    const store = useMemo(() => new SimpleModalStore(restaurants.length !== 0), [restaurants]);
 
     return (
         <Box
@@ -83,28 +83,28 @@ export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveur
                 zIndex: 6,
                 top: 10,
                 right: 112,
-                position: 'absolute',
-                backgroundColor: 'white',
-                userSelect: 'none',
+                position: "absolute",
+                backgroundColor: "white",
+                userSelect: "none",
             }}
         >
             <Box
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
                     p: 2,
-                    backgroundColor: '#4a453d',
-                    color: 'white',
+                    backgroundColor: "#4a453d",
+                    color: "white",
                 }}
             >
                 <Box
                     sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        cursor: 'pointer',
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        cursor: "pointer",
                     }}
                     onClick={() => store.setModalOpen(!store.modalOpen)}
                 >
@@ -116,11 +116,11 @@ export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveur
                 (restaurants.length > 0 ? (
                     <Box
                         sx={{
-                            maxHeight: '70vh',
-                            overflowY: 'auto',
+                            maxHeight: "70vh",
+                            overflowY: "auto",
                             p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
+                            display: "flex",
+                            flexDirection: "column",
                             gap: 1,
                         }}
                     >
@@ -135,11 +135,9 @@ export const UserDailyChoices = observer<{ saveurStore: SaveurStore }>(({ saveur
                     </Box>
                 ) : (
                     <Box sx={{ p: 1 }}>
-                        <Typography sx={{ textAlign: 'center' }}>
-                            Aucun choix pour le moment
-                        </Typography>
+                        <Typography sx={{ textAlign: "center" }}>Aucun choix pour le moment</Typography>
                     </Box>
                 ))}
         </Box>
-    )
-})
+    );
+});

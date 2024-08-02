@@ -1,19 +1,19 @@
-import moment from 'moment'
-import 'moment/dist/locale/fr'
+import moment from "moment";
+import "moment/dist/locale/fr";
 
-moment.locale('fr')
+moment.locale("fr");
 
 export const getHumanFormattedTimeDifference = (date?: Date | string) => {
-    if (!date) return ''
-    return moment(date).fromNow()
-}
+    if (!date) return "";
+    return moment(date).fromNow();
+};
 
 export const getHumanFormattedDate = (date?: Date | string) => {
-    if (!date) return ''
-    return moment(date).format('DD/MM/YYYY HH:mm')
-}
+    if (!date) return "";
+    return moment(date).format("DD/MM/YYYY HH:mm");
+};
 
 export const getHumanFormattedDay = (date?: Date | string) => {
-    if (!date) return ''
-    return moment(date).format('DD/MM/YYYY')
-}
+    if (!date) return "";
+    return moment(date).format("DD/MM/YYYY");
+};

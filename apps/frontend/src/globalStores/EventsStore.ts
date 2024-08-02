@@ -1,56 +1,54 @@
-import { ApiError } from '@galadrim-tools/shared'
-import { autorun, makeAutoObservable } from 'mobx'
-import { stringOrDate } from 'react-big-calendar'
-import { fetchEvents, getEventFromApi, postEvent, putEvent } from '../api/events'
-import { fetchBackendJson } from '../api/fetch'
-import { notifyError } from '../utils/notification'
+import type { ApiError } from "@galadrim-tools/shared";
+import { autorun, makeAutoObservable } from "mobx";
+import type { stringOrDate } from "react-big-calendar";
+import { fetchEvents, getEventFromApi, postEvent, putEvent } from "../api/events";
+import { fetchBackendJson } from "../api/fetch";
+import { notifyError } from "../utils/notification";
 
 export type RoomEvent = {
-    id: number
-    start: Date
-    end: Date
-    title: string
-    room: string
-    allDay?: boolean
-    userId: number
-}
+    id: number;
+    start: Date;
+    end: Date;
+    title: string;
+    room: string;
+    allDay?: boolean;
+    userId: number;
+};
 
-export type RawRoomEvent = Omit<RoomEvent, 'start' | 'end'> & {
-    start: string
-    end: string
-}
+export type RawRoomEvent = Omit<RoomEvent, "start" | "end"> & {
+    start: string;
+    end: string;
+};
 
 export class EventsStore {
-    public events: RoomEvent[] = []
+    public events: RoomEvent[] = [];
 
-    public roomName = ''
+    public roomName = "";
 
-    public waiting = false
+    public waiting = false;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
         autorun(() => {
             if (this.waiting) {
-                document.body.style.cursor = 'wait'
+                document.body.style.cursor = "wait";
             } else {
-                document.body.style.cursor = ''
+                document.body.style.cursor = "";
             }
-        })
+        });
     }
 
     setWaiting(state: boolean) {
-        this.waiting = state
+        this.waiting = state;
     }
 
     async fetchEvents(all = false) {
-        const events: RoomEvent[] = (await fetchEvents(all)).map((rawEvent: RawRoomEvent) =>
-            getEventFromApi(rawEvent)
-        )
-        this.setEvents(events)
+        const events: RoomEvent[] = (await fetchEvents(all)).map((rawEvent: RawRoomEvent) => getEventFromApi(rawEvent));
+        this.setEvents(events);
     }
 
     setRoomName(name: string) {
-        this.roomName = name
+        this.roomName = name;
     }
 
     onEventDrop({
@@ -59,105 +57,102 @@ export class EventsStore {
         end,
         resourceId: roomName,
     }: {
-        event: RoomEvent
-        start: stringOrDate
-        end: stringOrDate
-        isAllDay: boolean
-        resourceId?: string
+        event: RoomEvent;
+        start: stringOrDate;
+        end: stringOrDate;
+        isAllDay: boolean;
+        resourceId?: string;
     }) {
-        const [startDate, endDate] = [new Date(start), new Date(end)]
-        this.moveEvent(event?.id, startDate, endDate, roomName)
+        const [startDate, endDate] = [new Date(start), new Date(end)];
+        this.moveEvent(event?.id, startDate, endDate, roomName);
     }
     async newEvent(start: Date, end: Date, roomName: string | null = null) {
-        if (this.waiting) return
-        this.setWaiting(true)
+        if (this.waiting) return;
+        this.setWaiting(true);
         const res = await postEvent({
             start,
             end,
             room: roomName ?? this.roomName,
-        })
-        this.setWaiting(false)
+        });
+        this.setWaiting(false);
         if (res.id % 10_000 === 0) {
-            location.replace(`/galadrim/scam/winner/omg/`)
+            location.replace("/galadrim/scam/winner/omg/");
         }
-        return res
+        return res;
     }
     onDoubleClickEvent(event: RoomEvent) {
-        if (event.id === 0) return
-        return this.removeEvent(event.id)
+        if (event.id === 0) return;
+        return this.removeEvent(event.id);
     }
     async removeEvent(id: number) {
-        if (this.waiting) return
-        this.setWaiting(true)
-        const res = await fetchBackendJson<{ id: number; deleted: boolean }, ApiError>(
-            `/events/${id}`,
-            'DELETE'
-        )
-        this.setWaiting(false)
+        if (this.waiting) return;
+        this.setWaiting(true);
+        const res = await fetchBackendJson<{ id: number; deleted: boolean }, ApiError>(`/events/${id}`, "DELETE");
+        this.setWaiting(false);
         if (!res.ok || !res.json.deleted) {
-            return notifyError(`Erreur lors de la suppression de la réservation`)
+            return notifyError("Erreur lors de la suppression de la réservation");
         }
     }
     appendEvents(events: RoomEvent[]) {
-        this.events = [...this.events, ...events]
+        this.events = [...this.events, ...events];
     }
     setEvents(events: RoomEvent[]) {
-        this.events = events
+        this.events = events;
     }
     async moveEvent(eventId: number, start: Date, end: Date, roomName?: string) {
-        const event = this.events.find((event) => event.id === eventId)
-        if (!event) return
-        if (this.waiting) return
-        this.setWaiting(true)
+        const event = this.events.find((event) => event.id === eventId);
+        if (!event) return;
+        if (this.waiting) return;
+        this.setWaiting(true);
         try {
             await putEvent({
                 id: event.id,
                 start,
                 end,
                 room: roomName ?? event.room,
-            })
+            });
         } catch (error) {
-            notifyError(`Erreur lors de la mise à jour de la réservation`)
+            notifyError("Erreur lors de la mise à jour de la réservation");
         }
-        this.setWaiting(false)
+        this.setWaiting(false);
     }
 
     updateEvent(event: RoomEvent, updateData: RoomEvent) {
-        event.start = updateData.start
-        event.end = updateData.end
-        event.room = updateData.room
-        event.title = updateData.title
+        event.start = updateData.start;
+        event.end = updateData.end;
+        event.room = updateData.room;
+        event.title = updateData.title;
     }
 
     getRoomEvents(roomName: string) {
-        if (roomName === '*')
+        if (roomName === "*")
             return this.events.map((event) => {
-                return { ...event, title: event.title }
-            })
-        return this.events.filter((event) => event.room === roomName || event.room === '*')
+                return { ...event, title: event.title };
+            });
+        return this.events.filter((event) => event.room === roomName || event.room === "*");
     }
 
     get roomEvents() {
-        return this.getRoomEvents(this.roomName)
+        return this.getRoomEvents(this.roomName);
     }
 
     eventCollide(event: RoomEvent, date: Date): boolean {
-        return !(date < event.start || date > event.end)
+        return !(date < event.start || date > event.end);
     }
 
     roomIsAvailable(roomName: string, date: Date) {
-        const events = this.getRoomEvents(roomName)
-        return events.every((event) => !this.eventCollide(event, date))
+        const events = this.getRoomEvents(roomName);
+        return events.every((event) => !this.eventCollide(event, date));
     }
 
     roomUser(roomName: string, date: Date) {
-        const events = this.getRoomEvents(roomName)
-        const conflictEvent = events.find((event) => this.eventCollide(event, date))
+        const events = this.getRoomEvents(roomName);
+        const conflictEvent = events.find((event) => this.eventCollide(event, date));
 
         if (conflictEvent !== undefined) {
-            return conflictEvent.userId
+            return conflictEvent.userId;
         }
 
-        return null
+        return null;
     }
 }

@@ -1,37 +1,37 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from "mobx";
 
 export class ImageInputStore {
-    public image: File | null = null
+    public image: File | null = null;
 
-    public imageSrc: string | null = null
+    public imageSrc: string | null = null;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
     }
 
     setImage(image: File | null) {
-        this.image = image
+        this.image = image;
         if (image) {
-            const reader = new FileReader()
+            const reader = new FileReader();
             reader.addEventListener(
-                'load',
+                "load",
                 () => {
                     if (reader.result) {
-                        this.setImageSrc(reader.result.toString())
+                        this.setImageSrc(reader.result.toString());
                     }
                 },
-                false
-            )
-            reader.readAsDataURL(image)
+                false,
+            );
+            reader.readAsDataURL(image);
         }
     }
 
     setImageSrc(state: string | null) {
-        this.imageSrc = state
+        this.imageSrc = state;
     }
 
     setUploadedImage(input: HTMLInputElement) {
-        const image: File | null = input.files && input.files.length >= 1 ? input.files[0] : null
-        this.setImage(image)
+        const image: File | null = input.files && input.files.length >= 1 ? input.files[0] : null;
+        this.setImage(image);
     }
 }

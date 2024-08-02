@@ -1,146 +1,142 @@
-import { IIdea, INotification, IRestaurant, IReview, ITag } from '@galadrim-tools/shared'
-import { Socket, io } from 'socket.io-client'
-import { getEventFromApi } from '../api/events'
-import { getSocketApiUrl } from '../api/fetch'
-import { UserData } from '../api/galadrimeurs'
-import { TournoisResult } from '../pages/games/tournois/TournoisResultsStore'
-import { notifyError, notifySuccess } from '../utils/notification'
-import { AppStore } from './AppStore'
-import { RawRoomEvent } from './EventsStore'
+import type { IIdea, INotification, IRestaurant, IReview, ITag } from "@galadrim-tools/shared";
+import { type Socket, io } from "socket.io-client";
+import { getEventFromApi } from "../api/events";
+import { getSocketApiUrl } from "../api/fetch";
+import type { UserData } from "../api/galadrimeurs";
+import type { TournoisResult } from "../pages/games/tournois/TournoisResultsStore";
+import { notifyError, notifySuccess } from "../utils/notification";
+import { AppStore } from "./AppStore";
+import type { RawRoomEvent } from "./EventsStore";
 
 export class SocketStore {
-    private _socket: Socket | null = null
+    private _socket: Socket | null = null;
 
     get socket() {
         if (!this._socket) {
-            throw new Error('you must call connect() before accessing to socket')
+            throw new Error("you must call connect() before accessing to socket");
         }
-        return this._socket
+        return this._socket;
     }
 
     connect() {
-        if (this._socket) return
-        this._socket = io(getSocketApiUrl(), { transports: ['websocket'] })
-        this.setupEvents()
+        if (this._socket) return;
+        this._socket = io(getSocketApiUrl(), { transports: ["websocket"] });
+        this.setupEvents();
     }
 
     disconnect() {
-        this.socket.emit('logout')
-        this.socket.removeAllListeners()
-        this.socket.close()
-        this._socket = null
+        this.socket.emit("logout");
+        this.socket.removeAllListeners();
+        this.socket.close();
+        this._socket = null;
     }
 
     setupEvents() {
-        this.socket.on('auth', () => this.socketAuth())
-        this.socket.on('error', (msg) => this.error(msg))
-        this.socket.on('success', (msg) => this.success(msg))
-        this.socket.on('createEvent', (event) => this.createEvent(event))
-        this.socket.on('updateEvent', (event) => this.updateEvent(event))
-        this.socket.on('deleteEvent', (event) => this.deleteEvent(event))
-        this.socket.on('createTag', (restaurant) => this.createTag(restaurant))
-        this.socket.on('createRestaurant', (restaurant) => this.createRestaurant(restaurant))
-        this.socket.on('updateRestaurant', (restaurant) => this.updateRestaurant(restaurant))
-        this.socket.on('deleteRestaurant', ({ id }: { id: number }) => this.deleteRestaurant(id))
-        this.socket.on('chooseRestaurant', (restaurant) => this.chooseRestaurant(restaurant))
-        this.socket.on('fetchAll', () => AppStore.fetchAll())
-        this.socket.on('updateUser', (userInfo) => this.updateUser(userInfo))
-        this.socket.on('updateRights', (rights) => this.updateRights(rights))
-        this.socket.on('createIdea', (idea) => this.createOrUpdateIdea(idea))
-        this.socket.on('updateIdea', (idea) => this.createOrUpdateIdea(idea))
-        this.socket.on('deleteIdea', (ideaId) => this.deleteIdea(ideaId))
-        this.socket.on('createRestaurantReview', (idea) =>
-            this.createOrUpdateRestaurantReview(idea)
-        )
-        this.socket.on('updateRestaurantReview', (idea) =>
-            this.createOrUpdateRestaurantReview(idea)
-        )
-        this.socket.on('deleteRestaurantReview', (ideaId) => this.deleteRestaurantReview(ideaId))
-        this.socket.on('notification', (notification) => this.addNotification(notification))
-        this.socket.on('game.tournois.newResult', (newResult) => this.addTournoisResult(newResult))
+        this.socket.on("auth", () => this.socketAuth());
+        this.socket.on("error", (msg) => this.error(msg));
+        this.socket.on("success", (msg) => this.success(msg));
+        this.socket.on("createEvent", (event) => this.createEvent(event));
+        this.socket.on("updateEvent", (event) => this.updateEvent(event));
+        this.socket.on("deleteEvent", (event) => this.deleteEvent(event));
+        this.socket.on("createTag", (restaurant) => this.createTag(restaurant));
+        this.socket.on("createRestaurant", (restaurant) => this.createRestaurant(restaurant));
+        this.socket.on("updateRestaurant", (restaurant) => this.updateRestaurant(restaurant));
+        this.socket.on("deleteRestaurant", ({ id }: { id: number }) => this.deleteRestaurant(id));
+        this.socket.on("chooseRestaurant", (restaurant) => this.chooseRestaurant(restaurant));
+        this.socket.on("fetchAll", () => AppStore.fetchAll());
+        this.socket.on("updateUser", (userInfo) => this.updateUser(userInfo));
+        this.socket.on("updateRights", (rights) => this.updateRights(rights));
+        this.socket.on("createIdea", (idea) => this.createOrUpdateIdea(idea));
+        this.socket.on("updateIdea", (idea) => this.createOrUpdateIdea(idea));
+        this.socket.on("deleteIdea", (ideaId) => this.deleteIdea(ideaId));
+        this.socket.on("createRestaurantReview", (idea) => this.createOrUpdateRestaurantReview(idea));
+        this.socket.on("updateRestaurantReview", (idea) => this.createOrUpdateRestaurantReview(idea));
+        this.socket.on("deleteRestaurantReview", (ideaId) => this.deleteRestaurantReview(ideaId));
+        this.socket.on("notification", (notification) => this.addNotification(notification));
+        this.socket.on("game.tournois.newResult", (newResult) => this.addTournoisResult(newResult));
     }
 
     socketAuth() {
-        this.socket.emit('auth', {
+        this.socket.emit("auth", {
             userId: AppStore.authStore.user.id,
             socketToken: AppStore.authStore.user.socketToken,
-        })
+        });
     }
 
     error(msg: string) {
-        notifyError(msg)
+        notifyError(msg);
     }
 
     success(msg: string) {
-        notifySuccess(msg)
+        notifySuccess(msg);
     }
 
     createEvent(eventRaw: RawRoomEvent) {
-        AppStore.eventsStore.appendEvents([getEventFromApi(eventRaw)])
+        AppStore.eventsStore.appendEvents([getEventFromApi(eventRaw)]);
     }
 
     updateEvent(eventRaw: RawRoomEvent) {
-        const events = [...AppStore.eventsStore.events]
-        const event = events.find((event) => event.id === eventRaw.id)
-        if (!event) return
-        AppStore.eventsStore.updateEvent(event, getEventFromApi(eventRaw))
-        AppStore.eventsStore.setEvents(events)
+        const events = [...AppStore.eventsStore.events];
+        const event = events.find((event) => event.id === eventRaw.id);
+        if (!event) return;
+        AppStore.eventsStore.updateEvent(event, getEventFromApi(eventRaw));
+        AppStore.eventsStore.setEvents(events);
     }
 
     deleteEvent({ id }: RawRoomEvent) {
-        const events = AppStore.eventsStore.events.filter((event) => event.id !== id)
-        AppStore.eventsStore.setEvents(events)
+        const events = AppStore.eventsStore.events.filter((event) => event.id !== id);
+        AppStore.eventsStore.setEvents(events);
     }
 
     createRestaurant(restaurant: IRestaurant) {
-        AppStore.saveurStore.restaurantsStore.addRestaurant(restaurant)
+        AppStore.saveurStore.restaurantsStore.addRestaurant(restaurant);
     }
 
     createTag(tag: ITag) {
-        AppStore.saveurStore.tagsStore.pushTag(tag)
+        AppStore.saveurStore.tagsStore.pushTag(tag);
     }
 
     updateRestaurant(restaurant: IRestaurant) {
-        AppStore.saveurStore.restaurantsStore.editRestaurant(restaurant)
+        AppStore.saveurStore.restaurantsStore.editRestaurant(restaurant);
     }
 
     chooseRestaurant(restaurant: IRestaurant) {
-        AppStore.authStore.chooseRestaurant(restaurant)
+        AppStore.authStore.chooseRestaurant(restaurant);
     }
 
     deleteRestaurant(id: number) {
-        AppStore.saveurStore.restaurantsStore.deleteRestaurant(id)
+        AppStore.saveurStore.restaurantsStore.deleteRestaurant(id);
     }
 
     updateUser(userInfo: UserData) {
-        AppStore.updateUser(userInfo)
+        AppStore.updateUser(userInfo);
     }
 
     updateRights(rights: number) {
-        AppStore.authStore.updateRights(rights)
+        AppStore.authStore.updateRights(rights);
     }
 
     createOrUpdateIdea(idea: IIdea) {
-        AppStore.ideaStore.createOrUpdateIdea(idea)
+        AppStore.ideaStore.createOrUpdateIdea(idea);
     }
 
     deleteIdea(id: number) {
-        AppStore.ideaStore.removeIdeaById(id)
+        AppStore.ideaStore.removeIdeaById(id);
     }
 
     createOrUpdateRestaurantReview(review: IReview) {
-        AppStore.saveurStore.restaurantsStore.createOrUpdateReview(review)
+        AppStore.saveurStore.restaurantsStore.createOrUpdateReview(review);
     }
 
     deleteRestaurantReview(id: number) {
-        AppStore.saveurStore.restaurantsStore.removeReviewById(id)
+        AppStore.saveurStore.restaurantsStore.removeReviewById(id);
     }
 
     addNotification(notification: INotification) {
-        AppStore.authStore.addNotification(notification)
+        AppStore.authStore.addNotification(notification);
     }
 
     addTournoisResult(newResult: TournoisResult) {
-        AppStore.tournoisResultsStore?.addResult(newResult)
+        AppStore.tournoisResultsStore?.addResult(newResult);
     }
 }

@@ -1,4 +1,4 @@
-import { Typography, TypographyProps } from '@mui/material'
+import { Typography, type TypographyProps } from "@mui/material";
 
 export const GaladrimLogo = (props: TypographyProps) => {
     return (
@@ -12,5 +12,5 @@ export const GaladrimLogo = (props: TypographyProps) => {
         >
             galadrim.
         </Typography>
-    )
-}
+    );
+};
