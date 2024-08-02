@@ -1,17 +1,17 @@
-import { HttpContext } from '@adonisjs/core/http'
+import type { HttpContext } from "@adonisjs/core/http";
 
 export const meRoute = async ({ auth, response }: HttpContext) => {
-  const user = auth.user
+    const user = auth.user;
 
-  if (user === undefined) {
-    return response.unauthorized({
-      error: `Vous n'êtes pas connecté`,
-    })
-  }
+    if (user === undefined) {
+        return response.unauthorized({
+            error: `Vous n'êtes pas connecté`,
+        });
+    }
 
-  await user.load((q) => q.preload('notifications').preload('theme'))
+    await user.load((q) => q.preload("notifications").preload("theme"));
 
-  const userData = user.userData()
+    const userData = user.userData();
 
-  return userData
-}
+    return userData;
+};

@@ -13,5 +13,5 @@
 */
 
 export const policies = {
-  ResourcePolicy: () => import('#policies/resource_policy'),
-}
+    ResourcePolicy: () => import("#policies/resource_policy"),
+};

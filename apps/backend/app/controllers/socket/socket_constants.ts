@@ -1,1 +1,1 @@
-export const CONNECTED_SOCKETS = 'connectedSockets'
+export const CONNECTED_SOCKETS = "connectedSockets";

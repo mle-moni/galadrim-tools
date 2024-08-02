@@ -1,16 +1,16 @@
-import Idea from '#models/idea'
-import { Ws } from '#services/ws'
-import type { HttpContext } from '@adonisjs/core/http'
+import Idea from "#models/idea";
+import { Ws } from "#services/ws";
+import type { HttpContext } from "@adonisjs/core/http";
 
 export const destroyIdeaRoute = async ({ params, bouncer }: HttpContext) => {
-  const idea = await Idea.findOrFail(params.id)
-  await bouncer.with('ResourcePolicy').authorize('viewUpdateOrDelete', idea, 'IDEAS_ADMIN')
+    const idea = await Idea.findOrFail(params.id);
+    await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", idea, "IDEAS_ADMIN");
 
-  const deleletedId = idea.id
+    const deleletedId = idea.id;
 
-  await idea.delete()
+    await idea.delete();
 
-  Ws.io.to('connectedSockets').emit('deleteIdea', deleletedId)
+    Ws.io.to("connectedSockets").emit("deleteIdea", deleletedId);
 
-  return { message: "L'idée à bien été supprimée" }
-}
+    return { message: "L'idée à bien été supprimée" };
+};

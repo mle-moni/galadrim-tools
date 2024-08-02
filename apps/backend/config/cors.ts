@@ -1,4 +1,4 @@
-import { defineConfig } from '@adonisjs/cors'
+import { defineConfig } from "@adonisjs/cors";
 
 /**
  * Configuration options to tweak the CORS policy. The following
@@ -7,13 +7,13 @@ import { defineConfig } from '@adonisjs/cors'
  * https://docs.adonisjs.com/guides/security/cors
  */
 const corsConfig = defineConfig({
-  enabled: true,
-  origin: true,
-  methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
-  headers: true,
-  exposeHeaders: [],
-  credentials: true,
-  maxAge: 90,
-})
+    enabled: true,
+    origin: true,
+    methods: ["GET", "HEAD", "POST", "PUT", "DELETE"],
+    headers: true,
+    exposeHeaders: [],
+    credentials: true,
+    maxAge: 90,
+});
 
-export default corsConfig
+export default corsConfig;

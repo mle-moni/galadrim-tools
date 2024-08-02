@@ -1,6 +1,5 @@
-import BreakActivity from '#models/break_activity'
-import { HttpContext } from '@adonisjs/core/http'
+import BreakActivity from "#models/break_activity";
 
-export const breakActivitiesIndex = async ({}: HttpContext) => {
-  return BreakActivity.all()
-}
+export const breakActivitiesIndex = async () => {
+    return BreakActivity.all();
+};

@@ -8,15 +8,15 @@ function setChat() {
         document.getElementsByTagName('canvas')[0].style.position = 'relative'
         document.getElementsByTagName('canvas')[0].style.left = innerWidth / 2 - 500 + 'px'
 
-        let chatEl = document.createElement('div')
-        let chatTitle = document.createElement('h3')
+        const chatEl = document.createElement('div')
+        const chatTitle = document.createElement('h3')
         chatTitle.innerHTML = 'Salon de discussion'
         chatTitle.style.textAlign = 'center'
-        let chatBody = document.createElement('div')
+        const chatBody = document.createElement('div')
         chatBody.id = 'chatBody'
         chatBody.style.display = 'flex'
         chatBody.style.flexDirection = 'column'
-        let chatInput = document.createElement('input')
+        const chatInput = document.createElement('input')
         chatInput.id = 'chatUserInput'
         chatInput.style =
             "height: 30px; font-family:'Roboto-Thin'; margin: auto;" +
@@ -96,7 +96,7 @@ function genScope() {
     }
 
     function genGame(password, pseudo, ioSocket) {
-        let others = {}
+        const others = {}
 
         const config = {
             type: Phaser.CANVAS,
@@ -120,7 +120,7 @@ function genScope() {
         game.socket = ioSocket
         game.user = user
 
-        let controller = function (type, action, psd, obj) {
+        const controller = (type, action, psd, obj) => {
             if (type === 0) {
                 switch (action) {
                     case 'leaderboard':
@@ -151,10 +151,10 @@ function genScope() {
     // sockets events
 
     innerSocket.on('gameChat', (obj) => {
-        let p = document.createElement('p')
+        const p = document.createElement('p')
         // p.className = "chatParagraph";
-        let txt = '.b' + obj.psd + '!b' + ' : ' + obj.txt
-        let dtxt = document.createTextNode(txt)
+        const txt = '.b' + obj.psd + '!b' + ' : ' + obj.txt
+        const dtxt = document.createTextNode(txt)
         p.appendChild(dtxt)
         document.getElementById('chatBody').appendChild(p)
         transformMarks()
@@ -176,7 +176,7 @@ function genScope() {
 
     innerSocket.on('ladderTournois', (arr) => {
         ladder.innerHTML = ''
-        let userIds = []
+        const userIds = []
         // tri data
         for (let i = 0, rank = 1; i < arr.length; i++, rank++) {
             let canStore = true
@@ -189,7 +189,7 @@ function genScope() {
             }
             const username = users.get(arr[i].userId)?.username
             if (canStore && username) {
-                let p = document.createElement('p')
+                const p = document.createElement('p')
                 p.appendChild(document.createTextNode(rank + '. ' + username))
                 p.innerHTML += ' &rarr; '
                 p.appendChild(

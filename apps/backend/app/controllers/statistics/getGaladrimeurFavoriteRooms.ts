@@ -1,11 +1,11 @@
-import db from '@adonisjs/lucid/services/db'
-import { HttpContext } from '@adonisjs/core/http'
+import db from "@adonisjs/lucid/services/db";
+import type { HttpContext } from "@adonisjs/core/http";
 
 export const getGaladrimeurFavoriteRooms = async ({ request }: HttpContext) => {
-  const { days } = request.qs()
-  const filterQuery = days ? 'WHERE created_at > DATE_SUB(NOW(), INTERVAL ? DAY)' : ''
-  const result = await db.rawQuery(
-    `
+    const { days } = request.qs();
+    const filterQuery = days ? "WHERE created_at > DATE_SUB(NOW(), INTERVAL ? DAY)" : "";
+    const result = await db.rawQuery(
+        `
     SELECT
       room as id,
       room, 
@@ -14,7 +14,7 @@ export const getGaladrimeurFavoriteRooms = async ({ request }: HttpContext) => {
     FROM events 
     ${filterQuery}
     GROUP BY room ORDER BY time DESC;`,
-    days ? [days] : undefined
-  )
-  return result[0]
-}
+        days ? [days] : undefined,
+    );
+    return result[0];
+};

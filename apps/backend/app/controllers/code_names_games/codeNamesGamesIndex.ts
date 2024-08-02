@@ -1,8 +1,7 @@
-import CodeNamesGame from '#models/code_names_game'
-import { HttpContext } from '@adonisjs/core/http'
+import CodeNamesGame from "#models/code_names_game";
 
-export const codeNamesGamesIndex = async ({}: HttpContext) => {
-  const games = CodeNamesGame.query().preload('rounds')
+export const codeNamesGamesIndex = async () => {
+    const games = CodeNamesGame.query().preload("rounds");
 
-  return games
-}
+    return games;
+};

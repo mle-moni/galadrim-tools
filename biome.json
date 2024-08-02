@@ -27,7 +27,7 @@
         "enabled": true,
         "indentStyle": "space",
         "indentWidth": 4,
-        "lineWidth": 125,
+        "lineWidth": 100,
         "lineEnding": "lf"
     }
 }

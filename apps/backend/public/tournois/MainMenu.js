@@ -38,19 +38,18 @@ class MainMenu extends Phaser.Scene {
     }
 
     create() {
-        let self = this
-        self.available = true
-        this.spriteName = getSkinForUser(self.game.user)
+        this.available = true
+        this.spriteName = getSkinForUser(this.game.user)
         this.canMove = true
         this.notWonYet = true
         this.jumps = 0
         this.timeStart = Date.now()
         this.goToMap = (str) => {
             jumpSetter(0)
-            clearInterval(self.liveInterval)
-            self.available = false
-            self.game.socket.off('livePos', self.liveHandler)
-            self.game.socket.off('deletePlayer', self.delHandler)
+            clearInterval(this.liveInterval)
+            this.available = false
+            this.game.socket.off('livePos', this.liveHandler)
+            this.game.socket.off('deletePlayer', this.delHandler)
             this.scene.start(str)
         }
 
@@ -58,8 +57,8 @@ class MainMenu extends Phaser.Scene {
         const tileset = map.addTilesetImage('tileset_pokemon', 'tilesetPokemon')
 
         //layers
-        let solidLayer = map.createStaticLayer('solid', [tileset], 0, 0)
-        let skyLayer = map.createStaticLayer('ground', [tileset], 0, 0).setDepth(-1)
+        const solidLayer = map.createStaticLayer('solid', [tileset], 0, 0)
+        const skyLayer = map.createStaticLayer('ground', [tileset], 0, 0).setDepth(-1)
 
         this.othersPlayers = {}
         this.mapName = 'MainMenu'
@@ -82,7 +81,7 @@ class MainMenu extends Phaser.Scene {
         this.player = this.physics.add.sprite(x, y, this.spriteName)
 
         this.player.body.setCircle(11, 6, 25)
-        self.physics.add.world.gravity = { x: 0, y: 0 }
+        this.physics.add.world.gravity = { x: 0, y: 0 }
 
         //  this.player physics properties. Give the little guy a slight bounce.
         this.player.setBounce(0.1)
@@ -105,40 +104,40 @@ class MainMenu extends Phaser.Scene {
         setupAnimations(this)
 
         //  Input Events
-        self.game.cursors = this.input.keyboard.createCursorKeys()
+        this.game.cursors = this.input.keyboard.createCursorKeys()
 
         //camera
         this.cameras.main.startFollow(this.player)
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
-        self.liveInterval = setInterval(() => {
+        this.liveInterval = setInterval(() => {
             const gameObj = {
-                x: self.player.x,
-                y: self.player.y,
-                skin: self.spriteName,
-                map: self.mapName,
-                anim: self.anim,
+                x: this.player.x,
+                y: this.player.y,
+                skin: this.spriteName,
+                map: this.mapName,
+                anim: this.anim,
             }
-            self.game.socket.emit('livePos', gameObj, self.game.password)
+            this.game.socket.emit('livePos', gameObj, this.game.password)
         }, 40)
 
-        self.liveHandler = (obj) => {
-            if (self.available) {
-                for (let key in obj) {
-                    if (key !== self.game.pseudo) {
-                        if (self.mapName === obj[key].map) {
-                            if (self.othersPlayers.hasOwnProperty(key)) {
-                                self.othersPlayers[key].x = obj[key].x
-                                self.othersPlayers[key].y = obj[key].y
-                                self.othersPlayers[key].nameDisplayer.x =
-                                    obj[key].x - self.othersPlayers[key].nameDisplayer.width / 2
-                                self.othersPlayers[key].nameDisplayer.y = obj[key].y - 50
-                                self.othersPlayers[key].anims.play(
+        this.liveHandler = (obj) => {
+            if (this.available) {
+                for (const key in obj) {
+                    if (key !== this.game.pseudo) {
+                        if (this.mapName === obj[key].map) {
+                            if (this.othersPlayers.hasOwnProperty(key)) {
+                                this.othersPlayers[key].x = obj[key].x
+                                this.othersPlayers[key].y = obj[key].y
+                                this.othersPlayers[key].nameDisplayer.x =
+                                    obj[key].x - this.othersPlayers[key].nameDisplayer.width / 2
+                                this.othersPlayers[key].nameDisplayer.y = obj[key].y - 50
+                                this.othersPlayers[key].anims.play(
                                     obj[key].anim + '_' + obj[key].skin,
                                     true
                                 )
                             } else {
-                                const localBody = self.physics.add.sprite(
+                                const localBody = this.physics.add.sprite(
                                     obj[key].x,
                                     obj[key].y,
                                     obj[key].skin
@@ -147,43 +146,42 @@ class MainMenu extends Phaser.Scene {
                                 localBody.body.setCircle(11, 6, 25)
                                 localBody.setCollideWorldBounds(true)
                                 localBody.body.moves = false
-                                self.physics.collide(self.player, localBody)
-                                self.physics.add.collider(
-                                    self,
+                                this.physics.collide(this.player, localBody)
+                                this.physics.add.collider(
+                                    this,
                                     true,
-                                    self.player,
+                                    this.player,
                                     localBody,
                                     () => {}
                                 )
-                                self.othersPlayers[key] = localBody
-                                self.othersPlayers[key].nameDisplayer = this.add.text(16, 16, key, {
+                                this.othersPlayers[key] = localBody
+                                this.othersPlayers[key].nameDisplayer = this.add.text(16, 16, key, {
                                     fontSize: '18px',
                                     fill: '#F00',
                                 })
                             }
                         } else {
-                            if (self.othersPlayers.hasOwnProperty(key)) {
-                                self.othersPlayers[key].disableBody(true, true)
-                                self.othersPlayers[key].nameDisplayer.destroy()
+                            if (this.othersPlayers.hasOwnProperty(key)) {
+                                this.othersPlayers[key].disableBody(true, true)
+                                this.othersPlayers[key].nameDisplayer.destroy()
                             }
                         }
                     }
                 }
             }
         }
-        self.delHandler = (pseudo) => {
-            if (self.othersPlayers.hasOwnProperty(pseudo)) {
-                self.othersPlayers[pseudo].disableBody(true, true)
-                self.othersPlayers[pseudo].nameDisplayer.destroy()
-                delete self.othersPlayers[pseudo]
+        this.delHandler = (pseudo) => {
+            if (this.othersPlayers.hasOwnProperty(pseudo)) {
+                this.othersPlayers[pseudo].disableBody(true, true)
+                this.othersPlayers[pseudo].nameDisplayer.destroy()
+                delete this.othersPlayers[pseudo]
             }
         }
-        self.game.socket.on('livePos', self.liveHandler)
-        self.game.socket.on('deletePlayer', self.delHandler)
+        this.game.socket.on('livePos', this.liveHandler)
+        this.game.socket.on('deletePlayer', this.delHandler)
     }
 
     update() {
-        let self = this
 
         this.frames++
 
@@ -193,31 +191,31 @@ class MainMenu extends Phaser.Scene {
         }
 
         if (this.canMove) {
-            if (self.game.cursors.left.isDown) {
+            if (this.game.cursors.left.isDown) {
                 this.player.setVelocityX(-160)
                 this.player.setVelocityY(0)
-                this.player.anims.play('left_' + self.spriteName, true)
-                self.anim = 'left'
-            } else if (self.game.cursors.right.isDown) {
+                this.player.anims.play('left_' + this.spriteName, true)
+                this.anim = 'left'
+            } else if (this.game.cursors.right.isDown) {
                 this.player.setVelocityX(160)
                 this.player.setVelocityY(0)
-                this.player.anims.play('right_' + self.spriteName, true)
-                self.anim = 'right'
-            } else if (self.game.cursors.up.isDown) {
+                this.player.anims.play('right_' + this.spriteName, true)
+                this.anim = 'right'
+            } else if (this.game.cursors.up.isDown) {
                 this.player.setVelocityY(-160)
                 this.player.setVelocityX(0)
-                this.player.anims.play('up_' + self.spriteName, true)
-                self.anim = 'up'
-            } else if (self.game.cursors.down.isDown) {
+                this.player.anims.play('up_' + this.spriteName, true)
+                this.anim = 'up'
+            } else if (this.game.cursors.down.isDown) {
                 this.player.setVelocityY(160)
                 this.player.setVelocityX(0)
-                this.player.anims.play('down_' + self.spriteName, true)
-                self.anim = 'down'
+                this.player.anims.play('down_' + this.spriteName, true)
+                this.anim = 'down'
             } else {
                 this.player.setVelocityX(0)
                 this.player.setVelocityY(0)
-                this.player.anims.play('idle_' + self.spriteName)
-                self.anim = 'idle'
+                this.player.anims.play('idle_' + this.spriteName)
+                this.anim = 'idle'
             }
         }
     }
