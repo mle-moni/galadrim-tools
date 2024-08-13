@@ -4,10 +4,14 @@ export default class extends BaseSchema {
     protected tableName = "auth_access_tokens";
 
     async up() {
-        this.schema.dropTableIfExists("api_tokens");
         this.schema.createTable(this.tableName, (table) => {
             table.increments("id");
-            table.integer("tokenable_id").notNullable().references("users.id").onDelete("CASCADE");
+            table
+                .integer("tokenable_id")
+                .unsigned()
+                .notNullable()
+                .references("users.id")
+                .onDelete("CASCADE");
 
             table.string("type").notNullable();
             table.string("name").nullable();
@@ -17,6 +21,25 @@ export default class extends BaseSchema {
             table.timestamp("updated_at");
             table.timestamp("last_used_at").nullable();
             table.timestamp("expires_at").nullable();
+
+            this.defer(async (db) => {
+                const oldTokens = (await db.from("api_tokens")) as OldApiToken[];
+                const newTokensDto = oldTokens.map((oldToken) => ({
+                    tokenable_id: oldToken.user_id,
+                    type: "auth_token",
+                    name: null,
+                    hash: oldToken.token,
+                    abilities: JSON.stringify(["*"]),
+                    created_at: oldToken.created_at,
+                    updated_at: oldToken.created_at,
+                    last_used_at: null,
+                    expires_at: oldToken.expires_at,
+                }));
+
+                await db.table(this.tableName).multiInsert(newTokensDto);
+
+                await db.rawQuery("DROP TABLE IF EXISTS api_tokens");
+            });
         });
     }
 
@@ -43,3 +66,13 @@ export default class extends BaseSchema {
         });
     }
 }
+
+type OldApiToken = {
+    id: number;
+    user_id: number;
+    name: string;
+    type: string;
+    token: string;
+    expires_at: string | null;
+    created_at: string;
+};
