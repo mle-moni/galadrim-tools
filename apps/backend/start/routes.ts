@@ -107,7 +107,7 @@ router
         router.get("/caddyLogs/:id", [LogsController, "showCaddyLogs"]);
         router.get("/atopLogs/:id", [LogsController, "showAtopLogs"]);
     })
-    .use(middleware.auth());
+    .use(middleware.auth({ guards: ["web", "api"] }));
 
 router.post("/caddyLogs", [LogsController, "storeCaddyLogs"]);
 router.post("/atopLogs", [LogsController, "storeAtopLogs"]);
@@ -119,7 +119,7 @@ router
         router.resource("times", BreakTimesController).apiOnly();
     })
     .prefix("galabreak")
-    .use(middleware.auth());
+    .use(middleware.auth({ guards: ["web", "api"] }));
 
 router.get("/galadrimeurs", "galadrimeurs/GaladrimeursController.index");
 
@@ -129,7 +129,7 @@ router
         router.get("/time", [StatisticsController, "time"]);
         router.get("/amount", [StatisticsController, "amount"]);
     })
-    .use(middleware.auth())
+    .use(middleware.auth({ guards: ["web", "api"] }))
     .prefix("statistics");
 
 router
@@ -148,7 +148,7 @@ router
             .use(middleware.rights(["NOTIFICATION_ADMIN"]));
         router.get("/dashboard", [DashboardController, "index"]);
     })
-    .use(middleware.auth())
+    .use(middleware.auth({ guards: ["web", "api"] }))
     .prefix("admin");
 
 router.get("authRedirect/:target", ({ response, request }) => {
@@ -161,4 +161,4 @@ router
         router.get("tournois", [PlatformerResultsController, "index"]);
     })
     .prefix("games")
-    .use(middleware.auth());
+    .use(middleware.auth({ guards: ["web", "api"] }));
