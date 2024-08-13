@@ -1,26 +1,26 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material'
-import PasswordIcon from '@mui/icons-material/VpnKey'
-import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
-import { AppStore } from '../../globalStores/AppStore'
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import PasswordIcon from "@mui/icons-material/VpnKey";
+import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import { AppStore } from "../../globalStores/AppStore";
 
 export const PasswordInput = observer(() => {
-    const { authStore } = AppStore
-    const [showPassword, setShowPassword] = useState(false)
+    const { authStore } = AppStore;
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => {
-        setShowPassword(!showPassword)
-    }
+        setShowPassword(!showPassword);
+    };
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-    }
+        event.preventDefault();
+    };
 
     return (
         <OutlinedInput
             fullWidth
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="Mot de passe"
             value={authStore.password}
             onChange={(e) => authStore.setPassword(e.target.value)}
@@ -43,5 +43,5 @@ export const PasswordInput = observer(() => {
             }
             sx={{ mt: 2 }}
         />
-    )
-})
+    );
+});

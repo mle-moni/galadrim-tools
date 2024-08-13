@@ -8,28 +8,28 @@ import {
     RestaurantMenu,
     SignalWifiBad,
     VideogameAsset,
-} from '@mui/icons-material'
-import { Box } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { AppStore } from '../globalStores/AppStore'
-import { IconLink } from '../reusableComponents/common/IconLink'
-import MainLayout from '../reusableComponents/layouts/MainLayout'
+} from "@mui/icons-material";
+import { Box } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { AppStore } from "../globalStores/AppStore";
+import { IconLink } from "../reusableComponents/common/IconLink";
+import MainLayout from "../reusableComponents/layouts/MainLayout";
 
 const HomePage = observer(() => {
     const canSeeAdminPage = AppStore.authStore.connected
         ? AppStore.authStore.user.rights !== 0
-        : false
+        : false;
 
     return (
         <MainLayout fullscreen>
             <Box
                 sx={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-evenly',
-                    flexWrap: 'wrap',
-                    marginTop: ['140px', 0],
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    flexWrap: "wrap",
+                    marginTop: ["140px", 0],
                 }}
             >
                 <IconLink Icon={CalendarMonth} link="/rooms" title="Réservation de salles" />
@@ -49,7 +49,7 @@ const HomePage = observer(() => {
                 />
             </Box>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default HomePage
+export default HomePage;

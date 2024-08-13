@@ -1,32 +1,32 @@
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Autocomplete, Box, TextField } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
-import { AppStore } from '../../globalStores/AppStore'
-import { useCheckConnection } from '../../hooks/useCheckConnection'
-import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
-import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
-import { CodeNamesStore } from './CodeNamesStore'
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Autocomplete, Box, TextField } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
+import { AppStore } from "../../globalStores/AppStore";
+import { useCheckConnection } from "../../hooks/useCheckConnection";
+import { GaladrimButton } from "../../reusableComponents/common/GaladrimButton";
+import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
+import { CodeNamesStore } from "./CodeNamesStore";
 
 export const NewCodeNamesGamePage = observer(() => {
-    const { codeNamesFormStore } = useMemo(() => new CodeNamesStore(), [])
-    const { authStore } = AppStore
-    useCheckConnection(authStore)
+    const { codeNamesFormStore } = useMemo(() => new CodeNamesStore(), []);
+    const { authStore } = AppStore;
+    useCheckConnection(authStore);
 
     return (
         <>
-            <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
+            <RoundedLinks linkInfos={[{ Icon: BackIcon, link: "/" }]} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    codeNamesFormStore.submitNewGame()
+                    e.preventDefault();
+                    codeNamesFormStore.submitNewGame();
                 }}
                 style={{
-                    display: 'flex',
-                    justifyContent: 'center',
+                    display: "flex",
+                    justifyContent: "center",
                 }}
             >
-                <Box sx={{ width: '80%', mt: 10 }}>
+                <Box sx={{ width: "80%", mt: 10 }}>
                     <h1>Nouvelle Partie de Code Names 😳</h1>
                     <Autocomplete
                         disablePortal
@@ -37,7 +37,7 @@ export const NewCodeNamesGamePage = observer(() => {
                         )}
                         onChange={(_e, option) => {
                             if (option) {
-                                codeNamesFormStore.setBlueSpyMaster(option.value)
+                                codeNamesFormStore.setBlueSpyMaster(option.value);
                             }
                         }}
                         isOptionEqualToValue={(a, b) => a.value === b.value}
@@ -53,7 +53,7 @@ export const NewCodeNamesGamePage = observer(() => {
                         )}
                         onChange={(_e, option) => {
                             if (option) {
-                                codeNamesFormStore.setRedSpyMaster(option.value)
+                                codeNamesFormStore.setRedSpyMaster(option.value);
                             }
                         }}
                         isOptionEqualToValue={(a, b) => a.value === b.value}
@@ -63,7 +63,7 @@ export const NewCodeNamesGamePage = observer(() => {
                         <img
                             src={codeNamesFormStore.imageStore.imageSrc}
                             alt="code names"
-                            style={{ width: '400px' }}
+                            style={{ width: "400px" }}
                         />
                     )}
                     <Box sx={{ my: 2 }}>
@@ -82,7 +82,7 @@ export const NewCodeNamesGamePage = observer(() => {
                 </Box>
             </form>
         </>
-    )
-})
+    );
+});
 
-export default NewCodeNamesGamePage
+export default NewCodeNamesGamePage;

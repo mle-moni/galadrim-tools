@@ -1,10 +1,9 @@
-import Matrix from '#models/matrix'
-import type { HttpContext } from '@adonisjs/core/http'
+import Matrix from "#models/matrix";
 
 export default class MatricesController {
-  async index({}: HttpContext) {
-    const matrices = await Matrix.all()
+    async index() {
+        const matrices = await Matrix.all();
 
-    return matrices
-  }
+        return matrices;
+    }
 }

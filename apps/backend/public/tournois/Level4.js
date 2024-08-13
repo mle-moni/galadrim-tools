@@ -12,22 +12,21 @@ class Level4 extends Phaser.Scene {
     }
 
     create() {
-        let self = this
-        self.available = true
-        self.anim = 'idle'
-        self.accel = false
-        self.accelBol = true
-        this.spriteName = getSkinForUser(self.game.user)
+        this.available = true
+        this.anim = 'idle'
+        this.accel = false
+        this.accelBol = true
+        this.spriteName = getSkinForUser(this.game.user)
         this.canMove = true
         this.notWonYet = true
         this.jumps = 0
         this.timeStart = Date.now()
         this.goToMap = (str) => {
             jumpSetter(0)
-            clearInterval(self.liveInterval)
-            self.available = false
-            self.game.socket.off('livePos', self.liveHandler)
-            self.game.socket.off('deletePlayer', self.delHandler)
+            clearInterval(this.liveInterval)
+            this.available = false
+            this.game.socket.off('livePos', this.liveHandler)
+            this.game.socket.off('deletePlayer', this.delHandler)
             this.scene.start(str)
         }
 
@@ -35,7 +34,7 @@ class Level4 extends Phaser.Scene {
         const tileset = map.addTilesetImage('marioTileset', 'tileset')
 
         //layers
-        let solidLayer = map.createStaticLayer('solid', [tileset], 0, 0)
+        const solidLayer = map.createStaticLayer('solid', [tileset], 0, 0)
         // let skyLayer = map.createStaticLayer("sky", [tileset], 0, 0).setDepth(-1);
 
         // pour restart cette map
@@ -72,44 +71,44 @@ class Level4 extends Phaser.Scene {
         solidLayer.setCollisionByProperty({ solid: true })
 
         this.physics.add.collider(solidLayer, this.player, (sprite, tile) => {
-            if (self.accelBol) {
-                self.accel = false
+            if (this.accelBol) {
+                this.accel = false
             }
             if (tile.properties.hasOwnProperty('win')) {
-                if (self.notWonYet) {
-                    self.notWonYet = false
-                    self.canMove = false
-                    let dTime = Math.round((Date.now() - self.timeStart) / 10) / 100
-                    let score =
+                if (this.notWonYet) {
+                    this.notWonYet = false
+                    this.canMove = false
+                    const dTime = Math.round((Date.now() - this.timeStart) / 10) / 100
+                    const score =
                         '.iMon score est de : ' +
-                        self.jumps +
+                        this.jumps +
                         ' sauts et ' +
-                        Math.round((Date.now() - self.timeStart) / 10) / 100 +
+                        Math.round((Date.now() - this.timeStart) / 10) / 100 +
                         ' secondes sur la map 4 !!i'
-                    self.game.socket.emit(
+                    this.game.socket.emit(
                         'scoreTournois',
-                        { jumps: self.jumps, time: dTime, password: self.game.password },
+                        { jumps: this.jumps, time: dTime, password: this.game.password },
                         4
                     )
-                    scoreActuel.score = (dTime + self.jumps) * 100
-                    scoreActuel.jumps = self.jumps
+                    scoreActuel.score = (dTime + this.jumps) * 100
+                    scoreActuel.jumps = this.jumps
                     scoreActuel.time = dTime
                     sendTxt(score)
                     document.getElementById('ladder').style.visibility = 'visible'
                     document.getElementsByTagName('canvas')[0].style.visibility = 'hidden'
                 }
             } else if (tile.properties.hasOwnProperty('bounce')) {
-                self.player.setVelocityY(tile.properties['bounce'])
+                this.player.setVelocityY(tile.properties['bounce'])
             } else if (tile.properties.hasOwnProperty('dead')) {
                 this.goToMap('Level4')
                 document.getElementById('ladder').style.visibility = 'hidden'
                 document.getElementsByTagName('canvas')[0].style.visibility = 'visible'
             } else if (tile.properties.hasOwnProperty('accel')) {
-                self.accel = true
-                self.accelBol = false
-                self.player.setVelocityX(tile.properties.accel)
+                this.accel = true
+                this.accelBol = false
+                this.player.setVelocityX(tile.properties.accel)
                 setTimeout(() => {
-                    self.accelBol = true
+                    this.accelBol = true
                 }, 1000)
             }
         })
@@ -117,40 +116,40 @@ class Level4 extends Phaser.Scene {
         setupAnimations(this)
 
         //  Input Events
-        self.game.cursors = this.input.keyboard.createCursorKeys()
+        this.game.cursors = this.input.keyboard.createCursorKeys()
 
         //camera
         this.cameras.main.startFollow(this.player)
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
-        self.liveInterval = setInterval(() => {
+        this.liveInterval = setInterval(() => {
             const gameObj = {
-                x: self.player.x,
-                y: self.player.y,
-                skin: self.spriteName,
-                map: self.mapName,
-                anim: self.anim,
+                x: this.player.x,
+                y: this.player.y,
+                skin: this.spriteName,
+                map: this.mapName,
+                anim: this.anim,
             }
-            self.game.socket.emit('livePos', gameObj, self.game.password)
+            this.game.socket.emit('livePos', gameObj, this.game.password)
         }, 40)
 
-        self.liveHandler = (obj) => {
-            if (self.available) {
-                for (let key in obj) {
-                    if (key !== self.game.pseudo) {
-                        if (self.mapName === obj[key].map) {
-                            if (self.othersPlayers.hasOwnProperty(key)) {
-                                self.othersPlayers[key].x = obj[key].x
-                                self.othersPlayers[key].y = obj[key].y
-                                self.othersPlayers[key].nameDisplayer.x =
-                                    obj[key].x - self.othersPlayers[key].nameDisplayer.width / 2
-                                self.othersPlayers[key].nameDisplayer.y = obj[key].y - 50
-                                self.othersPlayers[key].anims.play(
+        this.liveHandler = (obj) => {
+            if (this.available) {
+                for (const key in obj) {
+                    if (key !== this.game.pseudo) {
+                        if (this.mapName === obj[key].map) {
+                            if (this.othersPlayers.hasOwnProperty(key)) {
+                                this.othersPlayers[key].x = obj[key].x
+                                this.othersPlayers[key].y = obj[key].y
+                                this.othersPlayers[key].nameDisplayer.x =
+                                    obj[key].x - this.othersPlayers[key].nameDisplayer.width / 2
+                                this.othersPlayers[key].nameDisplayer.y = obj[key].y - 50
+                                this.othersPlayers[key].anims.play(
                                     obj[key].anim + '_' + obj[key].skin,
                                     true
                                 )
                             } else {
-                                const localBody = self.physics.add.sprite(
+                                const localBody = this.physics.add.sprite(
                                     obj[key].x,
                                     obj[key].y,
                                     obj[key].skin
@@ -159,74 +158,73 @@ class Level4 extends Phaser.Scene {
                                 localBody.body.setCircle(11, 6, 25)
                                 localBody.setCollideWorldBounds(true)
                                 localBody.body.moves = false
-                                self.physics.collide(self.player, localBody)
-                                self.physics.add.collider(
-                                    self,
+                                this.physics.collide(this.player, localBody)
+                                this.physics.add.collider(
+                                    this,
                                     true,
-                                    self.player,
+                                    this.player,
                                     localBody,
                                     () => {}
                                 )
-                                self.othersPlayers[key] = localBody
-                                self.othersPlayers[key].nameDisplayer = this.add.text(16, 16, key, {
+                                this.othersPlayers[key] = localBody
+                                this.othersPlayers[key].nameDisplayer = this.add.text(16, 16, key, {
                                     fontSize: '18px',
                                     fill: '#F00',
                                 })
                             }
                         } else {
-                            if (self.othersPlayers.hasOwnProperty(key)) {
-                                self.othersPlayers[key].disableBody(true, true)
-                                self.othersPlayers[key].nameDisplayer.destroy()
+                            if (this.othersPlayers.hasOwnProperty(key)) {
+                                this.othersPlayers[key].disableBody(true, true)
+                                this.othersPlayers[key].nameDisplayer.destroy()
                             }
                         }
                     }
                 }
             }
         }
-        self.delHandler = (pseudo) => {
-            if (self.othersPlayers.hasOwnProperty(pseudo)) {
-                self.othersPlayers[pseudo].disableBody(true, true)
-                self.othersPlayers[pseudo].nameDisplayer.destroy()
-                delete self.othersPlayers[pseudo]
+        this.delHandler = (pseudo) => {
+            if (this.othersPlayers.hasOwnProperty(pseudo)) {
+                this.othersPlayers[pseudo].disableBody(true, true)
+                this.othersPlayers[pseudo].nameDisplayer.destroy()
+                delete this.othersPlayers[pseudo]
             }
         }
-        self.game.socket.on('livePos', self.liveHandler)
-        self.game.socket.on('deletePlayer', self.delHandler)
+        this.game.socket.on('livePos', this.liveHandler)
+        this.game.socket.on('deletePlayer', this.delHandler)
     }
 
     update() {
-        let self = this
 
         if (this.canMove) {
-            if (self.game.cursors.left.isDown && !self.accel) {
+            if (this.game.cursors.left.isDown && !this.accel) {
                 this.player.setVelocityX(-160)
 
                 if (this.player.body.onFloor()) {
-                    this.player.anims.play('left_' + self.spriteName, true)
-                    self.anim = 'left'
+                    this.player.anims.play('left_' + this.spriteName, true)
+                    this.anim = 'left'
                 } else {
-                    this.player.anims.play('leftJump_' + self.spriteName, true)
-                    self.anim = 'leftJump'
+                    this.player.anims.play('leftJump_' + this.spriteName, true)
+                    this.anim = 'leftJump'
                 }
-            } else if (self.game.cursors.right.isDown && !self.accel) {
+            } else if (this.game.cursors.right.isDown && !this.accel) {
                 this.player.setVelocityX(160)
 
                 if (this.player.body.onFloor()) {
-                    this.player.anims.play('right_' + self.spriteName, true)
-                    self.anim = 'right'
+                    this.player.anims.play('right_' + this.spriteName, true)
+                    this.anim = 'right'
                 } else {
-                    this.player.anims.play('rightJump_' + self.spriteName, true)
-                    self.anim = 'rightJump'
+                    this.player.anims.play('rightJump_' + this.spriteName, true)
+                    this.anim = 'rightJump'
                 }
             } else {
-                if (!self.accel) {
+                if (!this.accel) {
                     this.player.setVelocityX(0)
                 }
 
-                this.player.anims.play('idle_' + self.spriteName)
-                self.anim = 'idle'
+                this.player.anims.play('idle_' + this.spriteName)
+                this.anim = 'idle'
             }
-            if (self.game.cursors.up.isDown && this.player.body.onFloor()) {
+            if (this.game.cursors.up.isDown && this.player.body.onFloor()) {
                 this.player.setVelocityY(-430)
                 this.jumps++
                 jumpSetter(this.jumps)

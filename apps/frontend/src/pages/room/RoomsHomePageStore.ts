@@ -1,95 +1,95 @@
-import { makeAutoObservable } from 'mobx'
-import { AppStore } from '../../globalStores/AppStore'
-import { WorkplaceSvgRoom } from '../../reusableComponents/WorkplaceSvg/WorkplaceSvg'
-import { themeColors } from '../../theme'
-import { getReservableRoomFullName } from '../../utils/rooms'
+import { makeAutoObservable } from "mobx";
+import { AppStore } from "../../globalStores/AppStore";
+import type { WorkplaceSvgRoom } from "../../reusableComponents/WorkplaceSvg/WorkplaceSvg";
+import { themeColors } from "../../theme";
+import { getReservableRoomFullName } from "../../utils/rooms";
 
-const SVG_RENDER_LOOP_TIME = 1000
+const SVG_RENDER_LOOP_TIME = 1000;
 
 export class RoomsHomePageStore {
-    public keyId = 0
+    public keyId = 0;
 
-    intervalId: number
+    intervalId: number;
 
-    lastHoveredRoom?: WorkplaceSvgRoom
+    lastHoveredRoom?: WorkplaceSvgRoom;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
 
         this.intervalId = window.setInterval(() => {
-            this.incrementKey()
-        }, SVG_RENDER_LOOP_TIME)
+            this.incrementKey();
+        }, SVG_RENDER_LOOP_TIME);
     }
 
     cleanup() {
-        clearInterval(this.intervalId)
+        clearInterval(this.intervalId);
     }
 
     onClick(room: WorkplaceSvgRoom) {
-        const roomFullName = getReservableRoomFullName(room)
+        const roomFullName = getReservableRoomFullName(room);
         if (roomFullName !== null) {
-            AppStore.navigate('/room/' + roomFullName)
+            AppStore.navigate(`/room/${roomFullName}`);
         }
     }
 
     getRoomColor(room: WorkplaceSvgRoom) {
-        const roomFullName = getReservableRoomFullName(room)
+        const roomFullName = getReservableRoomFullName(room);
         if (roomFullName === null) {
-            return themeColors.secondary.dark
+            return themeColors.secondary.dark;
         }
         if (!AppStore.eventsStore.roomIsAvailable(roomFullName, new Date())) {
-            return themeColors.error.main
+            return themeColors.error.main;
         }
         if (this.lastHoveredRoom === room) {
-            return themeColors.secondary.dark
+            return themeColors.secondary.dark;
         }
-        return themeColors.secondary.main
+        return themeColors.secondary.main;
     }
 
     getRoomMouseOverColor(room: WorkplaceSvgRoom) {
-        this.lastHoveredRoom = room
-        return this.getRoomColor(room)
+        this.lastHoveredRoom = room;
+        return this.getRoomColor(room);
     }
 
     getRoomUser(room: WorkplaceSvgRoom) {
-        const roomFullName = getReservableRoomFullName(room)
+        const roomFullName = getReservableRoomFullName(room);
 
         if (roomFullName === null) {
-            return null
+            return null;
         }
 
-        const userId = AppStore.eventsStore.roomUser(roomFullName, new Date())
+        const userId = AppStore.eventsStore.roomUser(roomFullName, new Date());
 
         if (userId === null) {
-            return null
+            return null;
         }
 
-        const user = AppStore.users.get(userId)
+        const user = AppStore.users.get(userId);
 
         if (user === undefined) {
-            return null
+            return null;
         }
 
-        return user.imageUrl
+        return user.imageUrl;
     }
 
     onMouseOut() {
-        this.lastHoveredRoom = undefined
-        this.incrementKey()
+        this.lastHoveredRoom = undefined;
+        this.incrementKey();
     }
 
     incrementKey() {
-        ++this.keyId
+        ++this.keyId;
     }
 
     get svgKey() {
-        return `svg-key${this.keyId}`
+        return `svg-key${this.keyId}`;
     }
 
     get focusedRoomName() {
         if (this.lastHoveredRoom === undefined) {
-            return undefined
+            return undefined;
         }
-        return getReservableRoomFullName(this.lastHoveredRoom) ?? undefined
+        return getReservableRoomFullName(this.lastHoveredRoom) ?? undefined;
     }
 }

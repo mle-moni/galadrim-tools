@@ -5,29 +5,31 @@ export const NOTIFICATIONS = {
     SENT_BY_ADMIN: 0b100,
     NEW_REVIEW: 0b1000,
     NEW_IDEA_COMMENT: 0b10000,
-} as const
+} as const;
 
-export type NotificationName = keyof typeof NOTIFICATIONS
+export type NotificationName = keyof typeof NOTIFICATIONS;
 
 export const hasNotificationEnabled = (
     notificationsSettings: number,
-    notification: NotificationName
+    notification: NotificationName,
 ) => {
-    return notification === 'DEFAULT' || (notificationsSettings & NOTIFICATIONS[notification]) !== 0
-}
+    return (
+        notification === "DEFAULT" || (notificationsSettings & NOTIFICATIONS[notification]) !== 0
+    );
+};
 
 export const generateNotificationsSettings = (notificationSettingsWanted: NotificationName[]) => {
-    const notificationsSet = new Set(notificationSettingsWanted)
-    const notificationsArray = Array.from(notificationsSet)
+    const notificationsSet = new Set(notificationSettingsWanted);
+    const notificationsArray = Array.from(notificationsSet);
 
     return notificationsArray.reduce<number>(
         (acc, curr) => acc + NOTIFICATIONS[curr],
-        NOTIFICATIONS.DEFAULT
-    )
-}
+        NOTIFICATIONS.DEFAULT,
+    );
+};
 
 export const DEFAULT_NOTIFICATION_SETTINGS = generateNotificationsSettings([
-    'NEW_IDEA',
-    'NEW_RESTAURANT',
-    'SENT_BY_ADMIN',
-])
+    "NEW_IDEA",
+    "NEW_RESTAURANT",
+    "SENT_BY_ADMIN",
+]);

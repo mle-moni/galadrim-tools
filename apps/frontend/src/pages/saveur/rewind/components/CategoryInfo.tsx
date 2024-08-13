@@ -1,18 +1,18 @@
-import { observer } from 'mobx-react-lite'
-import { getRewindPositionLabel } from '../../../../utils/rewind'
+import { observer } from "mobx-react-lite";
+import { getRewindPositionLabel } from "../../../../utils/rewind";
 
-import './categoryInfo.css'
+import "./categoryInfo.css";
 
 type CategoryInfoProps = {
-    label: string
-    value: number | null
-    average?: number | null
-    position: number | null
-    total: number
-    unit?: string
-    averageUnit?: string
-    conditionalLabel?: string
-}
+    label: string;
+    value: number | null;
+    average?: number | null;
+    position: number | null;
+    total: number;
+    unit?: string;
+    averageUnit?: string;
+    conditionalLabel?: string;
+};
 
 export const CategoryInfo = observer(
     ({
@@ -28,22 +28,22 @@ export const CategoryInfo = observer(
         return (
             <div className="category-info">
                 <p className="label">
-                    {label}{' '}
+                    {label}{" "}
                     <strong>
                         {value} {unit}
-                    </strong>{' '}
+                    </strong>{" "}
                     !
                 </p>
                 {average && (
                     <div className="average">
-                        Si les calculs sont bons, votre moyenne est de{' '}
+                        Si les calculs sont bons, votre moyenne est de{" "}
                         <strong>
                             {average} {averageUnit ?? unit}
                         </strong>
                     </div>
                 )}
                 <div className="position">
-                    Ce qui vous place en <strong>{getRewindPositionLabel(position, total)}</strong>{' '}
+                    Ce qui vous place en <strong>{getRewindPositionLabel(position, total)}</strong>{" "}
                     parmi les Galagourmets
                 </div>
                 {conditionalLabel && (
@@ -52,6 +52,6 @@ export const CategoryInfo = observer(
                     </div>
                 )}
             </div>
-        )
-    }
-)
+        );
+    },
+);

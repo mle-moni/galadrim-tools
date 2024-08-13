@@ -1,19 +1,19 @@
-import { LoadingButton } from '@mui/lab'
-import { ButtonTypeMap, SxProps } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { PropsWithChildren, ReactNode } from 'react'
+import { LoadingButton } from "@mui/lab";
+import type { ButtonTypeMap, SxProps } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import type { PropsWithChildren, ReactNode } from "react";
 
 export interface GaladrimButtonProps {
-    sx?: SxProps
-    onClick?: () => void
-    disabled?: boolean
-    isSubmit?: boolean
-    isLoading?: boolean
-    fullWidth?: boolean
-    startIcon?: ReactNode
-    endIcon?: ReactNode
-    color?: ButtonTypeMap['props']['color']
-    variant?: 'text' | 'contained' | 'outlined'
+    sx?: SxProps;
+    onClick?: () => void;
+    disabled?: boolean;
+    isSubmit?: boolean;
+    isLoading?: boolean;
+    fullWidth?: boolean;
+    startIcon?: ReactNode;
+    endIcon?: ReactNode;
+    color?: ButtonTypeMap["props"]["color"];
+    variant?: "text" | "contained" | "outlined";
 }
 
 export const GaladrimButton = observer<PropsWithChildren<GaladrimButtonProps>>(
@@ -27,7 +27,7 @@ export const GaladrimButton = observer<PropsWithChildren<GaladrimButtonProps>>(
         fullWidth = true,
         startIcon,
         endIcon,
-        variant = 'contained',
+        variant = "contained",
         color,
     }) => {
         return (
@@ -36,15 +36,15 @@ export const GaladrimButton = observer<PropsWithChildren<GaladrimButtonProps>>(
                 endIcon={endIcon}
                 variant={variant}
                 fullWidth={fullWidth}
-                sx={{ textTransform: 'none', fontSize: 18, ...sx }}
+                sx={{ textTransform: "none", fontSize: 18, ...sx }}
                 onClick={onClick}
                 disabled={disabled}
-                type={isSubmit ? 'submit' : undefined}
+                type={isSubmit ? "submit" : undefined}
                 loading={isLoading}
                 color={color}
             >
                 {children}
             </LoadingButton>
-        )
-    }
-)
+        );
+    },
+);

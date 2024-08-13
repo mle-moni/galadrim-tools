@@ -1,4 +1,4 @@
-import BackIcon from '@mui/icons-material/ChevronLeft'
+import BackIcon from "@mui/icons-material/ChevronLeft";
 import {
     Autocomplete,
     Button,
@@ -8,13 +8,13 @@ import {
     FormGroup,
     Switch,
     TextField,
-} from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo } from 'react'
-import { GaladrimLogo } from '../../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../../reusableComponents/Core/GaladrimRoomsCard'
-import { EditUserRightsStore } from './EditUserRightsStore'
+} from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useEffect, useMemo } from "react";
+import { GaladrimLogo } from "../../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../../reusableComponents/Core/GaladrimRoomsCard";
+import { EditUserRightsStore } from "./EditUserRightsStore";
 
 const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
     ({ editUserRightsStore }) => {
@@ -23,9 +23,9 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('EVENT_ADMIN')}
+                            checked={editUserRightsStore.hasRight("EVENT_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('EVENT_ADMIN')
+                                editUserRightsStore.toggleRight("EVENT_ADMIN");
                             }}
                         />
                     }
@@ -34,9 +34,9 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('USER_ADMIN')}
+                            checked={editUserRightsStore.hasRight("USER_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('USER_ADMIN')
+                                editUserRightsStore.toggleRight("USER_ADMIN");
                             }}
                         />
                     }
@@ -45,9 +45,9 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('RIGHTS_ADMIN')}
+                            checked={editUserRightsStore.hasRight("RIGHTS_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('RIGHTS_ADMIN')
+                                editUserRightsStore.toggleRight("RIGHTS_ADMIN");
                             }}
                         />
                     }
@@ -56,9 +56,9 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('MIAM_ADMIN')}
+                            checked={editUserRightsStore.hasRight("MIAM_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('MIAM_ADMIN')
+                                editUserRightsStore.toggleRight("MIAM_ADMIN");
                             }}
                         />
                     }
@@ -67,9 +67,9 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('DASHBOARD_ADMIN')}
+                            checked={editUserRightsStore.hasRight("DASHBOARD_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('DASHBOARD_ADMIN')
+                                editUserRightsStore.toggleRight("DASHBOARD_ADMIN");
                             }}
                         />
                     }
@@ -78,9 +78,9 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('IDEAS_ADMIN')}
+                            checked={editUserRightsStore.hasRight("IDEAS_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('IDEAS_ADMIN')
+                                editUserRightsStore.toggleRight("IDEAS_ADMIN");
                             }}
                         />
                     }
@@ -89,18 +89,18 @@ const RightSwitches = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={editUserRightsStore.hasRight('NOTIFICATION_ADMIN')}
+                            checked={editUserRightsStore.hasRight("NOTIFICATION_ADMIN")}
                             onChange={() => {
-                                editUserRightsStore.toggleRight('NOTIFICATION_ADMIN')
+                                editUserRightsStore.toggleRight("NOTIFICATION_ADMIN");
                             }}
                         />
                     }
                     label="Administration des notifications"
                 />
             </FormGroup>
-        )
-    }
-)
+        );
+    },
+);
 
 const UserPicker = observer<{ editUserRightsStore: EditUserRightsStore }>(
     ({ editUserRightsStore }) => {
@@ -112,30 +112,30 @@ const UserPicker = observer<{ editUserRightsStore: EditUserRightsStore }>(
                 renderInput={(params) => <TextField {...params} label="Utilisateurs" />}
                 onChange={(_e, value) => {
                     if (value) {
-                        editUserRightsStore.setUserId(value.id)
+                        editUserRightsStore.setUserId(value.id);
                     } else {
-                        editUserRightsStore.setUserId(undefined)
+                        editUserRightsStore.setUserId(undefined);
                     }
                 }}
             />
-        )
-    }
-)
+        );
+    },
+);
 
 export const EditUserRights = observer(() => {
-    const editUserRightsStore = useMemo(() => new EditUserRightsStore(), [])
+    const editUserRightsStore = useMemo(() => new EditUserRightsStore(), []);
 
     useEffect(() => {
-        editUserRightsStore.init()
-    }, [])
+        editUserRightsStore.init();
+    }, [editUserRightsStore]);
 
     return (
-        <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
+        <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    editUserRightsStore.editUserRights()
+                    e.preventDefault();
+                    editUserRightsStore.editUserRights();
                 }}
             >
                 {editUserRightsStore.loading && <CircularProgress />}
@@ -162,5 +162,5 @@ export const EditUserRights = observer(() => {
                 </CustomLink>
             </form>
         </GaladrimRoomsCard>
-    )
-})
+    );
+});

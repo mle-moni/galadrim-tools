@@ -1,35 +1,35 @@
-import { Fab, SvgIconTypeMap } from '@mui/material'
-import { OverridableComponent } from '@mui/material/OverridableComponent'
-import { FC } from 'react'
-import { AppStore } from '../../globalStores/AppStore'
-import Sparkles from '../animations/rewind/Sparkles'
+import { Fab, type SvgIconTypeMap } from "@mui/material";
+import type { OverridableComponent } from "@mui/material/OverridableComponent";
+import type { FC } from "react";
+import { AppStore } from "../../globalStores/AppStore";
+import Sparkles from "../animations/rewind/Sparkles";
 
 export interface LinkInfo {
-    Icon: OverridableComponent<SvgIconTypeMap<unknown, 'svg'>> & {
-        muiName: string
-    }
-    link: string
-    hidden?: boolean
-    shiny?: boolean
+    Icon: OverridableComponent<SvgIconTypeMap<unknown, "svg">> & {
+        muiName: string;
+    };
+    link: string;
+    hidden?: boolean;
+    shiny?: boolean;
 }
 
-export const POS_OFFSET = 32
-const POS_INCREMENT = 64
+export const POS_OFFSET = 32;
+const POS_INCREMENT = 64;
 
 export const RoundedLinks: FC<{
-    linkInfos: LinkInfo[]
-    horizontalPosition?: 'left' | 'right'
-    verticalPosition?: 'top' | 'bottom'
-}> = ({ linkInfos, horizontalPosition = 'left', verticalPosition = 'top' }) => {
-    const visibleLinks = linkInfos.filter(({ hidden }) => hidden !== true)
+    linkInfos: LinkInfo[];
+    horizontalPosition?: "left" | "right";
+    verticalPosition?: "top" | "bottom";
+}> = ({ linkInfos, horizontalPosition = "left", verticalPosition = "top" }) => {
+    const visibleLinks = linkInfos.filter(({ hidden }) => hidden !== true);
 
     const handleClick = (link: string) => {
-        if (link.includes('http')) {
-            window.open(link)
-            return
+        if (link.includes("http")) {
+            window.open(link);
+            return;
         }
-        AppStore.navigate(link)
-    }
+        AppStore.navigate(link);
+    };
 
     return (
         <>
@@ -43,7 +43,7 @@ export const RoundedLinks: FC<{
                             color="primary"
                             onClick={() => handleClick(link)}
                             sx={{
-                                position: 'absolute',
+                                position: "absolute",
                                 [verticalPosition]: POS_OFFSET + POS_INCREMENT * index,
                                 [horizontalPosition]: POS_OFFSET,
                             }}
@@ -51,7 +51,7 @@ export const RoundedLinks: FC<{
                             <Icon />
                             <div
                                 style={{
-                                    position: 'absolute',
+                                    position: "absolute",
                                     top: 0,
                                     bottom: 0,
                                     right: 0,
@@ -61,7 +61,7 @@ export const RoundedLinks: FC<{
                                 <Sparkles />
                             </div>
                         </Fab>
-                    )
+                    );
                 }
 
                 return (
@@ -72,15 +72,15 @@ export const RoundedLinks: FC<{
                         color="primary"
                         onClick={() => handleClick(link)}
                         sx={{
-                            position: 'absolute',
+                            position: "absolute",
                             [verticalPosition]: POS_OFFSET + POS_INCREMENT * index,
                             [horizontalPosition]: POS_OFFSET,
                         }}
                     >
                         <Icon />
                     </Fab>
-                )
+                );
             })}
         </>
-    )
-}
+    );
+};

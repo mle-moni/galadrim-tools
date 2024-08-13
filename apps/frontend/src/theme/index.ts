@@ -1,32 +1,32 @@
-import { createTheme } from '@mui/material'
+import { createTheme } from "@mui/material";
 
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
     interface BreakpointOverrides {
-        mobile: true
-        xs: false // removes the `xs` breakpoint
-        sm: true
-        md: false
-        lg: false
-        xl: false
-        desktop: true
+        mobile: true;
+        xs: false; // removes the `xs` breakpoint
+        sm: true;
+        md: false;
+        lg: false;
+        xl: false;
+        desktop: true;
     }
 }
 
 export const themeColors = {
     primary: {
-        main: '#4a453d',
+        main: "#4a453d",
     },
     secondary: {
-        main: '#cbd5e1',
-        dark: '#94a3b8',
+        main: "#cbd5e1",
+        dark: "#94a3b8",
     },
     background: {
-        default: '#f9efe6',
+        default: "#f9efe6",
     },
     error: {
-        main: '#f87171',
+        main: "#f87171",
     },
-} as const
+} as const;
 
 export const getTheme = () =>
     createTheme({
@@ -38,4 +38,4 @@ export const getTheme = () =>
                 desktop: 769,
             },
         },
-    })
+    });

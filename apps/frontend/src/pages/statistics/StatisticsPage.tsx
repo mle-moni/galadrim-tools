@@ -1,22 +1,22 @@
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Button, Stack, Switch, Typography } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-import { toJS } from 'mobx'
-import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo } from 'react'
-import { AppStore } from '../../globalStores/AppStore'
-import MainLayout from '../../reusableComponents/layouts/MainLayout'
-import { amountColumns, roomColumns, timeColumns } from './columns'
-import { StatisticsStore } from './StatisticsStore'
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Button, Stack, Switch, Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { toJS } from "mobx";
+import { observer } from "mobx-react-lite";
+import { useEffect, useMemo } from "react";
+import { AppStore } from "../../globalStores/AppStore";
+import MainLayout from "../../reusableComponents/layouts/MainLayout";
+import { StatisticsStore } from "./StatisticsStore";
+import { amountColumns, roomColumns, timeColumns } from "./columns";
 
 const StatisticsPage = observer(() => {
-    const statisticStore = useMemo(() => new StatisticsStore(), [])
+    const statisticStore = useMemo(() => new StatisticsStore(), []);
 
     useEffect(() => {
         if (!statisticStore.loadingState.isLoading) {
-            statisticStore.fetchStats()
+            statisticStore.fetchStats();
         }
-    }, [])
+    }, [statisticStore]);
 
     return (
         <MainLayout fullscreen={false}>
@@ -24,8 +24,8 @@ const StatisticsPage = observer(() => {
                 <Button
                     startIcon={<BackIcon />}
                     variant="contained"
-                    onClick={() => AppStore.navigate('/rooms')}
-                    sx={{ mb: 2, mr: 'auto' }}
+                    onClick={() => AppStore.navigate("/rooms")}
+                    sx={{ mb: 2, mr: "auto" }}
                 >
                     Retour
                 </Button>
@@ -47,8 +47,8 @@ const StatisticsPage = observer(() => {
                 <div
                     style={{
                         height: 400,
-                        width: '100%',
-                        backgroundColor: 'rgba(255,255,255,0.5)',
+                        width: "100%",
+                        backgroundColor: "rgba(255,255,255,0.5)",
                     }}
                 >
                     <DataGrid
@@ -64,8 +64,8 @@ const StatisticsPage = observer(() => {
                 <div
                     style={{
                         height: 400,
-                        width: '100%',
-                        backgroundColor: 'rgba(255,255,255,0.5)',
+                        width: "100%",
+                        backgroundColor: "rgba(255,255,255,0.5)",
                     }}
                 >
                     <DataGrid
@@ -81,8 +81,8 @@ const StatisticsPage = observer(() => {
                 <div
                     style={{
                         height: 400,
-                        width: '100%',
-                        backgroundColor: 'rgba(255,255,255,0.5)',
+                        width: "100%",
+                        backgroundColor: "rgba(255,255,255,0.5)",
                     }}
                 >
                     <DataGrid
@@ -94,7 +94,7 @@ const StatisticsPage = observer(() => {
                 </div>
             </Stack>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default StatisticsPage
+export default StatisticsPage;

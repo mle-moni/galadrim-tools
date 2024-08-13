@@ -1,55 +1,55 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material'
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Autocomplete, Box, IconButton, TextField } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo, useRef } from 'react'
-import { useParams } from 'react-router-dom'
-import { AppStore } from '../../globalStores/AppStore'
-import { useCheckConnection } from '../../hooks/useCheckConnection'
-import { GaladrimButton } from '../../reusableComponents/common/GaladrimButton'
-import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
-import { CodeNamesStore } from './CodeNamesStore'
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Autocomplete, Box, IconButton, TextField } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useEffect, useMemo, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { AppStore } from "../../globalStores/AppStore";
+import { useCheckConnection } from "../../hooks/useCheckConnection";
+import { GaladrimButton } from "../../reusableComponents/common/GaladrimButton";
+import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
+import { CodeNamesStore } from "./CodeNamesStore";
 
-const CANVAS_WIDTH = 800
-const CANVAS_HEIGHT = 600
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 600;
 
 export const CodeNamesGamePage = observer(() => {
-    const { id } = useParams()
-    const canvasRef = useRef<HTMLCanvasElement | null>(null)
-    const store = useMemo(() => new CodeNamesStore(), [])
-    const codeNamesFormStore = store.codeNamesFormStore
+    const { id } = useParams();
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const store = useMemo(() => new CodeNamesStore(), []);
+    const codeNamesFormStore = store.codeNamesFormStore;
 
     useEffect(() => {
-        if (id === undefined) return
-        const numberId = +id
-        if (isNaN(numberId)) return
-        store.fetchGame(numberId)
-    }, [id])
+        if (id === undefined) return;
+        const numberId = +id;
+        if (Number.isNaN(numberId)) return;
+        store.fetchGame(numberId);
+    }, [id, store]);
 
     useEffect(() => {
-        if (store._canvas !== null) return
-        if (!canvasRef.current) return
+        if (store._canvas !== null) return;
+        if (!canvasRef.current) return;
 
-        store.setCanvas(canvasRef.current)
-    }, [store._canvas])
+        store.setCanvas(canvasRef.current);
+    }, [store._canvas, store]);
 
-    const { authStore } = AppStore
-    useCheckConnection(authStore)
+    const { authStore } = AppStore;
+    useCheckConnection(authStore);
 
     return (
         <>
-            <RoundedLinks linkInfos={[{ Icon: BackIcon, link: '/' }]} />
+            <RoundedLinks linkInfos={[{ Icon: BackIcon, link: "/" }]} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    store.submitNewRound()
+                    e.preventDefault();
+                    store.submitNewRound();
                 }}
                 style={{
-                    display: 'flex',
-                    justifyContent: 'center',
+                    display: "flex",
+                    justifyContent: "center",
                 }}
             >
-                <Box sx={{ width: '80%', mt: 10 }}>
+                <Box sx={{ width: "80%", mt: 10 }}>
                     <Autocomplete
                         disablePortal
                         options={AppStore.userOptions}
@@ -59,7 +59,7 @@ export const CodeNamesGamePage = observer(() => {
                         )}
                         onChange={(_e, option) => {
                             if (option) {
-                                codeNamesFormStore.setBlueSpyMaster(option.value)
+                                codeNamesFormStore.setBlueSpyMaster(option.value);
                             }
                         }}
                         isOptionEqualToValue={(a, b) => a.value === b.value}
@@ -77,7 +77,7 @@ export const CodeNamesGamePage = observer(() => {
                         )}
                         onChange={(_e, option) => {
                             if (option) {
-                                codeNamesFormStore.setRedSpyMaster(option.value)
+                                codeNamesFormStore.setRedSpyMaster(option.value);
                             }
                         }}
                         isOptionEqualToValue={(a, b) => a.value === b.value}
@@ -89,13 +89,13 @@ export const CodeNamesGamePage = observer(() => {
                         <img
                             src={codeNamesFormStore.imageStore.imageSrc}
                             alt="code names"
-                            style={{ width: '400px' }}
+                            style={{ width: "400px" }}
                         />
                     )}
 
                     <canvas
                         ref={canvasRef}
-                        style={{ borderRadius: 4, cursor: 'pointer', maxWidth: '80%' }}
+                        style={{ borderRadius: 4, cursor: "pointer", maxWidth: "80%" }}
                         id="canvas"
                         width={CANVAS_WIDTH}
                         height={CANVAS_HEIGHT}
@@ -108,7 +108,7 @@ export const CodeNamesGamePage = observer(() => {
                         <IconButton
                             sx={{ opacity: 0 }}
                             onClick={() => {
-                                store.setShowResult(!store.showResult)
+                                store.setShowResult(!store.showResult);
                             }}
                         >
                             {store.showResult ? <VisibilityOff /> : <Visibility />}
@@ -126,7 +126,7 @@ export const CodeNamesGamePage = observer(() => {
                         )}
                         onChange={(_e, option) => {
                             if (option) {
-                                codeNamesFormStore.setRoundSpyMaster(option.value)
+                                codeNamesFormStore.setRoundSpyMaster(option.value);
                             }
                         }}
                         isOptionEqualToValue={(a, b) => a.value === b.value}
@@ -166,7 +166,7 @@ export const CodeNamesGamePage = observer(() => {
                 </Box>
             </form>
         </>
-    )
-})
+    );
+});
 
-export default CodeNamesGamePage
+export default CodeNamesGamePage;

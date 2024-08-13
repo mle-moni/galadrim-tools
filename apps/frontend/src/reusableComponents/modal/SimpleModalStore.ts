@@ -1,14 +1,14 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from "mobx";
 
 export class SimpleModalStore {
-    modalOpen = false
+    modalOpen = false;
 
     constructor(modalOpen = false) {
-        makeAutoObservable(this)
-        this.modalOpen = modalOpen
+        makeAutoObservable(this);
+        this.modalOpen = modalOpen;
     }
 
     setModalOpen(state: boolean) {
-        this.modalOpen = state
+        this.modalOpen = state;
     }
 }

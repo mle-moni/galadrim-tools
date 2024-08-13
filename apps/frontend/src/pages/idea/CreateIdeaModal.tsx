@@ -1,27 +1,27 @@
-import { Lightbulb } from '@mui/icons-material'
-import { Box, Button, Checkbox, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
-import { TextInputWithIcon } from '../../reusableComponents/form/TextInputWithIcon'
-import { CreateIdeaCallback, CreateIdeaStore } from './createIdea/CreateIdeaStore'
+import { Lightbulb } from "@mui/icons-material";
+import { Box, Button, Checkbox, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
+import { TextInputWithIcon } from "../../reusableComponents/form/TextInputWithIcon";
+import { type CreateIdeaCallback, CreateIdeaStore } from "./createIdea/CreateIdeaStore";
 
 const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish }) => {
-    const ideaStore = useMemo(() => new CreateIdeaStore(), [])
+    const ideaStore = useMemo(() => new CreateIdeaStore(), []);
 
     const handleSubmit = () => {
-        ideaStore.createIdea(onPublish)
-    }
+        ideaStore.createIdea(onPublish);
+    };
 
     return (
         <div>
             <TextInputWithIcon
                 value={ideaStore.text.text}
-                placeholder={'Quelle est ton idée ?'}
+                placeholder={"Quelle est ton idée ?"}
                 Icon={Lightbulb}
                 onChange={(idea) => ideaStore.text.setText(idea)}
                 multiline
             />
-            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", marginTop: 2 }}>
                 <Checkbox
                     checked={ideaStore.isAnonymous.checked}
                     value={ideaStore.isAnonymous}
@@ -41,7 +41,7 @@ const CreateIdeaModal = observer<{ onPublish: CreateIdeaCallback }>(({ onPublish
                 Publier mon idée
             </Button>
         </div>
-    )
-})
+    );
+});
 
-export default CreateIdeaModal
+export default CreateIdeaModal;

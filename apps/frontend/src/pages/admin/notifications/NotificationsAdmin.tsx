@@ -1,24 +1,24 @@
-import { TextSnippet } from '@mui/icons-material'
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Alert, Autocomplete, Button, TextField } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
-import { GaladrimLogo } from '../../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../../reusableComponents/Core/GaladrimRoomsCard'
-import { TextInputWithIcon } from '../../../reusableComponents/form/TextInputWithIcon'
-import { NotificationsAdminStore } from './NotificationsAdminStore'
+import { TextSnippet } from "@mui/icons-material";
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Alert, Autocomplete, Button, TextField } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
+import { GaladrimLogo } from "../../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../../reusableComponents/Core/GaladrimRoomsCard";
+import { TextInputWithIcon } from "../../../reusableComponents/form/TextInputWithIcon";
+import { NotificationsAdminStore } from "./NotificationsAdminStore";
 
 export const NotificationsAdmin = observer(() => {
-    const store = useMemo(() => new NotificationsAdminStore(), [])
+    const store = useMemo(() => new NotificationsAdminStore(), []);
 
     return (
-        <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
+        <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    store.createNotification()
+                    e.preventDefault();
+                    store.createNotification();
                 }}
             >
                 <Alert severity="info">
@@ -35,7 +35,7 @@ export const NotificationsAdmin = observer(() => {
                     renderInput={(params) => <TextField {...params} label="Utilisateurs" />}
                     onChange={(_e, value) => {
                         if (value) {
-                            store.setUsersValue(value)
+                            store.setUsersValue(value);
                         }
                     }}
                     isOptionEqualToValue={(a, b) => a.value === b.value}
@@ -78,5 +78,5 @@ export const NotificationsAdmin = observer(() => {
                 </CustomLink>
             </form>
         </GaladrimRoomsCard>
-    )
-})
+    );
+});

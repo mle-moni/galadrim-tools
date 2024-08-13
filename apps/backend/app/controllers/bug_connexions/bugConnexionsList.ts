@@ -1,8 +1,7 @@
-import BugConnexion from '#models/bug_connexion'
-import { HttpContext } from '@adonisjs/core/http'
+import BugConnexion from "#models/bug_connexion";
 
-export const bugConnexionsList = async ({}: HttpContext) => {
-  const bugConnexions = await BugConnexion.all()
+export const bugConnexionsList = async () => {
+    const bugConnexions = await BugConnexion.all();
 
-  return bugConnexions
-}
+    return bugConnexions;
+};

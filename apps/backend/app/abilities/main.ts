@@ -12,12 +12,12 @@
 |
 */
 
-import { Bouncer } from '@adonisjs/bouncer'
+import { Bouncer } from "@adonisjs/bouncer";
 
 /**
  * Delete the following ability to start from
  * scratch
  */
 export const sampleAbility = Bouncer.ability(() => {
-  return true
-})
+    return true;
+});

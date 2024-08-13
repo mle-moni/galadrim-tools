@@ -1,19 +1,19 @@
-import { BaseSchema } from '@adonisjs/lucid/schema'
+import { BaseSchema } from "@adonisjs/lucid/schema";
 
 export default class UserSchema extends BaseSchema {
-  protected tableName = 'users'
+    protected tableName = "users";
 
-  public async up() {
-    this.schema.alterTable(this.tableName, (table) => {
-      table.string('email').nullable().unique()
-      table.string('image_url').nullable()
-    })
-  }
+    public async up() {
+        this.schema.alterTable(this.tableName, (table) => {
+            table.string("email").nullable().unique();
+            table.string("image_url").nullable();
+        });
+    }
 
-  public async down() {
-    this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn('email')
-      table.dropColumn('image_url')
-    })
-  }
+    public async down() {
+        this.schema.alterTable(this.tableName, (table) => {
+            table.dropColumn("email");
+            table.dropColumn("image_url");
+        });
+    }
 }

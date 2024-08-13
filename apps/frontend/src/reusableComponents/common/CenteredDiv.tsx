@@ -1,4 +1,4 @@
-import { CSSProperties, FC, PropsWithChildren } from 'react'
+import type { CSSProperties, FC, PropsWithChildren } from "react";
 
 export const CenteredDiv: FC<PropsWithChildren<{ style?: CSSProperties }>> = ({
     children,
@@ -6,12 +6,12 @@ export const CenteredDiv: FC<PropsWithChildren<{ style?: CSSProperties }>> = ({
 }) => (
     <div
         style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             ...style,
         }}
     >
         {children}
     </div>
-)
+);

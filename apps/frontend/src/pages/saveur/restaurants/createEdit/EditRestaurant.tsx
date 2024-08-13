@@ -1,4 +1,4 @@
-import { IRestaurant } from '@galadrim-tools/shared'
+import type { IRestaurant } from "@galadrim-tools/shared";
 import {
     Euro,
     LinkOutlined,
@@ -7,52 +7,53 @@ import {
     Storefront,
     Style,
     Tag,
-} from '@mui/icons-material'
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Autocomplete, Button, Modal, Paper, TextField } from '@mui/material'
-import { toJS } from 'mobx'
-import { observer } from 'mobx-react-lite'
-import { Fragment, useMemo } from 'react'
-import { getApiUrl } from '../../../../api/fetch'
-import { AppStore } from '../../../../globalStores/AppStore'
-import { SaveurStore } from '../../../../globalStores/SaveurStore'
-import { GaladrimLogo } from '../../../../reusableComponents/Branding/GaladrimLogo'
-import { CustomLink } from '../../../../reusableComponents/Core/CustomLink'
-import { GaladrimRoomsCard } from '../../../../reusableComponents/Core/GaladrimRoomsCard'
-import { TextInputWithIcon } from '../../../../reusableComponents/form/TextInputWithIcon'
-import { RestaurantStore } from './RestaurantStore'
+} from "@mui/icons-material";
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Autocomplete, Button, Modal, Paper, TextField } from "@mui/material";
+import { toJS } from "mobx";
+import { observer } from "mobx-react-lite";
+import { Fragment, useMemo } from "react";
+import { getApiUrl } from "../../../../api/fetch";
+import { AppStore } from "../../../../globalStores/AppStore";
+import type { SaveurStore } from "../../../../globalStores/SaveurStore";
+import { GaladrimLogo } from "../../../../reusableComponents/Branding/GaladrimLogo";
+import { CustomLink } from "../../../../reusableComponents/Core/CustomLink";
+import { GaladrimRoomsCard } from "../../../../reusableComponents/Core/GaladrimRoomsCard";
+import { TextInputWithIcon } from "../../../../reusableComponents/form/TextInputWithIcon";
+import { RestaurantStore } from "./RestaurantStore";
 
 export type EditRestaurantProps = { saveurStore: SaveurStore } & (
     | {
-          mode: 'create'
+          mode: "create";
       }
     | {
-          mode: 'edit'
-          restaurant: IRestaurant
+          mode: "edit";
+          restaurant: IRestaurant;
       }
-)
+);
 
 export const EditRestaurant = observer<EditRestaurantProps>((props) => {
-    const { saveurStore, mode } = props
+    const { saveurStore, mode } = props;
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const createRestaurantStore = useMemo(
         () =>
-            props.mode === 'edit' ? new RestaurantStore(props.restaurant) : new RestaurantStore(),
-        []
-    )
+            props.mode === "edit" ? new RestaurantStore(props.restaurant) : new RestaurantStore(),
+        [],
+    );
 
-    const tagsStore = AppStore.saveurStore.tagsStore
+    const tagsStore = AppStore.saveurStore.tagsStore;
 
     return (
-        <GaladrimRoomsCard size="large" sx={{ width: '100%', maxWidth: 600 }}>
+        <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
             <GaladrimLogo align="center" sx={{ mb: 8 }} />
             <form
                 onSubmit={(e) => {
-                    e.preventDefault()
-                    if (mode === 'create') {
-                        createRestaurantStore.createRestaurant()
+                    e.preventDefault();
+                    if (mode === "create") {
+                        createRestaurantStore.createRestaurant();
                     } else {
-                        createRestaurantStore.editRestaurant()
+                        createRestaurantStore.editRestaurant();
                     }
                 }}
             >
@@ -98,10 +99,10 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     open={tagsStore.creationModalVisible}
                     onClose={() => tagsStore.setCreationModalVisible(false)}
                     sx={{
-                        height: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                     }}
                 >
                     <Paper variant="outlined" sx={{ p: 6 }}>
@@ -128,7 +129,7 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     id="tags"
                     value={toJS(createRestaurantStore.tags)}
                     onChange={(_, newValue) => {
-                        createRestaurantStore.setTags(newValue)
+                        createRestaurantStore.setTags(newValue);
                     }}
                     options={toJS(saveurStore.tagsStore.tags)}
                     getOptionLabel={(option) => option.name}
@@ -149,7 +150,7 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     sx={{ mt: 2 }}
                 />
                 <Button variant="contained" component="label" sx={{ my: 2 }}>
-                    {mode === 'create' ? 'Ajouter une image' : `Changer l'image`}
+                    {mode === "create" ? "Ajouter une image" : `Changer l'image`}
                     <input
                         type="file"
                         hidden
@@ -160,7 +161,7 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     />
                 </Button>
                 {createRestaurantStore.image !== null && (
-                    <span style={{ marginLeft: '12px' }}>({createRestaurantStore.image.name})</span>
+                    <span style={{ marginLeft: "12px" }}>({createRestaurantStore.image.name})</span>
                 )}
                 <br />
                 {createRestaurantStore.imageSrc !== null &&
@@ -181,12 +182,12 @@ export const EditRestaurant = observer<EditRestaurantProps>((props) => {
                     size="large"
                     sx={{ my: 2 }}
                 >
-                    {mode === 'create' ? 'Ajouter' : 'Editer'} le restaurant
+                    {mode === "create" ? "Ajouter" : "Editer"} le restaurant
                 </Button>
                 <CustomLink to="/saveur">
                     <BackIcon /> Retour au plan
                 </CustomLink>
             </form>
         </GaladrimRoomsCard>
-    )
-})
+    );
+});

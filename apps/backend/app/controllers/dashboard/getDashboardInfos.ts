@@ -1,20 +1,20 @@
-import { DashboardInfos } from '@galadrim-tools/shared'
-import os from 'os'
+import type { DashboardInfos } from "@galadrim-tools/shared";
+import os from "node:os";
 
 export const getDashboardInfos = (): DashboardInfos => {
-  const sysUptime = os.uptime()
-  const [loadAverage1, loadAverage5, loadAverage15] = os.loadavg()
+    const sysUptime = os.uptime();
+    const [loadAverage1, loadAverage5, loadAverage15] = os.loadavg();
 
-  const freeMemory = os.freemem()
-  const totalMemory = os.totalmem()
-  const memoryUsed = totalMemory - freeMemory
+    const freeMemory = os.freemem();
+    const totalMemory = os.totalmem();
+    const memoryUsed = totalMemory - freeMemory;
 
-  return {
-    memoryUsed,
-    totalMemory,
-    sysUptime,
-    loadAverage1,
-    loadAverage5,
-    loadAverage15,
-  }
-}
+    return {
+        memoryUsed,
+        totalMemory,
+        sysUptime,
+        loadAverage1,
+        loadAverage5,
+        loadAverage15,
+    };
+};

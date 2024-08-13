@@ -1,4 +1,4 @@
-import { NotesOption } from '@galadrim-tools/shared'
+import type { NotesOption } from "@galadrim-tools/shared";
 import {
     Box,
     CardContent,
@@ -7,25 +7,28 @@ import {
     styled,
     Tooltip,
     Typography,
-} from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { AppStore } from '../../../globalStores/AppStore'
-import { getNameOfUsers } from './ratingsFunctions'
-import { Ratio } from './RestaurantCardStore'
+} from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { AppStore } from "../../../globalStores/AppStore";
+import { getNameOfUsers } from "./ratingsFunctions";
+import type { Ratio } from "./RestaurantCardStore";
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
-    width: '40%',
-    padding: '0px !important',
+    width: "40%",
+    padding: "0px !important",
     paddingTop: `${theme.spacing(2)} !important`,
-}))
+}));
 
 const RatioWrapper = styled(Box)({
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-})
+    display: "flex",
+    alignItems: "center",
+    cursor: "pointer",
+});
 
-const ProgressWrapper = styled(Box)(({ theme }) => ({ width: '100%', padding: theme.spacing(1) }))
+const ProgressWrapper = styled(Box)(({ theme }) => ({
+    width: "100%",
+    padding: theme.spacing(1),
+}));
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -35,14 +38,14 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     },
     [`& .${linearProgressClasses.bar}`]: {
         borderRadius: 5,
-        backgroundColor: '#1a90ff',
+        backgroundColor: "#1a90ff",
     },
-}))
+}));
 
 type RatingsProps = {
-    ratios: Ratio[]
-    onClick?: (id: NotesOption) => void
-}
+    ratios: Ratio[];
+    onClick?: (id: NotesOption) => void;
+};
 
 const Ratings = observer<RatingsProps>(({ ratios }) => {
     return (
@@ -54,7 +57,7 @@ const Ratings = observer<RatingsProps>(({ ratios }) => {
                         <Tooltip title={getNameOfUsers(ratio.userIds, AppStore.users)}>
                             <BorderLinearProgress
                                 variant="determinate"
-                                value={isNaN(ratio.value) ? 0 : ratio.value}
+                                value={Number.isNaN(ratio.value) ? 0 : ratio.value}
                             />
                         </Tooltip>
                     </ProgressWrapper>
@@ -62,7 +65,7 @@ const Ratings = observer<RatingsProps>(({ ratios }) => {
                 </RatioWrapper>
             ))}
         </StyledCardContent>
-    )
-})
+    );
+});
 
-export default Ratings
+export default Ratings;

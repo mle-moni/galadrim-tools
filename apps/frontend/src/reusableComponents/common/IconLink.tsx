@@ -1,21 +1,21 @@
-import { Box, Fab, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { AppStore } from '../../globalStores/AppStore'
-import { LinkInfo } from './RoundedLinks'
+import { Box, Fab, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { AppStore } from "../../globalStores/AppStore";
+import type { LinkInfo } from "./RoundedLinks";
 
-export type IconLinkProps = LinkInfo & { title: string }
+export type IconLinkProps = LinkInfo & { title: string };
 
 export const IconLink = observer<IconLinkProps>(({ Icon, link, title, hidden }) => {
     const handleClick = (link: string) => {
-        if (link.includes('http')) {
-            window.open(link)
-            return
+        if (link.includes("http")) {
+            window.open(link);
+            return;
         }
-        AppStore.navigate(link)
-    }
+        AppStore.navigate(link);
+    };
 
     if (hidden) {
-        return null
+        return null;
     }
 
     return (
@@ -31,5 +31,5 @@ export const IconLink = observer<IconLinkProps>(({ Icon, link, title, hidden }) 
             </Fab>
             <Typography sx={{ mt: 2 }}>{title}</Typography>
         </Box>
-    )
-})
+    );
+});

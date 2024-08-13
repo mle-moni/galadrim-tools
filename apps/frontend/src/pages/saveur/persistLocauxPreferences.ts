@@ -1,17 +1,17 @@
-const FAVOURITE_LOCAUX_KEY = 'FAVOURITE_LOCAUX'
+const FAVOURITE_LOCAUX_KEY = "FAVOURITE_LOCAUX";
 
 export const getFavouriteLocauxIndex = (defaultIndex = 0) => {
-    const favouriteLocauxIndexString = localStorage.getItem(FAVOURITE_LOCAUX_KEY)
+    const favouriteLocauxIndexString = localStorage.getItem(FAVOURITE_LOCAUX_KEY);
 
-    const favouriteLocauxIndex = +(favouriteLocauxIndexString ?? defaultIndex)
+    const favouriteLocauxIndex = +(favouriteLocauxIndexString ?? defaultIndex);
 
-    if (isNaN(favouriteLocauxIndex)) {
-        return defaultIndex
+    if (Number.isNaN(favouriteLocauxIndex)) {
+        return defaultIndex;
     }
 
-    return favouriteLocauxIndex
-}
+    return favouriteLocauxIndex;
+};
 
 export const setFavouriteLocauxIndex = (index: number) => {
-    localStorage.setItem(FAVOURITE_LOCAUX_KEY, index.toString())
-}
+    localStorage.setItem(FAVOURITE_LOCAUX_KEY, index.toString());
+};

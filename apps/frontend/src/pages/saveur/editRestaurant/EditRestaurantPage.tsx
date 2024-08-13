@@ -1,24 +1,24 @@
-import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router-dom'
-import { AppStore } from '../../../globalStores/AppStore'
-import MainLayout from '../../../reusableComponents/layouts/MainLayout'
-import { EditRestaurant } from '../restaurants/createEdit/EditRestaurant'
+import { observer } from "mobx-react-lite";
+import { useParams } from "react-router-dom";
+import { AppStore } from "../../../globalStores/AppStore";
+import MainLayout from "../../../reusableComponents/layouts/MainLayout";
+import { EditRestaurant } from "../restaurants/createEdit/EditRestaurant";
 
 export const EditRestaurantPage = observer(() => {
-    const saveurStore = AppStore.saveurStore
+    const saveurStore = AppStore.saveurStore;
 
-    const { id } = useParams()
+    const { id } = useParams();
 
     const restaurantFound = AppStore.saveurStore.restaurantsStore.restaurants.find(
-        (restaurant) => restaurant.id.toString() === id
-    )
+        (restaurant) => restaurant.id.toString() === id,
+    );
 
     if (restaurantFound === undefined) {
-        return null
+        return null;
     }
     return (
         <MainLayout fullscreen>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
                 <EditRestaurant
                     mode="edit"
                     restaurant={restaurantFound}
@@ -26,7 +26,7 @@ export const EditRestaurantPage = observer(() => {
                 />
             </div>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default EditRestaurantPage
+export default EditRestaurantPage;

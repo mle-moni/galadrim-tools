@@ -1,93 +1,93 @@
-import { makeAutoObservable } from 'mobx'
-import { fetchBackendJson } from '../api/fetch'
-import { LoadingStateStore } from '../reusableComponents/form/LoadingStateStore'
-import { notifyError } from '../utils/notification'
+import { makeAutoObservable } from "mobx";
+import { fetchBackendJson } from "../api/fetch";
+import { LoadingStateStore } from "../reusableComponents/form/LoadingStateStore";
+import { notifyError } from "../utils/notification";
 
 export interface ApiBreakActivity {
-    id: number
-    name: string
+    id: number;
+    name: string;
 }
 
 export interface ApiBreakTime {
-    id: number
-    time: string
+    id: number;
+    time: string;
 }
 
 export interface ApiBreakVote {
-    id: number
-    activities: ApiBreakActivity[]
-    times: ApiBreakTime[]
-    userId: number
-    createdAt: string
+    id: number;
+    activities: ApiBreakActivity[];
+    times: ApiBreakTime[];
+    userId: number;
+    createdAt: string;
 }
 
 export class GalabreakStore {
-    active = false
+    active = false;
 
-    votes: ApiBreakVote[] = []
-    activities: ApiBreakActivity[] = []
-    times: ApiBreakTime[] = []
+    votes: ApiBreakVote[] = [];
+    activities: ApiBreakActivity[] = [];
+    times: ApiBreakTime[] = [];
 
-    votesLoadingStore = new LoadingStateStore()
-    activitiesLoadingStore = new LoadingStateStore()
-    timesLoadingStore = new LoadingStateStore()
+    votesLoadingStore = new LoadingStateStore();
+    activitiesLoadingStore = new LoadingStateStore();
+    timesLoadingStore = new LoadingStateStore();
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this);
     }
 
     enable() {
-        this.active = true
+        this.active = true;
     }
 
     setActivities(activities: ApiBreakActivity[]) {
-        this.activities = activities
+        this.activities = activities;
     }
 
     setTimes(times: ApiBreakTime[]) {
-        this.times = times.sort((a, b) => a.time.localeCompare(b.time))
+        this.times = times.sort((a, b) => a.time.localeCompare(b.time));
     }
 
     setVotes(votes: ApiBreakVote[]) {
-        this.votes = votes
+        this.votes = votes;
     }
 
     async fetchActivities() {
-        this.activitiesLoadingStore.setIsLoading(true)
-        const res = await fetchBackendJson<ApiBreakActivity[], unknown>('/galabreak/activities')
-        this.activitiesLoadingStore.setIsLoading(false)
+        this.activitiesLoadingStore.setIsLoading(true);
+        const res = await fetchBackendJson<ApiBreakActivity[], unknown>("/galabreak/activities");
+        this.activitiesLoadingStore.setIsLoading(false);
         if (!res.ok) {
-            notifyError('Impossible de récupérer les activités')
-            return
+            notifyError("Impossible de récupérer les activités");
+            return;
         }
-        this.setActivities(res.json)
-        this.enable()
+        this.setActivities(res.json);
+        this.enable();
     }
 
     async fetchTimes() {
-        this.timesLoadingStore.setIsLoading(true)
-        const res = await fetchBackendJson<ApiBreakTime[], unknown>('/galabreak/times')
-        this.timesLoadingStore.setIsLoading(false)
+        this.timesLoadingStore.setIsLoading(true);
+        const res = await fetchBackendJson<ApiBreakTime[], unknown>("/galabreak/times");
+        this.timesLoadingStore.setIsLoading(false);
         if (!res.ok) {
-            notifyError('Impossible de récupérer les times')
-            return
+            notifyError("Impossible de récupérer les times");
+            return;
         }
-        this.setTimes(res.json)
+        this.setTimes(res.json);
     }
 
     async fetchVotes() {
-        this.votesLoadingStore.setIsLoading(true)
-        const res = await fetchBackendJson<ApiBreakVote[], unknown>('/galabreak/votes')
-        this.votesLoadingStore.setIsLoading(false)
+        this.votesLoadingStore.setIsLoading(true);
+        const res = await fetchBackendJson<ApiBreakVote[], unknown>("/galabreak/votes");
+        this.votesLoadingStore.setIsLoading(false);
         if (!res.ok) {
-            notifyError('Impossible de récupérer les votes')
-            return
+            notifyError("Impossible de récupérer les votes");
+            return;
         }
-        this.setVotes(res.json)
+        this.setVotes(res.json);
     }
 
     async fetchAll() {
-        await Promise.all([this.fetchActivities(), this.fetchTimes(), this.fetchVotes()])
+        await Promise.all([this.fetchActivities(), this.fetchTimes(), this.fetchVotes()]);
     }
 
     get isLoading() {
@@ -95,48 +95,48 @@ export class GalabreakStore {
             this.activitiesLoadingStore.isLoading ||
             this.timesLoadingStore.isLoading ||
             this.votesLoadingStore.isLoading
-        )
+        );
     }
 
     get activitiesOptions() {
         return this.activities.map((activity) => ({
             value: activity.id,
             label: activity.name,
-        }))
+        }));
     }
 
     get timesOptions() {
         return this.times.map((time) => ({
             value: time.id,
             label: time.time,
-        }))
+        }));
     }
 
     get activityVotes() {
-        const votes = new Map<number, ApiBreakVote[]>()
+        const votes = new Map<number, ApiBreakVote[]>();
 
         this.votes.forEach((vote) => {
             vote.activities.forEach((activity) => {
-                const currentVotes = votes.get(activity.id) || []
-                currentVotes.push(vote)
-                votes.set(activity.id, currentVotes)
-            })
-        })
+                const currentVotes = votes.get(activity.id) || [];
+                currentVotes.push(vote);
+                votes.set(activity.id, currentVotes);
+            });
+        });
 
-        return Array.from(votes.entries())
+        return Array.from(votes.entries());
     }
 
     get timeVotes() {
-        const votes = new Map<number, ApiBreakVote[]>()
+        const votes = new Map<number, ApiBreakVote[]>();
 
         this.votes.forEach((vote) => {
             vote.times.forEach((time) => {
-                const currentVotes = votes.get(time.id) || []
-                currentVotes.push(vote)
-                votes.set(time.id, currentVotes)
-            })
-        })
+                const currentVotes = votes.get(time.id) || [];
+                currentVotes.push(vote);
+                votes.set(time.id, currentVotes);
+            });
+        });
 
-        return Array.from(votes.entries())
+        return Array.from(votes.entries());
     }
 }

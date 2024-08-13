@@ -1,6 +1,5 @@
-import BreakTime from '#models/break_time'
-import { HttpContext } from '@adonisjs/core/http'
+import BreakTime from "#models/break_time";
 
-export const breakTimesIndex = async ({}: HttpContext) => {
-  return BreakTime.all()
-}
+export const breakTimesIndex = async () => {
+    return BreakTime.all();
+};

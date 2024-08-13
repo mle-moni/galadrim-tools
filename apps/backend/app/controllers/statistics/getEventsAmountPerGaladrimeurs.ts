@@ -1,11 +1,11 @@
-import db from '@adonisjs/lucid/services/db'
-import { HttpContext } from '@adonisjs/core/http'
+import db from "@adonisjs/lucid/services/db";
+import type { HttpContext } from "@adonisjs/core/http";
 
 export const getEventsAmountPerGaladrimeurs = async ({ request }: HttpContext) => {
-  const { days } = request.qs()
-  const filterQuery = days ? 'WHERE events.created_at > DATE_SUB(NOW(), INTERVAL ? DAY)' : ''
-  const result = await db.rawQuery(
-    `
+    const { days } = request.qs();
+    const filterQuery = days ? "WHERE events.created_at > DATE_SUB(NOW(), INTERVAL ? DAY)" : "";
+    const result = await db.rawQuery(
+        `
     SELECT
       count(events.id) as amount,
       users.username,
@@ -14,7 +14,7 @@ export const getEventsAmountPerGaladrimeurs = async ({ request }: HttpContext) =
     JOIN users ON events.user_id = users.id
     ${filterQuery}
     GROUP BY user_id ORDER BY amount DESC;`,
-    days ? [days] : undefined
-  )
-  return result[0]
-}
+        days ? [days] : undefined,
+    );
+    return result[0];
+};

@@ -1,18 +1,19 @@
 // @ts-nocheck
-import { observer } from 'mobx-react-lite'
-import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
-import MainLayout from '../../reusableComponents/layouts/MainLayout'
+import { observer } from "mobx-react-lite";
+import { CenteredDiv } from "../../reusableComponents/common/CenteredDiv";
+import MainLayout from "../../reusableComponents/layouts/MainLayout";
 
 export const ScamWinnerPage = observer(() => {
     return (
         <MainLayout>
             <CenteredDiv>
-                <div style={{ width: '80%' }}>
+                <div style={{ width: "80%" }}>
+                    {/* biome-ignore lint/a11y/noDistractingElements: <explanation> */}
                     <marquee bgcolor="red" behavior="alternate" scrolldelay="60">
                         <h1>🚨Vous avez booké la 50 000 ème reservation de salle !🚨</h1>
                     </marquee>
                     <br />
-                    <h2 style={{ textDecoration: 'underline' }}>
+                    <h2 style={{ textDecoration: "underline" }}>
                         🎉🎉🎉🎉Vous aver gagné GATEAU fabriqué par MAYEUL gratuit 🎉🎉🎉🎉
                     </h2>
 
@@ -29,10 +30,8 @@ export const ScamWinnerPage = observer(() => {
                     <br />
                     <div>
                         <h4>Benjamin D.</h4>
-                        <p>
-                            Heureuse surprise, sans doute mon jour de chance !
-                        </p>
-                        
+                        <p>Heureuse surprise, sans doute mon jour de chance !</p>
+
                         <h4>Jean-Paul Dubost</h4>
                         <p>
                             Au début, je pensais que c'était une blague, mais j'ai finalement eu mon
@@ -66,7 +65,7 @@ export const ScamWinnerPage = observer(() => {
                 </div>
             </CenteredDiv>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default ScamWinnerPage
+export default ScamWinnerPage;

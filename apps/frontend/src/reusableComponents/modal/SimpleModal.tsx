@@ -1,11 +1,11 @@
-import { Box, Modal } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { PropsWithChildren } from 'react'
+import { Box, Modal } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import type { PropsWithChildren } from "react";
 
 export interface SimpleModalProps {
-    open: boolean
-    onClose: () => void
-    width?: string | number
+    open: boolean;
+    onClose: () => void;
+    width?: string | number;
 }
 
 export const SimpleModal = observer<PropsWithChildren<SimpleModalProps>>(
@@ -15,20 +15,20 @@ export const SimpleModal = observer<PropsWithChildren<SimpleModalProps>>(
                 open={open}
                 onClose={onClose}
                 sx={{
-                    backdropFilter: 'blur(3px)',
+                    backdropFilter: "blur(3px)",
                 }}
                 onClick={(e) => {
-                    e.stopPropagation()
+                    e.stopPropagation();
                 }}
             >
                 <Box
                     sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
                         width,
-                        bgcolor: 'background.paper',
+                        bgcolor: "background.paper",
                         boxShadow: 24,
                         p: 4,
                         borderRadius: 4,
@@ -38,6 +38,6 @@ export const SimpleModal = observer<PropsWithChildren<SimpleModalProps>>(
                     {children}
                 </Box>
             </Modal>
-        )
-    }
-)
+        );
+    },
+);

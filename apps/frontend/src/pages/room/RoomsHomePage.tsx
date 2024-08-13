@@ -1,38 +1,43 @@
-import { Home } from '@mui/icons-material'
-import StatsIcon from '@mui/icons-material/QueryStats'
-import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useEffect, useMemo, useState } from 'react'
-import { AppStore } from '../../globalStores/AppStore'
-import { useWindowDimensions } from '../../hooks/useWindowDimensions'
-import { CenteredDiv } from '../../reusableComponents/common/CenteredDiv'
-import { RoundedLinks } from '../../reusableComponents/common/RoundedLinks'
-import MainLayout from '../../reusableComponents/layouts/MainLayout'
-import { Floor2, Floor3, Floor4, AllFloors } from '../../reusableComponents/WorkplaceSvg/WorkplaceSvg'
-import { RoomsHomePageStore } from './RoomsHomePageStore'
-import { WorkspaceLocation } from '../../utils/rooms'
+import { Home } from "@mui/icons-material";
+import StatsIcon from "@mui/icons-material/QueryStats";
+import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useEffect, useMemo, useState } from "react";
+import { AppStore } from "../../globalStores/AppStore";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import {
+    AllFloors,
+    Floor2,
+    Floor3,
+    Floor4,
+} from "../../reusableComponents/WorkplaceSvg/WorkplaceSvg";
+import { CenteredDiv } from "../../reusableComponents/common/CenteredDiv";
+import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
+import MainLayout from "../../reusableComponents/layouts/MainLayout";
+import type { WorkspaceLocation } from "../../utils/rooms";
+import { RoomsHomePageStore } from "./RoomsHomePageStore";
 
 const locationToComponent: Record<WorkspaceLocation, typeof Floor2 | (() => null)> = {
-    'saintPaul': AllFloors,
-    'saintPaul2': Floor2,
-    'saintPaul3': Floor3,
-    'saintPaul4': Floor4,
-    'nantes': () => null,
-    'bonneNouvelle': () => null,
-}
+    saintPaul: AllFloors,
+    saintPaul2: Floor2,
+    saintPaul3: Floor3,
+    saintPaul4: Floor4,
+    nantes: () => null,
+    bonneNouvelle: () => null,
+};
 
 const RoomsHomePage = observer(() => {
-    const homePageStore = useMemo(() => new RoomsHomePageStore(), [])
+    const homePageStore = useMemo(() => new RoomsHomePageStore(), []);
 
     useEffect(() => {
-        AppStore.eventsStore.setRoomName('')
+        AppStore.eventsStore.setRoomName("");
 
-        return () => homePageStore.cleanup()
-    }, [])
-    const [location, setLocation] = useState<WorkspaceLocation>('saintPaul')
-    const { width, height } = useWindowDimensions()
-    const shortestEdge = width < height ? width : height
-    const svgSize = Math.round(shortestEdge * 0.8)
+        return () => homePageStore.cleanup();
+    }, [homePageStore]);
+    const [location, setLocation] = useState<WorkspaceLocation>("saintPaul");
+    const { width, height } = useWindowDimensions();
+    const shortestEdge = width < height ? width : height;
+    const svgSize = Math.round(shortestEdge * 0.8);
 
     const WorkplaceComponent = locationToComponent[location];
 
@@ -40,21 +45,21 @@ const RoomsHomePage = observer(() => {
         <MainLayout fullscreen>
             <RoundedLinks
                 linkInfos={[
-                    { Icon: Home, link: '/' },
-                    { Icon: StatsIcon, link: '/rooms/statistics' },
+                    { Icon: Home, link: "/" },
+                    { Icon: StatsIcon, link: "/rooms/statistics" },
                 ]}
             />
             <Box
                 sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
                 }}
             >
                 <Button
                     size="large"
                     variant="contained"
-                    onClick={() => AppStore.navigate('/room')}
+                    onClick={() => AppStore.navigate("/room")}
                     sx={{
                         mt: -3.5,
                     }}
@@ -62,12 +67,12 @@ const RoomsHomePage = observer(() => {
                     Voir toutes les salles
                 </Button>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <RadioGroup
                     row
                     value={location}
                     onChange={(_, newValue) => {
-                        setLocation(newValue as WorkspaceLocation)
+                        setLocation(newValue as WorkspaceLocation);
                     }}
                     sx={{ my: 2 }}
                 >
@@ -92,17 +97,17 @@ const RoomsHomePage = observer(() => {
             <Typography
                 variant="h5"
                 style={{
-                    transition: 'all 1s',
-                    color: homePageStore.focusedRoomName ? 'black' : 'rgba(0,0,0,0)',
-                    textAlign: 'center',
+                    transition: "all 1s",
+                    color: homePageStore.focusedRoomName ? "black" : "rgba(0,0,0,0)",
+                    textAlign: "center",
                 }}
             >
                 {homePageStore.focusedRoomName ?? (
-                    <span style={{ visibility: 'hidden' }}>____</span>
+                    <span style={{ visibility: "hidden" }}>____</span>
                 )}
             </Typography>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default RoomsHomePage
+export default RoomsHomePage;

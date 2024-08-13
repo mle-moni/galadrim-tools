@@ -1,32 +1,32 @@
-import BackIcon from '@mui/icons-material/ChevronLeft'
-import { Box, FormControlLabel, Switch, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useMemo } from 'react'
-import { AppStore } from '../../../globalStores/AppStore'
-import { CustomLink } from '../../../reusableComponents/Core/CustomLink'
-import MainLayout from '../../../reusableComponents/layouts/MainLayout'
-import { NotificationSettingsStore } from './NotificationsSettingsStore'
+import BackIcon from "@mui/icons-material/ChevronLeft";
+import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useMemo } from "react";
+import { AppStore } from "../../../globalStores/AppStore";
+import { CustomLink } from "../../../reusableComponents/Core/CustomLink";
+import MainLayout from "../../../reusableComponents/layouts/MainLayout";
+import { NotificationSettingsStore } from "./NotificationsSettingsStore";
 
 export const NotificationsSettingsPage = observer(() => {
-    const { authStore } = AppStore
+    const { authStore } = AppStore;
     const notificationsSettingsStore = useMemo(
         () => new NotificationSettingsStore(authStore),
-        [authStore]
-    )
+        [authStore],
+    );
 
     return (
         <MainLayout fullscreen>
             <Box
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                 }}
             >
                 <Box
                     sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
+                        display: "flex",
+                        flexDirection: "column",
                         maxWidth: 800,
                     }}
                 >
@@ -37,10 +37,10 @@ export const NotificationsSettingsPage = observer(() => {
                         control={
                             <Switch
                                 checked={notificationsSettingsStore.hasNotificationEnabled(
-                                    'NEW_RESTAURANT'
+                                    "NEW_RESTAURANT",
                                 )}
                                 onChange={() => {
-                                    notificationsSettingsStore.toggleNotification('NEW_RESTAURANT')
+                                    notificationsSettingsStore.toggleNotification("NEW_RESTAURANT");
                                 }}
                             />
                         }
@@ -50,10 +50,10 @@ export const NotificationsSettingsPage = observer(() => {
                         control={
                             <Switch
                                 checked={notificationsSettingsStore.hasNotificationEnabled(
-                                    'NEW_IDEA'
+                                    "NEW_IDEA",
                                 )}
                                 onChange={() => {
-                                    notificationsSettingsStore.toggleNotification('NEW_IDEA')
+                                    notificationsSettingsStore.toggleNotification("NEW_IDEA");
                                 }}
                             />
                         }
@@ -63,10 +63,10 @@ export const NotificationsSettingsPage = observer(() => {
                         control={
                             <Switch
                                 checked={notificationsSettingsStore.hasNotificationEnabled(
-                                    'NEW_REVIEW'
+                                    "NEW_REVIEW",
                                 )}
                                 onChange={() => {
-                                    notificationsSettingsStore.toggleNotification('NEW_REVIEW')
+                                    notificationsSettingsStore.toggleNotification("NEW_REVIEW");
                                 }}
                             />
                         }
@@ -76,12 +76,12 @@ export const NotificationsSettingsPage = observer(() => {
                         control={
                             <Switch
                                 checked={notificationsSettingsStore.hasNotificationEnabled(
-                                    'NEW_IDEA_COMMENT'
+                                    "NEW_IDEA_COMMENT",
                                 )}
                                 onChange={() => {
                                     notificationsSettingsStore.toggleNotification(
-                                        'NEW_IDEA_COMMENT'
-                                    )
+                                        "NEW_IDEA_COMMENT",
+                                    );
                                 }}
                             />
                         }
@@ -94,7 +94,7 @@ export const NotificationsSettingsPage = observer(() => {
                 </Box>
             </Box>
         </MainLayout>
-    )
-})
+    );
+});
 
-export default NotificationsSettingsPage
+export default NotificationsSettingsPage;

@@ -1,37 +1,37 @@
-import { ArrowBack } from '@mui/icons-material'
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
-import { AppStore } from '../../../globalStores/AppStore'
-import { THEME_FIELDS_TO_LABEL, THEME_KEYS_WITHOUT_NAME } from '../../../globalStores/ThemeStore'
-import { CenteredDiv } from '../../../reusableComponents/common/CenteredDiv'
-import { GaladrimButton } from '../../../reusableComponents/common/GaladrimButton'
-import { RoundedLinks } from '../../../reusableComponents/common/RoundedLinks'
-import MainLayout from '../../../reusableComponents/layouts/MainLayout'
-import { THEME_OPTIONS, THEME_OPTIONS_KEYS, ThemeName } from '../../../theme/galadrimThemes'
-import { RoomCalendar } from '../../room/RoomCalendar'
+import { ArrowBack } from "@mui/icons-material";
+import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { AppStore } from "../../../globalStores/AppStore";
+import { THEME_FIELDS_TO_LABEL, THEME_KEYS_WITHOUT_NAME } from "../../../globalStores/ThemeStore";
+import { CenteredDiv } from "../../../reusableComponents/common/CenteredDiv";
+import { GaladrimButton } from "../../../reusableComponents/common/GaladrimButton";
+import { RoundedLinks } from "../../../reusableComponents/common/RoundedLinks";
+import MainLayout from "../../../reusableComponents/layouts/MainLayout";
+import { THEME_OPTIONS, THEME_OPTIONS_KEYS, type ThemeName } from "../../../theme/galadrimThemes";
+import { RoomCalendar } from "../../room/RoomCalendar";
 
 export const ThemePage = observer(() => {
     useEffect(() => {
-        AppStore.eventsStore.setRoomName('*')
-    }, [])
+        AppStore.eventsStore.setRoomName("*");
+    }, []);
     const {
         authStore: { themeStore },
-    } = AppStore
+    } = AppStore;
 
     return (
         <MainLayout fullscreen>
             <Box
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                 }}
             >
                 <Box
                     sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
+                        display: "flex",
+                        flexDirection: "column",
                         maxWidth: 800,
                     }}
                 >
@@ -43,7 +43,7 @@ export const ThemePage = observer(() => {
                         <InputLabel id="theme-select-label">Thème pré-configuré</InputLabel>
                         <Select
                             labelId="theme-select-label"
-                            value={themeStore.themeKey ?? ''}
+                            value={themeStore.themeKey ?? ""}
                             label="Theme pré-configuré"
                             onChange={(e) =>
                                 themeStore.setThemeKey((e.target.value || null) as ThemeName | null)
@@ -59,22 +59,22 @@ export const ThemePage = observer(() => {
 
                     {THEME_KEYS_WITHOUT_NAME.map((themeKey) => (
                         <label
-                            key={'theme_key_' + themeKey}
-                            htmlFor={'theme_key_' + themeKey}
+                            key={`theme_key_${themeKey}`}
+                            htmlFor={`theme_key_${themeKey}`}
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
                                 gap: 10,
                             }}
                         >
                             <Typography>{THEME_FIELDS_TO_LABEL[themeKey]} :</Typography>
                             <input
-                                id={'theme_key_' + themeKey}
+                                id={`theme_key_${themeKey}`}
                                 type="color"
                                 value={themeStore.newTheme[themeKey]}
                                 onChange={(e) => {
-                                    themeStore.updateStringField(themeKey, e.target.value)
+                                    themeStore.updateStringField(themeKey, e.target.value);
                                 }}
                             />
                         </label>
@@ -95,9 +95,9 @@ export const ThemePage = observer(() => {
             <CenteredDiv style={{ marginTop: 80 }}>
                 <RoomCalendar step={15} height="700px" isAbsolute={false} />
             </CenteredDiv>
-            <RoundedLinks linkInfos={[{ Icon: ArrowBack, link: '/profile' }]} />
+            <RoundedLinks linkInfos={[{ Icon: ArrowBack, link: "/profile" }]} />
         </MainLayout>
-    )
-})
+    );
+});
 
-export default ThemePage
+export default ThemePage;

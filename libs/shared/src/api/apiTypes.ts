@@ -1,30 +1,30 @@
 export type ApiFormError = {
-    rule: string
-    field: string
-    message: string
-}
+    rule: string;
+    field: string;
+    message: string;
+};
 export interface ApiErrors {
-    errors: ApiFormError[]
+    errors: ApiFormError[];
 }
 
 export interface AdonisApiError {
-    code: string
-    message: string
+    code: string;
+    message: string;
 }
 
 export interface ApiNotification {
-    notification: string
+    notification: string;
 }
 
 export interface ApiError {
-    error: string
+    error: string;
 }
 
 export interface DashboardInfos {
-    memoryUsed: number
-    totalMemory: number
-    sysUptime: number
-    loadAverage1: number
-    loadAverage5: number
-    loadAverage15: number
+    memoryUsed: number;
+    totalMemory: number;
+    sysUptime: number;
+    loadAverage1: number;
+    loadAverage5: number;
+    loadAverage15: number;
 }

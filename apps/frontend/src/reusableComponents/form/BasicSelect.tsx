@@ -1,27 +1,27 @@
-import { FormControl, InputLabel, MenuItem, Select, SxProps } from '@mui/material'
-import { ReactNode } from 'react'
+import { FormControl, InputLabel, MenuItem, Select, type SxProps } from "@mui/material";
+import type { ReactNode } from "react";
 
 export interface BasicSelectOption<T extends string | number> {
-    value: T
-    label: string
-    icon?: JSX.Element
+    value: T;
+    label: string;
+    icon?: JSX.Element;
 }
 
 export interface BasicSelectProps<T extends string | number> {
-    value?: T
-    defaultValue?: T
-    options: readonly BasicSelectOption<T>[]
-    onChange?: (value: T) => void
-    sx?: SxProps
-    label?: string
-    required?: boolean
-    disabled?: boolean
-    onBlur?: () => void
-    errorMessage?: string
-    size?: 'small' | 'medium'
-    startAdornment?: ReactNode
-    renderValue?: (value: T) => ReactNode
-    name?: string
+    value?: T;
+    defaultValue?: T;
+    options: readonly BasicSelectOption<T>[];
+    onChange?: (value: T) => void;
+    sx?: SxProps;
+    label?: string;
+    required?: boolean;
+    disabled?: boolean;
+    onBlur?: () => void;
+    errorMessage?: string;
+    size?: "small" | "medium";
+    startAdornment?: ReactNode;
+    renderValue?: (value: T) => ReactNode;
+    name?: string;
 }
 
 export const BasicSelect = <T extends string | number>({
@@ -40,8 +40,8 @@ export const BasicSelect = <T extends string | number>({
     disabled,
     name,
 }: BasicSelectProps<T>) => {
-    const id = `select-label-${label}`
-    const isString = typeof value === 'string'
+    const id = `select-label-${label}`;
+    const isString = typeof value === "string";
 
     return (
         <FormControl fullWidth sx={sx}>
@@ -51,7 +51,7 @@ export const BasicSelect = <T extends string | number>({
                 value={value}
                 defaultValue={defaultValue}
                 onChange={(e) => {
-                    onChange?.((isString ? e.target.value : +e.target.value) as T)
+                    onChange?.((isString ? e.target.value : +e.target.value) as T);
                 }}
                 label={label}
                 required={required}
@@ -71,5 +71,5 @@ export const BasicSelect = <T extends string | number>({
                 ))}
             </Select>
         </FormControl>
-    )
-}
+    );
+};

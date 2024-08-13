@@ -1,11 +1,11 @@
 export const NOTES_VALUES = {
-    '1': '🤮',
-    '2': '😕',
-    '3': '😶',
-    '4': '😁',
-    '5': '😍',
-} as const
+    "1": "🤮",
+    "2": "😕",
+    "3": "😶",
+    "4": "😁",
+    "5": "😍",
+} as const;
 
-export type NotesOption = keyof typeof NOTES_VALUES
+export type NotesOption = keyof typeof NOTES_VALUES;
 
-export type NotesValue = typeof NOTES_VALUES[NotesOption]
+export type NotesValue = (typeof NOTES_VALUES)[NotesOption];

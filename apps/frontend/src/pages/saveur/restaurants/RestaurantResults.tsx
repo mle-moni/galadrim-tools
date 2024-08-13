@@ -1,44 +1,44 @@
-import { Box, Button } from '@mui/material'
-import { observer } from 'mobx-react-lite'
-import { useSearchParams } from 'react-router-dom'
-import { SaveurStore } from '../../../globalStores/SaveurStore'
+import { Box, Button } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useSearchParams } from "react-router-dom";
+import type { SaveurStore } from "../../../globalStores/SaveurStore";
 
 export const RestaurantResults = observer<{ saveurStore: SaveurStore }>(({ saveurStore }) => {
-    const [, setSearchParams] = useSearchParams()
+    const [, setSearchParams] = useSearchParams();
 
-    const pattern = saveurStore.restaurantsStore.search
+    const pattern = saveurStore.restaurantsStore.search;
     const searchResults = saveurStore.restaurantsStore.fuseInstance
         .search(pattern, { limit: 5 })
-        .filter(({ score }) => score && score < 0.5)
+        .filter(({ score }) => score && score < 0.5);
 
     if (searchResults.length === 0) {
-        return null
+        return null;
     }
 
     return (
         <Box
             sx={{
-                bgcolor: 'white',
+                bgcolor: "white",
                 mb: 1,
                 p: 1,
-                borderRadius: '4px',
+                borderRadius: "4px",
             }}
         >
             {searchResults.map(({ item: resto }) => (
                 <Button
                     key={resto.id}
-                    sx={{ display: 'block', textTransform: 'none' }}
+                    sx={{ display: "block", textTransform: "none" }}
                     onClick={() => {
                         setSearchParams(
                             new URLSearchParams({
-                                'restaurant-id': resto.id.toString(),
-                            })
-                        )
+                                "restaurant-id": resto.id.toString(),
+                            }),
+                        );
                     }}
                 >
                     {resto.name}
                 </Button>
             ))}
         </Box>
-    )
-})
+    );
+});

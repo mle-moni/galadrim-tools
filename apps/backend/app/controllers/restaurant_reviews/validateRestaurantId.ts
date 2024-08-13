@@ -1,9 +1,9 @@
-import { schema, validator } from '@adonisjs/validator'
+import { schema, validator } from "@adonisjs/validator";
 
 const restaurantIdSchema = schema.create({
-  restaurantId: schema.number(),
-})
+    restaurantId: schema.number(),
+});
 
 export const validateRestaurantId = (data: unknown) => {
-  return validator.validate({ schema: restaurantIdSchema, data })
-}
+    return validator.validate({ schema: restaurantIdSchema, data });
+};

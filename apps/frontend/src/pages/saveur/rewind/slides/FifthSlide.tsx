@@ -1,21 +1,22 @@
-import { useMemo } from 'react'
-import { RewindStore } from '../../../../globalStores/RewindStore'
-import { AppStore } from '../../../../globalStores/AppStore'
-import { TimerSlides } from '../../../../reusableComponents/common/TimerSlides'
-import { TextCard } from '../components/TextCard'
-import { FavoriteRestaurant } from '../components/FavoriteRestaurant'
+import { useMemo } from "react";
+import { AppStore } from "../../../../globalStores/AppStore";
+import type { RewindStore } from "../../../../globalStores/RewindStore";
+import { TimerSlides } from "../../../../reusableComponents/common/TimerSlides";
+import { FavoriteRestaurant } from "../components/FavoriteRestaurant";
+import { TextCard } from "../components/TextCard";
 
 type FifthSlideProps = {
-    rewindStore: RewindStore
-}
+    rewindStore: RewindStore;
+};
 
 export const FifthSlide = ({ rewindStore }: FifthSlideProps) => {
-    const restaurantsStore = AppStore.saveurStore.restaurantsStore
+    const restaurantsStore = AppStore.saveurStore.restaurantsStore;
 
     const favoriteRestaurant = restaurantsStore.restaurants.find(
-        (restaurant) => restaurant.id === rewindStore.rewind?.favoriteRestaurantId
-    )
+        (restaurant) => restaurant.id === rewindStore.rewind?.favoriteRestaurantId,
+    );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const childrens = useMemo(
         () => [
             {
@@ -36,8 +37,8 @@ export const FifthSlide = ({ rewindStore }: FifthSlideProps) => {
                 duration: 6000,
             },
         ],
-        [rewindStore.loadingState.isLoading, favoriteRestaurant?.id]
-    )
+        [rewindStore.loadingState.isLoading, favoriteRestaurant?.id],
+    );
 
-    return <TimerSlides slides={childrens} isSubSlide />
-}
+    return <TimerSlides slides={childrens} isSubSlide />;
+};
