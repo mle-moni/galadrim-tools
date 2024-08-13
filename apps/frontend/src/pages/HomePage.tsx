@@ -36,18 +36,11 @@ const HomePage = observer(() => {
                 <IconLink Icon={RestaurantMenu} link="/saveur" title="Restaurants" />
                 <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
                 <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
-                <IconLink Icon={Pause} link="/galabreak" title="Pause ?" />
                 <IconLink
                     Icon={GitHub}
                     link="https://github.com/mle-moni/galadrim-tools"
-                    title="Participer"
+                    title="Contribuer"
                 />
-                <IconLink
-                    Icon={BugReport}
-                    link="https://github.com/mle-moni/galadrim-tools/issues"
-                    title="Reporter un bug"
-                />
-                <IconLink Icon={SignalWifiBad} link="/wifi" title="Problème de connexion ?" />
                 <IconLink
                     Icon={AdminPanelSettings}
                     link="/admin"
