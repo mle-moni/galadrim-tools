@@ -26,7 +26,6 @@ const RewindRecapPage = React.lazy(() => import("../pages/saveur/rewind/RewindRe
 const RewindPage = React.lazy(() => import("../pages/saveur/rewind/RewindPage"));
 const HomePage = React.lazy(() => import("../pages/HomePage"));
 const RoomsHomePage = React.lazy(() => import("../pages/room/RoomsHomePage"));
-const WifiPage = React.lazy(() => import("../pages/wifi/WifiPage"));
 const LoginPage = React.lazy(() => import("../pages/login/LoginPage"));
 const GetOtpPage = React.lazy(() => import("../pages/getOtp/GetOtpPage"));
 const ChangePasswordPage = React.lazy(() => import("../pages/changePassword/ChangePasswordPage"));
@@ -46,8 +45,6 @@ const MyRestaurantNotesPage = React.lazy(
 const NewCodeNamesGamePage = React.lazy(() => import("../pages/codeNames/NewCodeNamesGamePage"));
 const CodeNamesGamePage = React.lazy(() => import("../pages/codeNames/CodeNamesGamePage"));
 const ScamWinnerPage = React.lazy(() => import("../pages/scam/ScamWinnerPage"));
-const GalabreakPage = React.lazy(() => import("../pages/galabreak/GalabreakPage"));
-const GalabreakVotePage = React.lazy(() => import("../pages/galabreak/GalabreakVotePage"));
 const CaddyLogsPage = React.lazy(() => import("../pages/caddyLogs/CaddyLogsPage"));
 const AtopLogsPage = React.lazy(() => import("../pages/atopLogs/AtopLogsPage"));
 
@@ -117,10 +114,7 @@ const AppRoutes = () => {
                 />
                 <Route path="/profile/theme" element={<ThemePage />} />
                 <Route path="/ideas" element={<IdeaPage />} />
-                <Route path="/galabreak" element={<GalabreakPage />} />
-                <Route path="/galabreak/vote" element={<GalabreakVotePage />} />
                 <Route path="/galadrim/scam/winner/omg" element={<ScamWinnerPage />} />
-                <Route path="/wifi" element={<WifiPage />} />
                 <Route path="/caddyLogs/:id" element={<CaddyLogsPage />} />
                 <Route path="/atopLogs/:id" element={<AtopLogsPage />} />
 
