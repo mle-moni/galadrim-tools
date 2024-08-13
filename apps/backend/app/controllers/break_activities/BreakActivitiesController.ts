@@ -2,8 +2,8 @@ import type { HttpContext } from "@adonisjs/core/http";
 import { breakActivitiesIndex } from "./breakActivitiesIndex.js";
 
 export default class BreakActivitiesController {
-    public async index(ctx: HttpContext) {
-        return breakActivitiesIndex(ctx);
+    public async index() {
+        return breakActivitiesIndex();
     }
 
     public async store(ctx: HttpContext) {

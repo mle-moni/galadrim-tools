@@ -2,8 +2,8 @@ import type { HttpContext } from "@adonisjs/core/http";
 import { breakTimesIndex } from "./breakTimesIndex.js";
 
 export default class BreakTimesController {
-    public async index(ctx: HttpContext) {
-        return breakTimesIndex(ctx);
+    public async index() {
+        return breakTimesIndex();
     }
 
     public async store(ctx: HttpContext) {

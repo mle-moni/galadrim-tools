@@ -3,8 +3,8 @@ import { breakVotesIndex } from "./breakVotesIndex.js";
 import { storeBreakVote } from "./storeBreakVote.js";
 
 export default class BreakVotesController {
-    public async index(ctx: HttpContext) {
-        return breakVotesIndex(ctx);
+    public async index() {
+        return breakVotesIndex();
     }
 
     public async store(ctx: HttpContext) {

@@ -9,8 +9,8 @@ export default class AdminController {
         return createUserRoute(params);
     }
 
-    public async userRights(params: HttpContext) {
-        return userRightsRoute(params);
+    public async userRights() {
+        return userRightsRoute();
     }
 
     public async editUserRights(params: HttpContext) {

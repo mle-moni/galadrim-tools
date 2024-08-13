@@ -6,8 +6,8 @@ import { showCodeNamesGame } from "./showCodeNamesGame.js";
 import { storeCodeNamesGame } from "./storeCodeNamesGame.js";
 
 export default class CodeNamesGamesController {
-    public async index(ctx: HttpContext) {
-        return codeNamesGamesIndex(ctx);
+    public async index() {
+        return codeNamesGamesIndex();
     }
 
     public async store(ctx: HttpContext) {

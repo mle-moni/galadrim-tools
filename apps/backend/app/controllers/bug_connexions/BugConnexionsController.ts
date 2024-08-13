@@ -6,8 +6,8 @@ import { storeBugConnexion } from "./storeBugConnexion.js";
 import { updateBugConnexion } from "./updateBugConnexion.js";
 
 export default class BugConnexionsController {
-    public async index(ctx: HttpContext) {
-        return bugConnexionsList(ctx);
+    public async index() {
+        return bugConnexionsList();
     }
 
     public async store(ctx: HttpContext) {
