@@ -6,7 +6,7 @@ import { withAuthFinder } from "@adonisjs/auth/mixins/lucid";
 import { DbRememberMeTokensProvider } from "@adonisjs/auth/session";
 import { compose, cuid } from "@adonisjs/core/helpers";
 import hash from "@adonisjs/core/services/hash";
-import { BaseModel, beforeFind, beforeSave, belongsTo, column, hasMany } from "@adonisjs/lucid/orm";
+import { BaseModel, beforeFind, belongsTo, column, hasMany } from "@adonisjs/lucid/orm";
 import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
 import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import {
@@ -90,13 +90,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
     @beforeFind()
     static autoLoadParametersFind(query: ModelQueryBuilderContract<typeof User>) {
         query.preload("choices");
-    }
-
-    @beforeSave()
-    static async hashPassword(user: User) {
-        if (user.$dirty.password) {
-            user.password = await hash.make(user.password);
-        }
     }
 
     get imageSrc() {
