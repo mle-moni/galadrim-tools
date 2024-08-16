@@ -23,6 +23,7 @@ import Notification from "./notification.js";
 import RestaurantChoice from "./restaurant_choice.js";
 import RestaurantNote from "./restaurant_note.js";
 import Theme from "./theme.js";
+import PortraitGuess from "./portrait_guess.js";
 
 const AuthFinder = withAuthFinder(() => hash.use("argon"), {
     uids: ["username", "email"],
@@ -80,6 +81,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
     @hasMany(() => Notification)
     declare notifications: HasMany<typeof Notification>;
+
+    @hasMany(() => PortraitGuess)
+    declare portraitGuesses: HasMany<typeof PortraitGuess>;
 
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime;

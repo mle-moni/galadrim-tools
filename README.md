@@ -26,11 +26,11 @@ on the backend you need to create a `.env` you can copy and modify [.env.example
 the part you will need to adapt is the database connection settings
 
 ```
-MYSQL_HOST
-MYSQL_PORT
-MYSQL_USER
-MYSQL_PASSWORD
-MYSQL_DB_NAME
+DB_HOST
+DB_PORT
+DB_USER
+DB_PASSWORD
+DB_DATABASE
 ```
 
 ## Database

@@ -6,6 +6,7 @@ import IdeaPage from "../pages/idea/IdeaPage";
 import LoadingPage from "../pages/loading/LoadingPage";
 import { RenouvArtWait } from "../reusableComponents/animations/RenouvArtWait/RenouvArtWait";
 
+const GalakiPage = React.lazy(() => import("../pages/games/galaki/GalakiPage"));
 const TournoisPage = React.lazy(() => import("../pages/games/tournois/TournoisPage"));
 const StatisticsPage = React.lazy(() => import("../pages/statistics/StatisticsPage"));
 const NotificationsSettingsPage = React.lazy(
@@ -105,6 +106,7 @@ const AppRoutes = () => {
                 <Route path="/saveur" element={<SaveurPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/games/tournois" element={<TournoisPage />} />
+                <Route path="/games/galaki" element={<GalakiPage />} />
                 <Route path="/codeNames" element={<Navigate to={"/codeNamesGame"} />} />
                 <Route path="/codeNamesGame" element={<NewCodeNamesGamePage />} />
                 <Route path="/codeNamesGame/:id" element={<CodeNamesGamePage />} />

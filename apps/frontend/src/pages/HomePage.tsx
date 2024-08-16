@@ -1,13 +1,11 @@
 import {
     AdminPanelSettings,
-    BugReport,
     CalendarMonth,
     GitHub,
     Lightbulb,
-    Pause,
     RestaurantMenu,
-    SignalWifiBad,
     VideogameAsset,
+    PsychologyAlt,
 } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -35,6 +33,7 @@ const HomePage = observer(() => {
                 <IconLink Icon={CalendarMonth} link="/rooms" title="Réservation de salles" />
                 <IconLink Icon={RestaurantMenu} link="/saveur" title="Restaurants" />
                 <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
+                <IconLink Icon={PsychologyAlt} link="/games/galaki" title="Galaki" />
                 <IconLink Icon={Lightbulb} link="/ideas" title="Boîte à idée" />
                 <IconLink
                     Icon={GitHub}

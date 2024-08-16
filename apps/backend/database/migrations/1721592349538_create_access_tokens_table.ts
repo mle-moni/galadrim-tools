@@ -24,19 +24,21 @@ export default class extends BaseSchema {
 
             this.defer(async (db) => {
                 const oldTokens = (await db.from("api_tokens")) as OldApiToken[];
-                const newTokensDto = oldTokens.map((oldToken) => ({
-                    tokenable_id: oldToken.user_id,
-                    type: "auth_token",
-                    name: null,
-                    hash: oldToken.token,
-                    abilities: JSON.stringify(["*"]),
-                    created_at: oldToken.created_at,
-                    updated_at: oldToken.created_at,
-                    last_used_at: null,
-                    expires_at: oldToken.expires_at,
-                }));
+                if (oldTokens.length > 0) {
+                    const newTokensDto = oldTokens.map((oldToken) => ({
+                        tokenable_id: oldToken.user_id,
+                        type: "auth_token",
+                        name: null,
+                        hash: oldToken.token,
+                        abilities: JSON.stringify(["*"]),
+                        created_at: oldToken.created_at,
+                        updated_at: oldToken.created_at,
+                        last_used_at: null,
+                        expires_at: oldToken.expires_at,
+                    }));
 
-                await db.table(this.tableName).multiInsert(newTokensDto);
+                    await db.table(this.tableName).multiInsert(newTokensDto);
+                }
 
                 await db.rawQuery("DROP TABLE IF EXISTS api_tokens");
             });

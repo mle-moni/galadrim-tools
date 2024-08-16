@@ -52,6 +52,7 @@ import { showRestaurantRewind } from "#controllers/restaurant_rewinds/showRestau
 import RestaurantsController from "#controllers/restaurants/RestaurantsController";
 import StatisticsController from "#controllers/statistics/StatisticsController";
 import TagsController from "#controllers/tags/TagsController";
+import PortraitGuessGameController from "#controllers/portrait_guess_game/PortraitGuessGameController";
 import { middleware } from "./kernel.js";
 
 router.get("/", async () => {
@@ -100,6 +101,7 @@ router
 
         router.post("codeNamesGames/addRound/:id", [CodeNamesGamesController, "addRound"]);
         router.resource("codeNamesGames", CodeNamesGamesController).apiOnly();
+        router.resource("portraitGuessGame", PortraitGuessGameController).apiOnly();
 
         router.resource("restaurants/:restaurantId/reviews", RestaurantReviewsController).apiOnly();
         router.get("rewind/:id?", showRestaurantRewind);
@@ -109,6 +111,7 @@ router
     })
     .use(middleware.auth({ guards: ["web", "api"] }));
 
+router.post("portraitGuessGame/refresh", [PortraitGuessGameController, "refresh"]);
 router.post("/caddyLogs", [LogsController, "storeCaddyLogs"]);
 router.post("/atopLogs", [LogsController, "storeAtopLogs"]);
 

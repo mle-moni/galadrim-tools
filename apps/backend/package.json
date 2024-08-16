@@ -71,7 +71,8 @@
         "luxon": "^3.4.4",
         "mysql2": "^3.10.3",
         "reflect-metadata": "^0.2.2",
-        "socket.io": "^4.7.5"
+        "socket.io": "^4.7.5",
+        "ts-fsrs": "^4.1.2"
     },
     "hotHook": {
         "boundaries": ["./app/controllers/**/*.ts", "./app/middleware/*.ts"]
