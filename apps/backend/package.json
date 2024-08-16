@@ -7,7 +7,7 @@
     "scripts": {
         "start": "node bin/server.js",
         "build": "node ace build",
-        "dev": "node ace serve --hmr",
+        "dev": "node ace serve --watch",
         "test": "node ace test",
         "format": "biome format --write",
         "format-check": "biome format",
@@ -71,7 +71,8 @@
         "luxon": "^3.4.4",
         "mysql2": "^3.10.3",
         "reflect-metadata": "^0.2.2",
-        "socket.io": "^4.7.5"
+        "socket.io": "^4.7.5",
+        "ts-fsrs": "^4.1.2"
     },
     "hotHook": {
         "boundaries": ["./app/controllers/**/*.ts", "./app/middleware/*.ts"]

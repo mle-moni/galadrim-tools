@@ -44,4 +44,9 @@ export default await Env.create(new URL("../", import.meta.url), {
   */
     SESSION_DRIVER: Env.schema.enum(["cookie", "memory"] as const),
     COOKIE_DOMAIN: Env.schema.string(),
+
+    /**
+     * Variable for fetching portraits
+     */
+    PORTRAIT_CARD_FETCH_URL: Env.schema.string(),
 });
