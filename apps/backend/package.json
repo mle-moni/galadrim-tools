@@ -7,7 +7,7 @@
     "scripts": {
         "start": "node bin/server.js",
         "build": "node ace build",
-        "dev": "node ace serve --hmr",
+        "dev": "node ace serve --watch",
         "test": "node ace test",
         "format": "biome format --write",
         "format-check": "biome format",

@@ -6,6 +6,7 @@ import env from "#start/env";
 import type { HttpContext } from "@adonisjs/core/http";
 import { schema } from "@adonisjs/validator";
 import { Rating } from "ts-fsrs";
+import { mapGroupBy } from "./map_group_by.js";
 
 const GradeValidationSchema = schema.create({
     guessId: schema.number(),
@@ -37,6 +38,8 @@ export default class PortraitGuessGameController {
         }
         portraitGuess.addGuess(grade);
         await portraitGuess.save();
+
+        return { message: "ok" };
     }
 
     async refresh() {
@@ -50,7 +53,7 @@ export default class PortraitGuessGameController {
             Lastname: string;
         }[];
 
-        const portraitById = Map.groupBy(existingGuessablePortraits, (p) => p.id);
+        const portraitById = mapGroupBy(existingGuessablePortraits, (p) => p.id);
 
         const upToDatePortraitGuessablesPromises = refreshPortraitCards.map(async (p) => {
             const existingPortrait = portraitById.get(p.UserId)?.at(0);
@@ -67,7 +70,7 @@ export default class PortraitGuessGameController {
         const users = await User.query().preload("portraitGuesses");
         const newGuessesToCreate = users
             .flatMap((user) => {
-                const userGuessByGuessableId = Map.groupBy(
+                const userGuessByGuessableId = mapGroupBy(
                     user.portraitGuesses,
                     (p) => p.portraitGuessableId,
                 );
@@ -82,5 +85,7 @@ export default class PortraitGuessGameController {
             .filter((e): e is PortraitGuess => e !== undefined);
 
         await PortraitGuess.createMany(newGuessesToCreate);
+
+        return { message: "database updated" };
     }
 }
