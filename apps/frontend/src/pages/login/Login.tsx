@@ -1,8 +1,9 @@
 import MailIcon from "@mui/icons-material/AlternateEmail";
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getApiUrl } from "../../api/fetch";
 import { AppStore } from "../../globalStores/AppStore";
 import { GaladrimLogo } from "../../reusableComponents/Branding/GaladrimLogo";
 import { CustomLink } from "../../reusableComponents/Core/CustomLink";
@@ -20,6 +21,10 @@ export const Login = observer(() => {
             navigate("/");
         }
     }, [authStore, navigate]);
+
+    const forestLogin = () => {
+        location.replace(`${getApiUrl()}/forestLogin`);
+    };
 
     return (
         <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600 }}>
@@ -46,6 +51,21 @@ export const Login = observer(() => {
                     sx={{ my: 2 }}
                 >
                     Se connecter
+                </Button>
+
+                <Box className="flex w-full justify-center">
+                    <Typography className="text-center">ou</Typography>
+                </Box>
+                <Button
+                    fullWidth
+                    variant="contained"
+                    type="button"
+                    size="large"
+                    sx={{ my: 2 }}
+                    onClick={forestLogin}
+                    color="info"
+                >
+                    Se connecter avec Forest
                 </Button>
                 <CustomLink to="/getOtp">Mot de passe oublié ?</CustomLink>
             </form>

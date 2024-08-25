@@ -1,5 +1,6 @@
 import type { HttpContext } from "@adonisjs/core/http";
 import { changePasswordRoute } from "./changePassword.js";
+import { forestLoginRoute } from "./forest_login.js";
 import { createApiTokenRoute } from "./getApiToken.js";
 import { getOtpRoute } from "./getOtp.js";
 import { loginRoute } from "./login.js";
@@ -13,6 +14,10 @@ import { updateThemeRoute } from "./updateTheme.js";
 export default class AuthController {
     public async login(params: HttpContext) {
         return loginRoute(params);
+    }
+
+    public async forestLogin(params: HttpContext) {
+        return forestLoginRoute(params);
     }
 
     public async logout(params: HttpContext) {

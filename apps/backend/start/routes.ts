@@ -60,6 +60,7 @@ router.get("/", async () => {
 });
 
 router.post("/login", [AuthController, "login"]);
+router.get("/forestLogin", [AuthController, "forestLogin"]);
 router.post("/getOtp", [AuthController, "getOtp"]);
 
 router

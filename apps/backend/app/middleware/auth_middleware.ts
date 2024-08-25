@@ -1,4 +1,3 @@
-import { getUserToAuthenticate } from "#services/galadrim_auth";
 import type { Authenticators } from "@adonisjs/auth/types";
 import type { HttpContext } from "@adonisjs/core/http";
 import type { NextFn } from "@adonisjs/core/types/http";
@@ -20,15 +19,7 @@ export default class AuthMiddleware {
             guards?: (keyof Authenticators)[];
         } = {},
     ) {
-        try {
-            await ctx.auth.authenticateUsing(options.guards, { loginRoute: this.redirectTo });
-        } catch (error) {
-            const user = await getUserToAuthenticate(ctx);
-
-            if (!user) throw error;
-
-            await ctx.auth.use("web").login(user, true);
-        }
+        await ctx.auth.authenticateUsing(options.guards, { loginRoute: this.redirectTo });
 
         return next();
     }

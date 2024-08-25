@@ -45,6 +45,13 @@ export default await Env.create(new URL("../", import.meta.url), {
     SESSION_DRIVER: Env.schema.enum(["cookie", "memory"] as const),
     COOKIE_DOMAIN: Env.schema.string(),
 
+    CORS_ORIGINS: Env.schema.string(),
+    CACHE_VIEWS: Env.schema.boolean(),
+    GALADRIM_SECRET_KEY: Env.schema.string(),
+
+    BACKEND_URL: Env.schema.string({ format: "url", tld: false }),
+    FRONTEND_URL: Env.schema.string({ format: "url", tld: false }),
+
     /**
      * Variable for fetching portraits
      */
