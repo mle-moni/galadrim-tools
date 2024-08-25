@@ -46,13 +46,13 @@ import IdeasController from "#controllers/ideas/IdeasController";
 import LogsController from "#controllers/logs/LogsController";
 import MatricesController from "#controllers/matrices/MatricesController";
 import PlatformerResultsController from "#controllers/platformer_results/PlatformerResultsController";
+import PortraitGuessGameController from "#controllers/portrait_guess_game/PortraitGuessGameController";
 import RestaurantNotesController from "#controllers/restaurant_notes/RestaurantNotesController";
 import RestaurantReviewsController from "#controllers/restaurant_reviews/RestaurantReviewsController";
 import { showRestaurantRewind } from "#controllers/restaurant_rewinds/showRestaurantRewind";
 import RestaurantsController from "#controllers/restaurants/RestaurantsController";
 import StatisticsController from "#controllers/statistics/StatisticsController";
 import TagsController from "#controllers/tags/TagsController";
-import PortraitGuessGameController from "#controllers/portrait_guess_game/PortraitGuessGameController";
 import { middleware } from "./kernel.js";
 
 router.get("/", async () => {
@@ -60,11 +60,12 @@ router.get("/", async () => {
 });
 
 router.post("/login", [AuthController, "login"]);
-router.post("/logout", [AuthController, "logout"]);
 router.post("/getOtp", [AuthController, "getOtp"]);
 
 router
     .group(() => {
+        router.post("/logout", [AuthController, "logout"]);
+
         router.resource("events", EventsController).apiOnly();
         router.get("/allEvents", [EventsController, "all"]);
         router.get("/availableRooms", [EventsController, "availableRooms"]);
