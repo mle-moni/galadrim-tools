@@ -18,6 +18,6 @@ import { ROOMS_VIEWS } from "./rooms_folder_views.js";
  */
 
 export const ADOMIN_CONFIG: AdominConfig = {
-    title: "Your Backoffice Title",
+    title: "Galadrim Tools",
     views: [ROOMS_VIEWS],
 };
