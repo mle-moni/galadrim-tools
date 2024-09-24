@@ -28,3 +28,15 @@ export interface DashboardInfos {
     loadAverage5: number;
     loadAverage15: number;
 }
+
+export interface OfficeConfig {
+    width: number;
+    height: number;
+}
+
+export interface OfficeRoomConfig {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+}
