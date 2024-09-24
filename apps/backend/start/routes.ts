@@ -7,6 +7,7 @@
 |
 */
 
+import "#adomin/routes/adomin_router";
 import router from "@adonisjs/core/services/router";
 
 /*

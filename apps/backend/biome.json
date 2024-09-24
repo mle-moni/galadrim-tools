@@ -2,6 +2,6 @@
     "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
     "extends": ["../../biome.json"],
     "files": {
-        "ignore": ["public", "tmp", "build", "node_modules"]
+        "ignore": ["public", "tmp", "build", "node_modules", "app/adomin"]
     }
 }
