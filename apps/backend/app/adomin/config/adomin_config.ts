@@ -1,4 +1,5 @@
-import type { AdominConfig } from '#adomin/adomin_config.types'
+import type { AdominConfig } from "#adomin/adomin_config.types";
+import { ROOMS_VIEWS } from "./rooms_folder_views.js";
 
 /**
  * This file will contain your Adomin Config
@@ -17,6 +18,6 @@ import type { AdominConfig } from '#adomin/adomin_config.types'
  */
 
 export const ADOMIN_CONFIG: AdominConfig = {
-  title: 'Your Backoffice Title',
-  views: [],
-}
+    title: "Your Backoffice Title",
+    views: [ROOMS_VIEWS],
+};

@@ -16,7 +16,10 @@ export default class extends BaseSchema {
 
             table.string("name").notNullable();
 
-            table.json("config").notNullable();
+            table
+                .json("config")
+                .notNullable()
+                .defaultTo(`{"width": 100, "height": 100, "x": 0, "y": 0}`);
 
             table.timestamp("created_at");
             table.timestamp("updated_at");

@@ -9,7 +9,7 @@ export default class extends BaseSchema {
 
             table.integer("floor").notNullable();
 
-            table.json("config").notNullable();
+            table.json("config").notNullable().defaultTo(`{"width": 100, "height": 100}`);
 
             table
                 .integer("office_id")
@@ -20,6 +20,8 @@ export default class extends BaseSchema {
 
             table.timestamp("created_at");
             table.timestamp("updated_at");
+
+            table.unique(["office_id", "floor"]);
         });
     }
 
