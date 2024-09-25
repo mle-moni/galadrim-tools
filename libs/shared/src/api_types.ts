@@ -29,14 +29,8 @@ export interface DashboardInfos {
     loadAverage15: number;
 }
 
-export interface OfficeConfig {
-    width: number;
-    height: number;
-}
-
-export interface OfficeRoomConfig {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
+export interface ModelBase {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
 }

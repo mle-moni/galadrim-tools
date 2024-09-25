@@ -6,6 +6,7 @@ import IdeaPage from "../pages/idea/IdeaPage";
 import LoadingPage from "../pages/loading/LoadingPage";
 import { RenouvArtWait } from "../reusableComponents/animations/RenouvArtWait/RenouvArtWait";
 
+const OfficeRoomsPage = React.lazy(() => import("../pages/office-rooms/OfficeRoomsPage"));
 const GalakiPage = React.lazy(() => import("../pages/games/galaki/GalakiPage"));
 const TournoisPage = React.lazy(() => import("../pages/games/tournois/TournoisPage"));
 const StatisticsPage = React.lazy(() => import("../pages/statistics/StatisticsPage"));
@@ -93,6 +94,16 @@ const AppRoutes = () => {
                 <Route path="/admin/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/rooms" element={<RoomsHomePage />} />
+                <Route path="/office-rooms" element={<OfficeRoomsPage />} />
+                <Route path="/office-rooms/:officeId" element={<OfficeRoomsPage />} />
+                <Route
+                    path="/office-rooms/:officeId/:officeFloorId"
+                    element={<OfficeRoomsPage />}
+                />
+                <Route
+                    path="/office-rooms/:officeId/:officeFloorId/:officeRoomId"
+                    element={<OfficeRoomsPage />}
+                />
                 <Route path="/rooms/statistics" element={<StatisticsPage />} />
                 <Route path="room" element={<RoomPage />}>
                     <Route path=":roomName" element={<RoomPage />} />

@@ -66,15 +66,9 @@ export const galadrimDecrypt = (encryptedData: string): string | null => {
 
 const getUserEmailFromGaladrimCookie = async ({ request }: HttpContext) => {
     const emailCookie: string | null = request.cookiesList()["email-token"];
-
-    console.log("emailCookie", emailCookie);
-
     if (!emailCookie) return null;
     try {
         const email = galadrimDecrypt(emailCookie);
-
-        console.log("email decrypted", email);
-
         return email;
     } catch (error) {
         return null;
@@ -114,8 +108,6 @@ export const getUserToAuthenticate = async (ctx: HttpContext) => {
     if (!email) return null;
 
     const user = await User.findBy("email", email);
-
-    console.log("user found", user?.email);
 
     if (user) return user;
 

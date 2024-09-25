@@ -1,4 +1,4 @@
-import type { IRestaurant } from "../saveur";
+import type { IRestaurant } from "./saveur";
 
 export interface INotification {
     id: number;

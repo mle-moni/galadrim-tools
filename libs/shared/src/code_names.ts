@@ -1,4 +1,4 @@
-import type { IImage } from "../saveur";
+import type { IImage } from "./saveur";
 
 export type Matrix2d = {
     red: number[];

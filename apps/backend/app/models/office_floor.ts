@@ -1,6 +1,6 @@
 import { BaseModel, belongsTo, column, computed } from "@adonisjs/lucid/orm";
 import type { BelongsTo } from "@adonisjs/lucid/types/relations";
-import type { OfficeConfig } from "@galadrim-tools/shared";
+import type { OfficeFloorConfig } from "@galadrim-tools/shared";
 import type { DateTime } from "luxon";
 import Office from "./office.js";
 
@@ -18,7 +18,7 @@ export default class OfficeFloor extends BaseModel {
     declare floor: number;
 
     @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
-    declare config: OfficeConfig;
+    declare config: OfficeFloorConfig;
 
     @computed()
     get computedName() {

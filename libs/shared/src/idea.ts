@@ -1,4 +1,4 @@
-import type { IUserData } from "../user";
+import type { IUserData } from "./user";
 
 export interface IIdeaComment {
     id: number;

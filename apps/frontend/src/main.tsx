@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import React, { type FC, type PropsWithChildren } from "react";
 import { createRoot } from "react-dom/client";
@@ -14,6 +15,7 @@ const SnackBarSetter: FC<PropsWithChildren<unknown>> = ({ children }) => {
     AppStore.notification.setMethods(snackbarMethods);
     return <>{children}</>;
 };
+const queryClient = new QueryClient();
 
 const container = document.getElementById("root");
 
@@ -24,7 +26,9 @@ root.render(
         <ThemeProvider theme={theme}>
             <SnackbarProvider>
                 <SnackBarSetter>
-                    <MainRouter />
+                    <QueryClientProvider client={queryClient}>
+                        <MainRouter />
+                    </QueryClientProvider>
                 </SnackBarSetter>
             </SnackbarProvider>
         </ThemeProvider>
