@@ -13,7 +13,7 @@ export const useCanvasSize = () => {
 
 /** get canvas size to keep 16:9 ratio */
 const getCanvasSize = (windowWidth: number, windowHeight: number) => {
-    const maxHeight = Math.floor(windowHeight * 0.8);
+    const maxHeight = Math.floor(windowHeight - 450);
 
     const canvasWidth = Math.floor(windowWidth * 0.8);
     const canvasHeight = Math.floor(canvasWidth * (9 / 16));

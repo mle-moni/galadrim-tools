@@ -1,4 +1,5 @@
 import type { ApiOfficeRoom } from "@galadrim-tools/shared";
+import { themeColors } from "../../theme";
 
 export class OfficeFloorStore {
     private canvas: HTMLCanvasElement | null = null;
@@ -35,17 +36,17 @@ export class OfficeFloorStore {
         this.drawRooms();
 
         if (this.selectedRoom) {
-            this.drawRoom(this.selectedRoom, "#f00");
+            this.drawRoom(this.selectedRoom, themeColors.error.main);
         }
 
         this.animationFrame = window.requestAnimationFrame(this.draw.bind(this));
     }
 
     drawRooms() {
-        this.rooms.forEach((room) => this.drawRoom(room));
+        this.rooms.forEach((room) => this.drawRoom(room, themeColors.secondary.dark));
     }
 
-    drawRoom(rawRoom: ApiOfficeRoom, fillStyle = "#00f") {
+    drawRoom(rawRoom: ApiOfficeRoom, fillStyle: string) {
         if (!this.ctx || !this.canvas) return;
         const roomConfig = getApiOfficeRoomConfig(rawRoom, this.canvas);
 

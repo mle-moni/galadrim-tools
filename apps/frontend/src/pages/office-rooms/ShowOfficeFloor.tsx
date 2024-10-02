@@ -1,4 +1,5 @@
 import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
+import { Typography } from "@mui/material";
 import { useEffect } from "react";
 import { OfficeFloorStore } from "./OfficeFloorStore";
 import { useCanvasSize } from "./useCanvasSize";
@@ -33,7 +34,7 @@ export const ShowOfficeFloor = ({ rooms, selectedRoom, selectedOfficeFloor }: Pa
                 flexDirection: "column",
             }}
         >
-            <h2>Étage {selectedOfficeFloor.floor}</h2>
+            <Typography style={{ fontSize: 26 }}>Étage {selectedOfficeFloor.floor}</Typography>
             <canvas
                 style={{
                     borderRadius: 4,
