@@ -27,18 +27,22 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
         },
     });
 
-    const options = useMemo(() => {
-        if (!query.data) return [NO_ID_OPTION];
+    const officeRooms = useMemo(() => {
+        if (!query.data) return [];
 
-        const options = query.data.data
-            .filter((o) => o.officeFloorId === selectedFloor?.id)
-            .map((o) => ({
-                label: `étage ${selectedFloor?.floor} ${o.name}`,
-                value: o.id,
-            }));
+        const officeRooms = query.data.data.filter((o) => o.officeFloorId === selectedFloor?.id);
 
-        return options;
+        return officeRooms;
     }, [query.data, selectedFloor]);
+
+    const options = useMemo(() => {
+        if (officeRooms.length === 0) return [NO_ID_OPTION];
+
+        return officeRooms.map((o) => ({
+            label: `étage ${selectedFloor?.floor} ${o.name}`,
+            value: o.id,
+        }));
+    }, [officeRooms, selectedFloor]);
 
     const selected = useMemo(() => {
         if (!query.data) return null;
@@ -61,6 +65,7 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
     };
 
     return {
+        officeRooms,
         officeRoomsOptions: options,
         selectedOfficeRoom: selected,
         selectedOfficeRoomId: selected?.id ?? NO_ID,

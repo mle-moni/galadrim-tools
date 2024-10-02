@@ -82,6 +82,13 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             type: "string",
             label: "Nom",
         },
+        // TODO remove this hack (e.g. by using a JSON column type)
+        config: {
+            type: "file",
+            subType: "custom",
+            createFile: async () => {},
+            deleteFile: async () => {},
+        },
         officeFloor: {
             type: "belongsToRelation",
             label: "Etage",

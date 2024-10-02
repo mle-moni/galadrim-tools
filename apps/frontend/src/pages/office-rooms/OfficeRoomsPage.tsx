@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
+import { ShowOfficeFloor } from "./ShowOfficeFloor";
 import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
 import { useOfficeRoomSelect } from "./useOfficeRoomSelect";
 import { useOfficeSelect } from "./useOfficeSelect";
@@ -14,7 +15,7 @@ export const OfficeRoomsPage = () => {
     const { officesOptions, selectedOffice, setSelectedOfficeFromId } = useOfficeSelect();
     const { officeFloorsOptions, selectedOfficeFloor, setSelectedOfficeFloorFromId } =
         useOfficeFloorSelect(selectedOffice);
-    const { officeRoomsOptions, selectedOfficeRoom, setSelectedOfficeRoomFromId } =
+    const { officeRooms, officeRoomsOptions, selectedOfficeRoom, setSelectedOfficeRoomFromId } =
         useOfficeRoomSelect(selectedOfficeFloor);
 
     return (
@@ -50,6 +51,7 @@ export const OfficeRoomsPage = () => {
                     sx={{
                         display: "flex",
                         width: "100%",
+                        minHeight: "100px",
                         justifyContent: "center",
                         alignItems: "center",
                         gap: 2,
@@ -81,6 +83,13 @@ export const OfficeRoomsPage = () => {
                             />
                         ))}
                 </Box>
+                {selectedOfficeFloor && (
+                    <ShowOfficeFloor
+                        selectedOfficeFloor={selectedOfficeFloor}
+                        rooms={officeRooms}
+                        selectedRoom={selectedOfficeRoom}
+                    />
+                )}
             </Box>
         </MainLayout>
     );
