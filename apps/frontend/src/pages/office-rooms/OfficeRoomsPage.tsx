@@ -83,8 +83,9 @@ export const OfficeRoomsPage = () => {
                             />
                         ))}
                 </Box>
-                {selectedOfficeFloor && (
+                {selectedOffice && selectedOfficeFloor && (
                     <ShowOfficeFloor
+                        selectedOffice={selectedOffice}
                         selectedOfficeFloor={selectedOfficeFloor}
                         rooms={officeRooms}
                         selectedRoom={selectedOfficeRoom}
