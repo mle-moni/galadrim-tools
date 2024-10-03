@@ -36,6 +36,13 @@ export const ShowOfficeFloor = ({ rooms, selectedRoom, selectedOfficeFloor }: Pa
         >
             <Typography style={{ fontSize: 26 }}>Étage {selectedOfficeFloor.floor}</Typography>
             <canvas
+                onMouseMove={(event) => {
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    const mouseX = event.clientX - rect.left;
+                    const mouseY = event.clientY - rect.top;
+
+                    officeFloorStore.setMousePosition(mouseX, mouseY);
+                }}
                 style={{
                     borderRadius: 4,
                     borderStyle: "solid",

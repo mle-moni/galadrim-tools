@@ -1,15 +1,14 @@
 import type { ModelBase } from "./api_types";
 
-export interface OfficeFloorConfig {
-    width: number;
-    height: number;
+export type OfficeFloorConfig = unknown;
+
+export interface RoomPoint {
+    x: number;
+    y: number;
 }
 
 export interface OfficeRoomConfig {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
+    points: RoomPoint[];
 }
 
 export interface ApiOffice extends ModelBase {

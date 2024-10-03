@@ -1,5 +1,6 @@
-import type { ApiOfficeRoom } from "@galadrim-tools/shared";
+import type { ApiOfficeRoom, RoomPoint } from "@galadrim-tools/shared";
 import { themeColors } from "../../theme";
+import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 
 export class OfficeFloorStore {
     private canvas: HTMLCanvasElement | null = null;
@@ -7,6 +8,7 @@ export class OfficeFloorStore {
     private animationFrame: number | null = null;
     private rooms: ApiOfficeRoom[] = [];
     private selectedRoom: ApiOfficeRoom | null = null;
+    private mousePosition: RoomPoint = { x: 0, y: 0 };
 
     setup(canvas: HTMLCanvasElement | null) {
         this.canvas = canvas;
@@ -43,44 +45,51 @@ export class OfficeFloorStore {
     }
 
     drawRooms() {
-        this.rooms.forEach((room) => this.drawRoom(room, themeColors.secondary.dark));
+        this.rooms.forEach((room) => {
+            if (room.id === this.roomHovered?.id) {
+                this.drawRoom(room, themeColors.secondary.dark);
+            } else {
+                this.drawRoom(room, themeColors.secondary.main);
+            }
+        });
     }
 
-    drawRoom(rawRoom: ApiOfficeRoom, fillStyle: string) {
-        if (!this.ctx || !this.canvas) return;
-        const roomConfig = getApiOfficeRoomConfig(rawRoom, this.canvas);
+    drawRoom(room: ApiOfficeRoom, fillStyle: string) {
+        const ctx = this.ctx;
+        const canvas = this.canvas;
+        if (!ctx || !canvas) return;
+        const roomPoints = room.config.points.map((point) => getCanvasCoordinates(point, canvas));
 
-        this.ctx.fillStyle = fillStyle;
-        this.ctx.fillRect(roomConfig.x, roomConfig.y, roomConfig.width, roomConfig.height);
+        ctx.fillStyle = fillStyle;
+
+        ctx.beginPath();
+        roomPoints.forEach((point, index) => {
+            if (index === 0) {
+                ctx.moveTo(point.x, point.y);
+            } else {
+                ctx.lineTo(point.x, point.y);
+            }
+        });
+        ctx.fill();
+
+        ctx.closePath();
+    }
+
+    setMousePosition(x: number, y: number) {
+        if (!this.canvas) return;
+        this.mousePosition = { x, y };
+    }
+
+    get roomHovered() {
+        return this.rooms.find((room) => this.isPointInRoom(room, this.mousePosition)) ?? null;
+    }
+
+    isPointInRoom(room: ApiOfficeRoom, pointInCanvasCoordinates: RoomPoint): boolean {
+        const canvas = this.canvas;
+        if (!canvas) return false;
+        const roomPoints = room.config.points.map((p) => getCanvasCoordinates(p, canvas));
+        const isInside = isPointInPolygon(pointInCanvasCoordinates, roomPoints);
+
+        return isInside;
     }
 }
-
-/**
- * transform the positions / dimensions of the room to fit the canvas
- * positions are given as 1980x1080 pixels
- * but canvas can be any size with the same ratio (16:9)
- * so we need to scale the room config to fit the canvas
- */
-const getApiOfficeRoomConfig = (room: ApiOfficeRoom, canvas: HTMLCanvasElement) => {
-    const baseWidth = 1980;
-    const baseHeight = 1080;
-    const actualWidth = canvas.width;
-    const actualHeight = canvas.height;
-
-    const widthRatio = actualWidth / baseWidth;
-    const heightRatio = actualHeight / baseHeight;
-
-    const roomWidth = room.config.width * widthRatio;
-    const roomHeight = room.config.height * heightRatio;
-
-    const x = room.config.x * widthRatio;
-    const y = room.config.y * heightRatio;
-
-    return {
-        ...room.config,
-        width: roomWidth,
-        height: roomHeight,
-        x,
-        y,
-    };
-};
