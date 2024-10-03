@@ -4,13 +4,10 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchBackendJson } from "../../api/fetch";
 
-const NO_ID = 0;
-const NO_ID_OPTION = { label: "Aucun", value: NO_ID };
-
 export const useOfficeFloorSelect = (selectedOffice: ApiOffice | null) => {
     const navigate = useNavigate();
     const { officeId, officeFloorId: officeFloorIdRaw } = useParams();
-    const officeFloorId = Number(officeFloorIdRaw ?? NO_ID);
+    const officeFloorId = officeFloorIdRaw ? Number(officeFloorIdRaw) : null;
     const query = useQuery({
         queryKey: ["office-floors"],
         queryFn: async () => {
@@ -28,7 +25,7 @@ export const useOfficeFloorSelect = (selectedOffice: ApiOffice | null) => {
     });
 
     const options = useMemo(() => {
-        if (!query.data) return [NO_ID_OPTION];
+        if (!query.data) return [];
 
         const options = query.data.data
             .filter((o) => o.officeId === selectedOffice?.id)
@@ -63,7 +60,7 @@ export const useOfficeFloorSelect = (selectedOffice: ApiOffice | null) => {
     return {
         officeFloorsOptions: options,
         selectedOfficeFloor: selected,
-        selectedOfficeFloorId: selected?.id ?? NO_ID,
+        selectedOfficeFloorId: selected?.id ?? null,
         setSelectedOfficeFloorFromId: setSelectedFromId,
     };
 };

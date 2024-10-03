@@ -4,13 +4,10 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchBackendJson } from "../../api/fetch";
 
-const NO_OFFICE_ID = 0;
-const NO_OFFICE_OPTION = { label: "Aucun", value: NO_OFFICE_ID };
-
 export const useOfficeSelect = () => {
     const navigate = useNavigate();
     const { officeId: officeIdRaw } = useParams();
-    const officeId = Number(officeIdRaw ?? NO_OFFICE_ID);
+    const officeId = officeIdRaw ? Number(officeIdRaw) : null;
     const officesQuery = useQuery({
         queryKey: ["offices"],
         queryFn: async () => {
@@ -28,7 +25,7 @@ export const useOfficeSelect = () => {
     });
 
     const officesOptions = useMemo(() => {
-        if (!officesQuery.data) return [NO_OFFICE_OPTION];
+        if (!officesQuery.data) return [];
 
         const options = officesQuery.data.data.map((office) => ({
             label: office.name,
@@ -61,7 +58,7 @@ export const useOfficeSelect = () => {
     return {
         officesOptions,
         selectedOffice,
-        selectedOfficeId: officeId,
+        selectedOfficeId: selectedOffice?.id ?? null,
         setSelectedOfficeFromId,
     };
 };

@@ -4,13 +4,10 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchBackendJson } from "../../api/fetch";
 
-const NO_ID = 0;
-const NO_ID_OPTION = { label: "Aucun", value: NO_ID };
-
 export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
     const navigate = useNavigate();
     const { officeId, officeFloorId, officeRoomId: officeRoomIdRaw } = useParams();
-    const officeRoomId = Number(officeRoomIdRaw ?? NO_ID);
+    const officeRoomId = officeRoomIdRaw ? Number(officeRoomIdRaw) : null;
     const query = useQuery({
         queryKey: ["office-rooms"],
         queryFn: async () => {
@@ -36,7 +33,7 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
     }, [query.data, selectedFloor]);
 
     const options = useMemo(() => {
-        if (officeRooms.length === 0) return [NO_ID_OPTION];
+        if (officeRooms.length === 0) return [];
 
         return officeRooms.map((o) => ({
             label: `étage ${selectedFloor?.floor} ${o.name}`,
@@ -68,7 +65,7 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
         officeRooms,
         officeRoomsOptions: options,
         selectedOfficeRoom: selected,
-        selectedOfficeRoomId: selected?.id ?? NO_ID,
+        selectedOfficeRoomId: selected?.id ?? null,
         setSelectedOfficeRoomFromId: setSelectedFromId,
     };
 };

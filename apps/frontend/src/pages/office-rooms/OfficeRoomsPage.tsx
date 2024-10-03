@@ -28,7 +28,7 @@ export const OfficeRoomsPage = () => {
                 }}
             >
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <Breadcrumbs sx={{}}>
+                    <Breadcrumbs>
                         {selectedOffice && (
                             <Link style={LINK_STYLE} to={`/office-rooms/${selectedOffice.id}`}>
                                 {selectedOffice.name}
