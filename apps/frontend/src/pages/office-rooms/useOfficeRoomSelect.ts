@@ -36,10 +36,10 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
         if (officeRooms.length === 0) return [];
 
         return officeRooms.map((o) => ({
-            label: `étage ${selectedFloor?.floor} ${o.name}`,
+            label: o.name,
             value: o.id,
         }));
-    }, [officeRooms, selectedFloor]);
+    }, [officeRooms]);
 
     const selected = useMemo(() => {
         if (!query.data) return null;
@@ -67,5 +67,6 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
         selectedOfficeRoom: selected,
         selectedOfficeRoomId: selected?.id ?? null,
         setSelectedOfficeRoomFromId: setSelectedFromId,
+        nonFilteredOfficeRooms: query.data?.data ?? [],
     };
 };

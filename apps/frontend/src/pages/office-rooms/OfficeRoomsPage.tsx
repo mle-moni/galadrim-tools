@@ -13,10 +13,15 @@ const LINK_STYLE: CSSProperties = { color: "black", textDecoration: "none", font
 
 export const OfficeRoomsPage = () => {
     const { officesOptions, selectedOffice, setSelectedOfficeFromId } = useOfficeSelect();
-    const { officeFloorsOptions, selectedOfficeFloor, setSelectedOfficeFloorFromId } =
+    const { officeFloors, officeFloorsOptions, selectedOfficeFloor, setSelectedOfficeFloorFromId } =
         useOfficeFloorSelect(selectedOffice);
-    const { officeRooms, officeRoomsOptions, selectedOfficeRoom, setSelectedOfficeRoomFromId } =
-        useOfficeRoomSelect(selectedOfficeFloor);
+    const {
+        officeRooms,
+        officeRoomsOptions,
+        selectedOfficeRoom,
+        setSelectedOfficeRoomFromId,
+        nonFilteredOfficeRooms,
+    } = useOfficeRoomSelect(selectedOfficeFloor);
 
     return (
         <MainLayout fullscreen>
@@ -90,6 +95,20 @@ export const OfficeRoomsPage = () => {
                         rooms={officeRooms}
                         selectedRoom={selectedOfficeRoom}
                     />
+                )}
+                {selectedOffice && !selectedOfficeFloor && (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        {officeFloors.map((officeFloor) => (
+                            <ShowOfficeFloor
+                                key={officeFloor.id}
+                                selectedOffice={selectedOffice}
+                                selectedOfficeFloor={officeFloor}
+                                rooms={nonFilteredOfficeRooms}
+                                selectedRoom={selectedOfficeRoom}
+                                numberOfFloors={officeFloors.length}
+                            />
+                        ))}
+                    </Box>
                 )}
             </Box>
         </MainLayout>

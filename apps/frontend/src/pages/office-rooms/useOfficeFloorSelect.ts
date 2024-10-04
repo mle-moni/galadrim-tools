@@ -24,18 +24,24 @@ export const useOfficeFloorSelect = (selectedOffice: ApiOffice | null) => {
         },
     });
 
-    const options = useMemo(() => {
+    const officeFloors = useMemo(() => {
         if (!query.data) return [];
 
-        const options = query.data.data
-            .filter((o) => o.officeId === selectedOffice?.id)
-            .map((o) => ({
-                label: `${selectedOffice?.name ?? ""} étage ${o.floor}`,
-                value: o.id,
-            }));
+        const officeFloors = query.data.data.filter((o) => o.officeId === selectedOffice?.id);
+
+        return officeFloors;
+    }, [query.data, selectedOffice]);
+
+    const options = useMemo(() => {
+        if (officeFloors.length === 0) return [];
+
+        const options = officeFloors.map((o) => ({
+            label: `${selectedOffice?.name ?? ""} étage ${o.floor}`,
+            value: o.id,
+        }));
 
         return options;
-    }, [query.data, selectedOffice]);
+    }, [officeFloors, selectedOffice]);
 
     const selected = useMemo(() => {
         if (!query.data) return null;
@@ -58,6 +64,7 @@ export const useOfficeFloorSelect = (selectedOffice: ApiOffice | null) => {
     };
 
     return {
+        officeFloors,
         officeFloorsOptions: options,
         selectedOfficeFloor: selected,
         selectedOfficeFloorId: selected?.id ?? null,

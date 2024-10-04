@@ -1,14 +1,17 @@
 import { useMemo } from "react";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
-export const useCanvasSize = () => {
+export const useCanvasSize = (numberOfFloors: number) => {
     const { width, height } = useWindowDimensions();
     const { canvasWidth, canvasHeight } = useMemo(
         () => getCanvasSize(width, height),
         [width, height],
     );
 
-    return { canvasWidth, canvasHeight };
+    return {
+        canvasWidth: canvasWidth / numberOfFloors,
+        canvasHeight: canvasHeight / numberOfFloors,
+    };
 };
 
 /** get canvas size to keep 16:9 ratio */

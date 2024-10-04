@@ -1,33 +1,38 @@
 import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 import { Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { OfficeFloorStore } from "./OfficeFloorStore";
+import { getDbCoordinates } from "./coordinatesHelper";
 import { useCanvasSize } from "./useCanvasSize";
-
-const officeFloorStore = new OfficeFloorStore();
 
 interface Params {
     selectedRoom: ApiOfficeRoom | null;
     rooms: ApiOfficeRoom[];
     selectedOfficeFloor: ApiOfficeFloor;
     selectedOffice: ApiOffice;
+    numberOfFloors?: number;
 }
 
 export const ShowOfficeFloor = observer(
-    ({ rooms, selectedRoom, selectedOfficeFloor, selectedOffice }: Params) => {
+    ({ rooms, selectedRoom, selectedOfficeFloor, selectedOffice, numberOfFloors = 1 }: Params) => {
+        const officeFloorStore = useRef(new OfficeFloorStore()).current;
         const navigate = useNavigate();
-        const { canvasWidth, canvasHeight } = useCanvasSize();
+        const { canvasWidth, canvasHeight } = useCanvasSize(numberOfFloors);
         const [roomHoveredName, setRoomHoveredName] = useState<string | null>(null);
+        const filteredRooms = useMemo(
+            () => rooms.filter(({ officeFloorId }) => officeFloorId === selectedOfficeFloor.id),
+            [rooms, selectedOfficeFloor],
+        );
 
         useEffect(() => {
-            officeFloorStore.setRooms(rooms);
-        }, [rooms]);
+            officeFloorStore.setRooms(filteredRooms);
+        }, [filteredRooms, officeFloorStore]);
 
         useEffect(() => {
             officeFloorStore.setSelectedRoom(selectedRoom);
-        }, [selectedRoom]);
+        }, [selectedRoom, officeFloorStore]);
 
         return (
             <div
@@ -60,6 +65,10 @@ export const ShowOfficeFloor = observer(
                         const rect = event.currentTarget.getBoundingClientRect();
                         const mouseX = event.clientX - rect.left;
                         const mouseY = event.clientY - rect.top;
+
+                        console.log(
+                            getDbCoordinates({ x: mouseX, y: mouseY }, event.currentTarget),
+                        );
 
                         officeFloorStore.setMousePosition(mouseX, mouseY);
                         if (!officeFloorStore.roomHovered) return;
