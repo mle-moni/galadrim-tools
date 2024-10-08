@@ -1,8 +1,9 @@
-import { BaseModel, belongsTo, column, computed } from "@adonisjs/lucid/orm";
-import type { BelongsTo } from "@adonisjs/lucid/types/relations";
+import { BaseModel, belongsTo, column, computed, hasMany } from "@adonisjs/lucid/orm";
+import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { OfficeFloorConfig } from "@galadrim-tools/shared";
 import type { DateTime } from "luxon";
 import Office from "./office.js";
+import OfficeRoom from "./office_room.js";
 
 export default class OfficeFloor extends BaseModel {
     @column({ isPrimary: true })
@@ -31,4 +32,7 @@ export default class OfficeFloor extends BaseModel {
 
     @column.dateTime({ autoCreate: true, autoUpdate: true })
     declare updatedAt: DateTime;
+
+    @hasMany(() => OfficeRoom)
+    declare rooms: HasMany<typeof OfficeRoom>;
 }
