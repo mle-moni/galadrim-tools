@@ -1,4 +1,4 @@
-import { BaseModel, belongsTo, column } from "@adonisjs/lucid/orm";
+import { BaseModel, belongsTo, column, computed } from "@adonisjs/lucid/orm";
 import type { BelongsTo } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
 import OfficeRoom from "./office_room.js";
@@ -9,7 +9,7 @@ export default class RoomReservation extends BaseModel {
     declare id: number;
 
     @column()
-    declare title: string;
+    declare title: string | null;
 
     @column.dateTime()
     declare start: DateTime;
@@ -26,8 +26,13 @@ export default class RoomReservation extends BaseModel {
     @column()
     declare userId: number;
 
-    @belongsTo(() => User)
+    @belongsTo(() => User, { serializeAs: null })
     declare user: BelongsTo<typeof User>;
+
+    @computed()
+    get titleComputed() {
+        return this.title ?? this.user?.username ?? "Anonyme";
+    }
 
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime;

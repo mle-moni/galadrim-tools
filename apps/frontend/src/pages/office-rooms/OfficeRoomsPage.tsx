@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
 import { ShowOfficeFloor } from "./ShowOfficeFloor";
+import { OfficeRoomCalendar } from "./calendar/OfficeRoomCalendar";
 import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
 import { useOfficeRoomSelect } from "./useOfficeRoomSelect";
 import { useOfficeSelect } from "./useOfficeSelect";
@@ -88,12 +89,20 @@ export const OfficeRoomsPage = () => {
                             />
                         ))}
                 </Box>
-                {selectedOffice && selectedOfficeFloor && (
+                {selectedOffice && selectedOfficeFloor && !selectedOfficeRoom && (
                     <ShowOfficeFloor
                         selectedOffice={selectedOffice}
                         selectedOfficeFloor={selectedOfficeFloor}
                         rooms={officeRooms}
                         selectedRoom={selectedOfficeRoom}
+                    />
+                )}
+                {selectedOffice && selectedOfficeFloor && selectedOfficeRoom && (
+                    <OfficeRoomCalendar
+                        step={15}
+                        officeRooms={officeRooms}
+                        officeId={selectedOffice.id}
+                        isAbsolute={false}
                     />
                 )}
                 {selectedOffice && !selectedOfficeFloor && (

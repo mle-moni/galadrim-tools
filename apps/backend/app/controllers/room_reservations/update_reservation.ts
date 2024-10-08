@@ -7,8 +7,8 @@ import { DateTime } from "luxon";
 const validationSchema = vine.compile(
     vine.object({
         title: vine.string().trim(),
-        start: vine.date(),
-        end: vine.date(),
+        start: vine.date({ formats: { utc: true } }),
+        end: vine.date({ formats: { utc: true } }),
         officeRoomId: vine
             .number()
             .exists(async (db, value) =>
@@ -25,7 +25,10 @@ const messagesProvider = new SimpleMessagesProvider(DEFAULT_MESSAGE_PROVIDER_CON
 });
 
 export const updateReservation = async ({ params, bouncer, request }: HttpContext) => {
-    const found = await RoomReservation.findOrFail(params.id);
+    const found = await RoomReservation.query()
+        .where("id", params.id)
+        .preload("user")
+        .firstOrFail();
 
     const { end, start, officeRoomId, title } = await request.validateUsing(validationSchema, {
         messagesProvider,

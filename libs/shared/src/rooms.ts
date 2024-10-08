@@ -29,3 +29,11 @@ export interface ApiOfficeRoom extends ModelBase {
     name: string;
     config: OfficeRoomConfig;
 }
+export interface ApiRoomReservation extends ModelBase {
+    officeRoomId: number;
+    title: string | null;
+    titleComputed: string;
+    start: string;
+    end: string;
+    userId: number;
+}

@@ -6,9 +6,9 @@ import { DateTime } from "luxon";
 
 const validationSchema = vine.compile(
     vine.object({
-        title: vine.string().trim(),
-        start: vine.date(),
-        end: vine.date(),
+        title: vine.string().trim().optional(),
+        start: vine.date({ formats: { utc: true } }),
+        end: vine.date({ formats: { utc: true } }),
         officeRoomId: vine
             .number()
             .exists(async (db, value) =>
@@ -31,12 +31,14 @@ export const storeReservation = async ({ request, auth }: HttpContext) => {
     });
 
     const reservation = await RoomReservation.create({
-        title,
+        title: title ?? null,
         start: DateTime.fromJSDate(start),
         end: DateTime.fromJSDate(end),
         officeRoomId,
         userId: user.id,
     });
+
+    await reservation.load("user");
 
     return {
         message: "Salle réservée",
