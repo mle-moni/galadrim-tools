@@ -1,6 +1,6 @@
 import { Home } from "@mui/icons-material";
-import { Box, Breadcrumbs, Chip, Typography } from "@mui/material";
-import type { CSSProperties } from "react";
+import { Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
+import { type CSSProperties, useState } from "react";
 import { Link } from "react-router-dom";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
@@ -23,6 +23,8 @@ export const OfficeRoomsPage = () => {
         setSelectedOfficeRoomFromId,
         nonFilteredOfficeRooms,
     } = useOfficeRoomSelect(selectedOfficeFloor);
+
+    const [searchText, setSearchText] = useState("");
 
     return (
         <MainLayout fullscreen>
@@ -89,12 +91,22 @@ export const OfficeRoomsPage = () => {
                             />
                         ))}
                 </Box>
+                {selectedOffice && (
+                    <Box sx={{ display: "flex", mb: 2, justifyContent: "center" }}>
+                        <TextField
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            label="Rechercher une salle"
+                        />
+                    </Box>
+                )}
                 {selectedOffice && selectedOfficeFloor && !selectedOfficeRoom && (
                     <ShowOfficeFloor
                         selectedOffice={selectedOffice}
                         selectedOfficeFloor={selectedOfficeFloor}
                         rooms={officeRooms}
                         selectedRoom={selectedOfficeRoom}
+                        searchText={searchText}
                     />
                 )}
                 {selectedOffice && selectedOfficeFloor && selectedOfficeRoom && (
@@ -114,7 +126,8 @@ export const OfficeRoomsPage = () => {
                                 selectedOfficeFloor={officeFloor}
                                 rooms={nonFilteredOfficeRooms}
                                 selectedRoom={selectedOfficeRoom}
-                                numberOfFloors={officeFloors.length}
+                                numberOfFloors={officeFloors.length + 0.1}
+                                searchText={searchText}
                             />
                         ))}
                     </Box>

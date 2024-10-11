@@ -13,10 +13,18 @@ interface Params {
     selectedOfficeFloor: ApiOfficeFloor;
     selectedOffice: ApiOffice;
     numberOfFloors?: number;
+    searchText: string;
 }
 
 export const ShowOfficeFloor = observer(
-    ({ rooms, selectedRoom, selectedOfficeFloor, selectedOffice, numberOfFloors = 1 }: Params) => {
+    ({
+        rooms,
+        selectedRoom,
+        selectedOfficeFloor,
+        selectedOffice,
+        numberOfFloors = 1,
+        searchText,
+    }: Params) => {
         const officeFloorStore = useRef(new OfficeFloorStore()).current;
         const navigate = useNavigate();
         const { canvasWidth, canvasHeight } = useCanvasSize(numberOfFloors);
@@ -33,6 +41,10 @@ export const ShowOfficeFloor = observer(
         useEffect(() => {
             officeFloorStore.setSelectedRoom(selectedRoom);
         }, [selectedRoom, officeFloorStore]);
+
+        useEffect(() => {
+            officeFloorStore.setSearchText(searchText);
+        }, [searchText, officeFloorStore]);
 
         return (
             <div

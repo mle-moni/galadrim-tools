@@ -9,6 +9,7 @@ export class OfficeFloorStore {
     private rooms: ApiOfficeRoom[] = [];
     private selectedRoom: ApiOfficeRoom | null = null;
     private mousePosition: RoomPoint = { x: 0, y: 0 };
+    private searchText = "";
 
     setup(canvas: HTMLCanvasElement | null) {
         this.canvas = canvas;
@@ -46,7 +47,9 @@ export class OfficeFloorStore {
 
     drawRooms() {
         this.rooms.forEach((room) => {
-            if (room.id === this.roomHovered?.id) {
+            if (this.isSearched(room)) {
+                this.drawRoom(room, themeColors.error.main);
+            } else if (room.id === this.roomHovered?.id) {
                 this.drawRoom(room, themeColors.secondary.dark);
             } else {
                 this.drawRoom(room, themeColors.secondary.main);
@@ -75,6 +78,11 @@ export class OfficeFloorStore {
         ctx.closePath();
     }
 
+    isSearched(room: ApiOfficeRoom) {
+        if (this.searchText === "") return false;
+        return room.name.toLowerCase().includes(this.searchText.toLowerCase());
+    }
+
     setMousePosition(x: number, y: number) {
         if (!this.canvas) return;
         this.mousePosition = { x, y };
@@ -91,5 +99,9 @@ export class OfficeFloorStore {
         const isInside = isPointInPolygon(pointInCanvasCoordinates, roomPoints);
 
         return isInside;
+    }
+
+    setSearchText(searchText: string) {
+        this.searchText = searchText;
     }
 }
