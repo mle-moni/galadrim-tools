@@ -1,5 +1,7 @@
 import { DEFAULT_MESSAGE_PROVIDER_CONFIG } from "#adomin/validation/default_validator";
+import { CONNECTED_SOCKETS } from "#controllers/socket/socket_constants";
 import RoomReservation from "#models/room_reservation";
+import { Ws } from "#services/ws";
 import type { HttpContext } from "@adonisjs/core/http";
 import vine, { SimpleMessagesProvider } from "@vinejs/vine";
 import { DateTime } from "luxon";
@@ -39,6 +41,8 @@ export const storeReservation = async ({ request, auth }: HttpContext) => {
     });
 
     await reservation.load("user");
+
+    Ws.io.to(CONNECTED_SOCKETS).emit("createRoomReservation", reservation);
 
     return {
         message: "Salle réservée",

@@ -1,9 +1,10 @@
 import { ThemeProvider } from "@mui/material";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import React, { type FC, type PropsWithChildren } from "react";
 import { createRoot } from "react-dom/client";
 import { AppStore } from "./globalStores/AppStore";
+import { queryClient } from "./queryClient";
 import MainRouter from "./routes/MainRouter";
 import { getTheme } from "./theme";
 import "./theme/react-big-calendar.css";
@@ -15,7 +16,6 @@ const SnackBarSetter: FC<PropsWithChildren<unknown>> = ({ children }) => {
     AppStore.notification.setMethods(snackbarMethods);
     return <>{children}</>;
 };
-const queryClient = new QueryClient();
 
 const container = document.getElementById("root");
 
