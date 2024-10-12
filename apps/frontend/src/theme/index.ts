@@ -26,6 +26,9 @@ export const themeColors = {
     error: {
         main: "#f87171",
     },
+    highligh: {
+        main: "#5A29E6",
+    },
 } as const;
 
 export const getTheme = () =>

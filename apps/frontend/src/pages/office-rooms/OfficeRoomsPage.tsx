@@ -97,6 +97,7 @@ export const OfficeRoomsPage = () => {
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                             label="Rechercher une salle"
+                            size="small"
                         />
                     </Box>
                 )}
@@ -126,7 +127,7 @@ export const OfficeRoomsPage = () => {
                                 selectedOfficeFloor={officeFloor}
                                 rooms={nonFilteredOfficeRooms}
                                 selectedRoom={selectedOfficeRoom}
-                                numberOfFloors={officeFloors.length + 0.1}
+                                numberOfFloors={officeFloors.length + 0.25}
                                 searchText={searchText}
                             />
                         ))}

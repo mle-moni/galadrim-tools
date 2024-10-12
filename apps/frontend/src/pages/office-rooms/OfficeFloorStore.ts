@@ -47,20 +47,19 @@ export class OfficeFloorStore {
 
     drawRooms() {
         this.rooms.forEach((room) => {
-            if (this.isSearched(room)) {
-                this.drawRoom(room, themeColors.error.main);
-            } else if (room.id === this.roomHovered?.id) {
-                this.drawRoom(room, themeColors.secondary.dark);
+            const strokeStyle = this.isSearched(room) ? themeColors.highligh.main : undefined;
+            if (room.id === this.roomHovered?.id) {
+                this.drawRoom(room, themeColors.secondary.dark, strokeStyle);
             } else {
-                this.drawRoom(room, themeColors.secondary.main);
+                this.drawRoom(room, themeColors.secondary.main, strokeStyle);
             }
         });
     }
 
-    drawRoom(room: ApiOfficeRoom, fillStyle: string) {
+    drawRoom(room: ApiOfficeRoom, fillStyle: string, strokeStyle?: string) {
         const ctx = this.ctx;
         const canvas = this.canvas;
-        if (!ctx || !canvas) return;
+        if (!ctx || !canvas || room.config.points.length < 3) return;
         const roomPoints = room.config.points.map((point) => getCanvasCoordinates(point, canvas));
 
         ctx.fillStyle = fillStyle;
@@ -73,7 +72,13 @@ export class OfficeFloorStore {
                 ctx.lineTo(point.x, point.y);
             }
         });
+        ctx.lineTo(roomPoints[0].x, roomPoints[0].y);
         ctx.fill();
+
+        if (strokeStyle) {
+            ctx.strokeStyle = strokeStyle;
+            ctx.stroke();
+        }
 
         ctx.closePath();
     }

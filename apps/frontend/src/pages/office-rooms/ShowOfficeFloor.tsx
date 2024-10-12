@@ -46,6 +46,11 @@ export const ShowOfficeFloor = observer(
             officeFloorStore.setSearchText(searchText);
         }, [searchText, officeFloorStore]);
 
+        const resetMousePosition = () => {
+            officeFloorStore.setMousePosition(0, 0);
+            setRoomHoveredName(null);
+        };
+
         return (
             <div
                 style={{
@@ -60,6 +65,8 @@ export const ShowOfficeFloor = observer(
                     Étage {selectedOfficeFloor.floor}
                 </Typography>
                 <canvas
+                    onBlur={resetMousePosition}
+                    onMouseOut={resetMousePosition}
                     onMouseMove={(event) => {
                         const rect = event.currentTarget.getBoundingClientRect();
                         const mouseX = event.clientX - rect.left;
