@@ -3,6 +3,7 @@ import { createModelViewConfig } from "#adomin/create_model_view_config";
 import Office from "#models/office";
 import OfficeFloor from "#models/office_floor";
 import OfficeRoom from "#models/office_room";
+import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
 import vine from "@vinejs/vine";
 
 const OFFICE_VIEW = createModelViewConfig(() => Office, {
@@ -72,6 +73,27 @@ const FLOORS_VIEW = createModelViewConfig(() => OfficeFloor, {
             creatable: false,
             editable: false,
         },
+        computedName: {
+            type: "string",
+            computed: true,
+            creatable: false,
+            editable: false,
+            sqlFilter: (search, builder: ModelQueryBuilderContract<typeof OfficeFloor>) => {
+                if (!search) return;
+                const lowerSearch = search.toLowerCase();
+                if (lowerSearch.startsWith("etage ")) {
+										const floor = lowerSearch.replace("etage ", "")
+										if (floor.length === 0) return
+                    builder.where("floor", floor);
+                    return;
+                }
+                const parts = lowerSearch.split(" - etage ");
+                builder.where((subquery) => {
+                    subquery.whereHas("office", (q) => q.whereILike("name", parts[0]));
+                    if (parts.length === 2) subquery.andWhere("floor", parts[1]);
+                });
+            },
+        },
     },
 });
 
@@ -101,7 +123,7 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
         officeFloor: {
             type: "belongsToRelation",
             label: "Etage",
-            labelFields: ["floor"],
+            labelFields: ["computedName"],
             modelName: "OfficeFloor",
         },
         createdAt: {
@@ -118,6 +140,29 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             creatable: false,
             editable: false,
         },
+    },
+    virtualColumns: [
+        {
+            name: "offices",
+            adomin: {
+                type: "belongsToRelation",
+                label: "Bureau",
+                modelName: "Office",
+                labelFields: ["name"],
+                filterable: true,
+                sqlFilter: (search, builder: ModelQueryBuilderContract<typeof OfficeRoom>) => {
+                    if (!search) return;
+                    builder.whereHas("officeFloor", (q) => q.where("office_id", search));
+                },
+            },
+            async getter(model) {
+                return model.officeFloor.office;
+            },
+            columnOrderIndex: 3,
+        },
+    ],
+    queryBuilderCallback: (q) => {
+        q.preload("officeFloor", (q) => q.preload("office"));
     },
 });
 
