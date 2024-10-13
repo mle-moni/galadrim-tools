@@ -3,14 +3,14 @@ import { themeColors } from "../../theme";
 import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 
 export class OfficeFloorStore {
-    private canvas: HTMLCanvasElement | null = null;
-    private ctx: CanvasRenderingContext2D | null = null;
-    private animationFrame: number | null = null;
-    private rooms: ApiOfficeRoom[] = [];
-    private reservations: ApiRoomReservation[] = [];
-    private selectedRoom: ApiOfficeRoom | null = null;
-    private mousePosition: RoomPoint = { x: 0, y: 0 };
-    private searchText = "";
+    protected canvas: HTMLCanvasElement | null = null;
+    protected ctx: CanvasRenderingContext2D | null = null;
+    protected animationFrame: number | null = null;
+    protected rooms: ApiOfficeRoom[] = [];
+    protected reservations: ApiRoomReservation[] = [];
+    protected selectedRoom: ApiOfficeRoom | null = null;
+    protected mousePosition: RoomPoint = { x: 0, y: 0 };
+    protected searchText = "";
 
     setup(canvas: HTMLCanvasElement | null) {
         this.canvas = canvas;

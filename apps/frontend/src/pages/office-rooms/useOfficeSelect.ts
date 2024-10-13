@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchBackendJson } from "../../api/fetch";
 
-export const useOfficeSelect = () => {
+export const useOfficeSelect = (baseUrl = "/office-rooms") => {
     const navigate = useNavigate();
     const { officeId: officeIdRaw } = useParams();
     const officeId = officeIdRaw ? Number(officeIdRaw) : null;
@@ -43,9 +43,9 @@ export const useOfficeSelect = () => {
 
     const setSelectedOffice = (office: ApiOffice | null) => {
         if (!office) {
-            navigate("/office-rooms");
+            navigate(baseUrl);
         } else {
-            navigate(`/office-rooms/${office.id}`);
+            navigate(`${baseUrl}/${office.id}`);
         }
     };
 

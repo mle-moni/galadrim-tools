@@ -11,7 +11,7 @@ export default class OfficeRoom extends BaseModel {
     @column()
     declare officeFloorId: number;
 
-    @belongsTo(() => OfficeFloor)
+    @belongsTo(() => OfficeFloor, { serializeAs: null })
     declare officeFloor: BelongsTo<typeof OfficeFloor>;
 
     @column()

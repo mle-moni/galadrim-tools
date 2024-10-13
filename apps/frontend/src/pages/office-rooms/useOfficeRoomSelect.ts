@@ -4,7 +4,10 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchBackendJson } from "../../api/fetch";
 
-export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
+export const useOfficeRoomSelect = (
+    selectedFloor: ApiOfficeFloor | null,
+    baseUrl = "/office-rooms",
+) => {
     const navigate = useNavigate();
     const { officeId, officeFloorId, officeRoomId: officeRoomIdRaw } = useParams();
     const officeRoomId = officeRoomIdRaw ? Number(officeRoomIdRaw) : null;
@@ -49,9 +52,9 @@ export const useOfficeRoomSelect = (selectedFloor: ApiOfficeFloor | null) => {
 
     const setSelected = (newState: ApiOfficeRoom | null) => {
         if (!newState) {
-            navigate(`/office-rooms/${officeId}/${officeFloorId}`);
+            navigate(`${baseUrl}/${officeId}/${officeFloorId}`);
         } else {
-            navigate(`/office-rooms/${officeId}/${officeFloorId}/${newState.id}`);
+            navigate(`${baseUrl}/${officeId}/${officeFloorId}/${newState.id}`);
         }
     };
 
