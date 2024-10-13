@@ -1,11 +1,13 @@
 import { Home } from "@mui/icons-material";
 import { Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
-import { type CSSProperties, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useIsMediumScreen } from "../../hooks/useIsMobile";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
 import { ShowOfficeFloor } from "./ShowOfficeFloor";
-import { OfficeRoomCalendar } from "./calendar/OfficeRoomCalendar";
+import { type CalendarDateRange, OfficeRoomCalendar } from "./calendar/OfficeRoomCalendar";
+import { useOfficeRoomCalendar } from "./calendar/useOfficeRoomCalendar";
 import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
 import { useOfficeRoomSelect } from "./useOfficeRoomSelect";
 import { useOfficeSelect } from "./useOfficeSelect";
@@ -23,7 +25,13 @@ export const OfficeRoomsPage = () => {
         setSelectedOfficeRoomFromId,
         nonFilteredOfficeRooms,
     } = useOfficeRoomSelect(selectedOfficeFloor);
+    const calendarOptions = useMemo<[number | null, CalendarDateRange]>(
+        () => [selectedOffice?.id ?? null, [new Date()]],
+        [selectedOffice],
+    );
+    const { reservationsQuery } = useOfficeRoomCalendar(calendarOptions[0], calendarOptions[1]);
 
+    const isMediumScreen = useIsMediumScreen();
     const [searchText, setSearchText] = useState("");
 
     return (
@@ -63,6 +71,7 @@ export const OfficeRoomsPage = () => {
                         justifyContent: "center",
                         alignItems: "center",
                         gap: 2,
+                        flexWrap: "wrap",
                     }}
                 >
                     {selectedOffice === null &&
@@ -91,7 +100,7 @@ export const OfficeRoomsPage = () => {
                             />
                         ))}
                 </Box>
-                {selectedOffice && (
+                {selectedOffice && !selectedOfficeRoom && (
                     <Box sx={{ display: "flex", mb: 2, justifyContent: "center" }}>
                         <TextField
                             value={searchText}
@@ -108,18 +117,28 @@ export const OfficeRoomsPage = () => {
                         rooms={officeRooms}
                         selectedRoom={selectedOfficeRoom}
                         searchText={searchText}
+                        numberOfFloors={1}
+                        offsetHeight={isMediumScreen ? 0 : 450}
                     />
                 )}
                 {selectedOffice && selectedOfficeFloor && selectedOfficeRoom && (
                     <OfficeRoomCalendar
                         step={15}
-                        officeRooms={officeRooms}
+                        officeRooms={[selectedOfficeRoom]}
                         officeId={selectedOffice.id}
                         isAbsolute={false}
                     />
                 )}
                 {selectedOffice && !selectedOfficeFloor && (
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: isMediumScreen ? "column" : undefined,
+                            gap: 2,
+                            bgcolor: "background.default",
+                            pb: 2,
+                        }}
+                    >
                         {officeFloors.map((officeFloor) => (
                             <ShowOfficeFloor
                                 key={officeFloor.id}
@@ -127,7 +146,7 @@ export const OfficeRoomsPage = () => {
                                 selectedOfficeFloor={officeFloor}
                                 rooms={nonFilteredOfficeRooms}
                                 selectedRoom={selectedOfficeRoom}
-                                numberOfFloors={officeFloors.length + 0.25}
+                                numberOfFloors={isMediumScreen ? 1 : officeFloors.length}
                                 searchText={searchText}
                             />
                         ))}

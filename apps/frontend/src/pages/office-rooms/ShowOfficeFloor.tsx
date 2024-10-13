@@ -14,6 +14,7 @@ interface Params {
     selectedOffice: ApiOffice;
     numberOfFloors?: number;
     searchText: string;
+    offsetHeight?: number;
 }
 
 export const ShowOfficeFloor = observer(
@@ -24,10 +25,11 @@ export const ShowOfficeFloor = observer(
         selectedOffice,
         numberOfFloors = 1,
         searchText,
+        offsetHeight = 0,
     }: Params) => {
         const officeFloorStore = useRef(new OfficeFloorStore()).current;
         const navigate = useNavigate();
-        const { canvasWidth, canvasHeight } = useCanvasSize(numberOfFloors);
+        const { canvasWidth, canvasHeight } = useCanvasSize(numberOfFloors, offsetHeight);
         const [roomHoveredName, setRoomHoveredName] = useState<string | null>(null);
         const filteredRooms = useMemo(
             () => rooms.filter(({ officeFloorId }) => officeFloorId === selectedOfficeFloor.id),
@@ -57,11 +59,10 @@ export const ShowOfficeFloor = observer(
                     display: "flex",
                     width: "100%",
                     alignItems: "center",
-                    height: "100%",
                     flexDirection: "column",
                 }}
             >
-                <Typography style={{ fontSize: 26, userSelect: "none" }}>
+                <Typography sx={{ fontSize: 18, my: 1, userSelect: "none" }}>
                     Étage {selectedOfficeFloor.floor}
                 </Typography>
                 <canvas
@@ -118,7 +119,7 @@ export const ShowOfficeFloor = observer(
                     Utilisez un navigateur récent pour afficher ce contenu. Chrome c'est parfait.
                 </canvas>
                 {officeFloorStore.roomHovered && (
-                    <Typography style={{ fontSize: 26, userSelect: "none" }}>
+                    <Typography sx={{ fontSize: 18, my: 1, userSelect: "none" }}>
                         {roomHoveredName}
                     </Typography>
                 )}

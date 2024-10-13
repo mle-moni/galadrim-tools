@@ -1,12 +1,14 @@
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { AppStore } from "../../globalStores/AppStore";
+import { useIsMobile } from "../../hooks/useIsMobile";
 import { Notifications } from "../../pages/notifications/Notifications";
 import { WhoamiStore } from "./WhoamiStore";
 
 export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) => {
     const { authStore } = AppStore;
     const store = new WhoamiStore();
+    const isMobile = useIsMobile();
 
     return (
         <Stack display="flex" direction="column" alignItems="center">
@@ -28,7 +30,9 @@ export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) =>
                         alignItems: "center",
                     }}
                 >
-                    <Notifications sx={{ position: "absolute", zIndex: 10, left: -8 }} />
+                    {!isMobile && (
+                        <Notifications sx={{ position: "absolute", zIndex: 10, left: -8 }} />
+                    )}
                     <Avatar
                         alt={authStore.user.username}
                         src={authStore.user.imageUrl}
@@ -44,7 +48,7 @@ export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) =>
                     {authStore.user.username}
                 </Typography>
             </Box>
-            {noDisconnect ? (
+            {noDisconnect || isMobile ? (
                 <div style={{ width: 120 }} />
             ) : (
                 <Button

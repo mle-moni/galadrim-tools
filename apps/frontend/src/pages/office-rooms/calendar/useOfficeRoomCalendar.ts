@@ -9,8 +9,9 @@ interface ApiRoomReservationMutationResponse {
     reservation: ApiRoomReservation;
 }
 
-export const useOfficeRoomCalendar = (officeId: number, range: CalendarDateRange) => {
+export const useOfficeRoomCalendar = (officeId: number | null, range: CalendarDateRange) => {
     const reservationsQuery = useQuery({
+        enabled: officeId !== null,
         queryKey: ["office-rooms-reservations", officeId, range],
         queryFn: async () => {
             const params = new URLSearchParams();
