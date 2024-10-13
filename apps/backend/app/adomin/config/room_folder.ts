@@ -101,9 +101,8 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
         officeFloor: {
             type: "belongsToRelation",
             label: "Etage",
-            labelFields: ["computedName"],
+            labelFields: ["floor"],
             modelName: "OfficeFloor",
-            filterable: false,
         },
         createdAt: {
             type: "date",
@@ -119,9 +118,6 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             creatable: false,
             editable: false,
         },
-    },
-    queryBuilderCallback: (q) => {
-        q.preload("officeFloor", (q) => q.preload("office"));
     },
 });
 

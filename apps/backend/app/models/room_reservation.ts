@@ -26,7 +26,7 @@ export default class RoomReservation extends BaseModel {
     @column()
     declare userId: number;
 
-    @belongsTo(() => User, { serializeAs: null })
+    @belongsTo(() => User)
     declare user: BelongsTo<typeof User>;
 
     @computed()
