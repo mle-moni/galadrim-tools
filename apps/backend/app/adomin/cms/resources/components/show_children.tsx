@@ -1,4 +1,4 @@
-import { Html, type PropsWithChildren } from '@kitajs/html'
+import { Html, PropsWithChildren } from '@kitajs/html'
 import { HtmlBase } from './html_base.js'
 
 export const ShowChildren = ({

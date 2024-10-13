@@ -1,4 +1,4 @@
-import { Html, type PropsWithChildren } from '@kitajs/html'
+import { Html, PropsWithChildren } from '@kitajs/html'
 
 type HtmlBaseProps = PropsWithChildren<{
   title: string

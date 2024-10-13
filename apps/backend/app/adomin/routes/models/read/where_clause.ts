@@ -1,8 +1,8 @@
-import type { ColumnConfig } from '#adomin/create_model_view_config'
+import { ColumnConfig } from '#adomin/create_model_view_config'
 import { getIsPostgres } from '#adomin/utils/get_db_type'
 import string from '@adonisjs/core/helpers/string'
-import type { LucidModel, LucidRow, ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
-import type { RelationSubQueryBuilderContract } from '@adonisjs/lucid/types/relations'
+import { LucidModel, LucidRow, ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import { RelationSubQueryBuilderContract } from '@adonisjs/lucid/types/relations'
 
 interface WhereClauseOptionsBase {
   type: 'or' | 'and'

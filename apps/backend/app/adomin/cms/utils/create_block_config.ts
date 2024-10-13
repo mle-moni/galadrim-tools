@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
-import type { SchemaTypes } from '@vinejs/vine/types'
-import type { BlockConfig } from './cms.types.js'
+import { SchemaTypes } from '@vinejs/vine/types'
+import { BlockConfig } from './cms.types.js'
 
 export const createBlockConfig = <T extends (props: any) => any>({
   name,

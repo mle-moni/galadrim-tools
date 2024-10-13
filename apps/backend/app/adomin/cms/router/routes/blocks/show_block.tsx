@@ -1,6 +1,6 @@
 import { ShowChildren } from '#adomin/cms/resources/components/show_children'
 import { NotFound } from '#adomin/cms/resources/pages/not_found'
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import { Html } from '@kitajs/html'
 import { CMS_CONFIG } from '../../../cms_config.js'
 

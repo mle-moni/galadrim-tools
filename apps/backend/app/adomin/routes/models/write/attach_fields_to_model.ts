@@ -1,5 +1,5 @@
-import type { LucidModel, LucidRow } from '@adonisjs/lucid/types/model'
-import { type ColumnConfig, PASSWORD_SERIALIZED_FORM } from '../../../create_model_view_config.js'
+import { LucidModel, LucidRow } from '@adonisjs/lucid/types/model'
+import { ColumnConfig, PASSWORD_SERIALIZED_FORM } from '../../../create_model_view_config.js'
 import { getSqlColumnToUse } from '../get_model_config.js'
 import { handleFilePersist } from './handle_file_persist.js'
 import { handleHasManyUpdate } from './handle_has_many_update.js'

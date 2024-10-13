@@ -1,6 +1,6 @@
-import type { AdominHasManyRelationFieldConfig } from '#adomin/fields.types'
+import { AdominHasManyRelationFieldConfig } from '#adomin/fields.types'
 import stringHelpers from '@adonisjs/core/helpers/string'
-import type { LucidModel, LucidRow } from '@adonisjs/lucid/types/model'
+import { LucidModel, LucidRow } from '@adonisjs/lucid/types/model'
 
 interface Params {
   instance: LucidRow

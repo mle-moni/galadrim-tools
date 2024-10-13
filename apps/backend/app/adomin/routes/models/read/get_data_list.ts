@@ -1,9 +1,9 @@
-import type { ModelObject } from '@adonisjs/lucid/types/model'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 import type { ModelConfig } from '../../../create_model_view_config.js'
 import { computeColumnConfigFields, getModelFieldStrs } from '../get_model_config.js'
 import { computeVirtualFields } from './compute_virtual_columns.js'
 import {
-  type PaginationSettings,
+  PaginationSettings,
   applyColumnFilters,
   applyGlobalFilters,
   applySorting,

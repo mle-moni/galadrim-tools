@@ -46,7 +46,7 @@ interface Row {
 export const getCumulativeTableData = async (
   tableName: string,
   columnName: string,
-  monthes = 6
+  monthes: number = 6
 ) => {
   const interval = `${monthes - 1}`
   const res = await db.rawQuery<{ rows: Row[] }>(getRawSql(tableName, columnName, interval))

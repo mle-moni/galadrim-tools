@@ -1,10 +1,10 @@
 import { getFlatViews } from '#adomin/get_flat_views'
 import string from '@adonisjs/core/helpers/string'
-import type { HttpContext } from '@adonisjs/core/http'
-import type { AdominViewConfig } from '../../adomin_config.types.js'
-import type { ColumnConfig, ModelConfig } from '../../create_model_view_config.js'
+import { HttpContext } from '@adonisjs/core/http'
+import { AdominViewConfig } from '../../adomin_config.types.js'
+import { ColumnConfig, ModelConfig } from '../../create_model_view_config.js'
 import {
-  type AdominStaticRightsConfig,
+  AdominStaticRightsConfig,
   computeRightsCheck,
 } from '../adomin_routes_overrides_and_rights.js'
 
@@ -138,6 +138,11 @@ export async function computeColumnConfigFields(input: ColumnConfig[]): Promise<
 
     if (field.adomin.type === 'belongsToRelation' || field.adomin.type === 'hasOneRelation') {
       if (sortable === undefined && noCustomSort) sortable = false
+    }
+
+    if (field.adomin.type === 'json') {
+      if (sortable === undefined && noCustomSort) sortable = false
+      if (filterable === undefined && noCustomFilter) filterable = false
     }
 
     // load options for array field

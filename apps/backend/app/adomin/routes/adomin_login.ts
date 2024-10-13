@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 
 import { DEFAULT_MESSAGE_PROVIDER_CONFIG } from '#adomin/validation/default_validator'

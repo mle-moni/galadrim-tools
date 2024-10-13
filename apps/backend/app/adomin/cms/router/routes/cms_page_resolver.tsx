@@ -1,5 +1,5 @@
 import { NotFound } from '#adomin/cms/resources/pages/not_found'
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { Html } from '@kitajs/html'
 import { getCache } from '../../utils/cache_system.js'

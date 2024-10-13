@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import { destroyPage } from './destroy_page.js'
 import { pagesIndex } from './pages_index.js'
 import { showPage } from './show_page.js'

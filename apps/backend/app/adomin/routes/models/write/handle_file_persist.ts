@@ -1,6 +1,6 @@
-import type { MultipartFile } from '@adonisjs/core/bodyparser'
-import type { LucidRow } from '@adonisjs/lucid/types/model'
-import type { AdominFileFieldConfig } from '../../../fields.types.js'
+import { MultipartFile } from '@adonisjs/core/bodyparser'
+import { LucidRow } from '@adonisjs/lucid/types/model'
+import { AdominFileFieldConfig } from '../../../fields.types.js'
 import { Attachment } from '../../handle_files.js'
 
 const handleDeleteFile = async (

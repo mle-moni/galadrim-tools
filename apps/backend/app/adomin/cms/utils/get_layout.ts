@@ -1,7 +1,7 @@
 import { Exception } from '@adonisjs/core/exceptions'
 import { CMS_CONFIG } from '../cms_config.js'
 import { CmsBlockGrid } from '../resources/components/cms_block_grid.js'
-import type { CmsPage } from './cms.types.js'
+import { CmsPage } from './cms.types.js'
 
 export const getLayout = (page: CmsPage, blocks: JSX.Element[]) => {
   const params = page.config.layout

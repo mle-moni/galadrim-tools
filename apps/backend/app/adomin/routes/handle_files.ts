@@ -1,4 +1,4 @@
-import type { LucidRow } from '@adonisjs/lucid/types/model'
+import { LucidRow } from '@adonisjs/lucid/types/model'
 import type { ColumnConfig } from '../create_model_view_config.js'
 
 // Fake Attachment until attchmentLite ships to v6

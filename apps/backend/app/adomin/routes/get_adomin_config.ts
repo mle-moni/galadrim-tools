@@ -1,5 +1,5 @@
 import type { AdominViewConfig } from '#adomin/adomin_config.types'
-import type { ApiAdominView, ApiFolderView, ApiModelView, ApiStatView } from '#adomin/api_views.types'
+import { ApiAdominView, ApiFolderView, ApiModelView, ApiStatView } from '#adomin/api_views.types'
 import type { FolderViewConfig } from '#adomin/create_folder_view_config'
 import type { StatsViewConfig } from '#adomin/create_stats_view_config'
 import type { HttpContext } from '@adonisjs/core/http'

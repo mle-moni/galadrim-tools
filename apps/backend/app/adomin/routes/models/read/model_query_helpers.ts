@@ -1,7 +1,7 @@
-import type { LucidModel, LucidRow, ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
+import { LucidModel, LucidRow, ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import { schema } from '@adonisjs/validator'
-import type { ColumnConfig } from '../../../create_model_view_config.js'
-import type { AdominFieldConfig } from '../../../fields.types.js'
+import { ColumnConfig } from '../../../create_model_view_config.js'
+import { AdominFieldConfig } from '../../../fields.types.js'
 import { getSqlColumnToUse } from '../get_model_config.js'
 import { EXPORT_TYPES } from './download_export_file.js'
 import { whereClause } from './where_clause.js'
@@ -77,7 +77,11 @@ export const applyGlobalFilters = (
 
       if (field.adomin.sqlFilter !== undefined) {
         const sqlFilter = field.adomin.sqlFilter(globalFilter)
-        builder.andWhereRaw(sqlFilter)
+        if (typeof sqlFilter === 'string') {
+          builder.andWhereRaw(sqlFilter)
+        } else {
+          builder.andWhereRaw(sqlFilter.sql, sqlFilter.bindings)
+        }
         continue
       }
 
@@ -130,7 +134,11 @@ export const applyColumnFilters = (
 
       if (field.adomin.sqlFilter !== undefined) {
         const sqlFilter = field.adomin.sqlFilter(search)
-        builder.andWhereRaw(sqlFilter)
+        if (typeof sqlFilter === 'string') {
+          builder.andWhereRaw(sqlFilter)
+        } else {
+          builder.andWhereRaw(sqlFilter.sql, sqlFilter.bindings)
+        }
         continue
       }
 

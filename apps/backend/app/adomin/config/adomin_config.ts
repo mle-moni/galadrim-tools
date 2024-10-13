@@ -1,5 +1,5 @@
 import type { AdominConfig } from "#adomin/adomin_config.types";
-import { ROOMS_VIEWS } from "./rooms_folder_views.js";
+import { ROOMS_FOLDER } from "./room_folder.js";
 
 /**
  * This file will contain your Adomin Config
@@ -18,6 +18,6 @@ import { ROOMS_VIEWS } from "./rooms_folder_views.js";
  */
 
 export const ADOMIN_CONFIG: AdominConfig = {
-    title: "Galadrim Tools",
-    views: [ROOMS_VIEWS],
+    title: "Your Backoffice Title",
+    views: [ROOMS_FOLDER],
 };

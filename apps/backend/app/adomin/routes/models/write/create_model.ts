@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import { validateOrThrow } from '../../../validation/adomin_validation_helpers.js'
 import { getGenericMessages } from '../../../validation/validation_messages.js'
 import { computeRightsCheck } from '../../adomin_routes_overrides_and_rights.js'
@@ -11,6 +11,7 @@ import {
   attachForeignFields,
   updateVirtualColumns,
 } from './attach_fields_to_model.js'
+import { handleSpecialFieldsValidation } from './handle_special_fields_validation.js'
 
 export const createModel = async (ctx: HttpContext) => {
   const { params, response, request } = ctx
@@ -39,6 +40,8 @@ export const createModel = async (ctx: HttpContext) => {
 
   const schema = await getValidationSchemaFromConfig(modelConfig, 'create')
   const parsedData = await request.validate({ schema, messages: getGenericMessages(Model) })
+  const specialFieldsValidation = await handleSpecialFieldsValidation(modelConfig, parsedData)
+  if (specialFieldsValidation) return response.badRequest(specialFieldsValidation)
 
   const createdInstance = new Model()
 

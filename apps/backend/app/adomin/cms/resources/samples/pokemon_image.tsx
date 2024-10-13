@@ -1,4 +1,4 @@
-import type { BlockProps } from '#adomin/cms/utils/cms.types'
+import { BlockProps } from '#adomin/cms/utils/cms.types'
 import { Html } from '@kitajs/html'
 
 export type PokemonImageProps = BlockProps<{ pokemonId: number }>

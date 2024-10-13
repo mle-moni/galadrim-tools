@@ -1,6 +1,6 @@
 import type { ColumnConfig, ModelConfig } from '#adomin/create_model_view_config'
-import type { HttpContext } from '@adonisjs/core/http'
-import type { ModelObject } from '@adonisjs/lucid/types/model'
+import { HttpContext } from '@adonisjs/core/http'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 import { toCSVString } from '../../../utils/csv_utils.js'
 
 export const EXPORT_TYPES = ['csv', 'xlsx', 'json'] as const

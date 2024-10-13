@@ -1,4 +1,4 @@
-import type { LucidModel } from '@adonisjs/lucid/types/model'
+import { LucidModel } from '@adonisjs/lucid/types/model'
 import { getModelConfig, getModelFieldStrs } from './get_model_config.js'
 import { loadRelations } from './read/model_query_helpers.js'
 

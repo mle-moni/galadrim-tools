@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import vine, { SimpleMessagesProvider } from '@vinejs/vine'
 import { CMS_CONFIG } from '../../../cms_config.js'
 import { filterNullValues } from '../../../utils/array.js'

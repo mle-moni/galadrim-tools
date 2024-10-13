@@ -1,5 +1,5 @@
 import { clsx } from '#adomin/cms/utils/clsx'
-import type { LayoutProps } from '#adomin/cms/utils/cms.types'
+import { LayoutProps } from '#adomin/cms/utils/cms.types'
 import { Html } from '@kitajs/html'
 import { HtmlBase } from '../components/html_base.js'
 

@@ -2,7 +2,7 @@ import { Exception } from '@adonisjs/core/exceptions'
 import { Html } from '@kitajs/html'
 import { CMS_CONFIG } from '../cms_config.js'
 import { BLOCK_ID_PREFIX } from '../resources/components/cms_block_grid.js'
-import type { BlockParams } from './cms.types.js'
+import { BlockParams } from './cms.types.js'
 
 export const getBlock = async (params: BlockParams) => {
   const found = CMS_CONFIG.blocks.find((block) => block.name === params.name)

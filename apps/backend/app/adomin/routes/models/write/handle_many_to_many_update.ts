@@ -1,7 +1,7 @@
-import type { AdominManyToManyRelationFieldConfig } from '#adomin/fields.types'
+import { AdominManyToManyRelationFieldConfig } from '#adomin/fields.types'
 import stringHelpers from '@adonisjs/core/helpers/string'
 import db from '@adonisjs/lucid/services/db'
-import type { LucidModel, LucidRow } from '@adonisjs/lucid/types/model'
+import { LucidModel, LucidRow } from '@adonisjs/lucid/types/model'
 
 interface Params {
   instance: LucidRow
@@ -35,7 +35,10 @@ export const handleManyToManyUpdate = async ({ Model, fieldConfig, instance, val
 
   try {
     await trx.from(pivotTable).where(pivotFkName, instancePrimaryKeyValue).delete()
-    await trx.insertQuery().multiInsert(insertValues).table(pivotTable)
+
+    if (insertValues.length > 0) {
+      await trx.insertQuery().multiInsert(insertValues).table(pivotTable)
+    }
 
     await trx.commit()
   } catch (error) {

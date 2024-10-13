@@ -1,6 +1,7 @@
-import type { MultipartFile } from '@adonisjs/core/bodyparser'
-import type { LucidRow } from '@adonisjs/lucid/types/model'
-import type { RawQuery } from '@adonisjs/lucid/types/querybuilder'
+import { MultipartFile } from '@adonisjs/core/bodyparser'
+import { LucidRow } from '@adonisjs/lucid/types/model'
+import { RawQueryBindings } from '@adonisjs/lucid/types/querybuilder'
+import { VineObject, VineValidator } from '@vinejs/vine'
 
 export interface AdominBaseFieldConfig {
   /**
@@ -52,7 +53,7 @@ export interface AdominBaseFieldConfig {
    * }
    * ```
    */
-  sqlFilter?: (input: string | null) => string | RawQuery
+  sqlFilter?: (input: string | null) => string | { sql: string; bindings: RawQueryBindings }
   /**
    * Sql orderBy override, usefull for computed fields
    *
@@ -63,7 +64,7 @@ export interface AdominBaseFieldConfig {
    * }
    * ```
    */
-  sqlSort?: (ascDesc: 'asc' | 'desc') => string | RawQuery
+  sqlSort?: (ascDesc: 'asc' | 'desc') => string
   /**
    * Export data transformation callback to use for this field
    *
@@ -109,7 +110,7 @@ export interface AdominNumberFieldConfig extends AdominBaseFieldConfig {
    */
   step?: number
   /**
-   * default value for this field on the creation form
+   * default value for this field on the form
    */
   defaultValue?: number
   /**
@@ -156,7 +157,7 @@ export interface AdominStringFieldConfig extends AdominBaseFieldConfig {
    */
   isEmail?: boolean
   /**
-   * default value for this field on the creation form
+   * default value for this field on the form
    */
   defaultValue?: string
   /**
@@ -176,12 +177,12 @@ export interface AdominBooleanFieldConfig extends AdominBaseFieldConfig {
   type: 'boolean'
 
   /**
-   * component to use on create/update forms
+   * component to use on the forms
    * @default 'checkbox'
    */
   variant?: 'switch' | 'checkbox'
   /**
-   * default value for this field on the creation form
+   * default value for this field on the form
    */
   defaultValue?: boolean
 }
@@ -193,14 +194,14 @@ export interface AdominDateFieldConfig extends AdominBaseFieldConfig {
    */
   subType: 'date' | 'datetime'
   /**
-   * default value for this field on the creation form, two options:
+   * default value for this field on the form, two options:
    * - dynamic Date.now() + some time
    * - static date in ISO string format
    */
   defaultValue?: DateValueNow | DateValueIsoString
 }
 
-interface DateValueNow {
+export interface DateValueNow {
   mode: 'now'
   /**
    * Years to add to Date.now()
@@ -232,7 +233,7 @@ interface DateValueNow {
   plusSeconds?: number
 }
 
-interface DateValueIsoString {
+export interface DateValueIsoString {
   mode: 'isoString'
   /**
    * date in ISO string format
@@ -258,7 +259,7 @@ export type AdominEnumFieldConfig = AdominBaseFieldConfig & {
    */
   options: AdominSelectOption<string | null>[]
   /**
-   * default value for this field on the creation form
+   * default value for this field on the form
    */
   defaultValue?: string
 }
@@ -339,8 +340,9 @@ type FileSubType =
       deleteFile: (model: LucidRow) => Promise<void>
     }
 
-export interface AdominObjectFieldConfig extends AdominBaseFieldConfig {
-  type: 'object'
+export interface AdominJsonFieldConfig extends AdominBaseFieldConfig {
+  type: 'json'
+  validation?: VineValidator<VineObject<any, any, any>, any>
 }
 
 export interface AdominForeignKeyFieldConfig extends AdominBaseFieldConfig {
@@ -623,4 +625,4 @@ export type AdominFieldConfig =
   | AdominBelongsToRelationFieldConfig
   | AdominHasOneRelationFieldConfig
   | AdominManyToManyRelationFieldConfig
-// | AdominObjectFieldConfig
+  | AdominJsonFieldConfig

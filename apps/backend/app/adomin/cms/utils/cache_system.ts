@@ -1,4 +1,4 @@
-import { DateTime, Duration, type DurationLike } from 'luxon'
+import { DateTime, Duration, DurationLike } from 'luxon'
 
 const CACHE = new Map<string, { expiresAt: DateTime; value: unknown }>()
 

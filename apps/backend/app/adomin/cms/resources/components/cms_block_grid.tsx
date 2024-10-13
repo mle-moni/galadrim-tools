@@ -1,5 +1,5 @@
-import type { CmsPage, GridLayout } from '#adomin/cms/utils/cms.types'
-import { Html, type PropsWithChildren } from '@kitajs/html'
+import { CmsPage, GridLayout } from '#adomin/cms/utils/cms.types'
+import { Html, PropsWithChildren } from '@kitajs/html'
 
 export const BLOCK_ID_PREFIX = 'cms-'
 

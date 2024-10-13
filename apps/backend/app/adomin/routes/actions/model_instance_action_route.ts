@@ -1,5 +1,5 @@
 import { getFlatViews } from '#adomin/get_flat_views'
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import { isModelConfig } from '../models/get_model_config.js'
 
 export const modelInstanceActionRoute = async (ctx: HttpContext) => {
@@ -15,7 +15,7 @@ export const modelInstanceActionRoute = async (ctx: HttpContext) => {
   }
   const found = modelConfig.instanceActions?.find(({ name }) => name === params.action)
 
-  if (!found) {
+  if (!found || found.type !== 'backend-action') {
     return response.notFound({ error: `Action '${params.action}' not found` })
   }
 

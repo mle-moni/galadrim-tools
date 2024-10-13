@@ -1,4 +1,4 @@
-import type vine from '@vinejs/vine'
+import vine from '@vinejs/vine'
 
 export interface HtmlDivElementProps extends Omit<JSX.HtmlTag, 'class'> {
   className?: string

@@ -3,6 +3,7 @@ import { createModelViewConfig } from "#adomin/create_model_view_config";
 import Office from "#models/office";
 import OfficeFloor from "#models/office_floor";
 import OfficeRoom from "#models/office_room";
+import vine from "@vinejs/vine";
 
 const OFFICE_VIEW = createModelViewConfig(() => Office, {
     label: "Bureaux",
@@ -74,6 +75,17 @@ const FLOORS_VIEW = createModelViewConfig(() => OfficeFloor, {
     },
 });
 
+const roomConfigValidation = vine.compile(
+    vine.object({
+        points: vine.array(
+            vine.object({
+                x: vine.number(),
+                y: vine.number(),
+            }),
+        ),
+    }),
+);
+
 const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
     label: "Salles",
     icon: "calendar-stats",
@@ -82,12 +94,9 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             type: "string",
             label: "Nom",
         },
-        // TODO remove this hack (e.g. by using a JSON column type)
         config: {
-            type: "file",
-            subType: "custom",
-            createFile: async () => {},
-            deleteFile: async () => {},
+            type: "json",
+            validation: roomConfigValidation,
         },
         officeFloor: {
             type: "belongsToRelation",
@@ -116,7 +125,7 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
     },
 });
 
-export const ROOMS_VIEWS = createFolderViewConfig({
+export const ROOMS_FOLDER = createFolderViewConfig({
     label: "Salles de réunion",
     icon: "building-community",
     name: "rooms-folder",

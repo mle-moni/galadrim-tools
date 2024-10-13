@@ -1,5 +1,5 @@
 import db from '@adonisjs/lucid/services/db'
-import type { CmsPage } from '../../../utils/cms.types.js'
+import { CmsPage } from '../../../utils/cms.types.js'
 
 export const findPage = async (
   data: string | number,

@@ -1,5 +1,5 @@
-import type { ColumnConfig } from '#adomin/create_model_view_config'
-import type { LucidRow, ModelObject, ModelPaginatorContract } from '@adonisjs/lucid/types/model'
+import { ColumnConfig } from '#adomin/create_model_view_config'
+import { LucidRow, ModelObject, ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 import type { PaginatedData } from './get_data_list.js'
 
 export const computeVirtualColumns = async (

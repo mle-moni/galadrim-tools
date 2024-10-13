@@ -1,5 +1,5 @@
 import { getFlatViews } from '#adomin/get_flat_views'
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import vine from '@vinejs/vine'
 import { getModelConfig } from './get_model_config.js'
 

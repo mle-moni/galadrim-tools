@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import { computeRightsCheck } from '../../adomin_routes_overrides_and_rights.js'
 import { validateResourceId } from '../../validate_resource_id.js'
 import { getValidatedModelConfig } from '../validate_model_name.js'

@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import { findPage } from './pages_service.js'
 
 export const showPage = async (ctx: HttpContext) => {

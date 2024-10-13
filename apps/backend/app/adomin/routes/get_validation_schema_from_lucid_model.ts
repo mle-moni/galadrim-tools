@@ -1,7 +1,7 @@
 import { rules, schema } from '@adonisjs/validator'
-import type { ModelConfig } from '../create_model_view_config.js'
-import type { AdominFieldConfig } from '../fields.types.js'
-import type { AdominValidationMode } from '../validation/adomin_validation_helpers.js'
+import { ModelConfig } from '../create_model_view_config.js'
+import { AdominFieldConfig } from '../fields.types.js'
+import { AdominValidationMode } from '../validation/adomin_validation_helpers.js'
 import { computeColumnConfigFields } from './models/get_model_config.js'
 
 export const getValidationSchemaFromConfig = async (
@@ -52,7 +52,7 @@ const getFileSchema = (
   return schema.file[suffix]
 }
 
-const getValidationSchemaFromFieldConfig = (
+export const getValidationSchemaFromFieldConfig = (
   config: AdominFieldConfig,
   validationMode: AdominValidationMode
 ) => {
@@ -79,6 +79,12 @@ const getValidationSchemaFromFieldConfig = (
     return schema.array.optional().members(schema[config.relatedKeyType ?? 'number']())
   }
 
+  if (config.type === 'json') {
+    if (suffix) return schema.string[suffix]()
+
+    return schema.string()
+  }
+
   if (config.type === 'file') {
     const specialSchema = getFileSchema(validationMode, suffix)
 
@@ -101,7 +107,8 @@ const getType = (config: AdominFieldConfig) => {
       return config.fkType ?? 'number'
     case 'hasManyRelation':
     case 'manyToManyRelation':
-      throw new Error('hasManyRelation should be handled before calling this function')
+    case 'json':
+      throw new Error(`${config.type} should be handled before calling this function`)
     default:
       return config.type
   }

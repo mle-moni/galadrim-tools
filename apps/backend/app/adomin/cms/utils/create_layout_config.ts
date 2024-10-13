@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
-import type { SchemaTypes } from '@vinejs/vine/types'
-import type { LayoutConfig } from './cms.types.js'
+import { SchemaTypes } from '@vinejs/vine/types'
+import { LayoutConfig } from './cms.types.js'
 
 export const createLayoutConfig = <T extends (props: any) => any>({
   name,

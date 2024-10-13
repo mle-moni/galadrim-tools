@@ -1,5 +1,5 @@
 import { getFlatViews } from '#adomin/get_flat_views'
-import type { HttpContext } from '@adonisjs/core/http'
+import { HttpContext } from '@adonisjs/core/http'
 import type { AdominViewConfig } from '../../adomin_config.types.js'
 import type { StatsViewConfig } from '../../create_stats_view_config.js'
 import { computeRightsCheck } from '../adomin_routes_overrides_and_rights.js'
@@ -19,15 +19,13 @@ export const getStatConfig = (viewName: string) => {
 }
 
 const getFrontendStatConfig = async (config: StatsViewConfig) => {
-  const promises = config.stats.map(async ({ label, dataFetcher, name, type, options }) => {
-    const data = await dataFetcher()
-
+  const promises = config.stats.map(async ({ label, name, type, options, filters }) => {
     return {
       type,
       name,
       label,
-      data,
       options,
+      filters,
     }
   })
 
