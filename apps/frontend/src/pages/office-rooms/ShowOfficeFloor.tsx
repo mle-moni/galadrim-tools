@@ -1,4 +1,9 @@
-import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
+import type {
+    ApiOffice,
+    ApiOfficeFloor,
+    ApiOfficeRoom,
+    ApiRoomReservation,
+} from "@galadrim-tools/shared";
 import { Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -10,6 +15,7 @@ import { useCanvasSize } from "./useCanvasSize";
 interface Params {
     selectedRoom: ApiOfficeRoom | null;
     rooms: ApiOfficeRoom[];
+    reservations: ApiRoomReservation[];
     selectedOfficeFloor: ApiOfficeFloor;
     selectedOffice: ApiOffice;
     numberOfFloors?: number;
@@ -26,7 +32,13 @@ export const ShowOfficeFloor = observer(
         numberOfFloors = 1,
         searchText,
         offsetHeight = 0,
+        reservations,
     }: Params) => {
+        const roomIdsSet = useMemo(() => new Set(rooms.map((r) => r.id)), [rooms]);
+        const filteredReservations = useMemo(
+            () => reservations.filter((r) => roomIdsSet.has(r.officeRoomId)),
+            [reservations, roomIdsSet],
+        );
         const officeFloorStore = useRef(new OfficeFloorStore()).current;
         const navigate = useNavigate();
         const { canvasWidth, canvasHeight } = useCanvasSize(numberOfFloors, offsetHeight);
@@ -47,6 +59,10 @@ export const ShowOfficeFloor = observer(
         useEffect(() => {
             officeFloorStore.setSearchText(searchText);
         }, [searchText, officeFloorStore]);
+
+        useEffect(() => {
+            officeFloorStore.setReservations(filteredReservations);
+        });
 
         const resetMousePosition = () => {
             officeFloorStore.setMousePosition(0, 0);

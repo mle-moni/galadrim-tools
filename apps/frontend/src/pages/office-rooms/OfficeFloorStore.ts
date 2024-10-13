@@ -1,4 +1,4 @@
-import type { ApiOfficeRoom, RoomPoint } from "@galadrim-tools/shared";
+import type { ApiOfficeRoom, ApiRoomReservation, RoomPoint } from "@galadrim-tools/shared";
 import { themeColors } from "../../theme";
 import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 
@@ -7,6 +7,7 @@ export class OfficeFloorStore {
     private ctx: CanvasRenderingContext2D | null = null;
     private animationFrame: number | null = null;
     private rooms: ApiOfficeRoom[] = [];
+    private reservations: ApiRoomReservation[] = [];
     private selectedRoom: ApiOfficeRoom | null = null;
     private mousePosition: RoomPoint = { x: 0, y: 0 };
     private searchText = "";
@@ -31,6 +32,10 @@ export class OfficeFloorStore {
         this.selectedRoom = selectedRoom;
     }
 
+    setReservations(reservations: ApiRoomReservation[]) {
+        this.reservations = reservations;
+    }
+
     draw() {
         if (!this.ctx || !this.canvas) return;
 
@@ -48,7 +53,9 @@ export class OfficeFloorStore {
     drawRooms() {
         this.rooms.forEach((room) => {
             const strokeStyle = this.isSearched(room) ? themeColors.highligh.main : undefined;
-            if (room.id === this.roomHovered?.id) {
+            if (this.isRoomReserved(room)) {
+                this.drawRoom(room, themeColors.error.main, strokeStyle);
+            } else if (room.id === this.roomHovered?.id) {
                 this.drawRoom(room, themeColors.secondary.dark, strokeStyle);
             } else {
                 this.drawRoom(room, themeColors.secondary.main, strokeStyle);
@@ -86,6 +93,12 @@ export class OfficeFloorStore {
     isSearched(room: ApiOfficeRoom) {
         if (this.searchText === "") return false;
         return room.name.toLowerCase().includes(this.searchText.toLowerCase());
+    }
+
+    isRoomReserved(room: ApiOfficeRoom, now = new Date()) {
+        return this.reservations.some(
+            (r) => r.officeRoomId === room.id && new Date(r.start) < now && now < new Date(r.end),
+        );
     }
 
     setMousePosition(x: number, y: number) {

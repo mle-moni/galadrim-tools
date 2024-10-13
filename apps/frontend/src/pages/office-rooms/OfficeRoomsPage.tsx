@@ -30,6 +30,7 @@ export const OfficeRoomsPage = () => {
         [selectedOffice],
     );
     const { reservationsQuery } = useOfficeRoomCalendar(calendarOptions[0], calendarOptions[1]);
+    const reservations = useMemo(() => reservationsQuery.data ?? [], [reservationsQuery.data]);
 
     const isMediumScreen = useIsMediumScreen();
     const [searchText, setSearchText] = useState("");
@@ -63,43 +64,44 @@ export const OfficeRoomsPage = () => {
                         )}
                     </Breadcrumbs>
                 </Box>
-                <Box
-                    sx={{
-                        display: "flex",
-                        width: "100%",
-                        minHeight: "100px",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 2,
-                        flexWrap: "wrap",
-                    }}
-                >
-                    {selectedOffice === null &&
-                        officesOptions.map((o) => (
-                            <Chip
-                                label={o.label}
-                                key={o.value}
-                                onClick={() => setSelectedOfficeFromId(o.value)}
-                            />
-                        ))}
-                    {selectedOfficeFloor === null &&
-                        officeFloorsOptions.map((o) => (
-                            <Chip
-                                label={o.label}
-                                key={o.value}
-                                onClick={() => setSelectedOfficeFloorFromId(o.value)}
-                            />
-                        ))}
+                {!selectedOfficeRoom && (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            width: "100%",
+                            minHeight: "100px",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 2,
+                            flexWrap: "wrap",
+                        }}
+                    >
+                        {selectedOffice === null &&
+                            officesOptions.map((o) => (
+                                <Chip
+                                    label={o.label}
+                                    key={o.value}
+                                    onClick={() => setSelectedOfficeFromId(o.value)}
+                                />
+                            ))}
+                        {selectedOfficeFloor === null &&
+                            officeFloorsOptions.map((o) => (
+                                <Chip
+                                    label={o.label}
+                                    key={o.value}
+                                    onClick={() => setSelectedOfficeFloorFromId(o.value)}
+                                />
+                            ))}
 
-                    {selectedOfficeRoom === null &&
-                        officeRoomsOptions.map((o) => (
+                        {officeRoomsOptions.map((o) => (
                             <Chip
                                 label={o.label}
                                 key={o.value}
                                 onClick={() => setSelectedOfficeRoomFromId(o.value)}
                             />
                         ))}
-                </Box>
+                    </Box>
+                )}
                 {selectedOffice && !selectedOfficeRoom && (
                     <Box sx={{ display: "flex", mb: 2, justifyContent: "center" }}>
                         <TextField
@@ -119,6 +121,7 @@ export const OfficeRoomsPage = () => {
                         searchText={searchText}
                         numberOfFloors={1}
                         offsetHeight={isMediumScreen ? 0 : 450}
+                        reservations={reservations}
                     />
                 )}
                 {selectedOffice && selectedOfficeFloor && selectedOfficeRoom && (
@@ -148,6 +151,7 @@ export const OfficeRoomsPage = () => {
                                 selectedRoom={selectedOfficeRoom}
                                 numberOfFloors={isMediumScreen ? 1 : officeFloors.length}
                                 searchText={searchText}
+                                reservations={reservations}
                             />
                         ))}
                     </Box>

@@ -48,9 +48,10 @@ export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) =>
                     {authStore.user.username}
                 </Typography>
             </Box>
-            {noDisconnect || isMobile ? (
-                <div style={{ width: 120 }} />
-            ) : (
+
+            {noDisconnect && !isMobile && <div style={{ width: 120 }} />}
+
+            {!noDisconnect && !isMobile && (
                 <Button
                     size="small"
                     variant="outlined"
