@@ -4,10 +4,12 @@ import type {
     ApiOfficeRoom,
     ApiRoomReservation,
 } from "@galadrim-tools/shared";
-import { Typography } from "@mui/material";
+import { Box, Button, Chip } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { clipboardCopy } from "../../../reusableComponents/auth/WhoamiStore";
+import { notifyError, notifySuccess } from "../../../utils/notification";
 import { getDbCoordinates } from "../coordinatesHelper";
 import { useCanvasSize } from "../useCanvasSize";
 import { OfficeFloorStoreAdmin } from "./OfficeFloorStoreAdmin";
@@ -78,9 +80,6 @@ export const ShowOfficeFloorAdmin = observer(
                     flexDirection: "column",
                 }}
             >
-                <Typography sx={{ fontSize: 18, my: 1, userSelect: "none" }}>
-                    Étage {selectedOfficeFloor.floor}
-                </Typography>
                 <canvas
                     onBlur={resetMousePosition}
                     onMouseOut={resetMousePosition}
@@ -103,7 +102,7 @@ export const ShowOfficeFloorAdmin = observer(
                         const mouseY = event.clientY - rect.top;
 
                         officeFloorStore.setMousePosition(mouseX, mouseY);
-                        if (!officeFloorStore.roomHovered) {
+                        if (selectedRoom) {
                             const newPoint = getDbCoordinates(
                                 { x: mouseX, y: mouseY },
                                 event.currentTarget,
@@ -112,11 +111,7 @@ export const ShowOfficeFloorAdmin = observer(
                             return;
                         }
 
-                        if (officeFloorStore.roomHovered.id === selectedRoom?.id) {
-                            navigate(
-                                `/office-rooms/admin/${selectedOffice.id}/${selectedOfficeFloor.id}`,
-                            );
-                        } else {
+                        if (officeFloorStore.roomHovered) {
                             navigate(
                                 `/office-rooms/admin/${selectedOffice.id}/${selectedOfficeFloor.id}/${officeFloorStore.roomHovered.id}`,
                             );
@@ -137,10 +132,40 @@ export const ShowOfficeFloorAdmin = observer(
                 >
                     Utilisez un navigateur récent pour afficher ce contenu. Chrome c'est parfait.
                 </canvas>
-                {officeFloorStore.roomHovered && (
-                    <Typography sx={{ fontSize: 18, my: 1, userSelect: "none" }}>
-                        {roomHoveredName}
-                    </Typography>
+                {officeFloorStore.selectedRoom && (
+                    <>
+                        <Box>
+                            {officeFloorStore.selectedRoom?.config.points.map((p, index) => (
+                                <Chip
+                                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                                    key={index}
+                                    label={`${p.x},${p.y}`}
+                                    onDelete={() => officeFloorStore.deletePoint(index)}
+                                />
+                            ))}
+                        </Box>
+                        <Button
+                            onClick={() => {
+                                clipboardCopy(
+                                    JSON.stringify(officeFloorStore.selectedRoom?.config),
+                                    {
+                                        success: () => {
+                                            notifySuccess(
+                                                "Configuration copiée dans le presse papier",
+                                            );
+                                        },
+                                        error: () => {
+                                            notifyError(
+                                                "Impossible de copier dans le presse papier",
+                                            );
+                                        },
+                                    },
+                                );
+                            }}
+                        >
+                            Copy config
+                        </Button>
+                    </>
                 )}
             </div>
         );

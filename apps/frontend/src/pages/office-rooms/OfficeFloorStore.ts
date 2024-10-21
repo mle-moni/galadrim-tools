@@ -1,4 +1,5 @@
 import type { ApiOfficeRoom, ApiRoomReservation, RoomPoint } from "@galadrim-tools/shared";
+import { action, makeObservable, observable } from "mobx";
 import { themeColors } from "../../theme";
 import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 
@@ -8,9 +9,13 @@ export class OfficeFloorStore {
     protected animationFrame: number | null = null;
     protected rooms: ApiOfficeRoom[] = [];
     protected reservations: ApiRoomReservation[] = [];
-    protected selectedRoom: ApiOfficeRoom | null = null;
+    selectedRoom: ApiOfficeRoom | null = null;
     protected mousePosition: RoomPoint = { x: 0, y: 0 };
     protected searchText = "";
+
+    constructor() {
+        makeObservable(this, { selectedRoom: observable, setSelectedRoom: action });
+    }
 
     setup(canvas: HTMLCanvasElement | null) {
         this.canvas = canvas;
@@ -43,17 +48,15 @@ export class OfficeFloorStore {
 
         this.drawRooms();
 
-        if (this.selectedRoom) {
-            this.drawRoom(this.selectedRoom, themeColors.error.main);
-        }
-
         this.animationFrame = window.requestAnimationFrame(this.draw.bind(this));
     }
 
     drawRooms() {
         this.rooms.forEach((room) => {
             const strokeStyle = this.isSearched(room) ? themeColors.highligh.main : undefined;
-            if (this.isRoomReserved(room)) {
+            if (room.id === this.selectedRoom?.id) {
+                this.drawRoom(this.selectedRoom, themeColors.highligh.main);
+            } else if (this.isRoomReserved(room)) {
                 this.drawRoom(room, themeColors.error.main, strokeStyle);
             } else if (room.id === this.roomHovered?.id) {
                 this.drawRoom(room, themeColors.secondary.dark, strokeStyle);
