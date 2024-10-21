@@ -1,10 +1,34 @@
 import { createFolderViewConfig } from "#adomin/create_folder_view_config";
 import { createModelViewConfig } from "#adomin/create_model_view_config";
+import type {
+    AdominRightsCheckConfig,
+    AdominRightsCheckFunction,
+} from "#adomin/routes/adomin_routes_overrides_and_rights";
 import Office from "#models/office";
 import OfficeFloor from "#models/office_floor";
 import OfficeRoom from "#models/office_room";
+import type { HttpContext } from "@adonisjs/core/http";
 import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
 import vine from "@vinejs/vine";
+
+const checkIsRoomAdmin: AdominRightsCheckFunction = async (ctx: HttpContext) => {
+    const user = ctx.auth.user;
+    if (!user || !user.hasRights(["EVENT_ADMIN"]))
+        return {
+            hasAccess: false,
+            errorMessage: "Vous n'avez pas les droits nécessaires pour accéder à cette ressource",
+        };
+
+    return {
+        hasAccess: true,
+    };
+};
+
+const RIGHT_CHECKS: AdominRightsCheckConfig = {
+    create: checkIsRoomAdmin,
+    update: checkIsRoomAdmin,
+    delete: checkIsRoomAdmin,
+};
 
 const OFFICE_VIEW = createModelViewConfig(() => Office, {
     label: "Bureaux",
@@ -43,6 +67,7 @@ const OFFICE_VIEW = createModelViewConfig(() => Office, {
             editable: false,
         },
     },
+    crudlRights: RIGHT_CHECKS,
 });
 
 const FLOORS_VIEW = createModelViewConfig(() => OfficeFloor, {
@@ -82,8 +107,8 @@ const FLOORS_VIEW = createModelViewConfig(() => OfficeFloor, {
                 if (!search) return;
                 const lowerSearch = search.toLowerCase();
                 if (lowerSearch.startsWith("etage ")) {
-										const floor = lowerSearch.replace("etage ", "")
-										if (floor.length === 0) return
+                    const floor = lowerSearch.replace("etage ", "");
+                    if (floor.length === 0) return;
                     builder.where("floor", floor);
                     return;
                 }
@@ -95,6 +120,7 @@ const FLOORS_VIEW = createModelViewConfig(() => OfficeFloor, {
             },
         },
     },
+    crudlRights: RIGHT_CHECKS,
 });
 
 const roomConfigValidation = vine.compile(
@@ -164,6 +190,7 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
     queryBuilderCallback: (q) => {
         q.preload("officeFloor", (q) => q.preload("office"));
     },
+    crudlRights: RIGHT_CHECKS,
 });
 
 export const ROOMS_FOLDER = createFolderViewConfig({

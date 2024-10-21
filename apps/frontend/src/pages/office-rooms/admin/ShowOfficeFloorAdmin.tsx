@@ -8,11 +8,14 @@ import { Box, Button, Chip } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clipboardCopy } from "../../../reusableComponents/auth/WhoamiStore";
-import { notifyError, notifySuccess } from "../../../utils/notification";
 import { getDbCoordinates } from "../coordinatesHelper";
 import { useCanvasSize } from "../useCanvasSize";
 import { OfficeFloorStoreAdmin } from "./OfficeFloorStoreAdmin";
+import {
+    useOfficeRoomCreateMutation,
+    useOfficeRoomDeleteMutation,
+    useOfficeRoomUpdateMutation,
+} from "./officeRoomMutations";
 
 interface Params {
     selectedRoom: ApiOfficeRoom | null;
@@ -48,6 +51,12 @@ export const ShowOfficeFloorAdmin = observer(
         const filteredRooms = useMemo(
             () => rooms.filter(({ officeFloorId }) => officeFloorId === selectedOfficeFloor.id),
             [rooms, selectedOfficeFloor],
+        );
+
+        const createMutation = useOfficeRoomCreateMutation();
+        const updateMutation = useOfficeRoomUpdateMutation();
+        const deleteMutation = useOfficeRoomDeleteMutation(() =>
+            navigate(`/office-rooms/admin/${selectedOffice.id}/${selectedOfficeFloor.id}`),
         );
 
         useEffect(() => {
@@ -95,6 +104,29 @@ export const ShowOfficeFloorAdmin = observer(
                         } else if (roomHoveredName) {
                             setRoomHoveredName(null);
                         }
+                    }}
+                    onContextMenu={(event) => {
+                        event.preventDefault();
+
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        const mouseX = event.clientX - rect.left;
+                        const mouseY = event.clientY - rect.top;
+
+                        const p1 = getDbCoordinates({ x: mouseX, y: mouseY }, event.currentTarget);
+                        const p2 = { x: p1.x + 100, y: p1.y };
+                        const p3 = { x: p1.x + 100, y: p1.y + 100 };
+                        const p4 = { x: p1.x, y: p1.y + 100 };
+
+                        const newName = prompt("Nom pour la salle");
+                        if (!newName) return;
+
+                        createMutation.mutate({
+                            name: newName,
+                            config: JSON.stringify({
+                                points: [p1, p2, p3, p4],
+                            }),
+                            officeFloor: selectedOfficeFloor.id,
+                        });
                     }}
                     onClick={(event) => {
                         const rect = event.currentTarget.getBoundingClientRect();
@@ -144,27 +176,38 @@ export const ShowOfficeFloorAdmin = observer(
                                 />
                             ))}
                         </Box>
-                        <Button
-                            onClick={() => {
-                                clipboardCopy(
-                                    JSON.stringify(officeFloorStore.selectedRoom?.config),
-                                    {
-                                        success: () => {
-                                            notifySuccess(
-                                                "Configuration copiée dans le presse papier",
-                                            );
-                                        },
-                                        error: () => {
-                                            notifyError(
-                                                "Impossible de copier dans le presse papier",
-                                            );
-                                        },
-                                    },
-                                );
-                            }}
-                        >
-                            Copy config
-                        </Button>
+                        <Box>
+                            <Button
+                                onClick={() => {
+                                    if (!officeFloorStore.selectedRoom) return;
+
+                                    updateMutation.mutate({
+                                        id: officeFloorStore.selectedRoom.id,
+                                        name: officeFloorStore.selectedRoom.name,
+                                        config: JSON.stringify(
+                                            officeFloorStore.selectedRoom.config,
+                                        ),
+                                        officeFloor: selectedOfficeFloor.id,
+                                    });
+                                }}
+                                disabled={updateMutation.isPending}
+                            >
+                                Sauvegarder
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    if (!officeFloorStore.selectedRoom) return;
+                                    if (!confirm("Êtes-vous sûr de vouloir supprimer la salle ?")) {
+                                        return;
+                                    }
+
+                                    deleteMutation.mutate(officeFloorStore.selectedRoom.id);
+                                }}
+                                disabled={deleteMutation.isPending}
+                            >
+                                Supprimer
+                            </Button>
+                        </Box>
                     </>
                 )}
             </div>
