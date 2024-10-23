@@ -1,5 +1,5 @@
 import { Home } from "@mui/icons-material";
-import { Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
 import { type CSSProperties, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useIsMediumScreen } from "../../hooks/useIsMobile";
@@ -11,6 +11,7 @@ import { useOfficeRoomCalendar } from "./calendar/useOfficeRoomCalendar";
 import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
 import { useOfficeRoomSelect } from "./useOfficeRoomSelect";
 import { useOfficeSelect } from "./useOfficeSelect";
+import { useUserSelect } from "./useUserSelect";
 
 const LINK_STYLE: CSSProperties = { color: "black", textDecoration: "none", fontSize: 26 };
 
@@ -34,6 +35,13 @@ export const OfficeRoomsPage = () => {
 
     const isMediumScreen = useIsMediumScreen();
     const [searchText, setSearchText] = useState("");
+    const {
+        selectedUser,
+        selectedUserId,
+        setSelectedUserFromId,
+        usersOptions,
+        selectedUserOption,
+    } = useUserSelect();
 
     return (
         <MainLayout fullscreen>
@@ -103,12 +111,29 @@ export const OfficeRoomsPage = () => {
                     </Box>
                 )}
                 {selectedOffice && !selectedOfficeRoom && (
-                    <Box sx={{ display: "flex", mb: 2, justifyContent: "center" }}>
+                    <Box sx={{ display: "flex", mb: 2, justifyContent: "center", gap: 2 }}>
                         <TextField
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                             label="Rechercher une salle"
                             size="small"
+                            sx={{ width: 250 }}
+                        />
+                        <Autocomplete
+                            disablePortal
+                            sx={{ width: 250 }}
+                            options={usersOptions}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Rechercher un utilisateur"
+                                    size="small"
+                                />
+                            )}
+                            value={selectedUserOption}
+                            onChange={(_e, value) => {
+                                setSelectedUserFromId(value?.value ?? null);
+                            }}
                         />
                     </Box>
                 )}
@@ -122,6 +147,7 @@ export const OfficeRoomsPage = () => {
                         numberOfFloors={1}
                         offsetHeight={isMediumScreen ? 0 : 450}
                         reservations={reservations}
+                        searchedUser={selectedUser}
                     />
                 )}
                 {selectedOffice && selectedOfficeFloor && selectedOfficeRoom && (
@@ -152,6 +178,7 @@ export const OfficeRoomsPage = () => {
                                 numberOfFloors={isMediumScreen ? 1 : officeFloors.length}
                                 searchText={searchText}
                                 reservations={reservations}
+                                searchedUser={selectedUser}
                             />
                         ))}
                     </Box>

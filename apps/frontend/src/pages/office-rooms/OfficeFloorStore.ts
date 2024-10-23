@@ -1,5 +1,6 @@
 import type { ApiOfficeRoom, ApiRoomReservation, RoomPoint } from "@galadrim-tools/shared";
 import { action, makeObservable, observable } from "mobx";
+import type { UserData } from "../../api/galadrimeurs";
 import { themeColors } from "../../theme";
 import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 
@@ -12,6 +13,7 @@ export class OfficeFloorStore {
     selectedRoom: ApiOfficeRoom | null = null;
     protected mousePosition: RoomPoint = { x: 0, y: 0 };
     protected searchText = "";
+    protected searchedUser: UserData | null = null;
 
     constructor() {
         makeObservable(this, { selectedRoom: observable, setSelectedRoom: action });
@@ -31,6 +33,10 @@ export class OfficeFloorStore {
 
     setRooms(rooms: ApiOfficeRoom[]) {
         this.rooms = rooms;
+    }
+
+    setSearchedUser(searchedUser: UserData | null) {
+        this.searchedUser = searchedUser;
     }
 
     setSelectedRoom(selectedRoom: ApiOfficeRoom | null) {
@@ -53,11 +59,15 @@ export class OfficeFloorStore {
 
     drawRooms() {
         this.rooms.forEach((room) => {
+            const reservation = this.isRoomReserved(room);
             const strokeStyle = this.isSearched(room) ? themeColors.highligh.main : undefined;
             if (room.id === this.selectedRoom?.id) {
                 this.drawRoom(this.selectedRoom, themeColors.highligh.main);
-            } else if (this.isRoomReserved(room)) {
-                this.drawRoom(room, themeColors.error.main, strokeStyle);
+            } else if (reservation) {
+                const isUserSearched = reservation.userId === this.searchedUser?.id;
+                const seachedUserStrokeStyle = "#000";
+                const finalStrokeStyle = isUserSearched ? seachedUserStrokeStyle : strokeStyle;
+                this.drawRoom(room, themeColors.error.main, finalStrokeStyle);
             } else if (room.id === this.roomHovered?.id) {
                 this.drawRoom(room, themeColors.secondary.dark, strokeStyle);
             } else {
@@ -99,7 +109,7 @@ export class OfficeFloorStore {
     }
 
     isRoomReserved(room: ApiOfficeRoom, now = new Date()) {
-        return this.reservations.some(
+        return this.reservations.find(
             (r) => r.officeRoomId === room.id && new Date(r.start) < now && now < new Date(r.end),
         );
     }

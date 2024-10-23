@@ -8,8 +8,8 @@ import { Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { UserData } from "../../api/galadrimeurs";
 import { OfficeFloorStore } from "./OfficeFloorStore";
-import { getDbCoordinates } from "./coordinatesHelper";
 import { useCanvasSize } from "./useCanvasSize";
 
 interface Params {
@@ -20,6 +20,7 @@ interface Params {
     selectedOffice: ApiOffice;
     numberOfFloors?: number;
     searchText: string;
+    searchedUser?: UserData | null;
     offsetHeight?: number;
 }
 
@@ -31,6 +32,7 @@ export const ShowOfficeFloor = observer(
         selectedOffice,
         numberOfFloors = 1,
         searchText,
+        searchedUser = null,
         offsetHeight = 0,
         reservations,
     }: Params) => {
@@ -59,6 +61,10 @@ export const ShowOfficeFloor = observer(
         useEffect(() => {
             officeFloorStore.setSearchText(searchText);
         }, [searchText, officeFloorStore]);
+
+        useEffect(() => {
+            officeFloorStore.setSearchedUser(searchedUser);
+        }, [searchedUser, officeFloorStore]);
 
         useEffect(() => {
             officeFloorStore.setReservations(filteredReservations);
@@ -101,10 +107,6 @@ export const ShowOfficeFloor = observer(
                         const rect = event.currentTarget.getBoundingClientRect();
                         const mouseX = event.clientX - rect.left;
                         const mouseY = event.clientY - rect.top;
-
-                        console.log(
-                            getDbCoordinates({ x: mouseX, y: mouseY }, event.currentTarget),
-                        );
 
                         officeFloorStore.setMousePosition(mouseX, mouseY);
                         if (!officeFloorStore.roomHovered) return;
