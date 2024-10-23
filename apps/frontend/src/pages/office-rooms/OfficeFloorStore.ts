@@ -60,13 +60,15 @@ export class OfficeFloorStore {
     drawRooms() {
         this.rooms.forEach((room) => {
             const reservation = this.isRoomReserved(room);
-            const strokeStyle = this.isSearched(room) ? themeColors.highligh.main : undefined;
+            const strokeStyle = this.isSearched(room)
+                ? themeColors.highligh.main
+                : themeColors.background.default;
             if (room.id === this.selectedRoom?.id) {
-                this.drawRoom(this.selectedRoom, themeColors.highligh.main);
+                this.drawRoom(this.selectedRoom, themeColors.highligh.main, strokeStyle);
             } else if (reservation) {
                 const isUserSearched = reservation.userId === this.searchedUser?.id;
-                const seachedUserStrokeStyle = "#000";
-                const finalStrokeStyle = isUserSearched ? seachedUserStrokeStyle : strokeStyle;
+                const searchedUserStrokeStyle = themeColors.success.main;
+                const finalStrokeStyle = isUserSearched ? searchedUserStrokeStyle : strokeStyle;
                 this.drawRoom(room, themeColors.error.main, finalStrokeStyle);
             } else if (room.id === this.roomHovered?.id) {
                 this.drawRoom(room, themeColors.secondary.dark, strokeStyle);
@@ -76,7 +78,7 @@ export class OfficeFloorStore {
         });
     }
 
-    drawRoom(room: ApiOfficeRoom, fillStyle: string, strokeStyle?: string) {
+    drawRoom(room: ApiOfficeRoom, fillStyle: string, strokeStyle: string) {
         const ctx = this.ctx;
         const canvas = this.canvas;
         if (!ctx || !canvas || room.config.points.length < 3) return;
@@ -120,7 +122,12 @@ export class OfficeFloorStore {
     }
 
     get roomHovered() {
-        return this.rooms.find((room) => this.isPointInRoom(room, this.mousePosition)) ?? null;
+        return (
+            this.rooms
+                .slice()
+                .reverse()
+                .find((room) => this.isPointInRoom(room, this.mousePosition)) ?? null
+        );
     }
 
     isPointInRoom(room: ApiOfficeRoom, pointInCanvasCoordinates: RoomPoint): boolean {

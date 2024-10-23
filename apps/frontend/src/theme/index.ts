@@ -23,6 +23,9 @@ export const themeColors = {
     background: {
         default: "#f9efe6",
     },
+    success: {
+        main: "#4ade80",
+    },
     error: {
         main: "#f87171",
     },

@@ -35,13 +35,8 @@ export const OfficeRoomsPage = () => {
 
     const isMediumScreen = useIsMediumScreen();
     const [searchText, setSearchText] = useState("");
-    const {
-        selectedUser,
-        selectedUserId,
-        setSelectedUserFromId,
-        usersOptions,
-        selectedUserOption,
-    } = useUserSelect();
+    const { selectedUser, setSelectedUserFromId, usersOptions, selectedUserOption } =
+        useUserSelect();
 
     return (
         <MainLayout fullscreen>
