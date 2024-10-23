@@ -123,8 +123,10 @@ export class OfficeFloorStore {
 
     get roomHovered() {
         return (
-            this.rooms.toReversed().find((room) => this.isPointInRoom(room, this.mousePosition)) ??
-            null
+            this.rooms
+                .slice()
+                .reverse()
+                .find((room) => this.isPointInRoom(room, this.mousePosition)) ?? null
         );
     }
 
