@@ -9,7 +9,7 @@ export default class extends BaseSchema {
 
             table.integer("floor").notNullable();
 
-            table.json("config").notNullable().defaultTo(`{"width": 100, "height": 100}`);
+            table.json("config").notNullable();
 
             table
                 .integer("office_id")
