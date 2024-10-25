@@ -1,26 +1,5 @@
 import { BaseSchema } from "@adonisjs/lucid/schema";
 
-const DEFAULT_ROOM_CONFIG = {
-    points: [
-        {
-            x: 100,
-            y: 100,
-        },
-        {
-            x: 200,
-            y: 100,
-        },
-        {
-            x: 200,
-            y: 200,
-        },
-        {
-            x: 100,
-            y: 200,
-        },
-    ],
-};
-
 export default class extends BaseSchema {
     protected tableName = "office_rooms";
 
