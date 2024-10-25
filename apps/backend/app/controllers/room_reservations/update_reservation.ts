@@ -1,5 +1,6 @@
 import { DEFAULT_MESSAGE_PROVIDER_CONFIG } from "#adomin/validation/default_validator";
 import { CONNECTED_SOCKETS } from "#controllers/socket/socket_constants";
+import OfficeRoom from "#models/office_room";
 import RoomReservation from "#models/room_reservation";
 import { Ws } from "#services/ws";
 import type { HttpContext } from "@adonisjs/core/http";
@@ -26,7 +27,7 @@ const messagesProvider = new SimpleMessagesProvider(DEFAULT_MESSAGE_PROVIDER_CON
     officeRoomId: "salle",
 });
 
-export const updateReservation = async ({ params, bouncer, request }: HttpContext) => {
+export const updateReservation = async ({ params, bouncer, request, response }: HttpContext) => {
     const found = await RoomReservation.query()
         .where("id", params.id)
         .preload("user")
@@ -35,6 +36,13 @@ export const updateReservation = async ({ params, bouncer, request }: HttpContex
     const { end, start, officeRoomId, title } = await request.validateUsing(validationSchema, {
         messagesProvider,
     });
+
+    const foundRoom = await OfficeRoom.findOrFail(officeRoomId);
+    if (!foundRoom.isBookable) {
+        return response.badRequest({
+            error: `La salle n'est pas réservable`,
+        });
+    }
 
     await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found);
 

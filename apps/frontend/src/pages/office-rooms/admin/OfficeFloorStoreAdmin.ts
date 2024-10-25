@@ -22,4 +22,14 @@ export class OfficeFloorStoreAdmin extends OfficeFloorStore {
 
         this.selectedRoom.config.points.splice(index, 1);
     }
+
+    setIsBookable(isBookable: boolean) {
+        if (!this.selectedRoom) return;
+
+        this.selectedRoom.isBookable = isBookable;
+    }
+
+    isAdminPage(): boolean {
+        return true;
+    }
 }

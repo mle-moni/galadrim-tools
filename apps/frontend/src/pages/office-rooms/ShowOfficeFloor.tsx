@@ -55,7 +55,7 @@ export const ShowOfficeFloor = observer(
         }, [filteredRooms, officeFloorStore]);
 
         useEffect(() => {
-            officeFloorStore.setSelectedRoom(selectedRoom);
+            officeFloorStore.setSelectedRoom(selectedRoom?.id ?? null);
         }, [selectedRoom, officeFloorStore]);
 
         useEffect(() => {

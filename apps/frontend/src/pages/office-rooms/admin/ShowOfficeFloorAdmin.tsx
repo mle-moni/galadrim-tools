@@ -4,7 +4,7 @@ import type {
     ApiOfficeRoom,
     ApiRoomReservation,
 } from "@galadrim-tools/shared";
-import { Box, Button, Chip } from "@mui/material";
+import { Box, Button, Checkbox, Chip } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,7 +64,7 @@ export const ShowOfficeFloorAdmin = observer(
         }, [filteredRooms, officeFloorStore]);
 
         useEffect(() => {
-            officeFloorStore.setSelectedRoom(selectedRoom);
+            officeFloorStore.setSelectedRoom(selectedRoom?.id ?? null);
         }, [selectedRoom, officeFloorStore]);
 
         useEffect(() => {
@@ -126,6 +126,7 @@ export const ShowOfficeFloorAdmin = observer(
                                 points: [p1, p2, p3, p4],
                             }),
                             officeFloor: selectedOfficeFloor.id,
+                            isBookable: true,
                         });
                     }}
                     onClick={(event) => {
@@ -167,6 +168,10 @@ export const ShowOfficeFloorAdmin = observer(
                 {officeFloorStore.selectedRoom && (
                     <>
                         <Box>
+                            <Checkbox
+                                checked={officeFloorStore.selectedRoom.isBookable}
+                                onChange={(_e, checked) => officeFloorStore.setIsBookable(checked)}
+                            />
                             {officeFloorStore.selectedRoom?.config.points.map((p, index) => (
                                 <Chip
                                     // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -188,6 +193,7 @@ export const ShowOfficeFloorAdmin = observer(
                                             officeFloorStore.selectedRoom.config,
                                         ),
                                         officeFloor: selectedOfficeFloor.id,
+                                        isBookable: officeFloorStore.selectedRoom.isBookable,
                                     });
                                 }}
                                 disabled={updateMutation.isPending}

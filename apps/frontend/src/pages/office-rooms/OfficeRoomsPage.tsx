@@ -19,13 +19,15 @@ export const OfficeRoomsPage = () => {
     const { officesOptions, selectedOffice, setSelectedOfficeFromId } = useOfficeSelect();
     const { officeFloors, officeFloorsOptions, selectedOfficeFloor, setSelectedOfficeFloorFromId } =
         useOfficeFloorSelect(selectedOffice);
-    const {
-        officeRooms,
-        officeRoomsOptions,
-        selectedOfficeRoom,
-        setSelectedOfficeRoomFromId,
-        nonFilteredOfficeRooms,
-    } = useOfficeRoomSelect(selectedOfficeFloor);
+    const { officeRooms, selectedOfficeRoom, setSelectedOfficeRoomFromId, nonFilteredOfficeRooms } =
+        useOfficeRoomSelect(selectedOfficeFloor);
+    const reservableRooms = useMemo(() => officeRooms.filter((r) => r.isBookable), [officeRooms]);
+    const reservableRoomsOptions = useMemo(() => {
+        return reservableRooms.map((r) => ({
+            label: r.name,
+            value: r.id,
+        }));
+    }, [reservableRooms]);
     const calendarOptions = useMemo<[number | null, CalendarDateRange]>(
         () => [selectedOffice?.id ?? null, [new Date()]],
         [selectedOffice],
@@ -96,7 +98,7 @@ export const OfficeRoomsPage = () => {
                                 />
                             ))}
 
-                        {officeRoomsOptions.map((o) => (
+                        {reservableRoomsOptions.map((o) => (
                             <Chip
                                 label={o.label}
                                 key={o.value}
