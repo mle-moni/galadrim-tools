@@ -18,6 +18,7 @@
         "typecheck": "tsc --noEmit"
     },
     "imports": {
+        "#adomin/*": "./app/adomin/*.js",
         "#controllers/*": "./app/controllers/*.js",
         "#exceptions/*": "./app/exceptions/*.js",
         "#models/*": "./app/models/*.js",
@@ -65,6 +66,7 @@
         "@adonisjs/static": "^1.1.1",
         "@adonisjs/validator": "^13.0.2",
         "@galadrim-tools/shared": "*",
+        "@kitajs/html": "^4.1.0",
         "@vinejs/vine": "^2.1.0",
         "argon2": "^0.40.3",
         "axios": "^1.7.2",
@@ -72,7 +74,8 @@
         "mysql2": "^3.10.3",
         "reflect-metadata": "^0.2.2",
         "socket.io": "^4.7.5",
-        "ts-fsrs": "^4.1.2"
+        "ts-fsrs": "^4.1.2",
+        "xlsx": "^0.18.5"
     },
     "hotHook": {
         "boundaries": ["./app/controllers/**/*.ts", "./app/middleware/*.ts"]

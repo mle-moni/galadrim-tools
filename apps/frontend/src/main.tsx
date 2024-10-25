@@ -1,8 +1,10 @@
 import { ThemeProvider } from "@mui/material";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import React, { type FC, type PropsWithChildren } from "react";
 import { createRoot } from "react-dom/client";
 import { AppStore } from "./globalStores/AppStore";
+import { queryClient } from "./queryClient";
 import MainRouter from "./routes/MainRouter";
 import { getTheme } from "./theme";
 import "./theme/react-big-calendar.css";
@@ -24,7 +26,9 @@ root.render(
         <ThemeProvider theme={theme}>
             <SnackbarProvider>
                 <SnackBarSetter>
-                    <MainRouter />
+                    <QueryClientProvider client={queryClient}>
+                        <MainRouter />
+                    </QueryClientProvider>
                 </SnackBarSetter>
             </SnackbarProvider>
         </ThemeProvider>

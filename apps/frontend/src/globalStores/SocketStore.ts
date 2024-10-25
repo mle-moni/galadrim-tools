@@ -1,9 +1,17 @@
-import type { IIdea, INotification, IRestaurant, IReview, ITag } from "@galadrim-tools/shared";
+import type {
+    ApiRoomReservation,
+    IIdea,
+    INotification,
+    IRestaurant,
+    IReview,
+    ITag,
+} from "@galadrim-tools/shared";
 import { type Socket, io } from "socket.io-client";
 import { getEventFromApi } from "../api/events";
 import { getSocketApiUrl } from "../api/fetch";
 import type { UserData } from "../api/galadrimeurs";
 import type { TournoisResult } from "../pages/games/tournois/TournoisResultsStore";
+import { queryClient } from "../queryClient";
 import { notifyError, notifySuccess } from "../utils/notification";
 import { AppStore } from "./AppStore";
 import type { RawRoomEvent } from "./EventsStore";
@@ -58,6 +66,15 @@ export class SocketStore {
         this.socket.on("deleteRestaurantReview", (ideaId) => this.deleteRestaurantReview(ideaId));
         this.socket.on("notification", (notification) => this.addNotification(notification));
         this.socket.on("game.tournois.newResult", (newResult) => this.addTournoisResult(newResult));
+        this.socket.on("deleteRoomReservation", (reservationId) =>
+            this.deleteRoomReservation(reservationId),
+        );
+        this.socket.on("updateRoomReservation", (reservation) =>
+            this.updateRoomReservation(reservation),
+        );
+        this.socket.on("createRoomReservation", (reservation) =>
+            this.createRoomReservation(reservation),
+        );
     }
 
     socketAuth() {
@@ -142,5 +159,38 @@ export class SocketStore {
 
     addTournoisResult(newResult: TournoisResult) {
         AppStore.tournoisResultsStore?.addResult(newResult);
+    }
+
+    deleteRoomReservation(reservationId: number) {
+        queryClient.setQueriesData<ApiRoomReservation[]>(
+            { queryKey: ["office-rooms-reservations"] },
+            (old) => {
+                if (!old) return old;
+
+                return old.filter((r) => r.id !== reservationId);
+            },
+        );
+    }
+
+    updateRoomReservation(reservation: ApiRoomReservation) {
+        queryClient.setQueriesData<ApiRoomReservation[]>(
+            { queryKey: ["office-rooms-reservations"] },
+            (old) => {
+                if (!old) return old;
+
+                return old.map((r) => (r.id === reservation.id ? reservation : r));
+            },
+        );
+    }
+
+    createRoomReservation(reservation: ApiRoomReservation) {
+        queryClient.setQueriesData<ApiRoomReservation[]>(
+            { queryKey: ["office-rooms-reservations"] },
+            (old) => {
+                if (!old) return [reservation];
+
+                return [...old, reservation];
+            },
+        );
     }
 }

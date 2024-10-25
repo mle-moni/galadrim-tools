@@ -7,6 +7,7 @@
 |
 */
 
+import "#adomin/routes/adomin_router";
 import router from "@adonisjs/core/services/router";
 
 /*
@@ -51,6 +52,7 @@ import RestaurantNotesController from "#controllers/restaurant_notes/RestaurantN
 import RestaurantReviewsController from "#controllers/restaurant_reviews/RestaurantReviewsController";
 import { showRestaurantRewind } from "#controllers/restaurant_rewinds/showRestaurantRewind";
 import RestaurantsController from "#controllers/restaurants/RestaurantsController";
+import RoomReservationsController from "#controllers/room_reservations/room_reservations_controller";
 import StatisticsController from "#controllers/statistics/StatisticsController";
 import TagsController from "#controllers/tags/TagsController";
 import { middleware } from "./kernel.js";
@@ -110,6 +112,8 @@ router
         router.resource("bugConnexions", BugConnexionsController).apiOnly();
         router.get("/caddyLogs/:id", [LogsController, "showCaddyLogs"]);
         router.get("/atopLogs/:id", [LogsController, "showAtopLogs"]);
+
+        router.resource("/offices/:officeId/reservations", RoomReservationsController).apiOnly();
     })
     .use(middleware.auth({ guards: ["web", "api"] }));
 
