@@ -37,7 +37,7 @@ export default class extends BaseSchema {
 
             table.string("name").notNullable();
 
-            table.json("config").notNullable().defaultTo(JSON.stringify(DEFAULT_ROOM_CONFIG));
+            table.json("config").notNullable();
 
             table.boolean("is_bookable").notNullable().defaultTo(true);
 
