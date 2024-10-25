@@ -2,6 +2,7 @@ import { BaseModel, belongsTo, column } from "@adonisjs/lucid/orm";
 import type { BelongsTo } from "@adonisjs/lucid/types/relations";
 import type { OfficeRoomConfig } from "@galadrim-tools/shared";
 import type { DateTime } from "luxon";
+import { BOOLEAN_COLUMN } from "../helpers/columns.js";
 import OfficeFloor from "./office_floor.js";
 
 export default class OfficeRoom extends BaseModel {
@@ -19,6 +20,9 @@ export default class OfficeRoom extends BaseModel {
 
     @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
     declare config: OfficeRoomConfig;
+
+    @column(BOOLEAN_COLUMN)
+    declare isBookable: boolean;
 
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime;

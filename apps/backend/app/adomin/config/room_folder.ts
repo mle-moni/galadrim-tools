@@ -146,6 +146,10 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             type: "json",
             validation: roomConfigValidation,
         },
+        isBookable: {
+            type: "boolean",
+            defaultValue: true,
+        },
         officeFloor: {
             type: "belongsToRelation",
             label: "Etage",

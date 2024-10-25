@@ -1,14 +1,12 @@
 import { BaseModel, column } from "@adonisjs/lucid/orm";
 import type { DateTime } from "luxon";
+import { BOOLEAN_COLUMN } from "../helpers/columns.js";
 
 export default class Notification extends BaseModel {
     @column({ isPrimary: true })
     declare id: number;
 
-    @column({
-        prepare: (value: 0 | 1) => Boolean(value),
-        serialize: (value: 0 | 1) => Boolean(value),
-    })
+    @column(BOOLEAN_COLUMN)
     declare read: boolean;
 
     @column()

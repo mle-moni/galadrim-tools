@@ -1,5 +1,26 @@
 import { BaseSchema } from "@adonisjs/lucid/schema";
 
+const DEFAULT_ROOM_CONFIG = {
+    points: [
+        {
+            x: 100,
+            y: 100,
+        },
+        {
+            x: 200,
+            y: 100,
+        },
+        {
+            x: 200,
+            y: 200,
+        },
+        {
+            x: 100,
+            y: 200,
+        },
+    ],
+};
+
 export default class extends BaseSchema {
     protected tableName = "office_rooms";
 
@@ -16,10 +37,9 @@ export default class extends BaseSchema {
 
             table.string("name").notNullable();
 
-            table
-                .json("config")
-                .notNullable()
-                .defaultTo(`{"width": 100, "height": 100, "x": 0, "y": 0}`);
+            table.json("config").notNullable().defaultTo(JSON.stringify(DEFAULT_ROOM_CONFIG));
+
+            table.boolean("is_bookable").notNullable().defaultTo(true);
 
             table.timestamp("created_at");
             table.timestamp("updated_at");

@@ -3,6 +3,7 @@ import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
 import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { IIdea } from "@galadrim-tools/shared";
 import type { DateTime } from "luxon";
+import { BOOLEAN_COLUMN } from "../helpers/columns.js";
 import IdeaComment from "./idea_comment.js";
 import IdeaVote from "./idea_vote.js";
 import User from "./user.js";
@@ -17,7 +18,7 @@ export default class Idea extends BaseModel {
     @column()
     declare text: string;
 
-    @column()
+    @column(BOOLEAN_COLUMN)
     declare isAnonymous: boolean;
 
     @column()
