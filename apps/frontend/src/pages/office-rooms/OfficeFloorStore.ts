@@ -4,6 +4,8 @@ import type { UserData } from "../../api/galadrimeurs";
 import { themeColors } from "../../theme";
 import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 
+const DEFAULT_STROKE_STYLE = "#333333";
+
 export class OfficeFloorStore {
     protected canvas: HTMLCanvasElement | null = null;
     protected ctx: CanvasRenderingContext2D | null = null;
@@ -82,7 +84,7 @@ export class OfficeFloorStore {
             return themeColors.success.main;
         }
 
-        return "#333333";
+        return DEFAULT_STROKE_STYLE;
     }
 
     getFillStyle(room: ApiOfficeRoom) {
@@ -131,12 +133,13 @@ export class OfficeFloorStore {
         ctx.lineTo(roomPoints[0].x, roomPoints[0].y);
         ctx.fill();
 
-        if (strokeStyle) {
-            ctx.strokeStyle = strokeStyle;
-            ctx.stroke();
+        ctx.strokeStyle = strokeStyle;
+        if (strokeStyle !== DEFAULT_STROKE_STYLE) {
+            ctx.lineWidth = 4;
         }
-
+        ctx.stroke();
         ctx.closePath();
+        ctx.lineWidth = 1;
     }
 
     isSearched(room: ApiOfficeRoom) {
