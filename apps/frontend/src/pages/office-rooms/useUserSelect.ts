@@ -15,6 +15,7 @@ export const useUserSelect = () => {
         const options = usersQuery.data.map((user) => ({
             label: user.username,
             value: user.id,
+            imageUrl: user.imageUrl,
         }));
 
         return options;

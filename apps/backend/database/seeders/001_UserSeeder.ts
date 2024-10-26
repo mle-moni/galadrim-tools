@@ -1,12 +1,13 @@
 import User from "#models/user";
 import { BaseSeeder } from "@adonisjs/lucid/seeders";
-import { generateRights, RIGHTS } from "@galadrim-tools/shared";
+import { faker } from "@faker-js/faker";
+import { RIGHTS, generateRights } from "@galadrim-tools/shared";
 
 export default class UserSeeder extends BaseSeeder {
     public static environment = ["development"];
 
     public async run() {
-        User.updateOrCreateMany("id", [
+        await User.updateOrCreateMany("id", [
             {
                 id: 1,
                 username: "test",
@@ -47,5 +48,17 @@ export default class UserSeeder extends BaseSeeder {
                 rights: RIGHTS.DEFAULT,
             },
         ]);
+
+        const userDtos = [];
+        for (let i = 1; i <= 100; i++) {
+            userDtos.push({
+                username: faker.internet.userName(),
+                email: faker.internet.email(),
+                imageUrl: faker.image.url(),
+                password: "test",
+                rights: RIGHTS.DEFAULT,
+            });
+        }
+        await User.createMany(userDtos);
     }
 }

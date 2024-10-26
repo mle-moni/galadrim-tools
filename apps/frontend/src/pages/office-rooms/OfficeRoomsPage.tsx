@@ -1,11 +1,12 @@
 import { Home } from "@mui/icons-material";
-import { Autocomplete, Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
+import { Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
 import { type CSSProperties, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useIsMediumScreen } from "../../hooks/useIsMobile";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
 import { ShowOfficeFloor } from "./ShowOfficeFloor";
+import { UserSelect } from "./UserSelect";
 import { type CalendarDateRange, OfficeRoomCalendar } from "./calendar/OfficeRoomCalendar";
 import { useOfficeRoomCalendar } from "./calendar/useOfficeRoomCalendar";
 import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
@@ -116,21 +117,10 @@ export const OfficeRoomsPage = () => {
                             size="small"
                             sx={{ width: 250 }}
                         />
-                        <Autocomplete
-                            disablePortal
-                            sx={{ width: 250 }}
-                            options={usersOptions}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Rechercher un utilisateur"
-                                    size="small"
-                                />
-                            )}
-                            value={selectedUserOption}
-                            onChange={(_e, value) => {
-                                setSelectedUserFromId(value?.value ?? null);
-                            }}
+                        <UserSelect
+                            setSelectedUserFromId={setSelectedUserFromId}
+                            selectedUserOption={selectedUserOption}
+                            usersOptions={usersOptions}
                         />
                     </Box>
                 )}
