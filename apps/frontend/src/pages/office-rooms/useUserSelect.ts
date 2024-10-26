@@ -12,11 +12,14 @@ export const useUserSelect = () => {
     const usersOptions = useMemo(() => {
         if (!usersQuery.data) return [];
 
-        const options = usersQuery.data.map((user) => ({
-            label: user.username,
-            value: user.id,
-            imageUrl: user.imageUrl,
-        }));
+        const options = usersQuery.data
+            .slice()
+            .reverse() // old users first (they are more likely to have a picture)
+            .map((user) => ({
+                label: user.username,
+                value: user.id,
+                imageUrl: user.imageUrl,
+            }));
 
         return options;
     }, [usersQuery.data]);
