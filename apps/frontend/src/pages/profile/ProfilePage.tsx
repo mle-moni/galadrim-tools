@@ -1,5 +1,4 @@
-import { AlternateEmail, ColorLens, Key, Person, Settings } from "@mui/icons-material";
-import BackIcon from "@mui/icons-material/ChevronLeft";
+import { AlternateEmail, ColorLens, Home, Key, Person, Settings } from "@mui/icons-material";
 import { Avatar, Button, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useMemo, useState } from "react";
@@ -10,6 +9,7 @@ import { GaladrimRoomsCard } from "../../reusableComponents/Core/GaladrimRoomsCa
 import { createApiToken } from "../../reusableComponents/auth/createApiToken";
 import { CenteredDiv } from "../../reusableComponents/common/CenteredDiv";
 import { GaladrimButton } from "../../reusableComponents/common/GaladrimButton";
+import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import { TextFieldStore } from "../../reusableComponents/form/TextFieldStore";
 import { TextInputWithIcon } from "../../reusableComponents/form/TextInputWithIcon";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
@@ -36,6 +36,7 @@ export const ProfilePage = observer(() => {
     return (
         <MainLayout fullscreen={false}>
             <CenteredDiv>
+                <RoundedLinks linkInfos={[{ Icon: Home, link: "/" }]} />
                 <GaladrimRoomsCard size="large" sx={{ width: "100%", maxWidth: 600, mt: 4 }}>
                     <GaladrimLogo align="center" sx={{ mb: 2 }} />
                     <Typography sx={{ fontSize: 26, textAlign: "center", m: 2 }}>
@@ -121,9 +122,14 @@ export const ProfilePage = observer(() => {
                         <Settings sx={{ mr: 1 }} /> Paramètres de notifications
                     </CustomLink>
 
-                    <CustomLink to="/">
-                        <BackIcon /> Retour à l'accueil
-                    </CustomLink>
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        color="error"
+                        onClick={() => authStore.logout()}
+                    >
+                        Déconnexion
+                    </Button>
                 </GaladrimRoomsCard>
             </CenteredDiv>
         </MainLayout>

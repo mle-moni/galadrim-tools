@@ -1,11 +1,11 @@
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { AppStore } from "../../globalStores/AppStore";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { Notifications } from "../../pages/notifications/Notifications";
 import { WhoamiStore } from "./WhoamiStore";
 
-export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) => {
+export const Whoami = observer(() => {
     const { authStore } = AppStore;
     const store = new WhoamiStore();
     const isMobile = useIsMobile();
@@ -49,18 +49,7 @@ export const Whoami = observer<{ noDisconnect?: boolean }>(({ noDisconnect }) =>
                 </Typography>
             </Box>
 
-            {noDisconnect && !isMobile && <div style={{ width: 120 }} />}
-
-            {!noDisconnect && !isMobile && (
-                <Button
-                    size="small"
-                    variant="outlined"
-                    color="error"
-                    onClick={() => authStore.logout()}
-                >
-                    Déconnexion
-                </Button>
-            )}
+            {!isMobile && <div style={{ width: 120 }} />}
         </Stack>
     );
 });
