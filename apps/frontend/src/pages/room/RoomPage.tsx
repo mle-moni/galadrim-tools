@@ -32,7 +32,7 @@ const RoomPage = () => {
     );
 
     return (
-        <MainLayout fullscreen noDisconnect>
+        <MainLayout fullscreen>
             <div>
                 <Box sx={{ position: "absolute", top: 32, left: 32, zIndex: 10 }}>
                     <Button
