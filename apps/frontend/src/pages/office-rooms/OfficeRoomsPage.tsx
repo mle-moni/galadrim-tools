@@ -1,5 +1,5 @@
-import { Home } from "@mui/icons-material";
-import { Box, Breadcrumbs, Chip, TextField, Typography } from "@mui/material";
+import { CalendarMonth, Home } from "@mui/icons-material";
+import { Box, Breadcrumbs, Chip, IconButton, TextField, Typography } from "@mui/material";
 import { type CSSProperties, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useIsMediumScreen } from "../../hooks/useIsMobile";
@@ -40,6 +40,7 @@ export const OfficeRoomsPage = () => {
     const [searchText, setSearchText] = useState("");
     const { selectedUser, setSelectedUserFromId, usersOptions, selectedUserOption } =
         useUserSelect();
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     return (
         <MainLayout fullscreen>
@@ -69,6 +70,14 @@ export const OfficeRoomsPage = () => {
                             <Typography style={LINK_STYLE}>{selectedOfficeRoom.name}</Typography>
                         )}
                     </Breadcrumbs>
+                    {!selectedOfficeRoom && selectedOffice && (
+                        <IconButton
+                            onClick={() => setIsCalendarOpen((prev) => !prev)}
+                            color={isCalendarOpen ? "success" : "secondary"}
+                        >
+                            <CalendarMonth />
+                        </IconButton>
+                    )}
                 </Box>
                 {!selectedOfficeRoom && (
                     <Box
@@ -108,34 +117,38 @@ export const OfficeRoomsPage = () => {
                         ))}
                     </Box>
                 )}
-                {selectedOffice && !selectedOfficeRoom && (
-                    <Box sx={{ display: "flex", mb: 2, justifyContent: "center", gap: 2 }}>
-                        <TextField
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            label="Rechercher une salle"
-                            size="small"
-                            sx={{ width: 250 }}
-                        />
-                        <UserSelect
-                            setSelectedUserFromId={setSelectedUserFromId}
-                            selectedUserOption={selectedUserOption}
-                            usersOptions={usersOptions}
-                        />
-                    </Box>
-                )}
-                {selectedOffice && selectedOfficeFloor && !selectedOfficeRoom && (
-                    <ShowOfficeFloor
-                        selectedOffice={selectedOffice}
-                        selectedOfficeFloor={selectedOfficeFloor}
-                        rooms={officeRooms}
-                        selectedRoom={selectedOfficeRoom}
-                        searchText={searchText}
-                        numberOfFloors={1}
-                        offsetHeight={isMediumScreen ? 0 : 450}
-                        reservations={reservations}
-                        searchedUser={selectedUser}
-                    />
+                {!isCalendarOpen && (
+                    <>
+                        {selectedOffice && !selectedOfficeRoom && (
+                            <Box sx={{ display: "flex", mb: 2, justifyContent: "center", gap: 2 }}>
+                                <TextField
+                                    value={searchText}
+                                    onChange={(e) => setSearchText(e.target.value)}
+                                    label="Rechercher une salle"
+                                    size="small"
+                                    sx={{ width: 250 }}
+                                />
+                                <UserSelect
+                                    setSelectedUserFromId={setSelectedUserFromId}
+                                    selectedUserOption={selectedUserOption}
+                                    usersOptions={usersOptions}
+                                />
+                            </Box>
+                        )}
+                        {selectedOffice && selectedOfficeFloor && !selectedOfficeRoom && (
+                            <ShowOfficeFloor
+                                selectedOffice={selectedOffice}
+                                selectedOfficeFloor={selectedOfficeFloor}
+                                rooms={officeRooms}
+                                selectedRoom={selectedOfficeRoom}
+                                searchText={searchText}
+                                numberOfFloors={1}
+                                offsetHeight={isMediumScreen ? 0 : 450}
+                                reservations={reservations}
+                                searchedUser={selectedUser}
+                            />
+                        )}
+                    </>
                 )}
                 {selectedOffice && selectedOfficeFloor && selectedOfficeRoom && (
                     <OfficeRoomCalendar
@@ -143,9 +156,11 @@ export const OfficeRoomsPage = () => {
                         officeRooms={[selectedOfficeRoom]}
                         officeId={selectedOffice.id}
                         isAbsolute={false}
+                        officeFloorId={selectedOfficeFloor.id}
+                        officeFloors={officeFloors}
                     />
                 )}
-                {selectedOffice && !selectedOfficeFloor && (
+                {!isCalendarOpen && selectedOffice && !selectedOfficeFloor && (
                     <Box
                         sx={{
                             display: "flex",
@@ -169,6 +184,16 @@ export const OfficeRoomsPage = () => {
                             />
                         ))}
                     </Box>
+                )}
+                {isCalendarOpen && !selectedOfficeRoom && selectedOffice?.id && (
+                    <OfficeRoomCalendar
+                        step={15}
+                        officeRooms={nonFilteredOfficeRooms}
+                        officeId={selectedOffice.id}
+                        isAbsolute={false}
+                        officeFloorId={selectedOfficeFloor?.id ?? null}
+                        officeFloors={officeFloors}
+                    />
                 )}
             </Box>
         </MainLayout>
