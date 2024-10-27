@@ -1,11 +1,12 @@
 import { CalendarMonth, Home } from "@mui/icons-material";
-import { Box, Breadcrumbs, Chip, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Breadcrumbs, IconButton, Tabs, TextField, Tooltip, Typography } from "@mui/material";
 import { type CSSProperties, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useIsMediumScreen } from "../../hooks/useIsMobile";
+import { useIsMediumScreen, useIsMobile } from "../../hooks/useIsMobile";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../reusableComponents/layouts/MainLayout";
 import { ShowOfficeFloor } from "./ShowOfficeFloor";
+import { TabChip } from "./TabChip";
 import { UserSelect } from "./UserSelect";
 import { type CalendarDateRange, OfficeRoomCalendar } from "./calendar/OfficeRoomCalendar";
 import { useOfficeRoomCalendar } from "./calendar/useOfficeRoomCalendar";
@@ -41,9 +42,10 @@ export const OfficeRoomsPage = () => {
     const { selectedUser, setSelectedUserFromId, usersOptions, selectedUserOption } =
         useUserSelect();
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const isMobile = useIsMobile();
 
     return (
-        <MainLayout fullscreen hiddenOverflow>
+        <MainLayout fullscreen hiddenOverflow={!isMobile}>
             <RoundedLinks linkInfos={[{ Icon: Home, link: "/" }]} />
             <Box
                 sx={{
@@ -71,15 +73,61 @@ export const OfficeRoomsPage = () => {
                         )}
                     </Breadcrumbs>
                     {!selectedOfficeRoom && selectedOffice && (
-                        <IconButton
-                            onClick={() => setIsCalendarOpen((prev) => !prev)}
-                            color={isCalendarOpen ? "success" : "secondary"}
-                        >
-                            <CalendarMonth />
-                        </IconButton>
+                        <Tooltip title="Voir le Calendrier">
+                            <IconButton
+                                onClick={() => setIsCalendarOpen((prev) => !prev)}
+                                color={isCalendarOpen ? "success" : "secondary"}
+                            >
+                                <CalendarMonth />
+                            </IconButton>
+                        </Tooltip>
                     )}
                 </Box>
                 {!selectedOfficeRoom && (
+                    <Box sx={{ overflowX: "auto", whiteSpace: "nowrap" }}>
+                        <Tabs
+                            value={1}
+                            variant="scrollable"
+                            scrollButtons="auto"
+                            TabIndicatorProps={{ style: { display: "none" } }}
+                            sx={{
+                                "& .MuiTabs-scrollButtons": {
+                                    width: "auto",
+                                },
+                                "& > div > .MuiTabs-flexContainer": {
+                                    justifyContent: "center",
+                                },
+                                mb: 2,
+                            }}
+                        >
+                            {selectedOffice === null &&
+                                officesOptions.map((o) => (
+                                    <TabChip
+                                        label={o.label}
+                                        key={o.value}
+                                        onClick={() => setSelectedOfficeFromId(o.value)}
+                                    />
+                                ))}
+                            {selectedOfficeFloor === null &&
+                                officeFloorsOptions.map((o) => (
+                                    <TabChip
+                                        label={o.label}
+                                        key={o.value}
+                                        onClick={() => setSelectedOfficeFloorFromId(o.value)}
+                                    />
+                                ))}
+
+                            {reservableRoomsOptions.map((o) => (
+                                <TabChip
+                                    label={o.label}
+                                    key={o.value}
+                                    onClick={() => setSelectedOfficeRoomFromId(o.value)}
+                                />
+                            ))}
+                        </Tabs>
+                    </Box>
+                )}
+                {/* {!selectedOfficeRoom && (
                     <Box
                         sx={{
                             display: "flex",
@@ -90,33 +138,8 @@ export const OfficeRoomsPage = () => {
                             gap: 2,
                             flexWrap: "wrap",
                         }}
-                    >
-                        {selectedOffice === null &&
-                            officesOptions.map((o) => (
-                                <Chip
-                                    label={o.label}
-                                    key={o.value}
-                                    onClick={() => setSelectedOfficeFromId(o.value)}
-                                />
-                            ))}
-                        {selectedOfficeFloor === null &&
-                            officeFloorsOptions.map((o) => (
-                                <Chip
-                                    label={o.label}
-                                    key={o.value}
-                                    onClick={() => setSelectedOfficeFloorFromId(o.value)}
-                                />
-                            ))}
-
-                        {reservableRoomsOptions.map((o) => (
-                            <Chip
-                                label={o.label}
-                                key={o.value}
-                                onClick={() => setSelectedOfficeRoomFromId(o.value)}
-                            />
-                        ))}
-                    </Box>
-                )}
+                    ></Box>
+                )} */}
                 {!isCalendarOpen && (
                     <>
                         {selectedOffice && !selectedOfficeRoom && (

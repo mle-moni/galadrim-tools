@@ -13,7 +13,8 @@ type MainLayoutProps = PropsWithChildren<{
 }>;
 
 const Root = styled(Box, {
-    shouldForwardProp: (propName: string) => propName !== "fullscreen",
+    shouldForwardProp: (propName: string) =>
+        propName !== "fullscreen" && propName !== "hiddenOverflow",
 })<MainLayoutProps>(({ fullscreen, hiddenOverflow }) =>
     sx({
         display: "flex",

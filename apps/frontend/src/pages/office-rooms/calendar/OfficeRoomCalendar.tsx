@@ -26,13 +26,6 @@ const localizer = momentLocalizer(moment);
 
 const DragAndDropCalendar = withDragAndDrop<OfficeRoomEvent, ApiOfficeRoom>(Calendar);
 
-const CALENDAR_POSITION = {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 120,
-} as const;
-
 export type CalendarDateRange = [Date] | [Date, Date, Date, Date, Date];
 
 export const OfficeRoomCalendar = observer<{
