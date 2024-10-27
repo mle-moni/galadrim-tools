@@ -43,7 +43,7 @@ export const OfficeRoomsPage = () => {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
     return (
-        <MainLayout fullscreen>
+        <MainLayout fullscreen hiddenOverflow>
             <RoundedLinks linkInfos={[{ Icon: Home, link: "/" }]} />
             <Box
                 sx={{
@@ -155,9 +155,9 @@ export const OfficeRoomsPage = () => {
                         step={15}
                         officeRooms={[selectedOfficeRoom]}
                         officeId={selectedOffice.id}
-                        isAbsolute={false}
                         officeFloorId={selectedOfficeFloor.id}
                         officeFloors={officeFloors}
+                        isSingleRoom
                     />
                 )}
                 {!isCalendarOpen && selectedOffice && !selectedOfficeFloor && (
@@ -190,7 +190,6 @@ export const OfficeRoomsPage = () => {
                         step={15}
                         officeRooms={nonFilteredOfficeRooms}
                         officeId={selectedOffice.id}
-                        isAbsolute={false}
                         officeFloorId={selectedOfficeFloor?.id ?? null}
                         officeFloors={officeFloors}
                     />

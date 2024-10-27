@@ -38,20 +38,20 @@ export type CalendarDateRange = [Date] | [Date, Date, Date, Date, Date];
 export const OfficeRoomCalendar = observer<{
     step: number;
     height?: string | number;
-    isAbsolute?: boolean;
     officeFloors: ApiOfficeFloor[];
     officeRooms: ApiOfficeRoom[];
     officeId: number;
     officeFloorId: number | null;
+    isSingleRoom?: boolean;
 }>(
     ({
         step,
         height,
-        isAbsolute = true,
         officeRooms: rooms,
         officeId,
         officeFloorId,
         officeFloors,
+        isSingleRoom = false,
     }) => {
         const officeFloorsMap = useMemo(
             () => new Map(officeFloors.map((f) => [f.id, f])),
@@ -93,11 +93,16 @@ export const OfficeRoomCalendar = observer<{
                     height: height ?? "100%",
                     display: "flex",
                     justifyContent: "center",
-                    ...(isAbsolute ? CALENDAR_POSITION : {}),
                     backgroundColor: "var(--main-color)",
                 }}
             >
-                <div style={{ width: "90vw", backgroundColor: "white" }}>
+                <div
+                    style={{
+                        width: "90vw",
+                        backgroundColor: "white",
+                        maxHeight: isSingleRoom ? "100%" : "calc(100vh - 250px)",
+                    }}
+                >
                     <DragAndDropCalendar
                         selectable
                         min={new Date(0, 0, 0, 9, 0, 0)}

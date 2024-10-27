@@ -1,4 +1,4 @@
-import { Box, experimental_sx as sx, styled } from "@mui/material";
+import { Box, styled, experimental_sx as sx } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps, FC, PropsWithChildren } from "react";
 import { AppStore } from "../../globalStores/AppStore";
@@ -9,12 +9,12 @@ import { Whoami } from "../auth/Whoami";
 
 type MainLayoutProps = PropsWithChildren<{
     fullscreen?: boolean;
-    noDisconnect?: boolean;
+    hiddenOverflow?: boolean;
 }>;
 
 const Root = styled(Box, {
     shouldForwardProp: (propName: string) => propName !== "fullscreen",
-})<MainLayoutProps>(({ fullscreen }) =>
+})<MainLayoutProps>(({ fullscreen, hiddenOverflow }) =>
     sx({
         display: "flex",
         minHeight: fullscreen ? "100vh" : "auto",
@@ -23,17 +23,18 @@ const Root = styled(Box, {
         alignItems: "center",
         boxSizing: "border-box",
         backgroundColor: fullscreen ? "inherit" : getTheme().palette.background.default,
+        overflow: hiddenOverflow ? "hidden" : undefined,
     }),
 );
 
 export const MainLayout = observer(
-    ({ fullscreen, children, noDisconnect }: ComponentProps<FC<MainLayoutProps>>) => {
+    ({ fullscreen, hiddenOverflow, children }: ComponentProps<FC<MainLayoutProps>>) => {
         const { authStore } = AppStore;
 
         useCheckConnection(authStore);
 
         return (
-            <Root fullscreen={fullscreen}>
+            <Root fullscreen={fullscreen} hiddenOverflow={hiddenOverflow}>
                 <div
                     style={{
                         width: "100%",
@@ -47,7 +48,7 @@ export const MainLayout = observer(
                             zIndex: 10,
                         }}
                     >
-                        {authStore.connected && <Whoami noDisconnect={noDisconnect} />}
+                        {authStore.connected && <Whoami />}
                     </Box>
                     {children}
                 </div>
