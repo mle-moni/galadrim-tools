@@ -13,7 +13,7 @@ export type GaladrimThemeKey = keyof GaladrimTheme;
 export const THEME_KEYS = Object.keys(DEFAULT_THEME) as GaladrimThemeKey[];
 export const THEME_KEYS_WITHOUT_NAME = THEME_KEYS.slice(1);
 
-const FIELDS_TO_CSS_VARS: { [K in GaladrimThemeKey]: string | null } = {
+export const FIELDS_TO_CSS_VARS: { [K in GaladrimThemeKey]: string | null } = {
     name: null,
     myEventsBg: "--my-events-bg",
     myEventsBorder: "--my-events-border",

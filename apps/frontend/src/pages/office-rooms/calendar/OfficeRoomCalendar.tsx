@@ -8,6 +8,7 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AppStore } from "../../../globalStores/AppStore";
 import { MomentFrLocales } from "../../room/setFrLocales";
+import { ResourceHeader } from "./ResourceHeader";
 import { useOfficeRoomCalendar } from "./useOfficeRoomCalendar";
 
 export type OfficeRoomEvent = {
@@ -52,12 +53,15 @@ export const OfficeRoomCalendar = observer<{
         officeFloorId,
         officeFloors,
     }) => {
+        const officeFloorsMap = useMemo(
+            () => new Map(officeFloors.map((f) => [f.id, f])),
+            [officeFloors],
+        );
         const officeRooms = useMemo(() => {
-            const allFloorsSet = new Set(officeFloors.map((f) => f.id));
-            const finalSet = officeFloorId ? new Set([officeFloorId]) : allFloorsSet;
+            const finalSet = officeFloorId ? new Set([officeFloorId]) : officeFloorsMap;
 
             return rooms.filter((r) => finalSet.has(r.officeFloorId) && r.isBookable);
-        }, [rooms, officeFloorId, officeFloors]);
+        }, [rooms, officeFloorId, officeFloorsMap]);
         const [range, setRange] = useState<CalendarDateRange>([new Date()]);
         const handleRangeChange = (newRange: Date[] | null) => {
             if (!newRange) return;
@@ -136,6 +140,11 @@ export const OfficeRoomCalendar = observer<{
                         resourceTitleAccessor="name"
                         titleAccessor={"title"}
                         resourceAccessor="officeRoomId"
+                        components={{
+                            resourceHeader: (props) => (
+                                <ResourceHeader {...props} officeFloorsMap={officeFloorsMap} />
+                            ),
+                        }}
                     />
                 </div>
             </div>
