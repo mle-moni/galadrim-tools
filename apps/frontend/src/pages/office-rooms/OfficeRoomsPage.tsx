@@ -1,4 +1,4 @@
-import { CalendarMonth, Home } from "@mui/icons-material";
+import { CalendarMonth, EventBusy, Home } from "@mui/icons-material";
 import { Box, Breadcrumbs, IconButton, Tabs, TextField, Tooltip, Typography } from "@mui/material";
 import { type CSSProperties, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -42,6 +42,7 @@ export const OfficeRoomsPage = () => {
     const { selectedUser, setSelectedUserFromId, usersOptions, selectedUserOption } =
         useUserSelect();
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
     const isMobile = useIsMobile();
 
     return (
@@ -73,14 +74,26 @@ export const OfficeRoomsPage = () => {
                         )}
                     </Breadcrumbs>
                     {!selectedOfficeRoom && selectedOffice && (
-                        <Tooltip title="Voir le Calendrier">
-                            <IconButton
-                                onClick={() => setIsCalendarOpen((prev) => !prev)}
-                                color={isCalendarOpen ? "success" : "secondary"}
-                            >
-                                <CalendarMonth />
-                            </IconButton>
-                        </Tooltip>
+                        <Box>
+                            <Tooltip title="Voir le Calendrier">
+                                <IconButton
+                                    onClick={() => setIsCalendarOpen((prev) => !prev)}
+                                    color={isCalendarOpen ? "success" : "secondary"}
+                                >
+                                    <CalendarMonth />
+                                </IconButton>
+                            </Tooltip>
+                            {isCalendarOpen && (
+                                <Tooltip title="Ne montrer que les salles disponibles">
+                                    <IconButton
+                                        onClick={() => setShowOnlyAvailable((prev) => !prev)}
+                                        color={showOnlyAvailable ? "error" : "secondary"}
+                                    >
+                                        <EventBusy />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </Box>
                     )}
                 </Box>
                 {!selectedOfficeRoom && (
@@ -127,19 +140,6 @@ export const OfficeRoomsPage = () => {
                         </Tabs>
                     </Box>
                 )}
-                {/* {!selectedOfficeRoom && (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            width: "100%",
-                            minHeight: "100px",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 2,
-                            flexWrap: "wrap",
-                        }}
-                    ></Box>
-                )} */}
                 {!isCalendarOpen && (
                     <>
                         {selectedOffice && !selectedOfficeRoom && (
@@ -181,6 +181,7 @@ export const OfficeRoomsPage = () => {
                         officeFloorId={selectedOfficeFloor.id}
                         officeFloors={officeFloors}
                         isSingleRoom
+                        showOnlyAvailable={showOnlyAvailable}
                     />
                 )}
                 {!isCalendarOpen && selectedOffice && !selectedOfficeFloor && (
@@ -215,6 +216,7 @@ export const OfficeRoomsPage = () => {
                         officeId={selectedOffice.id}
                         officeFloorId={selectedOfficeFloor?.id ?? null}
                         officeFloors={officeFloors}
+                        showOnlyAvailable={showOnlyAvailable}
                     />
                 )}
             </Box>

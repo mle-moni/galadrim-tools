@@ -36,6 +36,7 @@ export const OfficeRoomCalendar = observer<{
     officeId: number;
     officeFloorId: number | null;
     isSingleRoom?: boolean;
+    showOnlyAvailable?: boolean;
 }>(
     ({
         step,
@@ -45,16 +46,29 @@ export const OfficeRoomCalendar = observer<{
         officeFloorId,
         officeFloors,
         isSingleRoom = false,
+        showOnlyAvailable = false,
     }) => {
         const officeFloorsMap = useMemo(
             () => new Map(officeFloors.map((f) => [f.id, f])),
             [officeFloors],
         );
-        const officeRooms = useMemo(() => {
+        const officeRoomsFiltered = useMemo(() => {
             const finalSet = officeFloorId ? new Set([officeFloorId]) : officeFloorsMap;
 
             return rooms.filter((r) => finalSet.has(r.officeFloorId) && r.isBookable);
         }, [rooms, officeFloorId, officeFloorsMap]);
+
+        const officeRoomsSorted = useMemo(
+            () =>
+                officeRoomsFiltered.slice().sort((a, b) => {
+                    const aFloor = officeFloorsMap.get(a.officeFloorId)?.floor ?? 0;
+                    const bFloor = officeFloorsMap.get(b.officeFloorId)?.floor ?? 0;
+
+                    return aFloor - bFloor;
+                }),
+            [officeRoomsFiltered, officeFloorsMap],
+        );
+
         const [range, setRange] = useState<CalendarDateRange>([new Date()]);
         const handleRangeChange = (newRange: Date[] | null) => {
             if (!newRange) return;
@@ -79,6 +93,20 @@ export const OfficeRoomCalendar = observer<{
                 title: e.titleComputed,
             }));
         }, [reservationsQuery.data]);
+
+        const nonAvailableRoomsSet = useMemo(() => {
+            const now = new Date();
+            const eventsNow = events.filter((e) => e.start < now && now < e.end);
+
+            return new Set(eventsNow.map((e) => e.officeRoomId));
+        }, [events]);
+
+        const officeRooms = useMemo(() => {
+            if (showOnlyAvailable) {
+                return officeRoomsSorted.filter((r) => !nonAvailableRoomsSet.has(r.id));
+            }
+            return officeRoomsSorted;
+        }, [officeRoomsSorted, nonAvailableRoomsSet, showOnlyAvailable]);
 
         return (
             <div

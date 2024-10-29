@@ -11,12 +11,13 @@ export const ResourceHeader = ({ label, resource, officeFloorsMap }: Props) => {
     const cssVarsBg = ["myEventsBg", "otherEventsBg"] as const;
     const cssVarsText = ["myEventsText", "otherEventsText"] as const;
     const floor = officeFloorsMap.get(resource.officeFloorId)?.floor ?? 0;
+    const title = `${label} (étage ${floor})`;
 
     const backgroundColor = FIELDS_TO_CSS_VARS[cssVarsBg[floor % 2]];
     const textColor = FIELDS_TO_CSS_VARS[cssVarsText[floor % 2]];
 
     return (
-        <Tooltip title={label}>
+        <Tooltip title={title}>
             <div
                 style={{
                     backgroundColor: `var(${backgroundColor})`,
