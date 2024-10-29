@@ -2,7 +2,7 @@ import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
 import "moment/locale/es";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -81,14 +81,22 @@ export const OfficeRoomCalendar = observer<{
             deleteReservationMutation,
             updateReservationMutation,
         } = useOfficeRoomCalendar(officeId, range);
-        const events: OfficeRoomEvent[] = (reservationsQuery.data ?? []).map((e) => ({
-            ...e,
-            createdAt: new Date(e.createdAt),
-            updatedAt: new Date(e.updatedAt),
-            start: new Date(e.start),
-            end: new Date(e.end),
-            title: e.titleComputed,
-        }));
+        const events: OfficeRoomEvent[] = useMemo(
+            () =>
+                (reservationsQuery.data ?? []).map((e) => ({
+                    ...e,
+                    createdAt: new Date(e.createdAt),
+                    updatedAt: new Date(e.updatedAt),
+                    start: new Date(e.start),
+                    end: new Date(e.end),
+                    title: e.titleComputed,
+                })),
+            [reservationsQuery.data],
+        );
+
+        useEffect(() => {
+            console.log(events);
+        }, [events]);
 
         const nonAvailableRoomsSet = useMemo(() => {
             const now = new Date();

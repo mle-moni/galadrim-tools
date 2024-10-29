@@ -29,7 +29,9 @@ export const reservationsIndex = async ({ params, request }: HttpContext) => {
         });
     });
 
-    const reservations = await reservationsQuery.preload("user");
+    const reservations = await reservationsQuery.preload("user", (q) =>
+        q.select("id", "username", "image", "imageUrl"),
+    );
 
     return reservations;
 };
