@@ -81,18 +81,14 @@ export const OfficeRoomCalendar = observer<{
             deleteReservationMutation,
             updateReservationMutation,
         } = useOfficeRoomCalendar(officeId, range);
-        const events: OfficeRoomEvent[] = useMemo(() => {
-            const rawData = reservationsQuery.data ?? [];
-
-            return rawData.map((e) => ({
-                ...e,
-                createdAt: new Date(e.createdAt),
-                updatedAt: new Date(e.updatedAt),
-                start: new Date(e.start),
-                end: new Date(e.end),
-                title: e.titleComputed,
-            }));
-        }, [reservationsQuery.data]);
+        const events: OfficeRoomEvent[] = (reservationsQuery.data ?? []).map((e) => ({
+            ...e,
+            createdAt: new Date(e.createdAt),
+            updatedAt: new Date(e.updatedAt),
+            start: new Date(e.start),
+            end: new Date(e.end),
+            title: e.titleComputed,
+        }));
 
         const nonAvailableRoomsSet = useMemo(() => {
             const now = new Date();
