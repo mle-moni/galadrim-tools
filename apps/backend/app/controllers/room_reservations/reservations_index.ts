@@ -25,7 +25,9 @@ export const reservationsIndex = async ({ params, request }: HttpContext) => {
 
     reservationsQuery.where((q) => {
         searchParams.range.forEach((date) => {
-            q.orWhereRaw("DATE(start) = DATE(?)", [date]);
+            q.orWhere((q) =>
+                q.where("start", ">", date).andWhereRaw("start < ? + INTERVAL 1 DAY", [date]),
+            );
         });
     });
 
