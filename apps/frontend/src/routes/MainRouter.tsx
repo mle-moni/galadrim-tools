@@ -118,9 +118,9 @@ const AppRoutes = () => {
                     element={<OfficeRoomsAdminPage />}
                 />
                 <Route path="/rooms/statistics" element={<StatisticsPage />} />
-                <Route path="room" element={<RoomPage />}>
+                {/* <Route path="room" element={<RoomPage />}>
                     <Route path=":roomName" element={<RoomPage />} />
-                </Route>
+                </Route> */}
                 <Route path="/saveur/myRestaurantNotes" element={<MyRestaurantNotesPage />} />
                 <Route path="/saveur/restaurants/:id" element={<EditRestaurantPage />} />
                 <Route path="/saveur/createRestaurant" element={<CreateRestaurantPage />} />

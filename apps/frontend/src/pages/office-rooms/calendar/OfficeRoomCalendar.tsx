@@ -2,12 +2,13 @@ import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
 import "moment/locale/es";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AppStore } from "../../../globalStores/AppStore";
 import { MomentFrLocales } from "../../room/setFrLocales";
+import { getStartOfDay } from "../getStartOfDay";
 import { ResourceHeader } from "./ResourceHeader";
 import { useOfficeRoomCalendar } from "./useOfficeRoomCalendar";
 
@@ -69,7 +70,7 @@ export const OfficeRoomCalendar = observer<{
             [officeRoomsFiltered, officeFloorsMap],
         );
 
-        const [range, setRange] = useState<CalendarDateRange>([new Date()]);
+        const [range, setRange] = useState<CalendarDateRange>([getStartOfDay()]);
         const handleRangeChange = (newRange: Date[] | null) => {
             if (!newRange) return;
             setRange(newRange as CalendarDateRange);
@@ -93,10 +94,6 @@ export const OfficeRoomCalendar = observer<{
                 })),
             [reservationsQuery.data],
         );
-
-        useEffect(() => {
-            console.log(events);
-        }, [events]);
 
         const nonAvailableRoomsSet = useMemo(() => {
             const now = new Date();

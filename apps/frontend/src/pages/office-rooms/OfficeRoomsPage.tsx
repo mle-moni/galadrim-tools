@@ -10,6 +10,7 @@ import { TabChip } from "./TabChip";
 import { UserSelect } from "./UserSelect";
 import { type CalendarDateRange, OfficeRoomCalendar } from "./calendar/OfficeRoomCalendar";
 import { useOfficeRoomCalendar } from "./calendar/useOfficeRoomCalendar";
+import { getStartOfDay } from "./getStartOfDay";
 import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
 import { useOfficeRoomSelect } from "./useOfficeRoomSelect";
 import { useOfficeSelect } from "./useOfficeSelect";
@@ -31,7 +32,7 @@ export const OfficeRoomsPage = () => {
         }));
     }, [reservableRooms]);
     const calendarOptions = useMemo<[number | null, CalendarDateRange]>(
-        () => [selectedOffice?.id ?? null, [new Date()]],
+        () => [selectedOffice?.id ?? null, [getStartOfDay()]],
         [selectedOffice],
     );
     const { reservationsQuery } = useOfficeRoomCalendar(calendarOptions[0], calendarOptions[1]);

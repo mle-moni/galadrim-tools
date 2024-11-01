@@ -3,6 +3,7 @@ import StatsIcon from "@mui/icons-material/QueryStats";
 import { Box, Button, FormControlLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppStore } from "../../globalStores/AppStore";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import {
@@ -40,6 +41,18 @@ const RoomsHomePage = observer(() => {
     const svgSize = Math.round(shortestEdge * 0.8);
 
     const WorkplaceComponent = locationToComponent[location];
+
+    const RedirectToOfficeRooms = () => {
+        const navigate = useNavigate();
+
+        useEffect(() => {
+            navigate("/office-rooms");
+        }, [navigate]);
+
+        return null;
+    };
+
+    if (Math.PI) return <RedirectToOfficeRooms />;
 
     return (
         <MainLayout fullscreen>

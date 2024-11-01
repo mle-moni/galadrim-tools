@@ -3,9 +3,9 @@ import {
     CalendarMonth,
     GitHub,
     Lightbulb,
+    PsychologyAlt,
     RestaurantMenu,
     VideogameAsset,
-    PsychologyAlt,
 } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { observer } from "mobx-react-lite";
@@ -30,7 +30,7 @@ const HomePage = observer(() => {
                     marginTop: ["140px", 0],
                 }}
             >
-                <IconLink Icon={CalendarMonth} link="/rooms" title="Réservation de salles" />
+                <IconLink Icon={CalendarMonth} link="/office-rooms" title="Réservation de salles" />
                 <IconLink Icon={RestaurantMenu} link="/saveur" title="Restaurants" />
                 <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
                 <IconLink Icon={PsychologyAlt} link="/games/galaki" title="Galaki" />
