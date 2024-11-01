@@ -44,7 +44,7 @@ export const updateReservation = async ({ params, bouncer, request, response }: 
         });
     }
 
-    await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found);
+    await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found, "EVENT_ADMIN");
 
     found.title = title;
     found.start = DateTime.fromJSDate(start);

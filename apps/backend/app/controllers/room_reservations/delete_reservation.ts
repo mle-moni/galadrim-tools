@@ -7,7 +7,7 @@ export const deleteReservation = async ({ params, bouncer }: HttpContext) => {
     const idToDelete = +params.id;
     const found = await RoomReservation.findOrFail(idToDelete);
 
-    await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found);
+    await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found, "EVENT_ADMIN");
 
     await found.delete();
 
