@@ -1,6 +1,7 @@
 import type { ApiRoomReservation } from "@galadrim-tools/shared";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchBackendJson } from "../../../api/fetch";
+import { fetchBackendJson, getErrorMessage } from "../../../api/fetch";
+import { notifyError } from "../../../utils/notification";
 import { APPLICATION_JSON_HEADERS } from "../../idea/createIdea/CreateIdeaStore";
 import type { CalendarDateRange, OfficeRoomEvent } from "./OfficeRoomCalendar";
 
@@ -46,6 +47,7 @@ export const useOfficeRoomCalendar = (officeId: number | null, range: CalendarDa
             );
 
             if (!res.ok) {
+                notifyError(getErrorMessage(res.json, "Impossible de créer la réservation"));
                 throw new Error("Impossible de créer la réservation");
             }
 
@@ -61,6 +63,7 @@ export const useOfficeRoomCalendar = (officeId: number | null, range: CalendarDa
             );
 
             if (!res.ok) {
+                notifyError(getErrorMessage(res.json, "Impossible de supprimer la réservation"));
                 throw new Error("Impossible de supprimer la réservation");
             }
 
@@ -91,7 +94,8 @@ export const useOfficeRoomCalendar = (officeId: number | null, range: CalendarDa
             );
 
             if (!res.ok) {
-                throw new Error("Impossible de créer la réservation");
+                notifyError(getErrorMessage(res.json, "Impossible de modifier la réservation"));
+                throw new Error("Impossible de modifier la réservation");
             }
 
             return res.json;

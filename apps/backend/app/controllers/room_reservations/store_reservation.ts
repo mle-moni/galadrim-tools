@@ -39,10 +39,19 @@ export const storeReservation = async ({ request, auth, response }: HttpContext)
         });
     }
 
+    const startDate = DateTime.fromJSDate(start);
+    const endDate = DateTime.fromJSDate(end);
+
+    if (startDate.day !== endDate.day) {
+        return response.badRequest({
+            error: "La date de début et la date de fin doivent être sur la même journée",
+        });
+    }
+
     const reservation = await RoomReservation.create({
         title: title ?? null,
-        start: DateTime.fromJSDate(start),
-        end: DateTime.fromJSDate(end),
+        start: startDate,
+        end: endDate,
         officeRoomId,
         userId: user.id,
     });

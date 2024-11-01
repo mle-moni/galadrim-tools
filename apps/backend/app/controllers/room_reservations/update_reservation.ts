@@ -46,9 +46,18 @@ export const updateReservation = async ({ params, bouncer, request, response }: 
 
     await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found, "EVENT_ADMIN");
 
+    const startDate = DateTime.fromJSDate(start);
+    const endDate = DateTime.fromJSDate(end);
+
+    if (startDate.day !== endDate.day) {
+        return response.badRequest({
+            error: "La date de début et la date de fin doivent être sur la même journée",
+        });
+    }
+
     found.title = title;
-    found.start = DateTime.fromJSDate(start);
-    found.end = DateTime.fromJSDate(end);
+    found.start = startDate;
+    found.end = endDate;
     found.officeRoomId = officeRoomId;
 
     await found.save();
