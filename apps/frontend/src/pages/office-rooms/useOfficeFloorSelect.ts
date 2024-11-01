@@ -39,12 +39,12 @@ export const useOfficeFloorSelect = (
         if (officeFloors.length === 0) return [];
 
         const options = officeFloors.map((o) => ({
-            label: `${selectedOffice?.name ?? ""} étage ${o.floor}`,
+            label: `Étage ${o.floor}`,
             value: o.id,
         }));
 
         return options;
-    }, [officeFloors, selectedOffice]);
+    }, [officeFloors]);
 
     const selected = useMemo(() => {
         if (!query.data) return null;

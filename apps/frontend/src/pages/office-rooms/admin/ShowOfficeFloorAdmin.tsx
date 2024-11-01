@@ -96,13 +96,16 @@ export const ShowOfficeFloorAdmin = observer(
                         const rect = event.currentTarget.getBoundingClientRect();
                         const mouseX = event.clientX - rect.left;
                         const mouseY = event.clientY - rect.top;
+                        const canvas = officeFloorStore.canvas;
 
                         officeFloorStore.setMousePosition(mouseX, mouseY);
                         if (officeFloorStore.roomHovered) {
+                            if (canvas) canvas.style.cursor = "pointer";
                             if (officeFloorStore.roomHovered.name === roomHoveredName) return;
                             setRoomHoveredName(officeFloorStore.roomHovered.name);
-                        } else if (roomHoveredName) {
-                            setRoomHoveredName(null);
+                        } else {
+                            if (canvas) canvas.style.cursor = "default";
+                            if (roomHoveredName) setRoomHoveredName(null);
                         }
                     }}
                     onContextMenu={(event) => {
@@ -151,7 +154,6 @@ export const ShowOfficeFloorAdmin = observer(
                         }
                     }}
                     style={{
-                        cursor: "pointer",
                         borderRadius: 4,
                         borderStyle: "solid",
                         borderWidth: 1,

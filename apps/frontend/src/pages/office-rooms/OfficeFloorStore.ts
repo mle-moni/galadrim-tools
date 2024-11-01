@@ -7,7 +7,7 @@ import { getCanvasCoordinates, isPointInPolygon } from "./coordinatesHelper";
 const DEFAULT_STROKE_STYLE = "#333333";
 
 export class OfficeFloorStore {
-    protected canvas: HTMLCanvasElement | null = null;
+    canvas: HTMLCanvasElement | null = null;
     protected ctx: CanvasRenderingContext2D | null = null;
     protected animationFrame: number | null = null;
     rooms: ApiOfficeRoom[] = [];
@@ -187,6 +187,6 @@ export class OfficeFloorStore {
     }
 
     setSearchText(searchText: string) {
-        this.searchText = searchText;
+        this.searchText = searchText.trim();
     }
 }
