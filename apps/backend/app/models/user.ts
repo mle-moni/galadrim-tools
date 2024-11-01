@@ -20,10 +20,11 @@ import {
 } from "@galadrim-tools/shared";
 import type { DateTime } from "luxon";
 import Notification from "./notification.js";
+import Office from "./office.js";
+import PortraitGuess from "./portrait_guess.js";
 import RestaurantChoice from "./restaurant_choice.js";
 import RestaurantNote from "./restaurant_note.js";
 import Theme from "./theme.js";
-import PortraitGuess from "./portrait_guess.js";
 
 const AuthFinder = withAuthFinder(() => hash.use("argon"), {
     uids: ["username", "email"],
@@ -66,6 +67,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
     @column()
     declare themeId: number | null;
+
+    @column()
+    declare officeId: number | null;
+
+    @belongsTo(() => Office)
+    declare office: BelongsTo<typeof Office>;
 
     @column(ATTACHMENT_COLUMN)
     declare image: IImage | null;
@@ -150,6 +157,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
             notifications,
             skin: this.skin,
             theme,
+            officeId: this.officeId,
         };
     }
 

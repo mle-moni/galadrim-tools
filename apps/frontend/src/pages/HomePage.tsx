@@ -18,6 +18,9 @@ const HomePage = observer(() => {
         ? AppStore.authStore.user.rights !== 0
         : false;
 
+    const officeId = AppStore.authStore.user.officeId;
+    const officeRoomsLink = officeId ? `/office-rooms/${officeId}` : "/office-rooms";
+
     return (
         <MainLayout fullscreen>
             <Box
@@ -30,7 +33,11 @@ const HomePage = observer(() => {
                     marginTop: ["140px", 0],
                 }}
             >
-                <IconLink Icon={CalendarMonth} link="/office-rooms" title="Réservation de salles" />
+                <IconLink
+                    Icon={CalendarMonth}
+                    link={officeRoomsLink}
+                    title="Réservation de salles"
+                />
                 <IconLink Icon={RestaurantMenu} link="/saveur" title="Restaurants" />
                 <IconLink Icon={VideogameAsset} link="/games/tournois" title="Platformer" />
                 <IconLink Icon={PsychologyAlt} link="/games/galaki" title="Galaki" />

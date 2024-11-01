@@ -35,4 +35,5 @@ export interface IUserData {
     notifications: INotification[];
     skin: string | null;
     theme: ITheme | null;
+    officeId: number | null;
 }
