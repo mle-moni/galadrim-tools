@@ -1,50 +1,31 @@
-import Event from "#models/event";
+import { DEFAULT_MESSAGE_PROVIDER_CONFIG } from "#adomin/validation/default_validator";
+import OfficeRoom from "#models/office_room";
+import RoomReservation from "#models/room_reservation";
 import type { HttpContext } from "@adonisjs/core/http";
+import vine, { SimpleMessagesProvider } from "@vinejs/vine";
 
-export const availableRooms = async ({ request, response }: HttpContext) => {
-    const queryString = request.qs();
-    const start = queryString.start ?? null;
-    const end = queryString.end ?? null;
+const validationSchema = vine.compile(
+    vine.object({
+        start: vine.date({ formats: { utc: true } }),
+        end: vine.date({ formats: { utc: true } }),
+    }),
+);
 
-    const startDate = new Date(start);
-    const endDate = new Date(end);
+const messagesProvider = new SimpleMessagesProvider(DEFAULT_MESSAGE_PROVIDER_CONFIG, {
+    start: "date de début",
+    end: "date de fin",
+});
 
-    const invalidDate =
-        startDate.toString() === "Invalid Date" || endDate.toString() === "Invalid Date";
-
-    if (invalidDate || !start || !end) {
-        return response.badRequest({
-            error: "Invalid Date",
-        });
-    }
-
-    const rooms = [
-        "Salle Vador",
-        "Salle Adier",
-        "Salle Turing",
-        "Salle manguier massif",
-        "Salle du coffre",
-        "Cuisine",
-        "Le Cube",
-        "L'Arche",
-        "Nantes - Le boudoir",
-        "Nantes - La cave",
-        "Nantes - La salle de torture",
-        "Nantes - Le placard",
-        "Salle Amesh",
-        "Salle Lovelace",
-        "Salle Turing",
-        "Salle du manguier (ultra)-massif",
-        "Salle du Trésor",
-        "L'Olympe",
-        "La Forêt",
-        "Salle Méditerranée",
-    ];
+export const availableRooms = async ({ request }: HttpContext) => {
+    const { start, end } = await request.validateUsing(validationSchema, { messagesProvider });
 
     // get all events with dates incompatible with the new event
-    const res = await Event.query().where("end", ">", startDate).andWhere("start", "<", endDate);
+    const reservations = await RoomReservation.query()
+        .where("end", ">", start)
+        .andWhere("start", "<", end);
+    const unavailableRooms = new Set(reservations.map((reservation) => reservation.officeRoomId));
+    const unavailableRoomIds = Array.from(unavailableRooms);
+    const rooms = await OfficeRoom.query().whereNotIn("id", unavailableRoomIds);
 
-    const unavailableRooms = new Set(res.map((event) => event.room));
-
-    return rooms.filter((room) => !unavailableRooms.has(room));
+    return rooms;
 };
