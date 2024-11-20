@@ -1,6 +1,6 @@
 import { CalendarMonth, EventBusy, Home } from "@mui/icons-material";
 import { Box, Breadcrumbs, IconButton, Tabs, TextField, Tooltip, Typography } from "@mui/material";
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useIsMediumScreen, useIsMobile } from "../../hooks/useIsMobile";
 import { RoundedLinks } from "../../reusableComponents/common/RoundedLinks";
@@ -45,6 +45,14 @@ export const OfficeRoomsPage = () => {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
     const isMobile = useIsMobile();
+
+    useEffect(() => {
+        if (selectedOfficeFloor) return;
+
+        if (officeFloorsOptions.length === 1) {
+            setSelectedOfficeFloorFromId(officeFloorsOptions[0].value);
+        }
+    }, [officeFloorsOptions, selectedOfficeFloor, setSelectedOfficeFloorFromId]);
 
     return (
         <MainLayout fullscreen hiddenOverflow={!isMobile}>
