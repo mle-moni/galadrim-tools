@@ -61,12 +61,12 @@ export class OfficeFloorStore {
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // if (this.isAdminPage()) {
-        //     const imgPath = "/assets/images/old_floors/floor_2.png";
-        //     const image = new Image();
-        //     image.src = imgPath;
-        //     this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
-        // }
+        if (this.isAdminPage()) {
+            const imgPath = "/assets/images/old_floors/nantes.png";
+            const image = new Image();
+            image.src = imgPath;
+            this.ctx.drawImage(image, 0, 0, this.canvas.width, this.canvas.height);
+        }
 
         this.drawRooms();
 
