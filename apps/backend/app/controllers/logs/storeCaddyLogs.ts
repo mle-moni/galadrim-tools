@@ -6,7 +6,7 @@ import { randomBytes } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 
 const fileValidation = schema.create({
-    file: schema.file({ size: "100mb" }),
+    file: schema.file({ size: "200mb" }),
 });
 
 export const storeCaddyLogs = async ({ request, response }: HttpContext) => {
