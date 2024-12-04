@@ -53,6 +53,7 @@ import RestaurantReviewsController from "#controllers/restaurant_reviews/Restaur
 import { showRestaurantRewind } from "#controllers/restaurant_rewinds/showRestaurantRewind";
 import RestaurantsController from "#controllers/restaurants/RestaurantsController";
 import RoomReservationsController from "#controllers/room_reservations/room_reservations_controller";
+import SensorsController from "#controllers/sensors/sensors_controller";
 import StatisticsController from "#controllers/statistics/StatisticsController";
 import TagsController from "#controllers/tags/TagsController";
 import { middleware } from "./kernel.js";
@@ -171,3 +172,5 @@ router
     })
     .prefix("games")
     .use(middleware.auth({ guards: ["web", "api"] }));
+
+router.get("/sensors", [SensorsController, "index"]);
