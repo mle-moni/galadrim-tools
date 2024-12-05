@@ -130,6 +130,7 @@ export const ShowOfficeFloorAdmin = observer(
                             }),
                             officeFloor: selectedOfficeFloor.id,
                             isBookable: true,
+                            isPhonebox: false,
                         });
                     }}
                     onClick={(event) => {
@@ -182,6 +183,10 @@ export const ShowOfficeFloorAdmin = observer(
                                     onDelete={() => officeFloorStore.deletePoint(index)}
                                 />
                             ))}
+                            <Checkbox
+                                checked={officeFloorStore.selectedRoom.isPhonebox}
+                                onChange={(_e, checked) => officeFloorStore.setIsPhonebox(checked)}
+                            />
                         </Box>
                         <Box>
                             <Button
@@ -196,6 +201,7 @@ export const ShowOfficeFloorAdmin = observer(
                                         ),
                                         officeFloor: selectedOfficeFloor.id,
                                         isBookable: officeFloorStore.selectedRoom.isBookable,
+                                        isPhonebox: officeFloorStore.selectedRoom.isPhonebox,
                                     });
                                 }}
                                 disabled={updateMutation.isPending}

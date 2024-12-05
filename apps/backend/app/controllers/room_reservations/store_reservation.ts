@@ -39,6 +39,12 @@ export const storeReservation = async ({ request, auth, response }: HttpContext)
         });
     }
 
+    if (!foundRoom.isPhonebox) {
+        return response.badRequest({
+            error: "Les phone box ne sont pas réservables",
+        });
+    }
+
     const startDate = DateTime.fromJSDate(start);
     const endDate = DateTime.fromJSDate(end);
 

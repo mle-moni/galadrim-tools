@@ -10,6 +10,7 @@ export interface ApiOfficeRoomDto {
     config: string;
     officeFloor: number;
     isBookable: boolean;
+    isPhonebox: boolean;
 }
 
 export const useOfficeRoomCreateMutation = () => {

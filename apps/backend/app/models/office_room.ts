@@ -24,6 +24,9 @@ export default class OfficeRoom extends BaseModel {
     @column(BOOLEAN_COLUMN)
     declare isBookable: boolean;
 
+    @column(BOOLEAN_COLUMN)
+    declare isPhonebox: boolean;
+
     @column.dateTime({ autoCreate: true })
     declare createdAt: DateTime;
 

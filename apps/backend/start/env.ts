@@ -56,4 +56,9 @@ export default await Env.create(new URL("../", import.meta.url), {
      * Variable for fetching portraits
      */
     PORTRAIT_CARD_FETCH_URL: Env.schema.string(),
+
+    /**
+     * Variable for phonebox sensors
+     */
+    SENSORS_SECRET: Env.schema.string(),
 });

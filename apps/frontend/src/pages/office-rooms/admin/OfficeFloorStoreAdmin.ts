@@ -29,6 +29,12 @@ export class OfficeFloorStoreAdmin extends OfficeFloorStore {
         this.selectedRoom.isBookable = isBookable;
     }
 
+    setIsPhonebox(isPhonebox: boolean) {
+        if (!this.selectedRoom) return;
+
+        this.selectedRoom.isPhonebox = isPhonebox;
+    }
+
     isAdminPage(): boolean {
         return true;
     }

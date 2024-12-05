@@ -150,6 +150,10 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             type: "boolean",
             defaultValue: true,
         },
+        isPhonebox: {
+            type: "boolean",
+            defaultValue: false,
+        },
         officeFloor: {
             type: "belongsToRelation",
             label: "Etage",
