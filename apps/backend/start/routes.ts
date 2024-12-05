@@ -174,3 +174,4 @@ router
     .use(middleware.auth({ guards: ["web", "api"] }));
 
 router.get("/sensors", [SensorsController, "index"]);
+router.get("/sensors/report", [SensorsController, "report"]);
