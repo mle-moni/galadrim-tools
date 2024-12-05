@@ -14,10 +14,12 @@ const validationSchema = vine.compile(
 );
 
 export const handleReport = async ({ request }: HttpContext) => {
+    console.log("--- START REPORT ---");
+    console.log(DateTime.now().toFormat("yyyy-MM-dd HH:mm:ss"));
+
     const { id, bat, tamper, motion, lux, temp } = await request.validateUsing(validationSchema);
 
-    console.log(DateTime.now().toFormat("yyyy-MM-dd HH:mm:ss"));
-    console.log(`--- REPORT FROM ${id} ---`);
+    console.log("id", id);
     console.log("bat", bat);
     console.log("tamper", tamper);
     console.log("motion", motion);
