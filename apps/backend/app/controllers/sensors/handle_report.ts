@@ -1,16 +1,17 @@
 import type { HttpContext } from "@adonisjs/core/http";
+import vine from "@vinejs/vine";
 import { DateTime } from "luxon";
 
-// const validationSchema = vine.compile(
-//     vine.object({
-//         id: vine.any(),
-//         temp: vine.any(),
-//         lux: vine.any(),
-//         motion: vine.any(),
-//         tamper: vine.any(),
-//         bat: vine.any(),
-//     }),
-// );
+const validationSchema = vine.compile(
+    vine.object({
+        ID: vine.string(),
+        temp: vine.number(),
+        lux: vine.number(),
+        motion: vine.boolean(),
+        tamper: vine.boolean(),
+        bat: vine.number(),
+    }),
+);
 
 export const handleReport = async ({ request }: HttpContext) => {
     console.log("--- START REPORT ---");
@@ -18,14 +19,9 @@ export const handleReport = async ({ request }: HttpContext) => {
 
     console.log(JSON.stringify(request.all()));
 
-    // const { id, bat, tamper, motion, lux, temp } = await request.validateUsing(validationSchema);
+    const { ID } = await request.validateUsing(validationSchema);
 
-    // console.log("id", id);
-    // console.log("bat", bat);
-    // console.log("tamper", tamper);
-    // console.log("motion", motion);
-    // console.log("lux", lux);
-    // console.log("temp", temp);
+    console.log("id", ID);
     console.log("--- END REPORT ---");
 
     return { message: "OK" };
