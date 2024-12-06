@@ -31,7 +31,7 @@ export const handleReport = async ({ request }: HttpContext) => {
         })
         .save();
 
-    if (lux > 500) {
+    if (lux > 200) {
         await reservePhoneBox(foundSensor.officeRoomId);
     } else {
         await endPhoneBoxReservation(foundSensor.officeRoomId);
