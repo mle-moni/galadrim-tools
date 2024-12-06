@@ -1,6 +1,8 @@
+import Sensor from "#models/sensor";
 import type { HttpContext } from "@adonisjs/core/http";
 import vine from "@vinejs/vine";
-import { DateTime } from "luxon";
+import { endPhoneBoxReservation } from "./end_phone_box_reservation.js";
+import { reservePhoneBox } from "./reserve_phone_box.js";
 
 const validationSchema = vine.compile(
     vine.object({
@@ -14,15 +16,22 @@ const validationSchema = vine.compile(
 );
 
 export const handleReport = async ({ request }: HttpContext) => {
-    console.log("--- START REPORT ---");
-    console.log(DateTime.now().toFormat("yyyy-MM-dd HH:mm:ss"));
+    const { ID, lux, bat, temp } = await request.validateUsing(validationSchema);
+    const foundSensor = await Sensor.findByOrFail("sensorId", ID);
 
-    console.log(JSON.stringify(request.all()));
+    await foundSensor
+        .merge({
+            lastLux: lux,
+            lastBat: bat,
+            lastTemp: temp,
+        })
+        .save();
 
-    const { ID } = await request.validateUsing(validationSchema);
-
-    console.log("id", ID);
-    console.log("--- END REPORT ---");
+    if (lux > 500) {
+        await reservePhoneBox(foundSensor.officeRoomId);
+    } else {
+        await endPhoneBoxReservation(foundSensor.officeRoomId);
+    }
 
     return { message: "OK" };
 };

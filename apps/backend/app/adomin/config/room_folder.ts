@@ -7,6 +7,7 @@ import type {
 import Office from "#models/office";
 import OfficeFloor from "#models/office_floor";
 import OfficeRoom from "#models/office_room";
+import Sensor from "#models/sensor";
 import type { HttpContext } from "@adonisjs/core/http";
 import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
 import vine from "@vinejs/vine";
@@ -201,9 +202,63 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
     crudlRights: RIGHT_CHECKS,
 });
 
+const SENSORS_VIEW = createModelViewConfig(() => Sensor, {
+    label: "Capteurs",
+    icon: "wifi",
+    columns: {
+        name: {
+            type: "string",
+            label: "Nom",
+        },
+        sensorId: {
+            type: "string",
+            label: "ID du capteur",
+        },
+        officeRoom: {
+            type: "belongsToRelation",
+            label: "Salle",
+            labelFields: ["name"],
+            modelName: "OfficeRoom",
+        },
+        lastBat: {
+            type: 'number',
+            label: 'Batterie',
+            editable: false,
+            creatable: false,
+        },
+        lastLux: {
+            type: 'number',
+            label: 'Luminosité (lux)',
+            editable: false,
+            creatable: false,
+        },
+        lastTemp: {
+            type: 'number',
+            label: 'Température (°C)',
+            editable: false,
+            creatable: false,
+        },
+        createdAt: {
+            type: "date",
+            label: "Créé le",
+            subType: "datetime",
+            creatable: false,
+            editable: false,
+        },
+        updatedAt: {
+            type: "date",
+            label: "Mis à jour le",
+            subType: "datetime",
+            creatable: false,
+            editable: false,
+        },
+    },
+    crudlRights: RIGHT_CHECKS,
+});
+
 export const ROOMS_FOLDER = createFolderViewConfig({
     label: "Salles de réunion",
     icon: "building-community",
     name: "rooms-folder",
-    views: [OFFICE_VIEW, FLOORS_VIEW, OFFICE_ROOMS_VIEW],
+    views: [OFFICE_VIEW, FLOORS_VIEW, OFFICE_ROOMS_VIEW, SENSORS_VIEW],
 });

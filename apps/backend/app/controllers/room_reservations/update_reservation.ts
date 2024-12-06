@@ -64,5 +64,5 @@ export const updateReservation = async ({ params, bouncer, request, response }: 
 
     Ws.io.to(CONNECTED_SOCKETS).emit("updateRoomReservation", found);
 
-    return { message: "Reservation supprimée", reservation: found };
+    return { message: "Réservation mise à jour", reservation: found };
 };
