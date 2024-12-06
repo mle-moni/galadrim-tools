@@ -23,7 +23,7 @@ export const reservePhoneBox = async (officeRoomId: number) => {
         return makeNewReservation(phoneBox, botUser);
     }
 
-    lastReservation.end = DateTime.now().plus({ minutes: 15 });
+    lastReservation.end = DateTime.now().plus({ hours: 2 });
 
     await lastReservation.save();
 
@@ -40,7 +40,7 @@ const makeNewReservation = async (phoneBox: OfficeRoom, botUser: User) => {
         officeRoomId: phoneBox.id,
         userId: botUser.id,
         start: DateTime.now(),
-        end: DateTime.now().plus({ minutes: 15 }),
+        end: DateTime.now().plus({ hours: 2 }),
     });
 
     await reservation.load("user");
