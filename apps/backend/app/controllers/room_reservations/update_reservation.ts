@@ -44,6 +44,12 @@ export const updateReservation = async ({ params, bouncer, request, response }: 
         });
     }
 
+    if (foundRoom.isPhonebox) {
+        return response.badRequest({
+            error: "Les phone box ne sont pas réservables",
+        });
+    }
+
     await bouncer.with("ResourcePolicy").authorize("viewUpdateOrDelete", found, "EVENT_ADMIN");
 
     const startDate = DateTime.fromJSDate(start);
