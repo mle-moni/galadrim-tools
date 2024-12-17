@@ -1,7 +1,6 @@
 import { ArrowBack } from "@mui/icons-material";
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
 import { AppStore } from "../../../globalStores/AppStore";
 import { THEME_FIELDS_TO_LABEL, THEME_KEYS_WITHOUT_NAME } from "../../../globalStores/ThemeStore";
 import { CenteredDiv } from "../../../reusableComponents/common/CenteredDiv";
@@ -9,12 +8,8 @@ import { GaladrimButton } from "../../../reusableComponents/common/GaladrimButto
 import { RoundedLinks } from "../../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../../reusableComponents/layouts/MainLayout";
 import { THEME_OPTIONS, THEME_OPTIONS_KEYS, type ThemeName } from "../../../theme/galadrimThemes";
-import { RoomCalendar } from "../../room/RoomCalendar";
 
 export const ThemePage = observer(() => {
-    useEffect(() => {
-        AppStore.eventsStore.setRoomName("*");
-    }, []);
     const {
         authStore: { themeStore },
     } = AppStore;
@@ -92,9 +87,7 @@ export const ThemePage = observer(() => {
                 </GaladrimButton>
             </CenteredDiv>
 
-            <CenteredDiv style={{ marginTop: 80 }}>
-                <RoomCalendar step={15} height="700px" isAbsolute={false} />
-            </CenteredDiv>
+            <CenteredDiv style={{ marginTop: 80 }}>{/* TODO add calendar */}</CenteredDiv>
             <RoundedLinks linkInfos={[{ Icon: ArrowBack, link: "/profile" }]} />
         </MainLayout>
     );

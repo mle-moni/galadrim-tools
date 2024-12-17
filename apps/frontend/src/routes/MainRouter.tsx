@@ -1,11 +1,11 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import Snowfall from "react-snowfall";
 import { AppStore } from "../globalStores/AppStore";
 import IdeaPage from "../pages/idea/IdeaPage";
 import LoadingPage from "../pages/loading/LoadingPage";
 import { RenouvArtWait } from "../reusableComponents/animations/RenouvArtWait/RenouvArtWait";
-import Snowfall from 'react-snowfall'
 
 const OfficeRoomsPage = React.lazy(() => import("../pages/office-rooms/OfficeRoomsPage"));
 const OfficeRoomsAdminPage = React.lazy(
@@ -31,7 +31,6 @@ const RestaurantsListPage = React.lazy(
 const RewindRecapPage = React.lazy(() => import("../pages/saveur/rewind/RewindRecapPage"));
 const RewindPage = React.lazy(() => import("../pages/saveur/rewind/RewindPage"));
 const HomePage = React.lazy(() => import("../pages/HomePage"));
-const RoomsHomePage = React.lazy(() => import("../pages/room/RoomsHomePage"));
 const LoginPage = React.lazy(() => import("../pages/login/LoginPage"));
 const GetOtpPage = React.lazy(() => import("../pages/getOtp/GetOtpPage"));
 const ChangePasswordPage = React.lazy(() => import("../pages/changePassword/ChangePasswordPage"));
@@ -42,7 +41,6 @@ const NotificationsAdminPage = React.lazy(
 );
 const DashboardPage = React.lazy(() => import("../pages/admin/dashboard/DashboardPage"));
 const AdminPage = React.lazy(() => import("../pages/admin/AdminPage"));
-const RoomPage = React.lazy(() => import("../pages/room/RoomPage"));
 const NotFoundPage = React.lazy(() => import("../pages/errors/404/NotFoundPage"));
 const ProfilePage = React.lazy(() => import("../pages/profile/ProfilePage"));
 const MyRestaurantNotesPage = React.lazy(
@@ -66,11 +64,11 @@ const MainRouter = () => {
                         <AppRoutes />
                         <Snowfall
                             style={{
-                                position: 'fixed',
-                                width: '100vw',
-                                height: '100vh',
+                                position: "fixed",
+                                width: "100vw",
+                                height: "100vh",
                                 zIndex: 6,
-                                color: '#fff',
+                                color: "#fff",
                             }}
                         />
                     </React.Suspense>
@@ -106,7 +104,6 @@ const AppRoutes = () => {
                 <Route path="/admin/rights" element={<AdminRightsPage />} />
                 <Route path="/admin/dashboard" element={<DashboardPage />} />
                 <Route path="/admin" element={<AdminPage />} />
-                <Route path="/rooms" element={<RoomsHomePage />} />
                 <Route path="/office-rooms" element={<OfficeRoomsPage />} />
                 <Route path="/office-rooms/:officeId" element={<OfficeRoomsPage />} />
                 <Route

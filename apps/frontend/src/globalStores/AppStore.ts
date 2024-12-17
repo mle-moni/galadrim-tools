@@ -1,10 +1,9 @@
 import { makeAutoObservable } from "mobx";
 import type { NavigateFunction } from "react-router-dom";
-import { fetchUsers, type UserData } from "../api/galadrimeurs";
+import { type UserData, fetchUsers } from "../api/galadrimeurs";
 import type { TournoisResultsStore } from "../pages/games/tournois/TournoisResultsStore";
 import { IdeasStore } from "../pages/idea/IdeasStore";
 import { AuthStore } from "./AuthStore";
-import { EventsStore } from "./EventsStore";
 import { GalabreakStore } from "./GalabreakStore";
 import { NotificationStore } from "./NotificationStore";
 import { SaveurStore } from "./SaveurStore";
@@ -18,8 +17,6 @@ export class MainStore {
     public users = new Map<number, UserData>();
 
     public usersArray: UserData[] = [];
-
-    public eventsStore = new EventsStore();
 
     public saveurStore = new SaveurStore();
 
@@ -70,7 +67,6 @@ export class MainStore {
 
     async fetchAll() {
         this.saveurStore.init();
-        this.eventsStore.fetchEvents();
         const users = await fetchUsers();
         this.setUsersMap(new Map<number, UserData>(users.map((user) => [user.id, user])));
     }

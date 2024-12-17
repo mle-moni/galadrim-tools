@@ -7,9 +7,9 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { AppStore } from "../../../globalStores/AppStore";
-import { MomentFrLocales } from "../../room/setFrLocales";
 import { getStartOfDay } from "../getStartOfDay";
 import { ResourceHeader } from "./ResourceHeader";
+import { MomentFrLocales } from "./setFrLocales";
 import { useOfficeRoomCalendar } from "./useOfficeRoomCalendar";
 
 export type OfficeRoomEvent = {

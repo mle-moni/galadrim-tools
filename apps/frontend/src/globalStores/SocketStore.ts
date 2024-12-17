@@ -7,14 +7,12 @@ import type {
     ITag,
 } from "@galadrim-tools/shared";
 import { type Socket, io } from "socket.io-client";
-import { getEventFromApi } from "../api/events";
 import { getSocketApiUrl } from "../api/fetch";
 import type { UserData } from "../api/galadrimeurs";
 import type { TournoisResult } from "../pages/games/tournois/TournoisResultsStore";
 import { queryClient } from "../queryClient";
 import { notifyError, notifySuccess } from "../utils/notification";
 import { AppStore } from "./AppStore";
-import type { RawRoomEvent } from "./EventsStore";
 
 export class SocketStore {
     private _socket: Socket | null = null;
@@ -43,9 +41,6 @@ export class SocketStore {
         this.socket.on("auth", () => this.socketAuth());
         this.socket.on("error", (msg) => this.error(msg));
         this.socket.on("success", (msg) => this.success(msg));
-        this.socket.on("createEvent", (event) => this.createEvent(event));
-        this.socket.on("updateEvent", (event) => this.updateEvent(event));
-        this.socket.on("deleteEvent", (event) => this.deleteEvent(event));
         this.socket.on("createTag", (restaurant) => this.createTag(restaurant));
         this.socket.on("createRestaurant", (restaurant) => this.createRestaurant(restaurant));
         this.socket.on("updateRestaurant", (restaurant) => this.updateRestaurant(restaurant));
@@ -90,23 +85,6 @@ export class SocketStore {
 
     success(msg: string) {
         notifySuccess(msg);
-    }
-
-    createEvent(eventRaw: RawRoomEvent) {
-        AppStore.eventsStore.appendEvents([getEventFromApi(eventRaw)]);
-    }
-
-    updateEvent(eventRaw: RawRoomEvent) {
-        const events = [...AppStore.eventsStore.events];
-        const event = events.find((event) => event.id === eventRaw.id);
-        if (!event) return;
-        AppStore.eventsStore.updateEvent(event, getEventFromApi(eventRaw));
-        AppStore.eventsStore.setEvents(events);
-    }
-
-    deleteEvent({ id }: RawRoomEvent) {
-        const events = AppStore.eventsStore.events.filter((event) => event.id !== id);
-        AppStore.eventsStore.setEvents(events);
     }
 
     createRestaurant(restaurant: IRestaurant) {

@@ -41,7 +41,6 @@ import BreakVotesController from "#controllers/break_votes/BreakVotesController"
 import BugConnexionsController from "#controllers/bug_connexions/BugConnexionsController";
 import CodeNamesGamesController from "#controllers/code_names_games/CodeNamesGamesController";
 import DashboardController from "#controllers/dashboard/DashboardController";
-import EventsController from "#controllers/events/EventsController";
 import GaladrimeursController from "#controllers/galadrimeurs/GaladrimeursController";
 import IdeasController from "#controllers/ideas/IdeasController";
 import LogsController from "#controllers/logs/LogsController";
@@ -69,10 +68,6 @@ router.post("/getOtp", [AuthController, "getOtp"]);
 router
     .group(() => {
         router.post("/logout", [AuthController, "logout"]);
-
-        router.resource("events", EventsController).apiOnly();
-        router.get("/allEvents", [EventsController, "all"]);
-        router.get("/availableRooms", [EventsController, "availableRooms"]);
 
         router.resource("tags", TagsController).apiOnly();
         router.resource("restaurants", RestaurantsController).apiOnly();
@@ -115,6 +110,7 @@ router
         router.get("/atopLogs/:id", [LogsController, "showAtopLogs"]);
 
         router.resource("/offices/:officeId/reservations", RoomReservationsController).apiOnly();
+        router.get("/availableRooms", [RoomReservationsController, "availableRooms"]);
     })
     .use(middleware.auth({ guards: ["web", "api"] }));
 

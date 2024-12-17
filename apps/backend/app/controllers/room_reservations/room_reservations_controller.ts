@@ -1,4 +1,5 @@
 import type { HttpContext } from "@adonisjs/core/http";
+import { availableRooms } from "./available_rooms.js";
 import { deleteReservation } from "./delete_reservation.js";
 import { reservationsIndex } from "./reservations_index.js";
 import { showReservation } from "./show_reservation.js";
@@ -24,5 +25,9 @@ export default class RoomReservationsController {
 
     async destroy(ctx: HttpContext) {
         return deleteReservation(ctx);
+    }
+
+    async availableRooms(ctx: HttpContext) {
+        return availableRooms(ctx);
     }
 }
