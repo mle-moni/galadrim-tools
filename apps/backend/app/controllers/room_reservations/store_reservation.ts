@@ -6,6 +6,7 @@ import { Ws } from "#services/ws";
 import type { HttpContext } from "@adonisjs/core/http";
 import vine, { SimpleMessagesProvider } from "@vinejs/vine";
 import { DateTime } from "luxon";
+import { reservationUserSelector } from "./reservation_user_selecter.js";
 
 const validationSchema = vine.compile(
     vine.object({
@@ -62,7 +63,7 @@ export const storeReservation = async ({ request, auth, response }: HttpContext)
         userId: user.id,
     });
 
-    await reservation.load("user");
+    await reservation.load("user", reservationUserSelector);
 
     Ws.io.to(CONNECTED_SOCKETS).emit("createRoomReservation", reservation);
 

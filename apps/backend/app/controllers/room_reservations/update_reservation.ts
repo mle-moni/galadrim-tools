@@ -6,6 +6,7 @@ import { Ws } from "#services/ws";
 import type { HttpContext } from "@adonisjs/core/http";
 import vine, { SimpleMessagesProvider } from "@vinejs/vine";
 import { DateTime } from "luxon";
+import { reservationUserSelector } from "./reservation_user_selecter.js";
 
 const validationSchema = vine.compile(
     vine.object({
@@ -30,7 +31,7 @@ const messagesProvider = new SimpleMessagesProvider(DEFAULT_MESSAGE_PROVIDER_CON
 export const updateReservation = async ({ params, bouncer, request, response }: HttpContext) => {
     const found = await RoomReservation.query()
         .where("id", params.id)
-        .preload("user")
+        .preload("user", reservationUserSelector)
         .firstOrFail();
 
     const { end, start, officeRoomId, title } = await request.validateUsing(validationSchema, {

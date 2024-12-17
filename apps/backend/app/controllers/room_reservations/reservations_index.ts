@@ -3,6 +3,7 @@ import Office from "#models/office";
 import RoomReservation from "#models/room_reservation";
 import type { HttpContext } from "@adonisjs/core/http";
 import vine, { SimpleMessagesProvider } from "@vinejs/vine";
+import { reservationUserSelector } from "./reservation_user_selecter.js";
 
 const validationSchema = vine.compile(
     vine.object({
@@ -31,9 +32,7 @@ export const reservationsIndex = async ({ params, request }: HttpContext) => {
         });
     });
 
-    const reservations = await reservationsQuery.preload("user", (q) =>
-        q.select("id", "username", "image", "imageUrl"),
-    );
+    const reservations = await reservationsQuery.preload("user", reservationUserSelector);
 
     return reservations;
 };
