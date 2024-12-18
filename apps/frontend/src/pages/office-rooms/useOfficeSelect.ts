@@ -57,6 +57,7 @@ export const useOfficeSelect = (baseUrl = "/office-rooms") => {
 
     return {
         officesOptions,
+        allOffices: officesQuery.data?.data ?? [],
         selectedOffice,
         selectedOfficeId: selectedOffice?.id ?? null,
         setSelectedOfficeFromId,

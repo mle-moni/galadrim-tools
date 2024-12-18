@@ -66,10 +66,10 @@ export const useOfficeRoomSelect = (
 
     return {
         officeRooms,
+        allOfficeRooms: query.data?.data ?? [],
         officeRoomsOptions: options,
         selectedOfficeRoom: selected,
         selectedOfficeRoomId: selected?.id ?? null,
         setSelectedOfficeRoomFromId: setSelectedFromId,
-        nonFilteredOfficeRooms: query.data?.data ?? [],
     };
 };

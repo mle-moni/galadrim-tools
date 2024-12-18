@@ -22,7 +22,7 @@ export const OfficeRoomsPage = () => {
     const { officesOptions, selectedOffice, setSelectedOfficeFromId } = useOfficeSelect();
     const { officeFloors, officeFloorsOptions, selectedOfficeFloor, setSelectedOfficeFloorFromId } =
         useOfficeFloorSelect(selectedOffice);
-    const { officeRooms, selectedOfficeRoom, setSelectedOfficeRoomFromId, nonFilteredOfficeRooms } =
+    const { officeRooms, selectedOfficeRoom, setSelectedOfficeRoomFromId, allOfficeRooms } =
         useOfficeRoomSelect(selectedOfficeFloor);
     const reservableRooms = useMemo(() => officeRooms.filter((r) => r.isBookable), [officeRooms]);
     const reservableRoomsOptions = useMemo(() => {
@@ -208,7 +208,7 @@ export const OfficeRoomsPage = () => {
                                 key={officeFloor.id}
                                 selectedOffice={selectedOffice}
                                 selectedOfficeFloor={officeFloor}
-                                rooms={nonFilteredOfficeRooms}
+                                rooms={allOfficeRooms}
                                 selectedRoom={selectedOfficeRoom}
                                 numberOfFloors={isMediumScreen ? 1 : officeFloors.length}
                                 searchText={searchText}
@@ -221,7 +221,7 @@ export const OfficeRoomsPage = () => {
                 {isCalendarOpen && !selectedOfficeRoom && selectedOffice?.id && (
                     <OfficeRoomCalendar
                         step={15}
-                        officeRooms={nonFilteredOfficeRooms}
+                        officeRooms={allOfficeRooms}
                         officeId={selectedOffice.id}
                         officeFloorId={selectedOfficeFloor?.id ?? null}
                         officeFloors={officeFloors}

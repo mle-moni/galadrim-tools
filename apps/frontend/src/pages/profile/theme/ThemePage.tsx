@@ -8,6 +8,7 @@ import { GaladrimButton } from "../../../reusableComponents/common/GaladrimButto
 import { RoundedLinks } from "../../../reusableComponents/common/RoundedLinks";
 import MainLayout from "../../../reusableComponents/layouts/MainLayout";
 import { THEME_OPTIONS, THEME_OPTIONS_KEYS, type ThemeName } from "../../../theme/galadrimThemes";
+import { ThemeOfficeRoomCalendar } from "./ThemeOfficeRoomCalendar";
 
 export const ThemePage = observer(() => {
     const {
@@ -87,7 +88,9 @@ export const ThemePage = observer(() => {
                 </GaladrimButton>
             </CenteredDiv>
 
-            <CenteredDiv style={{ marginTop: 80 }}>{/* TODO add calendar */}</CenteredDiv>
+            <CenteredDiv style={{ marginTop: 80 }}>
+                <ThemeOfficeRoomCalendar />
+            </CenteredDiv>
             <RoundedLinks linkInfos={[{ Icon: ArrowBack, link: "/profile" }]} />
         </MainLayout>
     );

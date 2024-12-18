@@ -68,6 +68,7 @@ export const useOfficeFloorSelect = (
 
     return {
         officeFloors,
+        allOfficeFloors: query.data?.data ?? [],
         officeFloorsOptions: options,
         selectedOfficeFloor: selected,
         selectedOfficeFloorId: selected?.id ?? null,
