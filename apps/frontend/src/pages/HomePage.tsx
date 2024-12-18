@@ -18,7 +18,7 @@ const HomePage = observer(() => {
         ? AppStore.authStore.user.rights !== 0
         : false;
 
-    const officeId = AppStore.authStore.connected ? AppStore.authStore.user.officeId : null;
+    const officeId = AppStore.authStore.userOrNull?.officeId ?? null;
     const officeRoomsLink = officeId ? `/office-rooms/${officeId}` : "/office-rooms";
 
     return (

@@ -1,4 +1,12 @@
-import { AlternateEmail, ColorLens, Home, Key, Person, Settings } from "@mui/icons-material";
+import {
+    AlternateEmail,
+    Business,
+    ColorLens,
+    Home,
+    Key,
+    Person,
+    Settings,
+} from "@mui/icons-material";
 import { Avatar, Button, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useMemo, useState } from "react";
@@ -120,6 +128,10 @@ export const ProfilePage = observer(() => {
                         style={{ marginBottom: "20px" }}
                     >
                         <Settings sx={{ mr: 1 }} /> Paramètres de notifications
+                    </CustomLink>
+
+                    <CustomLink to="/changeDefaultOffice" style={{ marginBottom: "20px" }}>
+                        <Business sx={{ mr: 1 }} /> Changer les locaux auxquels vous êtes rattaché
                     </CustomLink>
 
                     <Button

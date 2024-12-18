@@ -34,6 +34,9 @@ const HomePage = React.lazy(() => import("../pages/HomePage"));
 const LoginPage = React.lazy(() => import("../pages/login/LoginPage"));
 const GetOtpPage = React.lazy(() => import("../pages/getOtp/GetOtpPage"));
 const ChangePasswordPage = React.lazy(() => import("../pages/changePassword/ChangePasswordPage"));
+const ChangeDefaultOfficePage = React.lazy(
+    () => import("../pages/changeDefaultOffice/ChangeDefaultOfficePage"),
+);
 const CreateUserPage = React.lazy(() => import("../pages/admin/createUser/CreateUserPage"));
 const AdminRightsPage = React.lazy(() => import("../pages/admin/rights/AdminRightsPage"));
 const NotificationsAdminPage = React.lazy(
@@ -99,6 +102,7 @@ const AppRoutes = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/getOtp" element={<GetOtpPage />} />
                 <Route path="/changePassword" element={<ChangePasswordPage />} />
+                <Route path="/changeDefaultOffice" element={<ChangeDefaultOfficePage />} />
                 <Route path="/admin/createUser" element={<CreateUserPage />} />
                 <Route path="/admin/notifications" element={<NotificationsAdminPage />} />
                 <Route path="/admin/rights" element={<AdminRightsPage />} />

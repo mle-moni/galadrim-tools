@@ -86,6 +86,7 @@ router
         router.get("/me", [AuthController, "me"]);
         router.post("/createApiToken", [AuthController, "createApiToken"]);
         router.post("/changePassword", [AuthController, "changePassword"]);
+        router.post("/changeDefaultOffice", [AuthController, "changeDefaultOffice"]);
         router.post("/updateProfile", [AuthController, "updateProfile"]);
         router.post("/updateTheme", [AuthController, "updateTheme"]);
 

@@ -100,6 +100,10 @@ export class AuthStore {
         this.connected = true;
     }
 
+    setOfficeId(officeId: number | null) {
+        this.user.officeId = officeId;
+    }
+
     setEmail(email: string) {
         this.email = email;
         localStorage.setItem("email", email);
@@ -112,6 +116,10 @@ export class AuthStore {
     get user() {
         if (!this._user) throw new Error("use this computed only after login");
         return this._user;
+    }
+
+    get userOrNull() {
+        return this._user ?? null;
     }
 
     async getOtp() {

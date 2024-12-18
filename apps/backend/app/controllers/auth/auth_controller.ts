@@ -1,4 +1,5 @@
 import type { HttpContext } from "@adonisjs/core/http";
+import { changeDefaultOfficeRoute } from "./changeDefaultOfficeRoute.js";
 import { changePasswordRoute } from "./changePassword.js";
 import { forestLoginRoute } from "./forest_login.js";
 import { createApiTokenRoute } from "./getApiToken.js";
@@ -38,6 +39,10 @@ export default class AuthController {
 
     public async changePassword(params: HttpContext) {
         return changePasswordRoute(params);
+    }
+
+    public async changeDefaultOffice(params: HttpContext) {
+        return changeDefaultOfficeRoute(params);
     }
 
     public async updateProfile(params: HttpContext) {
