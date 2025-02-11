@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import Snowfall from "react-snowfall";
 import { AppStore } from "../globalStores/AppStore";
 import IdeaPage from "../pages/idea/IdeaPage";
 import LoadingPage from "../pages/loading/LoadingPage";
@@ -65,15 +64,6 @@ const MainRouter = () => {
                 <BrowserRouter>
                     <React.Suspense fallback={<LoadingPage />}>
                         <AppRoutes />
-                        <Snowfall
-                            style={{
-                                position: "fixed",
-                                width: "100vw",
-                                height: "100vh",
-                                zIndex: 6,
-                                color: "#fff",
-                            }}
-                        />
                     </React.Suspense>
                 </BrowserRouter>
             ) : (
