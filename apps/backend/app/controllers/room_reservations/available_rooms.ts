@@ -20,12 +20,17 @@ export const availableRooms = async ({ auth, request, response }: HttpContext) =
         });
     }
 
-    const allRoomsQuery = OfficeRoom.query().select("id", "name").where("is_bookable", true);
+    const allRoomsQuery = OfficeRoom.query()
+        .select("id", "name")
+        .where("is_bookable", true)
+        .preload("officeFloor");
     const officeId = user.officeId;
     if (officeId) {
         allRoomsQuery.whereHas("officeFloor", (builder) => builder.where("office_id", officeId));
     }
-    const allRooms: { id: number; name: string }[] = await allRoomsQuery;
+    const allRooms: { id: number; name: string; officeId: number }[] = (await allRoomsQuery).map(
+        ({ id, name, officeFloor }) => ({ id, name, officeId: officeFloor.officeId }),
+    );
 
     // get all events with dates incompatible with the new event
     const res = await RoomReservation.query()
