@@ -21,7 +21,7 @@ export const availableRooms = async ({ auth, request, response }: HttpContext) =
     }
 
     const allRoomsQuery = OfficeRoom.query()
-        .select("id", "name")
+        .select("id", "name", "officeFloorId")
         .where("is_bookable", true)
         .preload("officeFloor");
     const officeId = user.officeId;
