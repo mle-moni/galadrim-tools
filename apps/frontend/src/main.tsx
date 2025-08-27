@@ -1,3 +1,4 @@
+import { NuqsAdapter } from "nuqs/adapters/react-router/v6";
 import { ThemeProvider } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
@@ -23,14 +24,16 @@ const root = createRoot(container!);
 
 root.render(
     <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <SnackbarProvider>
-                <SnackBarSetter>
-                    <QueryClientProvider client={queryClient}>
-                        <MainRouter />
-                    </QueryClientProvider>
-                </SnackBarSetter>
-            </SnackbarProvider>
-        </ThemeProvider>
+        <NuqsAdapter>
+            <ThemeProvider theme={theme}>
+                <SnackbarProvider>
+                    <SnackBarSetter>
+                        <QueryClientProvider client={queryClient}>
+                            <MainRouter />
+                        </QueryClientProvider>
+                    </SnackBarSetter>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </NuqsAdapter>
     </React.StrictMode>,
 );
