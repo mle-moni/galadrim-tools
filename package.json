@@ -24,10 +24,14 @@
         "biome:check": "yarn biome:backend:check && yarn biome:shared:check && yarn biome:frontend:check"
     },
     "private": true,
-    "workspaces": ["apps/*", "libs/*"],
+    "workspaces": [
+        "apps/*",
+        "libs/*"
+    ],
     "author": "LE MONIES DE SAGAZAN Mayeul",
     "devDependencies": {
         "@biomejs/biome": "1.8.3",
         "concurrently": "^7.6.0"
-    }
+    },
+    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

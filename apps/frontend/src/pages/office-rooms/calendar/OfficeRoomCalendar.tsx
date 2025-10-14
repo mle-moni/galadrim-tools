@@ -59,6 +59,13 @@ export const OfficeRoomCalendar = observer<{
             return rooms.filter((r) => finalSet.has(r.officeFloorId) && r.isBookable);
         }, [rooms, officeFloorId, officeFloorsMap]);
 
+        const officeFloorsList = officeFloors.reduce((acc, f) => {
+            if (!acc.includes(f.floor)) {
+                acc.push(f.floor);
+            }
+            return acc;
+        }, [] as number[]).sort((a, b) => a - b);
+
         const officeRoomsSorted = useMemo(
             () =>
                 officeRoomsFiltered.slice().sort((a, b) => {
@@ -169,7 +176,7 @@ export const OfficeRoomCalendar = observer<{
                         resourceAccessor="officeRoomId"
                         components={{
                             resourceHeader: (props) => (
-                                <ResourceHeader {...props} officeFloorsMap={officeFloorsMap} />
+                                <ResourceHeader {...props} officeFloorsMap={officeFloorsMap} officeFloorsList={officeFloorsList} />
                             ),
                         }}
                     />
