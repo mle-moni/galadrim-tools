@@ -15,6 +15,7 @@ import { useOfficeFloorSelect } from "./useOfficeFloorSelect";
 import { useOfficeRoomSelect } from "./useOfficeRoomSelect";
 import { useOfficeSelect } from "./useOfficeSelect";
 import { useUserSelect } from "./useUserSelect";
+import { useQueryState, parseAsBoolean } from "nuqs";
 
 const LINK_STYLE: CSSProperties = { color: "black", textDecoration: "none", fontSize: 26 };
 
@@ -42,9 +43,16 @@ export const OfficeRoomsPage = () => {
     const [searchText, setSearchText] = useState("");
     const { selectedUser, setSelectedUserFromId, usersOptions, selectedUserOption } =
         useUserSelect();
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
     const isMobile = useIsMobile();
+
+    const [isCalendarOpen, setIsCalendarOpen] = useQueryState(
+        "calendar",
+        parseAsBoolean.withDefault(false).withOptions({ history: "replace" }),
+    );
+    const [showOnlyAvailable, setShowOnlyAvailable] = useQueryState(
+        "onlyAvailable",
+        parseAsBoolean.withDefault(false).withOptions({ history: "replace" }),
+    );
 
     useEffect(() => {
         if (selectedOfficeFloor) return;
