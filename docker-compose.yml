@@ -1,7 +1,7 @@
-version: '3.8'
+version: "3.8"
 services:
     db:
-        image: mysql
+        image: mysql:8.0
         command: --default-authentication-plugin=mysql_native_password
         cap_add:
             - SYS_NICE
@@ -10,10 +10,14 @@ services:
             - MYSQL_DATABASE=galadrim_tools
             - MYSQL_ROOT_PASSWORD=root
         ports:
-            - '3310:3306'
+            - "3310:3306"
         volumes:
             - db:/var/lib/mysql
-            - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+            interval: 5s
+            timeout: 5s
+            retries: 20
 volumes:
     db:
         driver: local

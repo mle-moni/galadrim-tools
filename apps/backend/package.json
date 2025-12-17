@@ -14,6 +14,9 @@
         "lint": "biome lint --write",
         "lint-check": "biome lint",
         "migrate-prod": "node ace migration:run --force",
+        "db:migrate": "node ace migration:run",
+        "db:seed": "node ace db:seed",
+        "db:setup": "pnpm run db:migrate && pnpm run db:seed",
         "deploy": "./scripts/deploy.sh",
         "typecheck": "tsc --noEmit"
     },

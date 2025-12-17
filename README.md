@@ -37,13 +37,21 @@ DB_DATABASE
 
 ## Database
 
-### Docker mysql database
+### Docker mysql database (optional)
 
-if you have docker/docker-compose installed, you can run
+If you have Docker installed, you can run
 
--   `docker-compose up`
+-   `docker compose up -d db`
 
-it will launch a mysql server on the port 3310 you can edit this in [docker-compose.yml](./docker-compose.yml)
+It will launch a MySQL server exposed on `localhost:3310` (edit this in `docker-compose.yml` if needed).
+
+Backend env values when using Docker defaults:
+
+-   `DB_HOST=127.0.0.1`
+-   `DB_PORT=3310`
+-   `DB_USER=root`
+-   `DB_PASSWORD=root`
+-   `DB_DATABASE=galadrim_tools`
 
 ### database setup
 

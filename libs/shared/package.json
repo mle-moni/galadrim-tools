@@ -5,11 +5,13 @@
     "private": true,
     "dependencies": {
         "pino-std-serializers": "^6.0.0",
-        "typescript": "^4.1.3",
         "zod": "^3.19.1"
     },
+    "devDependencies": {
+        "typescript": "~5.4"
+    },
     "scripts": {
-        "build": "rm -rf ./dist && tsc",
+        "build": "node -e \"require('node:fs').rmSync('./dist',{ recursive:true, force:true })\" && tsc",
         "build:watch": "tsc -w",
         "format": "biome format --write",
         "format-check": "biome format",
