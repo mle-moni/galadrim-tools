@@ -1,4 +1,4 @@
-import { Box, styled, experimental_sx as sx } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import type { ComponentProps, FC, PropsWithChildren } from "react";
 import { AppStore } from "../../globalStores/AppStore";
@@ -15,18 +15,16 @@ type MainLayoutProps = PropsWithChildren<{
 const Root = styled(Box, {
     shouldForwardProp: (propName: string) =>
         propName !== "fullscreen" && propName !== "hiddenOverflow",
-})<MainLayoutProps>(({ fullscreen, hiddenOverflow }) =>
-    sx({
-        display: "flex",
-        minHeight: fullscreen ? "100vh" : "auto",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        boxSizing: "border-box",
-        backgroundColor: fullscreen ? "inherit" : getTheme().palette.background.default,
-        overflow: hiddenOverflow ? "hidden" : undefined,
-    }),
-);
+})<MainLayoutProps>(({ fullscreen, hiddenOverflow }) => ({
+    display: "flex",
+    minHeight: fullscreen ? "100vh" : "auto",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    boxSizing: "border-box",
+    backgroundColor: fullscreen ? "inherit" : getTheme().palette.background.default,
+    overflow: hiddenOverflow ? "hidden" : undefined,
+}));
 
 export const MainLayout = observer(
     ({ fullscreen, hiddenOverflow, children }: ComponentProps<FC<MainLayoutProps>>) => {

@@ -9,7 +9,9 @@ see some other sample images [here](./readme-images/README.md)
 
 ## Setup
 
--   yarn install
+-   use Node.js 20 (`.nvmrc`)
+-   `corepack enable`
+-   `pnpm install`
 -   for the backend you will need a mysql database ([docker setup](#Docker-mysql-database))
 
 ## Environment
@@ -46,14 +48,14 @@ it will launch a mysql server on the port 3310 you can edit this in [docker-comp
 ### database setup
 
 -   `cd libs/shared`
--   `yarn build`
+-   `pnpm build`
 -   `cd ./apps/backend`
 -   `node ace migration:run`
 -   `node ace db:seed`
 
 ## Start project
 
--   `yarn dev`
+-   `pnpm dev`
 
 :warning: when updating a file in libs/shared you might need to restart frontend watcher
 
@@ -86,17 +88,17 @@ node ace repl
 When you write complex logic, try to write tests
 
 to test all, you can run
-`yarn test`
+`pnpm test`
 
 or to test only one project, you can do
-`yarn test:backend`
-`yarn test:frontend`
+`pnpm test:backend`
+`pnpm test:frontend`
 
 ## Build project
 
-`yarn build:shared`
-`yarn build:backend`
-`yarn build:frontend`
+`pnpm build:shared`
+`pnpm build:backend`
+`pnpm build:frontend`
 
 ## Contributing
 

@@ -15,6 +15,6 @@
         "format-check": "biome format",
         "lint": "biome lint --write",
         "lint-check": "biome lint",
-        "dev": "npm run build:watch"
+        "dev": "pnpm run build:watch"
     }
 }

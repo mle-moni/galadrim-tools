@@ -15,19 +15,23 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: '20.x'
-                  cache: 'yarn'
+                  cache: 'pnpm'
+                  cache-dependency-path: pnpm-lock.yaml
+
+            - name: Enable Corepack
+              run: corepack enable
 
             - name: Install dependencies 📦
-              run: yarn install --frozen-lockfile
+              run: pnpm install --frozen-lockfile
 
             - name: Biome lint check
-              run: yarn biome:check
+              run: pnpm biome:check
 
             - name: Build shared library
-              run: yarn build:shared
+              run: pnpm build:shared
 
             - name: typecheck backend
-              run: cd apps/backend && yarn typecheck
+              run: pnpm --filter backend typecheck
 
             - name: typecheck frontend
-              run: cd apps/frontend && yarn typecheck
+              run: pnpm --filter frontend typecheck

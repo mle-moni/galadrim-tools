@@ -19,7 +19,7 @@
     "dependencies": {
         "@emotion/react": "^11.10.4",
         "@emotion/styled": "^11.10.4",
-        "@galadrim-tools/shared": "*",
+        "@galadrim-tools/shared": "workspace:*",
         "@mui/icons-material": "^5.10.6",
         "@mui/lab": "^5.0.0-alpha.101",
         "@mui/material": "^5.10.7",

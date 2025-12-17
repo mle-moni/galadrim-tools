@@ -1,5 +1,5 @@
 import { Home } from "@mui/icons-material";
-import { Box, styled, experimental_sx as sx } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { type PropsWithChildren, useMemo } from "react";
 import { RewindStore } from "../../../globalStores/RewindStore";
@@ -19,17 +19,15 @@ type MainLayoutProps = PropsWithChildren<{
 
 export const RewindRoot = styled(Box, {
     shouldForwardProp: (propName: string) => propName !== "fullscreen",
-})<MainLayoutProps>(({ fullscreen }) =>
-    sx({
-        display: "flex",
-        minHeight: fullscreen ? "100vh" : "auto",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        boxSizing: "border-box",
-        backgroundColor: "#F0FFF1",
-    }),
-);
+})<MainLayoutProps>(({ fullscreen }) => ({
+    display: "flex",
+    minHeight: fullscreen ? "100vh" : "auto",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    boxSizing: "border-box",
+    backgroundColor: "#F0FFF1",
+}));
 
 const RewindPage = observer(() => {
     const userRewindStore = useMemo(() => {

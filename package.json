@@ -3,35 +3,35 @@
     "version": "3.6.0",
     "license": "GPLv2",
     "scripts": {
-        "dev": "concurrently --kill-others \"yarn dev:shared\" \"yarn dev:backend\" \"yarn dev:frontend\"",
-        "dev:frontend": "cd ./apps/frontend && yarn dev",
-        "dev:backend": "cd ./apps/backend && yarn dev",
-        "dev:shared": "cd ./libs/shared && yarn dev",
+        "dev": "concurrently --kill-others \"pnpm --filter @galadrim-tools/shared dev\" \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\"",
+        "dev:frontend": "pnpm --filter frontend dev",
+        "dev:backend": "pnpm --filter backend dev",
+        "dev:shared": "pnpm --filter @galadrim-tools/shared dev",
         "deploy": "git pull && ./deployAll.sh",
-        "test:backend": "cd ./apps/backend && yarn test",
-        "test:frontend": "cd ./apps/frontend && yarn test",
-        "test": "yarn test:backend && yarn test:frontend",
-        "build:frontend": "cd ./apps/frontend && yarn build",
-        "build:backend": "cd ./apps/backend && yarn build",
-        "build:shared": "cd ./libs/shared && yarn build",
-        "migrate-prod": "cd ./apps/backend && yarn migrate-prod",
-        "deploy:backend": "cd ./apps/backend && yarn deploy",
-        "deploy:frontend:nobuild": "cd ./apps/frontend && yarn deploy",
-        "deploy:frontend": "git pull && yarn build:shared && yarn build:frontend && cd ./apps/frontend && yarn deploy",
-        "biome:backend:check": "cd ./apps/backend && yarn lint-check && yarn format-check",
-        "biome:shared:check": "cd ./libs/shared && yarn lint-check && yarn format-check",
-        "biome:frontend:check": "cd ./apps/frontend && yarn lint-check && yarn format-check",
-        "biome:check": "yarn biome:backend:check && yarn biome:shared:check && yarn biome:frontend:check"
+        "test:backend": "pnpm --filter backend test",
+        "test:frontend": "pnpm --filter frontend test",
+        "test": "pnpm test:backend && pnpm test:frontend",
+        "build:frontend": "pnpm --filter frontend build",
+        "build:backend": "pnpm --filter backend build",
+        "build:shared": "pnpm --filter @galadrim-tools/shared build",
+        "migrate-prod": "pnpm --filter backend migrate-prod",
+        "deploy:backend": "pnpm --filter backend deploy",
+        "deploy:frontend:nobuild": "pnpm --filter frontend deploy",
+        "deploy:frontend": "git pull && pnpm build:shared && pnpm build:frontend && pnpm --filter frontend deploy",
+        "biome:backend:check": "pnpm --filter backend lint-check && pnpm --filter backend format-check",
+        "biome:shared:check": "pnpm --filter @galadrim-tools/shared lint-check && pnpm --filter @galadrim-tools/shared format-check",
+        "biome:frontend:check": "pnpm --filter frontend lint-check && pnpm --filter frontend format-check",
+        "biome:check": "pnpm biome:backend:check && pnpm biome:shared:check && pnpm biome:frontend:check"
     },
     "private": true,
-    "workspaces": [
-        "apps/*",
-        "libs/*"
-    ],
+    "workspaces": ["apps/*", "libs/*"],
     "author": "LE MONIES DE SAGAZAN Mayeul",
     "devDependencies": {
         "@biomejs/biome": "1.8.3",
         "concurrently": "^7.6.0"
     },
-    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "pnpm": {
+        "onlyBuiltDependencies": ["@biomejs/biome", "@swc/core", "argon2", "esbuild"]
+    },
+    "packageManager": "pnpm@10.0.0"
 }
