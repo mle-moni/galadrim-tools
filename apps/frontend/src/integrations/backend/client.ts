@@ -8,6 +8,20 @@ export function getApiUrl() {
     return DEFAULT_API_URL;
 }
 
+export function getSocketApiUrl() {
+    const apiUrl = getApiUrl();
+
+    try {
+        const url = new URL(apiUrl);
+        url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+        return url.toString().replace(/\/$/, "");
+    } catch {
+        if (apiUrl.startsWith("https://")) return apiUrl.replace(/^https:\/\//, "wss://");
+        if (apiUrl.startsWith("http://")) return apiUrl.replace(/^http:\/\//, "ws://");
+        return apiUrl;
+    }
+}
+
 export const APPLICATION_JSON_HEADERS = {
     "Content-Type": "application/json",
 } as const;
