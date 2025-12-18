@@ -29,6 +29,19 @@ const IMPORTER = (filePath: string) => {
     return import(filePath);
 };
 
+/**
+ * When running inside Docker, binding to "localhost"/"127.0.0.1" inside the
+ * container makes the server unreachable from the host (looks like a CORS error
+ * in the browser). Default to 0.0.0.0 for non-production runs.
+ */
+if (process.env.NODE_ENV !== "production") {
+    const host = process.env.HOST?.trim();
+
+    if (!host || host === "localhost" || host === "127.0.0.1") {
+        process.env.HOST = "0.0.0.0";
+    }
+}
+
 new Ignitor(APP_ROOT, { importer: IMPORTER })
     .tap((app) => {
         app.booting(async () => {

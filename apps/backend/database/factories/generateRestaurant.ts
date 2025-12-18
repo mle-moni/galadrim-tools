@@ -31,13 +31,13 @@ const getRestaurantDto = async () => {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         lat: +faker.location.latitude({
-            min: 48.87755839830862,
-            max: 48.86143981275648,
+            min: 48.86143981275648,
+            max: 48.87755839830862,
             precision: 8,
         }),
         lng: +faker.location.longitude({
-            min: 2.364892959594727,
-            max: 2.3366975784301762,
+            min: 2.3366975784301762,
+            max: 2.364892959594727,
             precision: 8,
         }),
         image,

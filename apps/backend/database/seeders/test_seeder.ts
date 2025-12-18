@@ -1,3 +1,5 @@
+import Office from "#models/office";
+import OfficeFloor from "#models/office_floor";
 import OfficeRoom from "#models/office_room";
 import { BaseSeeder } from "@adonisjs/lucid/seeders";
 
@@ -63,13 +65,34 @@ const floorPlan = [
 
 export default class extends BaseSeeder {
     async run() {
-        await OfficeRoom.query().where("officeFloorId", 4).delete();
+        let officeFloor = await OfficeFloor.query()
+            .select("id", "officeId", "floor")
+            .orderBy("id", "asc")
+            .first();
+
+        if (!officeFloor) {
+            const office = await Office.firstOrCreate(
+                { name: "Seeded Office" },
+                { address: "Seeded Office Address", lat: 0, lng: 0 },
+            );
+
+            officeFloor = await OfficeFloor.firstOrCreate(
+                { officeId: office.id, floor: 1 },
+                { config: {} },
+            );
+        }
+
+        if (!officeFloor) {
+            throw new Error("Failed to resolve an office floor for seeding");
+        }
+
+        await OfficeRoom.query().where("officeFloorId", officeFloor.id).delete();
 
         await OfficeRoom.createMany(
             floorPlan.map(({ config, roomName }) => ({
                 name: roomName,
                 config,
-                officeFloorId: 4,
+                officeFloorId: officeFloor.id,
             })),
         );
     }

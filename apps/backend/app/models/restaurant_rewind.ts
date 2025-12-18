@@ -18,7 +18,19 @@ export default class RestaurantRewind extends BaseModel {
     @column()
     declare dailyChoiceCount: number | null;
 
-    @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
+    @column({
+        prepare: (value) => JSON.stringify(value),
+        consume: (value) => {
+            if (typeof value === "string") {
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return {};
+                }
+            }
+            return value as Record<string, number>;
+        },
+    })
     declare restaurantPerTag: Record<string, number>;
 
     @column()
@@ -48,7 +60,20 @@ export default class RestaurantRewind extends BaseModel {
     @column()
     declare maxRank: number;
 
-    @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
+    @column({
+        prepare: (value) => JSON.stringify(value),
+        consume: (value) => {
+            if (value === null) return null;
+            if (typeof value === "string") {
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return null;
+                }
+            }
+            return value as [RewindAnimal, RewindAdjective];
+        },
+    })
     declare personality: [RewindAnimal, RewindAdjective] | null;
 
     @column.dateTime({ autoCreate: true })

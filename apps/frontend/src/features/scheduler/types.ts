@@ -1,28 +1,29 @@
 export interface Room {
-  id: string
-  name: string
+    id: number;
+    name: string;
 }
 
 export interface Reservation {
-  id: string
-  roomId: string
-  title: string
-  startTime: Date
-  endTime: Date
-  color: string
-  owner: string
+    id: number;
+    roomId: number;
+    title: string;
+    startTime: Date;
+    endTime: Date;
+    color: string;
+    owner: string;
+    canEdit: boolean;
 }
 
 export interface DragSelection {
-  roomId: string
-  startTime: Date
-  endTime: Date
-  isDragging: boolean
+    roomId: number;
+    startTime: Date;
+    endTime: Date;
+    isDragging: boolean;
 }
 
 export interface LayoutEvent extends Reservation {
-  top: number
-  height: number
-  left: number
-  width: number
+    top: number;
+    height: number;
+    left: number;
+    width: number;
 }

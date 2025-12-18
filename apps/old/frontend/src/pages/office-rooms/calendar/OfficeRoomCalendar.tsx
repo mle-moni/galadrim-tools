@@ -3,6 +3,8 @@ import { observer } from "mobx-react-lite";
 import moment from "moment";
 import "moment/locale/es";
 import { useMemo, useState } from "react";
+import type React from "react";
+import type { EventProps } from "react-big-calendar";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -26,6 +28,38 @@ moment.locale("fr", MomentFrLocales);
 const localizer = momentLocalizer(moment);
 
 const DragAndDropCalendar = withDragAndDrop<OfficeRoomEvent, ApiOfficeRoom>(Calendar);
+
+const canEditEvent = (event: OfficeRoomEvent) => {
+    return (
+        AppStore.authStore.user.id === event.userId || (AppStore.authStore.user.rights & 0b10) !== 0
+    );
+};
+
+const CalendarEvent = ({ event, title }: EventProps<OfficeRoomEvent>) => {
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (canEditEvent(event)) return;
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        if (canEditEvent(event)) return;
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleDoubleClick = (e: React.MouseEvent) => {
+        if (canEditEvent(event)) return;
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    return (
+        <div onMouseDown={handleMouseDown} onClick={handleClick} onDoubleClick={handleDoubleClick}>
+            {title}
+        </div>
+    );
+};
 
 export type CalendarDateRange = [Date] | [Date, Date, Date, Date, Date];
 
@@ -140,10 +174,14 @@ export const OfficeRoomCalendar = observer<{
                 >
                     <DragAndDropCalendar
                         selectable
+                        draggableAccessor={(event) => canEditEvent(event)}
                         min={new Date(0, 0, 0, 9, 0, 0)}
                         max={new Date(0, 0, 0, 19, 30, 0)}
                         step={step}
                         resizableAccessor={() => false}
+                        onSelectEvent={(event) => {
+                            if (!canEditEvent(event)) return;
+                        }}
                         localizer={localizer}
                         events={events}
                         eventPropGetter={(e) => {
@@ -164,6 +202,7 @@ export const OfficeRoomCalendar = observer<{
                             previous: "précédent",
                         }}
                         onEventDrop={(opts) => {
+                            if (!canEditEvent(opts.event)) return;
                             updateReservationMutation.mutate(opts);
                         }}
                         onSelectSlot={({ start, end, resourceId }) => {
@@ -174,13 +213,17 @@ export const OfficeRoomCalendar = observer<{
                                 officeRoomId: +resourceId,
                             });
                         }}
-                        onDoubleClickEvent={({ id }) => deleteReservationMutation.mutate(id)}
+                        onDoubleClickEvent={(event) => {
+                            if (!canEditEvent(event)) return;
+                            deleteReservationMutation.mutate(event.id);
+                        }}
                         resources={officeRooms}
                         resourceIdAccessor="id"
                         resourceTitleAccessor="name"
                         titleAccessor={"title"}
                         resourceAccessor="officeRoomId"
                         components={{
+                            event: CalendarEvent,
                             resourceHeader: (props) => (
                                 <ResourceHeader
                                     {...props}
