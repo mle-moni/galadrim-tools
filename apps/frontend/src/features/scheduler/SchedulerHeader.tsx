@@ -51,7 +51,7 @@ export default function SchedulerHeader({
     };
 
     return (
-        <header className="flex flex-col gap-4 border-b bg-background px-6 py-4">
+        <header className="sticky top-0 z-20 w-full max-w-full flex flex-col gap-4 border-b bg-background px-6 py-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex min-w-0 items-center gap-3">
                     {leading}
