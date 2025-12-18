@@ -124,33 +124,30 @@ export default function SchedulerPage(props: {
         const hasExplicitFloorSelection =
             typeof props.focusedRoomId === "number" || typeof props.initialFloorId === "number";
 
-        if (hasExplicitFloorSelection) {
-            let desiredFloorId: number | null = null;
-
-            if (typeof props.focusedRoomId === "number") {
-                const room = (officeRoomsQuery.data ?? []).find(
-                    (r) => r.id === props.focusedRoomId,
-                );
-                if (room && floorIdsForOffice.has(room.officeFloorId)) {
-                    desiredFloorId = room.officeFloorId;
-                }
+        if (!hasExplicitFloorSelection) {
+            if (selectedFloorId !== null) {
+                setSelectedFloorId(null);
             }
-
-            if (desiredFloorId === null && typeof props.initialFloorId === "number") {
-                if (floorIdsForOffice.has(props.initialFloorId)) {
-                    desiredFloorId = props.initialFloorId;
-                }
-            }
-
-            if (desiredFloorId !== selectedFloorId) {
-                setSelectedFloorId(desiredFloorId);
-            }
-
             return;
         }
 
-        if (selectedFloorId !== null && !floorIdsForOffice.has(selectedFloorId)) {
-            setSelectedFloorId(null);
+        let desiredFloorId: number | null = null;
+
+        if (typeof props.focusedRoomId === "number") {
+            const room = (officeRoomsQuery.data ?? []).find((r) => r.id === props.focusedRoomId);
+            if (room && floorIdsForOffice.has(room.officeFloorId)) {
+                desiredFloorId = room.officeFloorId;
+            }
+        }
+
+        if (desiredFloorId === null && typeof props.initialFloorId === "number") {
+            if (floorIdsForOffice.has(props.initialFloorId)) {
+                desiredFloorId = props.initialFloorId;
+            }
+        }
+
+        if (desiredFloorId !== selectedFloorId) {
+            setSelectedFloorId(desiredFloorId);
         }
     }, [
         officeFloorsQuery.data,
