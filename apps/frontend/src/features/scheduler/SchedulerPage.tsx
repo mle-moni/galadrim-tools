@@ -1,10 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Building2, CalendarDays, Map as MapIcon } from "lucide-react";
 import { io } from "socket.io-client";
 
-import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
+import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
@@ -28,10 +38,20 @@ import {
     useUpdateRoomReservationMutation,
 } from "@/integrations/backend/reservations";
 
-export default function SchedulerPage() {
+function formatFloorLabel(floor: number) {
+    if (floor === 1) return "1er étage";
+    return `${floor}ème étage`;
+}
+
+export default function SchedulerPage(props: {
+    initialOfficeId?: number;
+    initialFloorId?: number;
+    focusedRoomId?: number;
+}) {
     const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
     const [isFiveMinuteSlots, setIsFiveMinuteSlots] = useState(false);
     const [selectedOfficeId, setSelectedOfficeId] = useState<number | null>(null);
+    const [selectedFloorId, setSelectedFloorId] = useState<number | null>(null);
 
     const queryClient = useQueryClient();
 
@@ -41,19 +61,105 @@ export default function SchedulerPage() {
     const officeRoomsQuery = useQuery(officeRoomsQueryOptions());
 
     useEffect(() => {
-        if (selectedOfficeId !== null) return;
+        if (!officesQuery.data) return;
 
-        const officeIdFromMe = meQuery.data?.officeId ?? null;
-        if (officeIdFromMe !== null) {
-            setSelectedOfficeId(officeIdFromMe);
+        const hasExplicitOfficeSelection =
+            typeof props.focusedRoomId === "number" || typeof props.initialOfficeId === "number";
+        if (selectedOfficeId !== null && !hasExplicitOfficeSelection) return;
+
+        const availableOfficeIds = new Set(officesQuery.data.map((o) => o.id));
+        const floorsById = new Map((officeFloorsQuery.data ?? []).map((f) => [f.id, f]));
+        const roomsById = new Map((officeRoomsQuery.data ?? []).map((r) => [r.id, r]));
+
+        let desiredOfficeId: number | null = null;
+
+        if (typeof props.focusedRoomId === "number") {
+            const room = roomsById.get(props.focusedRoomId);
+            const floor = room ? floorsById.get(room.officeFloorId) : undefined;
+            const officeIdFromRoom = floor?.officeId;
+            if (typeof officeIdFromRoom === "number" && availableOfficeIds.has(officeIdFromRoom)) {
+                desiredOfficeId = officeIdFromRoom;
+            }
+        }
+
+        if (desiredOfficeId === null && typeof props.initialOfficeId === "number") {
+            if (availableOfficeIds.has(props.initialOfficeId)) {
+                desiredOfficeId = props.initialOfficeId;
+            }
+        }
+
+        if (desiredOfficeId === null) {
+            const officeIdFromMe = meQuery.data?.officeId;
+            if (typeof officeIdFromMe === "number" && availableOfficeIds.has(officeIdFromMe)) {
+                desiredOfficeId = officeIdFromMe;
+            } else {
+                desiredOfficeId = officesQuery.data[0]?.id ?? null;
+            }
+        }
+
+        if (desiredOfficeId !== null && desiredOfficeId !== selectedOfficeId) {
+            setSelectedOfficeId(desiredOfficeId);
+        }
+    }, [
+        meQuery.data?.officeId,
+        officeFloorsQuery.data,
+        officeRoomsQuery.data,
+        officesQuery.data,
+        props.focusedRoomId,
+        props.initialOfficeId,
+        selectedOfficeId,
+    ]);
+
+    useEffect(() => {
+        if (selectedOfficeId === null) {
+            setSelectedFloorId(null);
             return;
         }
 
-        const firstOfficeId = officesQuery.data?.[0]?.id ?? null;
-        if (firstOfficeId !== null) {
-            setSelectedOfficeId(firstOfficeId);
+        const floorsForOffice = (officeFloorsQuery.data ?? []).filter(
+            (f) => f.officeId === selectedOfficeId,
+        );
+        const floorIdsForOffice = new Set(floorsForOffice.map((f) => f.id));
+
+        const hasExplicitFloorSelection =
+            typeof props.focusedRoomId === "number" || typeof props.initialFloorId === "number";
+
+        if (hasExplicitFloorSelection) {
+            let desiredFloorId: number | null = null;
+
+            if (typeof props.focusedRoomId === "number") {
+                const room = (officeRoomsQuery.data ?? []).find(
+                    (r) => r.id === props.focusedRoomId,
+                );
+                if (room && floorIdsForOffice.has(room.officeFloorId)) {
+                    desiredFloorId = room.officeFloorId;
+                }
+            }
+
+            if (desiredFloorId === null && typeof props.initialFloorId === "number") {
+                if (floorIdsForOffice.has(props.initialFloorId)) {
+                    desiredFloorId = props.initialFloorId;
+                }
+            }
+
+            if (desiredFloorId !== selectedFloorId) {
+                setSelectedFloorId(desiredFloorId);
+            }
+
+            return;
         }
-    }, [meQuery.data?.officeId, officesQuery.data, selectedOfficeId]);
+
+        if (selectedFloorId !== null && !floorIdsForOffice.has(selectedFloorId)) {
+            setSelectedFloorId(null);
+        }
+    }, [
+        officeFloorsQuery.data,
+        officeRoomsQuery.data,
+        props.focusedRoomId,
+        props.initialFloorId,
+        selectedFloorId,
+        selectedOfficeId,
+    ]);
 
     const dayIso = useMemo(() => startOfDayIso(currentDate), [currentDate]);
     const officeIdForQueries = selectedOfficeId ?? 0;
@@ -90,12 +196,44 @@ export default function SchedulerPage() {
         return officesQuery.data?.find((o) => o.id === selectedOfficeId)?.name;
     }, [officesQuery.data, selectedOfficeId]);
 
+    const officeFloorsForOffice = useMemo(() => {
+        if (selectedOfficeId === null) return [];
+        return (officeFloorsQuery.data ?? [])
+            .filter((f) => f.officeId === selectedOfficeId)
+            .slice()
+            .sort((a, b) => a.floor - b.floor);
+    }, [officeFloorsQuery.data, selectedOfficeId]);
+
+    const floorTabs: { id: number | null; label: string }[] = useMemo(() => {
+        const base: { id: number | null; label: string }[] = [{ id: null, label: "Tous" }];
+        for (const floor of officeFloorsForOffice) {
+            base.push({ id: floor.id, label: formatFloorLabel(floor.floor) });
+        }
+        return base;
+    }, [officeFloorsForOffice]);
+
+    const planningSearch = useMemo(() => {
+        return {
+            officeId: selectedOfficeId ?? undefined,
+            floorId: selectedFloorId ?? undefined,
+            roomId: props.focusedRoomId ?? undefined,
+        };
+    }, [props.focusedRoomId, selectedFloorId, selectedOfficeId]);
+
+    const visuelSearch = useMemo(() => {
+        return {
+            officeId: selectedOfficeId ?? undefined,
+            floorId: selectedFloorId ?? undefined,
+        };
+    }, [selectedFloorId, selectedOfficeId]);
+
     const rooms: Room[] = useMemo(() => {
         if (selectedOfficeId === null) return [];
 
         const officeFloorIds = new Set(
             (officeFloorsQuery.data ?? [])
                 .filter((floor) => floor.officeId === selectedOfficeId)
+                .filter((floor) => (selectedFloorId === null ? true : floor.id === selectedFloorId))
                 .map((floor) => floor.id),
         );
 
@@ -105,7 +243,7 @@ export default function SchedulerPage() {
                     officeFloorIds.has(room.officeFloorId) && room.isBookable && !room.isPhonebox,
             )
             .map((room) => ({ id: room.id, name: room.name }));
-    }, [officeFloorsQuery.data, officeRoomsQuery.data, selectedOfficeId]);
+    }, [officeFloorsQuery.data, officeRoomsQuery.data, selectedFloorId, selectedOfficeId]);
 
     const meId = meQuery.data?.id ?? null;
     const myRights = meQuery.data?.rights ?? 0;
@@ -266,6 +404,76 @@ export default function SchedulerPage() {
         deleteReservationMutation.mutate(id);
     };
 
+    const viewToggle = (
+        <div className="flex items-center rounded-md border bg-card p-1">
+            <Button asChild size="sm" variant="secondary" className="h-8">
+                <Link to="/planning" search={planningSearch}>
+                    <CalendarDays className="h-4 w-4" />
+                    Planning
+                </Link>
+            </Button>
+            <Button asChild size="sm" variant="ghost" className="h-8">
+                <Link to="/visuel" search={visuelSearch}>
+                    <MapIcon className="h-4 w-4" />
+                    Visuel
+                </Link>
+            </Button>
+        </div>
+    );
+
+    const officeSelector = (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2" type="button">
+                    <Building2 className="h-4 w-4" />
+                    {selectedOfficeName ?? "Chargement…"}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                {(officesQuery.data ?? []).map((office: ApiOffice) => (
+                    <DropdownMenuItem key={office.id} asChild>
+                        <Link
+                            to="/planning"
+                            search={{
+                                officeId: office.id,
+                                floorId: undefined,
+                                roomId: undefined,
+                            }}
+                        >
+                            {office.name}
+                        </Link>
+                    </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+
+    const floorFilters = floorTabs.map((tab) => {
+        const isActive = tab.id === selectedFloorId;
+
+        return (
+            <Button
+                key={tab.label}
+                asChild
+                type="button"
+                variant={isActive ? "secondary" : "ghost"}
+                size="sm"
+                className={cn("h-8", !isActive && "text-muted-foreground")}
+            >
+                <Link
+                    to="/planning"
+                    search={{
+                        officeId: selectedOfficeId ?? undefined,
+                        floorId: tab.id ?? undefined,
+                        roomId: undefined,
+                    }}
+                >
+                    {tab.label}
+                </Link>
+            </Button>
+        );
+    });
+
     const isReady = selectedOfficeId !== null && meQuery.data !== undefined;
 
     return (
@@ -280,7 +488,9 @@ export default function SchedulerPage() {
                 onDateChange={setCurrentDate}
                 isFiveMinuteSlots={isFiveMinuteSlots}
                 setIsFiveMinuteSlots={setIsFiveMinuteSlots}
-                officeName={selectedOfficeName}
+                viewToggle={viewToggle}
+                officeSelector={officeSelector}
+                floorFilters={floorFilters}
             />
 
             <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -298,6 +508,7 @@ export default function SchedulerPage() {
                         onUpdateReservation={handleUpdateReservation}
                         onDeleteReservation={handleDeleteReservation}
                         isFiveMinuteSlots={isFiveMinuteSlots}
+                        focusedRoomId={props.focusedRoomId}
                     />
                 ) : (
                     <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">

@@ -1,11 +1,8 @@
 import type React from "react";
-import { List } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 interface SchedulerHeaderProps {
     currentDate: Date;
@@ -13,7 +10,10 @@ interface SchedulerHeaderProps {
     isFiveMinuteSlots: boolean;
     setIsFiveMinuteSlots: (val: boolean) => void;
     leading?: React.ReactNode;
-    officeName?: string;
+
+    viewToggle?: React.ReactNode;
+    officeSelector?: React.ReactNode;
+    floorFilters?: React.ReactNode;
 }
 
 export default function SchedulerHeader({
@@ -22,7 +22,9 @@ export default function SchedulerHeader({
     isFiveMinuteSlots,
     setIsFiveMinuteSlots,
     leading,
-    officeName,
+    viewToggle,
+    officeSelector,
+    floorFilters,
 }: SchedulerHeaderProps) {
     const formatDate = (date: Date) => {
         return date.toLocaleDateString("fr-FR", {
@@ -48,8 +50,6 @@ export default function SchedulerHeader({
         onDateChange(new Date());
     };
 
-    const floors = ["Tous", "1er étage", "2ème étage", "3ème étage"];
-
     return (
         <header className="flex flex-col gap-4 border-b bg-background px-6 py-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -72,38 +72,13 @@ export default function SchedulerHeader({
                         </Label>
                     </div>
 
-                    <Tabs defaultValue="planning" className="hidden lg:block">
-                        <TabsList>
-                            <TabsTrigger value="planning">Planning</TabsTrigger>
-                            <TabsTrigger value="visual">Visuel</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-
-                    <Button variant="outline" className="gap-2" type="button">
-                        <List className="h-4 w-4" />
-                        {officeName ?? "Chargement…"}
-                    </Button>
+                    {viewToggle}
+                    {officeSelector}
                 </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-4">
-                <div className="flex flex-wrap items-center gap-1">
-                    {floors.map((label, idx) => (
-                        <Button
-                            key={label}
-                            type="button"
-                            variant={idx === 0 ? "secondary" : "ghost"}
-                            size="sm"
-                            className={cn(
-                                "h-8",
-                                idx === 0 && "shadow-none",
-                                idx !== 0 && "text-muted-foreground",
-                            )}
-                        >
-                            {label}
-                        </Button>
-                    ))}
-                </div>
+                <div className="flex flex-wrap items-center gap-1">{floorFilters}</div>
 
                 <div className="min-w-0 flex-1 text-center text-base font-semibold capitalize text-foreground">
                     {formatDate(currentDate)}
@@ -121,13 +96,6 @@ export default function SchedulerHeader({
                             Suivant
                         </Button>
                     </div>
-
-                    <Tabs defaultValue="day" className="hidden lg:block">
-                        <TabsList>
-                            <TabsTrigger value="day">Jour</TabsTrigger>
-                            <TabsTrigger value="week">Semaine</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
                 </div>
             </div>
         </header>

@@ -32,14 +32,14 @@ function LoginRoute() {
 
     useEffect(() => {
         if (!meQuery.data) return;
-        router.history.replace(redirect ?? "/scheduler");
+        router.history.replace(redirect ?? "/planning");
     }, [meQuery.data, redirect, router.history]);
 
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (user: IUserData) => {
             queryClient.setQueryData(queryKeys.me(), user);
-            router.history.push(redirect ?? "/scheduler");
+            router.history.push(redirect ?? "/planning");
         },
         onError: (error: unknown) => {
             setFormError(

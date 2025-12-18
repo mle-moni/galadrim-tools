@@ -1,6 +1,8 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 
+import { cn } from "@/lib/utils";
+
 import { END_HOUR, HOURS_COUNT, START_HOUR, TIME_COLUMN_WIDTH } from "./constants";
 import type { DragSelection, Reservation, Room } from "./types";
 import {
@@ -20,6 +22,7 @@ interface SchedulerGridProps {
     onUpdateReservation: (reservation: Reservation) => void;
     onDeleteReservation: (id: Reservation["id"]) => void;
     isFiveMinuteSlots: boolean;
+    focusedRoomId?: number;
 }
 
 interface MovingState {
@@ -36,6 +39,7 @@ export default function SchedulerGrid({
     onUpdateReservation,
     onDeleteReservation,
     isFiveMinuteSlots,
+    focusedRoomId,
 }: SchedulerGridProps) {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +62,21 @@ export default function SchedulerGrid({
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    useEffect(() => {
+        if (!focusedRoomId) return;
+        if (!rooms.some((r) => r.id === focusedRoomId)) return;
+
+        const container = containerRef.current;
+        if (!container) return;
+
+        const roomColumn = document.getElementById(`room-col-${focusedRoomId}`);
+        if (!roomColumn) return;
+
+        const targetLeft =
+            roomColumn.offsetLeft - container.clientWidth / 2 + roomColumn.clientWidth / 2;
+        container.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+    }, [focusedRoomId, rooms]);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -304,10 +323,18 @@ export default function SchedulerGrid({
                     {rooms.map((room) => (
                         <div
                             key={room.id}
-                            className="group relative flex h-full w-52 flex-shrink-0 flex-col border-r"
+                            className={cn(
+                                "group relative flex h-full w-52 flex-shrink-0 flex-col border-r",
+                                focusedRoomId === room.id && "bg-accent/10",
+                            )}
                             onMouseEnter={() => setHoveredRoomId(room.id)}
                         >
-                            <div className="flex h-10 flex-shrink-0 items-center justify-center border-b bg-muted/30 text-sm font-semibold text-foreground shadow-sm">
+                            <div
+                                className={cn(
+                                    "flex h-10 flex-shrink-0 items-center justify-center border-b bg-muted/30 text-sm font-semibold text-foreground shadow-sm",
+                                    focusedRoomId === room.id && "bg-accent/30",
+                                )}
+                            >
                                 <span className="truncate px-2" title={room.name}>
                                     {room.name}
                                 </span>
