@@ -1,4 +1,10 @@
-import { Outlet, createRootRouteWithContext, useRouterState } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+import {
+    Outlet,
+    createRootRouteWithContext,
+    useRouter,
+    useRouterState,
+} from "@tanstack/react-router";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
@@ -9,6 +15,9 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 
+import { unlockPlatformerEasterEgg } from "@/features/platformer/easter-egg";
+import { createKeySequenceMatcher, KONAMI_SEQUENCE } from "@/lib/konami";
+
 interface MyRouterContext {
     queryClient: QueryClient;
 }
@@ -18,8 +27,53 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootComponent() {
+    const router = useRouter();
     const pathname = useRouterState({ select: (s) => s.location.pathname });
+    const href = useRouterState({ select: (s) => s.location.href });
     const isAuthRoute = pathname.startsWith("/login");
+
+    const hrefRef = useRef(href);
+    const pathnameRef = useRef(pathname);
+
+    useEffect(() => {
+        hrefRef.current = href;
+    }, [href]);
+
+    useEffect(() => {
+        pathnameRef.current = pathname;
+    }, [pathname]);
+
+    useEffect(() => {
+        if (isAuthRoute) return;
+
+        const matcher = createKeySequenceMatcher(KONAMI_SEQUENCE);
+
+        const isEditableElement = (target: EventTarget | null) => {
+            if (!(target instanceof HTMLElement)) return false;
+            return (
+                target.isContentEditable ||
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.tagName === "SELECT"
+            );
+        };
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.defaultPrevented) return;
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            if (pathnameRef.current.startsWith("/platformer")) return;
+
+            if (isEditableElement(e.target) || isEditableElement(document.activeElement)) return;
+
+            if (matcher.feed(e.key)) {
+                unlockPlatformerEasterEgg(hrefRef.current);
+                router.history.push("/platformer");
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [isAuthRoute, router.history]);
 
     if (isAuthRoute) {
         return (
