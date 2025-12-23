@@ -423,7 +423,7 @@ export default function SchedulerGrid({
 
     const currentHour = currentTime.getHours();
     const focusStart = currentHour - 1;
-    const focusEnd = currentHour + 2;
+    const focusEnd = currentHour + 1;
 
     const shouldShowHalfHour = (hour: number) => {
         return hour >= focusStart && hour <= focusEnd;
