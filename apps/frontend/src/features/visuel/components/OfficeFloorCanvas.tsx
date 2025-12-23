@@ -1,5 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
+import { useNow } from "@/debug/clock";
+
 import type { ApiOfficeRoom } from "@galadrim-tools/shared";
 
 import type { ApiRoomReservationWithUser } from "@/integrations/backend/reservations";
@@ -18,6 +20,28 @@ function isReservedNow(roomId: number, reservations: ApiRoomReservationWithUser[
         const end = new Date(r.end);
         return start < now && now < end;
     });
+}
+
+function getActiveReservation(
+    roomId: number,
+    reservations: ApiRoomReservationWithUser[],
+    now: Date,
+): ApiRoomReservationWithUser | null {
+    const active = reservations.filter((r) => {
+        if (r.officeRoomId !== roomId) return false;
+        const start = new Date(r.start);
+        const end = new Date(r.end);
+        return start < now && now < end;
+    });
+
+    if (active.length === 0) return null;
+
+    active.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+    return active[0] ?? null;
+}
+
+function getReservationOwnerLabel(reservation: ApiRoomReservationWithUser): string {
+    return reservation.user?.username ?? reservation.titleComputed ?? "Quelqu'un";
 }
 
 function getRoomAtPoint(
@@ -64,10 +88,17 @@ export default function OfficeFloorCanvas(props: {
         return props.rooms.find((room) => room.id === hoveredRoomId) ?? null;
     }, [hoveredRoomId, props.rooms]);
 
+    const now = useNow({ intervalMs: 60_000 });
+
     const hoveredRoomReservedNow = useMemo(() => {
         if (!hoveredRoom) return null;
-        return isReservedNow(hoveredRoom.id, props.reservations, new Date());
-    }, [hoveredRoom, props.reservations]);
+        return isReservedNow(hoveredRoom.id, props.reservations, now);
+    }, [hoveredRoom, now, props.reservations]);
+
+    const hoveredRoomActiveReservation = useMemo(() => {
+        if (!hoveredRoom) return null;
+        return getActiveReservation(hoveredRoom.id, props.reservations, now);
+    }, [hoveredRoom, now, props.reservations]);
 
     useLayoutEffect(() => {
         if (!hoveredRoom) {
@@ -88,8 +119,6 @@ export default function OfficeFloorCanvas(props: {
 
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
-
-        const now = new Date();
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -121,7 +150,7 @@ export default function OfficeFloorCanvas(props: {
             ctx.lineWidth = isHovered ? 1.5 : 1;
             ctx.stroke();
         }
-    }, [canvasHeight, canvasWidth, hoveredRoomId, props.reservations, props.rooms]);
+    }, [canvasHeight, canvasWidth, hoveredRoomId, now, props.reservations, props.rooms]);
 
     return (
         <div ref={wrapperRef} className="relative h-[275px] w-full max-w-[500px]">
@@ -161,7 +190,9 @@ export default function OfficeFloorCanvas(props: {
                                 hoveredRoomReservedNow ? "text-destructive" : "text-emerald-700"
                             }
                         >
-                            {hoveredRoomReservedNow ? "Occupée" : "Libre"}
+                            {hoveredRoomReservedNow
+                                ? `Occupée${hoveredRoomActiveReservation ? ` par ${getReservationOwnerLabel(hoveredRoomActiveReservation)}` : ""}`
+                                : "Libre"}
                         </div>
                     )}
                 </div>

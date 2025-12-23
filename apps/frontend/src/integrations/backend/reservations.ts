@@ -119,9 +119,14 @@ async function deleteRoomReservation(officeId: number, reservationId: number) {
     return res.json;
 }
 
+type ClockLike = {
+    now: (opts?: { baseDate?: Date }) => Date;
+};
+
 export function useCreateRoomReservationMutation(opts: {
     officeId: number;
     dayIso: string;
+    clock?: ClockLike;
     me: Pick<IUserData, "id" | "username">;
 }) {
     const queryClient = useQueryClient();
@@ -134,7 +139,7 @@ export function useCreateRoomReservationMutation(opts: {
             await queryClient.cancelQueries({ queryKey });
 
             const previous = queryClient.getQueryData<ApiRoomReservationWithUser[]>(queryKey);
-            const nowIso = new Date().toISOString();
+            const nowIso = (opts.clock?.now() ?? new Date()).toISOString();
             const optimisticId = -Date.now();
 
             const optimisticReservation: ApiRoomReservationWithUser = {

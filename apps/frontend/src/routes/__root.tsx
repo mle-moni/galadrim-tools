@@ -14,6 +14,7 @@ import AppSidebar from "@/components/AppSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
+import DebugDevtools from "@/debug/devtools";
 
 import { unlockPlatformerEasterEgg } from "@/features/platformer/easter-egg";
 import { createKeySequenceMatcher, KONAMI_SEQUENCE } from "@/lib/konami";
@@ -89,6 +90,7 @@ function RootComponent() {
                             render: <TanStackRouterDevtoolsPanel />,
                         },
                         TanStackQueryDevtools,
+                        DebugDevtools,
                     ]}
                 />
             </>
@@ -111,6 +113,7 @@ function RootComponent() {
                         render: <TanStackRouterDevtoolsPanel />,
                     },
                     TanStackQueryDevtools,
+                    DebugDevtools,
                 ]}
             />
         </SidebarProvider>

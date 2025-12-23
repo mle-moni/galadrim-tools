@@ -5,6 +5,8 @@ import { Building2 } from "lucide-react";
 
 import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
+import { useNow } from "@/debug/clock";
+
 import { Button } from "@/components/ui/button";
 import FloorTabSelector from "@/components/FloorTabSelector";
 import {
@@ -91,7 +93,8 @@ export default function VisuelPage(props: {
         return officeFloorsForOffice.filter((f) => f.id === selectedFloorId);
     }, [officeFloorsForOffice, selectedFloorId]);
 
-    const dayIso = useMemo(() => startOfDayIso(new Date()), []);
+    const now = useNow({ intervalMs: 60_000 });
+    const dayIso = useMemo(() => startOfDayIso(now), [now]);
     const officeIdForQueries = selectedOfficeId ?? 0;
 
     const reservationsQuery = useQuery({

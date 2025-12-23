@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
+import { useClock } from "@/debug/clock";
+
 interface SchedulerHeaderProps {
     currentDate: Date;
     onDateChange: (date: Date) => void;
@@ -26,6 +28,8 @@ export default function SchedulerHeader({
     officeSelector,
     floorFilters,
 }: SchedulerHeaderProps) {
+    const clock = useClock();
+
     const formatDate = (date: Date) => {
         return date.toLocaleDateString("fr-FR", {
             weekday: "long",
@@ -47,7 +51,7 @@ export default function SchedulerHeader({
     };
 
     const handleToday = () => {
-        onDateChange(new Date());
+        onDateChange(clock.now());
     };
 
     return (

@@ -6,6 +6,8 @@ import { io } from "socket.io-client";
 
 import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
+import { useClock } from "@/debug/clock";
+
 import FloorTabSelector from "@/components/FloorTabSelector";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +50,9 @@ export default function SchedulerPage(props: {
     initialFloorId?: number;
     focusedRoomId?: number;
 }) {
-    const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
+    const clock = useClock();
+
+    const [currentDate, setCurrentDate] = useState<Date>(() => clock.now());
     const [isFiveMinuteSlots, setIsFiveMinuteSlots] = useState(false);
     const [selectedOfficeId, setSelectedOfficeId] = useState<number | null>(null);
     const [selectedFloorId, setSelectedFloorId] = useState<number | null>(null);
@@ -172,6 +176,7 @@ export default function SchedulerPage(props: {
     const createReservationMutation = useCreateRoomReservationMutation({
         officeId: officeIdForQueries,
         dayIso,
+        clock,
         me: {
             id: meQuery.data?.id ?? 0,
             username: meQuery.data?.username ?? "Moi",

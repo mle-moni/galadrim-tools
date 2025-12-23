@@ -1,10 +1,7 @@
 import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { useClock, useNow } from "@/debug/clock";
 import { cn } from "@/lib/utils";
 
 import { END_HOUR, HOURS_COUNT, START_HOUR, TIME_COLUMN_WIDTH } from "./constants";
@@ -20,83 +17,6 @@ import EventBlock from "./EventBlock";
 
 const HEADER_HEIGHT = 40;
 const DEFAULT_PIXELS_PER_HOUR = 80;
-
-function parseDevNow(raw: string, currentDate: Date): Date | null {
-    const trimmed = raw.trim();
-    if (!trimmed) return null;
-
-    const hhmmMatch = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(trimmed);
-    if (hhmmMatch) {
-        const hours = Number(hhmmMatch[1]);
-        const minutes = Number(hhmmMatch[2]);
-        const next = new Date(currentDate);
-        next.setHours(hours, minutes, 0, 0);
-        return next;
-    }
-
-    const offsetMinutesMatch = /^[+-]\d+$/.exec(trimmed);
-    if (offsetMinutesMatch) {
-        const offsetMinutes = Number(trimmed);
-        if (!Number.isFinite(offsetMinutes)) return null;
-        return new Date(Date.now() + offsetMinutes * 60_000);
-    }
-
-    const parsed = new Date(trimmed);
-    if (!Number.isFinite(parsed.getTime())) return null;
-    return parsed;
-}
-
-const DEBUG_STATE_KEY = "scheduler.debug";
-
-type DebugState = {
-    open: boolean;
-    devNowRaw: string | null;
-    devNowDraft: string;
-};
-
-function isLocalDebugHost(): boolean {
-    if (typeof window === "undefined") return false;
-
-    const hostname = window.location.hostname;
-    return hostname.includes("localhost") || hostname.includes("127.0.0.1") || hostname === "::1";
-}
-
-function loadDebugState(): DebugState {
-    if (!isLocalDebugHost()) return { open: false, devNowRaw: null, devNowDraft: "" };
-
-    try {
-        const raw = window.sessionStorage.getItem(DEBUG_STATE_KEY);
-        if (!raw) return { open: false, devNowRaw: null, devNowDraft: "" };
-
-        const parsed = JSON.parse(raw) as Partial<DebugState>;
-        const devNowRaw = typeof parsed.devNowRaw === "string" ? parsed.devNowRaw : null;
-        const devNowDraft =
-            typeof parsed.devNowDraft === "string" ? parsed.devNowDraft : devNowRaw ?? "";
-
-        return {
-            open: Boolean(parsed.open),
-            devNowRaw,
-            devNowDraft,
-        };
-    } catch {
-        return { open: false, devNowRaw: null, devNowDraft: "" };
-    }
-}
-
-function saveDebugState(state: DebugState) {
-    if (!isLocalDebugHost()) return;
-
-    try {
-        if (!state.open && !state.devNowRaw && !state.devNowDraft) {
-            window.sessionStorage.removeItem(DEBUG_STATE_KEY);
-            return;
-        }
-
-        window.sessionStorage.setItem(DEBUG_STATE_KEY, JSON.stringify(state));
-    } catch {
-        // ignore
-    }
-}
 
 interface SchedulerGridProps {
     currentDate: Date;
@@ -129,18 +49,10 @@ export default function SchedulerGrid({
     const dragActivateTimeoutRef = useRef<number | null>(null);
     const autoScrollKeyRef = useRef<string | null>(null);
 
-    const [debug, setDebug] = useState<DebugState>(() => loadDebugState());
-    const { open: debugOpen, devNowRaw, devNowDraft } = debug;
-
-    const devNow = useMemo(() => {
-        if (!devNowRaw) return null;
-        return parseDevNow(devNowRaw, currentDate);
-    }, [currentDate, devNowRaw]);
-
-    const devNowDraftParsed = useMemo(() => {
-        if (!devNowDraft.trim()) return null;
-        return parseDevNow(devNowDraft, currentDate);
-    }, [currentDate, devNowDraft]);
+    const clock = useClock();
+    const currentTime = useNow({ baseDate: currentDate, intervalMs: 60_000 });
+    const isSpoofedNow = clock.isSpoofed({ baseDate: currentDate });
+    const spoofedNowMs = isSpoofedNow ? currentTime.getTime() : null;
 
     const [containerHeight, setContainerHeight] = useState(0);
 
@@ -173,7 +85,6 @@ export default function SchedulerGrid({
 
     const [dragSelection, setDragSelection] = useState<DragSelection | null>(null);
     const [movingState, setMovingState] = useState<MovingState | null>(null);
-    const [currentTime, setCurrentTime] = useState<Date>(() => devNow ?? new Date());
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
     const [hoveredRoomId, setHoveredRoomId] = useState<number | null>(null);
 
@@ -203,26 +114,15 @@ export default function SchedulerGrid({
     }, [focusedRoomId, rooms]);
 
     useEffect(() => {
-        if (devNow) {
-            setCurrentTime(devNow);
-            return;
-        }
-
-        setCurrentTime(new Date());
-        const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-        return () => clearInterval(timer);
-    }, [devNow]);
-
-    useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
         if (!containerHeight) return;
 
-        const autoScrollKey = `${currentDate.toDateString()}-${devNow ? devNow.getTime() : "realtime"}`;
+        const autoScrollKey = `${currentDate.toDateString()}-${spoofedNowMs ?? "realtime"}`;
         if (autoScrollKeyRef.current === autoScrollKey) return;
         autoScrollKeyRef.current = autoScrollKey;
 
-        const now = devNow ?? new Date();
+        const now = isSpoofedNow ? currentTime : new Date();
         const isToday =
             now.getDate() === currentDate.getDate() &&
             now.getMonth() === currentDate.getMonth() &&
@@ -241,26 +141,10 @@ export default function SchedulerGrid({
                 behavior: "smooth",
             });
         });
-    }, [containerHeight, currentDate, devNow, gridHeight, pixelsPerHour]);
+    }, [containerHeight, currentDate, gridHeight, isSpoofedNow, pixelsPerHour, spoofedNowMs]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
     const selectionActivateDelayMs = 100;
-
-    const isDev = isLocalDebugHost();
-
-    useEffect(() => {
-        if (!isDev) return;
-        saveDebugState(debug);
-    }, [debug, isDev]);
-
-    const applyDevNow = () => {
-        const trimmed = devNowDraft.trim();
-        setDebug((prev) => ({ ...prev, devNowRaw: trimmed || null, devNowDraft: trimmed }));
-    };
-
-    const clearDevNow = () => {
-        setDebug((prev) => ({ ...prev, devNowRaw: null, devNowDraft: "" }));
-    };
 
     const handleWheel = (e: React.WheelEvent) => {
         const container = containerRef.current;
@@ -705,77 +589,6 @@ export default function SchedulerGrid({
                     </div>
                 </div>
             </div>
-
-            {isDev && (
-                <div
-                    className="pointer-events-auto absolute bottom-3 left-3 z-[60] w-80 rounded-md border bg-card/95 p-3 shadow-lg backdrop-blur-sm"
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onWheel={(e) => e.stopPropagation()}
-                >
-                    <div className="flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                            <div className="truncate text-sm font-semibold">Debug mode</div>
-                            <div className="text-xs text-muted-foreground">
-                                {devNow ? `Active: ${formatTime(devNow)}` : "Active: real time"}
-                            </div>
-                        </div>
-                        <Switch
-                            checked={debugOpen}
-                            onCheckedChange={(open) => setDebug((prev) => ({ ...prev, open }))}
-                        />
-                    </div>
-
-                    {debugOpen && (
-                        <div className="mt-3 flex flex-col gap-2">
-                            <div className="flex flex-col gap-1">
-                                <Label htmlFor="scheduler-dev-now" className="text-xs">
-                                    Fake current time
-                                </Label>
-                                <Input
-                                    id="scheduler-dev-now"
-                                    value={devNowDraft}
-                                    onChange={(e) =>
-                                        setDebug((prev) => ({
-                                            ...prev,
-                                            devNowDraft: e.target.value,
-                                        }))
-                                    }
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") applyDevNow();
-                                    }}
-                                    placeholder="14:30 | +90 | 2025-12-23T14:30"
-                                />
-                                {devNowDraft.trim().length > 0 && !devNowDraftParsed && (
-                                    <div className="text-xs text-destructive">
-                                        Invalid format. Use `HH:MM`, `+/-minutes`, or an ISO date.
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="secondary"
-                                    className="h-8"
-                                    onClick={applyDevNow}
-                                >
-                                    Apply
-                                </Button>
-                                <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="ghost"
-                                    className="h-8"
-                                    onClick={clearDevNow}
-                                >
-                                    Clear
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            )}
         </div>
     );
 }
