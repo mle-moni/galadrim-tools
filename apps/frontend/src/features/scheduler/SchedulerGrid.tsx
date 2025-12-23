@@ -141,7 +141,33 @@ export default function SchedulerGrid({
         return parseDevNow(devNowDraft, currentDate);
     }, [currentDate, devNowDraft]);
 
-    const pixelsPerHour = DEFAULT_PIXELS_PER_HOUR;
+    const [containerHeight, setContainerHeight] = useState(0);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const update = () => setContainerHeight(container.clientHeight);
+        update();
+
+        if (typeof ResizeObserver === "undefined") {
+            window.addEventListener("resize", update);
+            return () => window.removeEventListener("resize", update);
+        }
+
+        const observer = new ResizeObserver(() => update());
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, []);
+
+    const pixelsPerHour = useMemo(() => {
+        if (!containerHeight) return DEFAULT_PIXELS_PER_HOUR;
+
+        const availableHeight = Math.max(0, containerHeight - HEADER_HEIGHT);
+        const fit = availableHeight / HOURS_COUNT;
+        return Math.max(DEFAULT_PIXELS_PER_HOUR, fit);
+    }, [containerHeight]);
+
     const gridHeight = HOURS_COUNT * pixelsPerHour;
 
     const [dragSelection, setDragSelection] = useState<DragSelection | null>(null);
@@ -465,9 +491,9 @@ export default function SchedulerGrid({
                 onWheel={handleWheel}
             >
                 <div className="min-w-max">
-                    <div className="sticky top-0 z-40 flex">
+                    <div className="sticky top-0 z-[75] flex">
                         <div
-                            className="sticky left-0 z-50 flex h-10 flex-shrink-0 items-center justify-center border-b border-r bg-muted/30 shadow-sm"
+                            className="sticky left-0 z-[80] flex h-10 flex-shrink-0 items-center justify-center border-b border-r bg-background shadow-sm"
                             style={{ width: TIME_COLUMN_WIDTH }}
                         >
                             <span className="text-sm font-semibold text-muted-foreground">
@@ -494,7 +520,7 @@ export default function SchedulerGrid({
 
                     <div className="flex">
                         <div
-                            className="sticky left-0 z-30 flex flex-shrink-0 flex-col border-r bg-card shadow-sm"
+                            className="sticky left-0 z-[70] flex flex-shrink-0 flex-col border-r bg-background shadow-sm"
                             style={{ width: TIME_COLUMN_WIDTH }}
                         >
                             <div className="relative" style={{ height: gridHeight }}>
