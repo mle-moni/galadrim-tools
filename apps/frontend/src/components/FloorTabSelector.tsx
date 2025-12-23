@@ -24,7 +24,12 @@ export default function FloorTabSelector({
     className,
 }: FloorTabSelectorProps) {
     return (
-        <div className={cn("flex flex-wrap items-center gap-2", className)}>
+        <div
+            className={cn(
+                "flex max-w-full flex-nowrap items-center gap-2 overflow-x-auto",
+                className,
+            )}
+        >
             {tabs.map((tab) => {
                 const isActive = tab.id === selectedId;
                 const suffix = tab.floor === 1 ? "er" : "ème";
@@ -35,7 +40,7 @@ export default function FloorTabSelector({
                         to={to}
                         search={getSearch(tab.id)}
                         className={cn(
-                            "border-b-2 border-transparent px-3 py-1.5 text-sm font-medium leading-6 text-slate-700",
+                            "whitespace-nowrap border-b-2 border-transparent px-3 py-1.5 text-sm font-medium leading-6 text-slate-700",
                             isActive && "border-[#2048e9] text-[#1f31ae]",
                         )}
                     >

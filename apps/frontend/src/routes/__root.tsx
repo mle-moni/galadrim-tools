@@ -96,9 +96,9 @@ function RootComponent() {
     }
 
     return (
-        <SidebarProvider defaultOpen>
+        <SidebarProvider defaultOpen className="h-svh min-h-0">
             <AppSidebar />
-            <SidebarInset className="min-h-svh min-w-0">
+            <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
                 <Outlet />
             </SidebarInset>
             <TanStackDevtools

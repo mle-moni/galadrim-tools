@@ -127,6 +127,7 @@ export default function SchedulerGrid({
 }: SchedulerGridProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const dragActivateTimeoutRef = useRef<number | null>(null);
+    const autoScrollKeyRef = useRef<string | null>(null);
 
     const [debug, setDebug] = useState<DebugState>(() => loadDebugState());
     const { open: debugOpen, devNowRaw, devNowDraft } = debug;
@@ -215,6 +216,11 @@ export default function SchedulerGrid({
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
+        if (!containerHeight) return;
+
+        const autoScrollKey = `${currentDate.toDateString()}-${devNow ? devNow.getTime() : "realtime"}`;
+        if (autoScrollKeyRef.current === autoScrollKey) return;
+        autoScrollKeyRef.current = autoScrollKey;
 
         const now = devNow ?? new Date();
         const isToday =
@@ -235,7 +241,7 @@ export default function SchedulerGrid({
                 behavior: "smooth",
             });
         });
-    }, [currentDate, devNow, gridHeight, pixelsPerHour]);
+    }, [containerHeight, currentDate, devNow, gridHeight, pixelsPerHour]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
     const selectionActivateDelayMs = 100;
@@ -503,13 +509,13 @@ export default function SchedulerGrid({
 
     return (
         <div
-            className="relative flex h-full flex-1 min-w-0 select-none overflow-hidden"
+            className="relative flex min-h-0 flex-1 min-w-0 select-none overflow-hidden"
             onMouseMove={handleGlobalMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
         >
             <div
-                className="h-full min-w-0 flex-1 overflow-auto bg-background"
+                className="min-h-0 min-w-0 flex-1 overflow-auto bg-background"
                 ref={containerRef}
                 onWheel={handleWheel}
             >

@@ -51,8 +51,8 @@ export default function SchedulerHeader({
     };
 
     return (
-        <header className="sticky top-0 z-20 w-full max-w-full flex flex-col gap-4 border-b bg-background px-6 py-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+        <header className="sticky top-0 z-20 w-full max-w-full flex flex-col gap-3 border-b bg-background px-4 py-3 md:gap-4 md:px-6 md:py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4">
                 <div className="flex min-w-0 items-center gap-3">
                     {leading}
                     <h1 className="truncate text-xl font-semibold tracking-tight">
@@ -77,8 +77,8 @@ export default function SchedulerHeader({
                 </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
-                <div className="flex flex-wrap items-center gap-2">{floorFilters}</div>
+            <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                <div className="min-w-0">{floorFilters}</div>
 
                 <div className="min-w-0 flex-1 text-center text-base font-semibold capitalize text-foreground">
                     {formatDate(currentDate)}
