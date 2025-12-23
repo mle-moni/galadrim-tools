@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import type { ApiOfficeRoom } from "@galadrim-tools/shared";
 
@@ -55,6 +55,32 @@ export default function OfficeFloorCanvas(props: {
     }, [canvasWidth]);
 
     const [hoveredRoomId, setHoveredRoomId] = useState<number | null>(null);
+    const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number } | null>(null);
+    const tooltipRef = useRef<HTMLDivElement>(null);
+    const [tooltipSize, setTooltipSize] = useState<{ width: number; height: number } | null>(null);
+
+    const hoveredRoom = useMemo(() => {
+        if (hoveredRoomId === null) return null;
+        return props.rooms.find((room) => room.id === hoveredRoomId) ?? null;
+    }, [hoveredRoomId, props.rooms]);
+
+    const hoveredRoomReservedNow = useMemo(() => {
+        if (!hoveredRoom) return null;
+        return isReservedNow(hoveredRoom.id, props.reservations, new Date());
+    }, [hoveredRoom, props.reservations]);
+
+    useLayoutEffect(() => {
+        if (!hoveredRoom) {
+            setTooltipSize(null);
+            return;
+        }
+
+        const tooltip = tooltipRef.current;
+        if (!tooltip) return;
+
+        const rect = tooltip.getBoundingClientRect();
+        setTooltipSize({ width: rect.width, height: rect.height });
+    }, [hoveredRoom, hoveredRoomReservedNow]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -98,7 +124,49 @@ export default function OfficeFloorCanvas(props: {
     }, [canvasHeight, canvasWidth, hoveredRoomId, props.reservations, props.rooms]);
 
     return (
-        <div ref={wrapperRef} className="h-[275px] w-full max-w-[500px]">
+        <div ref={wrapperRef} className="relative h-[275px] w-full max-w-[500px]">
+            {hoveredRoom && hoveredPoint && (
+                <div
+                    ref={tooltipRef}
+                    className="pointer-events-none absolute z-50 max-w-[220px] rounded-md border bg-background/95 px-2 py-1 text-xs shadow-sm backdrop-blur"
+                    style={{
+                        left: (() => {
+                            const offset = 20;
+                            const width = tooltipSize?.width ?? 220;
+
+                            const canFitRight = hoveredPoint.x + offset + width <= canvasWidth;
+                            const preferred = canFitRight
+                                ? hoveredPoint.x + offset
+                                : hoveredPoint.x - offset - width;
+
+                            return Math.min(Math.max(0, preferred), canvasWidth - width);
+                        })(),
+                        top: (() => {
+                            const offset = 20;
+                            const height = tooltipSize?.height ?? 48;
+
+                            const canFitAbove = hoveredPoint.y - offset - height >= 0;
+                            const preferred = canFitAbove
+                                ? hoveredPoint.y - offset - height
+                                : hoveredPoint.y + offset;
+
+                            return Math.min(Math.max(0, preferred), canvasHeight - height);
+                        })(),
+                    }}
+                >
+                    <div className="font-semibold text-foreground">{hoveredRoom.name}</div>
+                    {hoveredRoomReservedNow !== null && (
+                        <div
+                            className={
+                                hoveredRoomReservedNow ? "text-destructive" : "text-emerald-700"
+                            }
+                        >
+                            {hoveredRoomReservedNow ? "Occupée" : "Libre"}
+                        </div>
+                    )}
+                </div>
+            )}
+
             <canvas
                 ref={canvasRef}
                 width={canvasWidth}
@@ -113,12 +181,14 @@ export default function OfficeFloorCanvas(props: {
 
                     const hovered = getRoomAtPoint(props.rooms, { x, y }, canvas);
                     setHoveredRoomId(hovered?.id ?? null);
+                    setHoveredPoint(hovered ? { x, y } : null);
                     canvas.style.cursor = hovered ? "pointer" : "default";
                 }}
                 onMouseLeave={() => {
                     const canvas = canvasRef.current;
                     if (!canvas) return;
                     setHoveredRoomId(null);
+                    setHoveredPoint(null);
                     canvas.style.cursor = "default";
                 }}
                 onClick={(event) => {
