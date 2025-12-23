@@ -212,7 +212,7 @@ export default function SchedulerGrid({
     }, [currentDate, devNow, gridHeight, pixelsPerHour]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
-    const selectionActivateDelayMs = 150;
+    const selectionActivateDelayMs = 100;
 
     const isDev = isLocalDebugHost();
 
