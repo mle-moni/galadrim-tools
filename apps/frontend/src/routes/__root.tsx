@@ -98,7 +98,7 @@ function RootComponent() {
     return (
         <SidebarProvider defaultOpen>
             <AppSidebar />
-            <SidebarInset className="min-h-svh">
+            <SidebarInset className="min-h-svh min-w-0">
                 <Outlet />
             </SidebarInset>
             <TanStackDevtools

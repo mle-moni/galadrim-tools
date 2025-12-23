@@ -454,13 +454,13 @@ export default function SchedulerGrid({
 
     return (
         <div
-            className="relative flex h-full flex-1 select-none overflow-hidden"
+            className="relative flex h-full flex-1 min-w-0 select-none overflow-hidden"
             onMouseMove={handleGlobalMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
         >
             <div
-                className="h-full flex-1 overflow-auto bg-background"
+                className="h-full min-w-0 flex-1 overflow-auto bg-background"
                 ref={containerRef}
                 onWheel={handleWheel}
             >
