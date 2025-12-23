@@ -31,12 +31,60 @@ export function formatTime(date: Date) {
     });
 }
 
-function doOverlap(a: Reservation, b: Reservation) {
-    return a.startTime < b.endTime && b.startTime < a.endTime;
+function sortReservationsForLayout(a: Reservation, b: Reservation) {
+    const startDiff = a.startTime.getTime() - b.startTime.getTime();
+    if (startDiff !== 0) return startDiff;
+
+    const durationA = a.endTime.getTime() - a.startTime.getTime();
+    const durationB = b.endTime.getTime() - b.startTime.getTime();
+    const durationDiff = durationB - durationA;
+    if (durationDiff !== 0) return durationDiff;
+
+    return a.id - b.id;
+}
+
+function applyColumnLayout(cluster: LayoutEvent[]) {
+    if (cluster.length <= 1) return;
+
+    const columnEndTimesMs: number[] = [];
+    const columnByEvent = new Map<LayoutEvent, number>();
+
+    for (const event of cluster) {
+        const startMs = event.startTime.getTime();
+
+        let columnIndex = -1;
+        for (let i = 0; i < columnEndTimesMs.length; i++) {
+            if (startMs >= columnEndTimesMs[i]!) {
+                columnIndex = i;
+                break;
+            }
+        }
+
+        if (columnIndex === -1) {
+            columnIndex = columnEndTimesMs.length;
+            columnEndTimesMs.push(event.endTime.getTime());
+        } else {
+            columnEndTimesMs[columnIndex] = Math.max(
+                columnEndTimesMs[columnIndex]!,
+                event.endTime.getTime(),
+            );
+        }
+
+        columnByEvent.set(event, columnIndex);
+    }
+
+    const columnCount = columnEndTimesMs.length;
+    const columnWidth = 100 / columnCount;
+
+    for (const event of cluster) {
+        const col = columnByEvent.get(event) ?? 0;
+        event.width = columnWidth;
+        event.left = col * columnWidth;
+    }
 }
 
 export function calculateEventLayout(events: Reservation[], pixelsPerHour: number): LayoutEvent[] {
-    const sortedEvents = [...events].sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+    const sortedEvents = [...events].sort(sortReservationsForLayout);
 
     const eventsWithMetrics: LayoutEvent[] = sortedEvents.map((event) => {
         const top = getPixelsFromTime(event.startTime, pixelsPerHour);
@@ -51,27 +99,30 @@ export function calculateEventLayout(events: Reservation[], pixelsPerHour: numbe
         };
     });
 
-    for (let i = 0; i < eventsWithMetrics.length; i++) {
-        const current = eventsWithMetrics[i];
-        const overlappingGroup = [current];
+    let currentCluster: LayoutEvent[] = [];
+    let clusterEndMs = -1;
 
-        for (let j = 0; j < eventsWithMetrics.length; j++) {
-            if (i === j) continue;
-            const other = eventsWithMetrics[j];
-            if (doOverlap(current, other)) {
-                overlappingGroup.push(other);
-            }
+    for (const event of eventsWithMetrics) {
+        if (currentCluster.length === 0) {
+            currentCluster = [event];
+            clusterEndMs = event.endTime.getTime();
+            continue;
         }
 
-        const count = overlappingGroup.length;
-        if (count > 1) {
-            overlappingGroup.sort((a, b) => a.id - b.id);
-            const index = overlappingGroup.findIndex((event) => event.id === current.id);
+        const startMs = event.startTime.getTime();
 
-            current.width = 100 / count;
-            current.left = index * current.width;
+        if (startMs < clusterEndMs) {
+            currentCluster.push(event);
+            clusterEndMs = Math.max(clusterEndMs, event.endTime.getTime());
+            continue;
         }
+
+        applyColumnLayout(currentCluster);
+        currentCluster = [event];
+        clusterEndMs = event.endTime.getTime();
     }
+
+    applyColumnLayout(currentCluster);
 
     return eventsWithMetrics;
 }
