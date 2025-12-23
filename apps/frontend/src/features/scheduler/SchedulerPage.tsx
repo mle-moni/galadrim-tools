@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 
 import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
+import FloorTabSelector from "@/components/FloorTabSelector";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -14,7 +15,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
 
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
@@ -201,13 +201,22 @@ export default function SchedulerPage(props: {
             .sort((a, b) => a.floor - b.floor);
     }, [officeFloorsQuery.data, selectedOfficeId]);
 
-    const floorTabs: { id: number | null; label: string }[] = useMemo(() => {
-        const base: { id: number | null; label: string }[] = [{ id: null, label: "Tous" }];
+    const floorTabs: { id: number | null; label: string; floor: number | null }[] = useMemo(
+        () => {
+            const base: { id: number | null; label: string; floor: number | null }[] = [
+                { id: null, label: "Tous", floor: null },
+            ];
         for (const floor of officeFloorsForOffice) {
-            base.push({ id: floor.id, label: formatFloorLabel(floor.floor) });
+                base.push({
+                    id: floor.id,
+                    label: formatFloorLabel(floor.floor),
+                    floor: floor.floor,
+                });
         }
         return base;
-    }, [officeFloorsForOffice]);
+        },
+        [officeFloorsForOffice],
+    );
 
     const planningSearch = useMemo(() => {
         return {
@@ -445,31 +454,18 @@ export default function SchedulerPage(props: {
         </DropdownMenu>
     );
 
-    const floorFilters = floorTabs.map((tab) => {
-        const isActive = tab.id === selectedFloorId;
-
-        return (
-            <Button
-                key={tab.label}
-                asChild
-                type="button"
-                variant={isActive ? "secondary" : "ghost"}
-                size="sm"
-                className={cn("h-8", !isActive && "text-muted-foreground")}
-            >
-                <Link
-                    to="/planning"
-                    search={{
-                        officeId: selectedOfficeId ?? undefined,
-                        floorId: tab.id ?? undefined,
-                        roomId: undefined,
-                    }}
-                >
-                    {tab.label}
-                </Link>
-            </Button>
-        );
-    });
+    const floorFilters = (
+        <FloorTabSelector
+            tabs={floorTabs}
+            selectedId={selectedFloorId}
+            to="/planning"
+            getSearch={(tabId) => ({
+                officeId: selectedOfficeId ?? undefined,
+                floorId: tabId ?? undefined,
+                roomId: undefined,
+            })}
+        />
+    );
 
     const isReady = selectedOfficeId !== null && meQuery.data !== undefined;
 

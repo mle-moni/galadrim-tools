@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Building2, CalendarDays, Map as MapIcon } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
 import { Button } from "@/components/ui/button";
+import FloorTabSelector from "@/components/FloorTabSelector";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,9 +24,9 @@ import {
 import { roomReservationsQueryOptions } from "@/integrations/backend/reservations";
 
 import OfficeFloorCanvas from "./components/OfficeFloorCanvas";
-import { formatFloorLabel, formatFloorShort } from "./utils/floors";
+import { formatFloorLabel } from "./utils/floors";
 
-const FLOOR_ROW_HEIGHT = 380;
+const FLOOR_ROW_HEIGHT = 307;
 const OVERSCAN_ROWS = 2;
 
 export default function VisuelPage(props: {
@@ -114,10 +115,6 @@ export default function VisuelPage(props: {
         return map;
     }, [officeRoomsQuery.data]);
 
-    const officeById = useMemo(() => {
-        return new Map((officesQuery.data ?? []).map((o) => [o.id, o]));
-    }, [officesQuery.data]);
-
     const floorsById = useMemo(() => {
         return new Map((officeFloorsQuery.data ?? []).map((f) => [f.id, f]));
     }, [officeFloorsQuery.data]);
@@ -153,10 +150,12 @@ export default function VisuelPage(props: {
     const topSpacer = startIndex * FLOOR_ROW_HEIGHT;
     const bottomSpacer = Math.max(0, totalHeight - endIndex * FLOOR_ROW_HEIGHT);
 
-    const floorTabs: { id: number | null; label: string }[] = useMemo(() => {
-        const base: { id: number | null; label: string }[] = [{ id: null, label: "Tous" }];
+    const floorTabs: { id: number | null; label: string; floor: number | null }[] = useMemo(() => {
+        const base: { id: number | null; label: string; floor: number | null }[] = [
+            { id: null, label: "Tous", floor: null },
+        ];
         for (const floor of officeFloorsForOffice) {
-            base.push({ id: floor.id, label: formatFloorLabel(floor.floor) });
+            base.push({ id: floor.id, label: formatFloorLabel(floor.floor), floor: floor.floor });
         }
         return base;
     }, [officeFloorsForOffice]);
@@ -189,36 +188,52 @@ export default function VisuelPage(props: {
         router.history.push(`/planning?${params.toString()}`);
     };
 
-    const headerOffice = officeById.get(selectedOfficeId ?? -1);
+    const pathname = router.state.location.pathname;
+    const isPlanningActive = pathname.startsWith("/planning");
+    const isVisuelActive = pathname.startsWith("/visuel");
 
     return (
         <div className="flex h-full min-h-0 flex-col bg-background">
-            <header className="border-b bg-background px-6 py-4">
+            <header className="border-b border-slate-100 bg-background px-6 pb-0 pt-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <h1 className="text-xl font-semibold tracking-tight">Salles de réunions</h1>
+                        <h1 className="text-[20px] font-semibold leading-6 tracking-[-0.5px] text-slate-950">
+                            Salles de réunions
+                        </h1>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-end gap-3">
-                        <div className="flex items-center rounded-md border bg-card p-1">
-                            <Button asChild size="sm" variant="ghost" className="h-8">
-                                <Link to="/planning" search={planningSearch}>
-                                    <CalendarDays className="h-4 w-4" />
-                                    Planning
-                                </Link>
-                            </Button>
-                            <Button asChild size="sm" variant="secondary" className="h-8">
-                                <Link to="/visuel" search={currentSearch}>
-                                    <MapIcon className="h-4 w-4" />
-                                    Visuel
-                                </Link>
-                            </Button>
+                    <div className="flex flex-wrap items-center justify-end gap-4">
+                        <div className="flex items-center rounded-lg bg-slate-100 p-0.5">
+                            <Link
+                                to="/planning"
+                                search={planningSearch}
+                                className={cn(
+                                    "rounded-md px-3 py-1.5 text-sm font-medium leading-6 text-slate-700",
+                                    isPlanningActive && "bg-white",
+                                )}
+                            >
+                                Planning
+                            </Link>
+                            <Link
+                                to="/visuel"
+                                search={currentSearch}
+                                className={cn(
+                                    "rounded-lg px-3 py-1.5 text-sm font-medium leading-6 text-slate-700",
+                                    isVisuelActive && "bg-white",
+                                )}
+                            >
+                                Visuel
+                            </Link>
                         </div>
 
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="gap-2" type="button">
-                                    <Building2 className="h-4 w-4" />
+                                <Button
+                                    variant="outline"
+                                    className="h-10 gap-2 rounded-md border-slate-300 bg-white px-3 py-2 text-sm font-semibold leading-6 text-slate-800 shadow-none"
+                                    type="button"
+                                >
+                                    <Building2 className="h-5 w-5 text-slate-500" />
                                     {selectedOfficeName ?? "Chargement…"}
                                 </Button>
                             </DropdownMenuTrigger>
@@ -241,36 +256,16 @@ export default function VisuelPage(props: {
                     </div>
                 </div>
 
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                    <div className="flex flex-wrap items-center gap-1">
-                        {floorTabs.map((tab) => {
-                            const isActive = tab.id === selectedFloorId;
-                            return (
-                                <Button
-                                    key={tab.label}
-                                    asChild
-                                    type="button"
-                                    size="sm"
-                                    variant={isActive ? "secondary" : "ghost"}
-                                    className={cn("h-8", !isActive && "text-muted-foreground")}
-                                >
-                                    <Link
-                                        to="/visuel"
-                                        search={{
-                                            officeId: selectedOfficeId ?? undefined,
-                                            floorId: tab.id ?? undefined,
-                                        }}
-                                    >
-                                        {tab.label}
-                                    </Link>
-                                </Button>
-                            );
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <FloorTabSelector
+                        tabs={floorTabs}
+                        selectedId={selectedFloorId}
+                        to="/visuel"
+                        getSearch={(tabId) => ({
+                            officeId: selectedOfficeId ?? undefined,
+                            floorId: tabId ?? undefined,
                         })}
-                    </div>
-
-                    <div className="ml-auto text-sm text-muted-foreground">
-                        {headerOffice ? headerOffice.address : null}
-                    </div>
+                    />
                 </div>
             </header>
 
@@ -285,22 +280,19 @@ export default function VisuelPage(props: {
                     return (
                         <section
                             key={floor.id}
-                            className={cn("border-b", "bg-black", isDimmed && "opacity-60")}
+                            className={cn("border-b border-slate-100", isDimmed && "opacity-60")}
                             style={{ height: FLOOR_ROW_HEIGHT }}
                         >
-                            <div className="flex h-full items-center gap-6 px-6 py-6">
-                                <div className="flex w-32 flex-col gap-2">
-                                    <div className="flex items-center gap-2">
-                                        <Button variant="secondary" size="sm" className="w-fit">
+                            <div className="flex h-full items-start gap-20 px-6 py-4">
+                                <div className="flex w-[68px] flex-col">
+                                    <div className="flex items-center">
+                                        <div className="rounded-2xl border border-slate-100 bg-slate-50 px-2 py-0.5 text-center text-xs font-medium leading-4 text-slate-700">
                                             {`Étage ${floor.floor}`}
-                                        </Button>
-                                    </div>
-                                    <div className="text-xs text-white/60">
-                                        {formatFloorShort(floor.floor)} · {rooms.length} salles
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="ml-auto">
+                                <div className="flex-1">
                                     <OfficeFloorCanvas
                                         key={`${floor.id}-${visibleIndex}`}
                                         rooms={rooms.filter((r) => r.isBookable && !r.isPhonebox)}

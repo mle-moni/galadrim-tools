@@ -78,7 +78,7 @@ export default function SchedulerHeader({
             </div>
 
             <div className="flex flex-wrap items-center gap-4">
-                <div className="flex flex-wrap items-center gap-1">{floorFilters}</div>
+                <div className="flex flex-wrap items-center gap-2">{floorFilters}</div>
 
                 <div className="min-w-0 flex-1 text-center text-base font-semibold capitalize text-foreground">
                     {formatDate(currentDate)}

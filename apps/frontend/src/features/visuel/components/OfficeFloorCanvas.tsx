@@ -46,7 +46,7 @@ export default function OfficeFloorCanvas(props: {
     const { width: wrapperWidth } = useElementSize(wrapperRef);
 
     const canvasWidth = useMemo(() => {
-        const target = Math.min(560, Math.max(360, Math.floor(wrapperWidth || 560)));
+        const target = Math.min(500, Math.max(360, Math.floor(wrapperWidth || 500)));
         return target;
     }, [wrapperWidth]);
 
@@ -78,8 +78,8 @@ export default function OfficeFloorCanvas(props: {
             const reserved = isReservedNow(room.id, props.reservations, now);
             const isHovered = hoveredRoomId === room.id;
 
-            const fill = reserved ? "#fecaca" : "#bbf7d0"; // red-200 / green-200
-            const hoverFill = reserved ? "#fca5a5" : "#86efac"; // red-300 / green-300
+            const fill = reserved ? "#fecaca" : "#dcfce7"; // error-200 / success-100
+            const hoverFill = reserved ? "#fca5a5" : "#bbf7d0"; // error-300 / success-200
 
             ctx.beginPath();
             polygon.forEach((pt, idx) => {
@@ -91,14 +91,14 @@ export default function OfficeFloorCanvas(props: {
             ctx.fillStyle = isHovered ? hoverFill : fill;
             ctx.fill();
 
-            ctx.strokeStyle = isHovered ? "#ffffff" : "rgba(255,255,255,0.55)";
-            ctx.lineWidth = isHovered ? 2 : 1;
+            ctx.strokeStyle = reserved ? "#fca5a5" : "#bbf7d0";
+            ctx.lineWidth = isHovered ? 1.5 : 1;
             ctx.stroke();
         }
     }, [canvasHeight, canvasWidth, hoveredRoomId, props.reservations, props.rooms]);
 
     return (
-        <div ref={wrapperRef} className="w-[560px] max-w-[70vw]">
+        <div ref={wrapperRef} className="h-[275px] w-full max-w-[500px]">
             <canvas
                 ref={canvasRef}
                 width={canvasWidth}
