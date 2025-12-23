@@ -1,5 +1,5 @@
 export const START_HOUR = 9;
-export const END_HOUR = 19;
+export const END_HOUR = 20;
 export const HOURS_COUNT = END_HOUR - START_HOUR;
 export const TIME_COLUMN_WIDTH = 60;
 

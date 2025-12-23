@@ -18,7 +18,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
-import { THEME_ME, THEME_OTHER } from "./constants";
+import { END_HOUR, START_HOUR, THEME_ME, THEME_OTHER } from "./constants";
 import type { Reservation, Room } from "./types";
 
 import { meQueryOptions } from "@/integrations/backend/auth";
@@ -201,22 +201,19 @@ export default function SchedulerPage(props: {
             .sort((a, b) => a.floor - b.floor);
     }, [officeFloorsQuery.data, selectedOfficeId]);
 
-    const floorTabs: { id: number | null; label: string; floor: number | null }[] = useMemo(
-        () => {
-            const base: { id: number | null; label: string; floor: number | null }[] = [
-                { id: null, label: "Tous", floor: null },
-            ];
+    const floorTabs: { id: number | null; label: string; floor: number | null }[] = useMemo(() => {
+        const base: { id: number | null; label: string; floor: number | null }[] = [
+            { id: null, label: "Tous", floor: null },
+        ];
         for (const floor of officeFloorsForOffice) {
-                base.push({
-                    id: floor.id,
-                    label: formatFloorLabel(floor.floor),
-                    floor: floor.floor,
-                });
+            base.push({
+                id: floor.id,
+                label: formatFloorLabel(floor.floor),
+                floor: floor.floor,
+            });
         }
         return base;
-        },
-        [officeFloorsForOffice],
-    );
+    }, [officeFloorsForOffice]);
 
     const planningSearch = useMemo(() => {
         return {
@@ -257,21 +254,40 @@ export default function SchedulerPage(props: {
     const reservations: Reservation[] = useMemo(() => {
         const isEventAdmin = (myRights & 0b10) !== 0;
 
-        return (reservationsQuery.data ?? []).map((reservation) => {
-            const isMine = meId !== null && reservation.userId === meId;
+        const scheduleStart = new Date(currentDate);
+        scheduleStart.setHours(START_HOUR, 0, 0, 0);
 
-            return {
-                id: reservation.id,
-                roomId: reservation.officeRoomId,
-                title: reservation.title ?? "",
-                owner: reservation.titleComputed,
-                startTime: new Date(reservation.start),
-                endTime: new Date(reservation.end),
-                color: isMine ? THEME_ME : THEME_OTHER,
-                canEdit: isMine || isEventAdmin,
-            };
-        });
-    }, [meId, myRights, reservationsQuery.data]);
+        const scheduleEnd = new Date(currentDate);
+        scheduleEnd.setHours(END_HOUR, 0, 0, 0);
+
+        return (reservationsQuery.data ?? [])
+            .map((reservation) => {
+                const isMine = meId !== null && reservation.userId === meId;
+
+                const startTime = new Date(reservation.start);
+                const endTime = new Date(reservation.end);
+
+                if (endTime <= scheduleStart) return null;
+                if (startTime >= scheduleEnd) return null;
+
+                const clampedStartTime = startTime < scheduleStart ? scheduleStart : startTime;
+                const clampedEndTime = endTime > scheduleEnd ? scheduleEnd : endTime;
+
+                if (clampedEndTime <= clampedStartTime) return null;
+
+                return {
+                    id: reservation.id,
+                    roomId: reservation.officeRoomId,
+                    title: reservation.title ?? "",
+                    owner: reservation.titleComputed,
+                    startTime: clampedStartTime,
+                    endTime: clampedEndTime,
+                    color: isMine ? THEME_ME : THEME_OTHER,
+                    canEdit: isMine || isEventAdmin,
+                };
+            })
+            .filter((value) => value !== null);
+    }, [currentDate, meId, myRights, reservationsQuery.data]);
 
     const socketUserId = meQuery.data?.id;
     const socketToken = meQuery.data?.socketToken;
@@ -386,21 +402,38 @@ export default function SchedulerPage(props: {
     const handleAddReservation = (input: Pick<Reservation, "roomId" | "startTime" | "endTime">) => {
         if (!selectedOfficeId || !meQuery.data) return;
 
+        const scheduleEnd = new Date(currentDate);
+        scheduleEnd.setHours(END_HOUR, 0, 0, 0);
+
+        if (input.startTime >= scheduleEnd) return;
+
+        const clampedEnd = input.endTime > scheduleEnd ? scheduleEnd : input.endTime;
+        if (clampedEnd <= input.startTime) return;
+
         createReservationMutation.mutate({
             officeRoomId: input.roomId,
             start: input.startTime,
-            end: input.endTime,
+            end: clampedEnd,
         });
     };
 
     const handleUpdateReservation = (updatedReservation: Reservation) => {
         if (!selectedOfficeId) return;
 
+        const scheduleEnd = new Date(currentDate);
+        scheduleEnd.setHours(END_HOUR, 0, 0, 0);
+
+        if (updatedReservation.startTime >= scheduleEnd) return;
+
+        const clampedEnd =
+            updatedReservation.endTime > scheduleEnd ? scheduleEnd : updatedReservation.endTime;
+        if (clampedEnd <= updatedReservation.startTime) return;
+
         updateReservationMutation.mutate({
             id: updatedReservation.id,
             officeRoomId: updatedReservation.roomId,
             start: updatedReservation.startTime,
-            end: updatedReservation.endTime,
+            end: clampedEnd,
             title: updatedReservation.title || updatedReservation.owner,
         });
     };

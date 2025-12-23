@@ -356,7 +356,15 @@ export default function SchedulerGrid({
 
         const startTime = getTimeFromPixels(offsetY, currentDate, pixelsPerHour);
         const snappedStart = roundToNearestMinutes(startTime, intervalMinutes);
-        const snappedEnd = new Date(snappedStart.getTime() + intervalMinutes * 60000);
+
+        const endOfDay = new Date(currentDate);
+        endOfDay.setHours(END_HOUR, 0, 0, 0);
+
+        if (snappedStart >= endOfDay) return;
+
+        const snappedEnd = new Date(
+            Math.min(snappedStart.getTime() + intervalMinutes * 60000, endOfDay.getTime()),
+        );
 
         if (dragActivateTimeoutRef.current !== null) {
             window.clearTimeout(dragActivateTimeoutRef.current);
@@ -422,10 +430,25 @@ export default function SchedulerGrid({
                         ? dragSelection.startTime
                         : dragSelection.endTime;
 
-                const endTime =
+                const endOfDay = new Date(currentDate);
+                endOfDay.setHours(END_HOUR, 0, 0, 0);
+
+                if (selectionStart >= endOfDay) {
+                    setDragSelection(null);
+                    return;
+                }
+
+                const rawEndTime =
                     selectionEnd.getTime() === selectionStart.getTime()
                         ? new Date(selectionStart.getTime() + intervalMinutes * 60000)
                         : selectionEnd;
+
+                const endTime = rawEndTime > endOfDay ? endOfDay : rawEndTime;
+
+                if (endTime <= selectionStart) {
+                    setDragSelection(null);
+                    return;
+                }
 
                 onAddReservation({
                     roomId: dragSelection.roomId,
@@ -541,6 +564,10 @@ export default function SchedulerGrid({
                                         )}
                                     </div>
                                 ))}
+
+                                <span className="absolute bottom-2 left-0 right-0 text-center font-mono text-xs font-medium text-muted-foreground">
+                                    {END_HOUR.toString().padStart(2, "0")}:00
+                                </span>
 
                                 {showCurrentLine && (
                                     <div
