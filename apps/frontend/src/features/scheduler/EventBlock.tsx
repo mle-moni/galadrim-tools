@@ -20,6 +20,12 @@ export default function EventBlock({
     onDelete,
     onDragStart,
 }: EventBlockProps) {
+    const durationMinutes = Math.round(
+        (event.endTime.getTime() - event.startTime.getTime()) / 60000,
+    );
+    const isInline = durationMinutes <= 30;
+    const isCompact = durationMinutes <= 60;
+
     const handleMouseDown = (e: React.MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
@@ -39,14 +45,21 @@ export default function EventBlock({
         onDelete(event.id);
     };
 
+    const minHeight = isInline ? 18 : 20;
+
     return (
         <div
             onMouseDown={handleMouseDown}
             onDoubleClick={handleDoubleClick}
             className={cn(
-                "absolute flex select-none flex-col justify-start overflow-hidden rounded-md border-l-[6px] p-2 shadow-sm transition-none",
+                "absolute flex select-none overflow-hidden rounded-md border-l-[6px] shadow-sm transition-none",
                 event.canEdit ? "cursor-pointer" : "cursor-default",
                 event.color,
+                isInline
+                    ? "flex-row items-center gap-2 px-2 py-1"
+                    : isCompact
+                      ? "flex-col gap-0.5 p-1.5"
+                      : "flex-col p-2",
                 !event.canEdit
                     ? "z-10"
                     : isSelected
@@ -55,15 +68,30 @@ export default function EventBlock({
             )}
             style={{
                 top: `${event.top}px`,
-                height: `${Math.max(event.height, 20)}px`,
+                height: `${Math.max(event.height, minHeight)}px`,
                 left: `${event.left}%`,
                 width: `${event.width}%`,
             }}
         >
-            <div className="truncate text-sm font-semibold leading-tight">{event.owner}</div>
-            <div className="font-mono text-xs leading-tight tracking-wide opacity-90">
-                {formatTime(event.startTime)} - {formatTime(event.endTime)}
-            </div>
+            {isInline ? (
+                <>
+                    <span className="min-w-0 flex-1 truncate text-sm font-semibold leading-tight">
+                        {event.owner}
+                    </span>
+                    <span className="shrink-0 font-mono text-xs leading-tight tracking-wide opacity-90">
+                        {formatTime(event.startTime)}-{formatTime(event.endTime)}
+                    </span>
+                </>
+            ) : (
+                <>
+                    <div className="truncate text-sm font-semibold leading-tight">
+                        {event.owner}
+                    </div>
+                    <div className="font-mono text-xs leading-tight tracking-wide opacity-90">
+                        {formatTime(event.startTime)} - {formatTime(event.endTime)}
+                    </div>
+                </>
+            )}
         </div>
     );
 }
