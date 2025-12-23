@@ -19,6 +19,7 @@ export interface DragSelection {
     startTime: Date;
     endTime: Date;
     isDragging: boolean;
+    isActive?: boolean;
 }
 
 export interface LayoutEvent extends Reservation {
