@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisuelRouteImport } from './routes/visuel'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SchedulerRouteImport } from './routes/scheduler'
+import { Route as ScamWinnerOmgRouteImport } from './routes/scamWinnerOmg'
 import { Route as PlatformerRouteImport } from './routes/platformer'
 import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as MiamsRouteImport } from './routes/miams'
@@ -35,6 +36,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const SchedulerRoute = SchedulerRouteImport.update({
   id: '/scheduler',
   path: '/scheduler',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScamWinnerOmgRoute = ScamWinnerOmgRouteImport.update({
+  id: '/scamWinnerOmg',
+  path: '/scamWinnerOmg',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlatformerRoute = PlatformerRouteImport.update({
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
+  '/scamWinnerOmg': typeof ScamWinnerOmgRoute
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
+  '/scamWinnerOmg': typeof ScamWinnerOmgRoute
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
+  '/scamWinnerOmg': typeof ScamWinnerOmgRoute
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/miams'
     | '/planning'
     | '/platformer'
+    | '/scamWinnerOmg'
     | '/scheduler'
     | '/settings'
     | '/visuel'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/miams'
     | '/planning'
     | '/platformer'
+    | '/scamWinnerOmg'
     | '/scheduler'
     | '/settings'
     | '/visuel'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/miams'
     | '/planning'
     | '/platformer'
+    | '/scamWinnerOmg'
     | '/scheduler'
     | '/settings'
     | '/visuel'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   MiamsRoute: typeof MiamsRoute
   PlanningRoute: typeof PlanningRoute
   PlatformerRoute: typeof PlatformerRoute
+  ScamWinnerOmgRoute: typeof ScamWinnerOmgRoute
   SchedulerRoute: typeof SchedulerRoute
   SettingsRoute: typeof SettingsRoute
   VisuelRoute: typeof VisuelRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       path: '/scheduler'
       fullPath: '/scheduler'
       preLoaderRoute: typeof SchedulerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scamWinnerOmg': {
+      id: '/scamWinnerOmg'
+      path: '/scamWinnerOmg'
+      fullPath: '/scamWinnerOmg'
+      preLoaderRoute: typeof ScamWinnerOmgRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/platformer': {
@@ -293,6 +313,7 @@ const rootRouteChildren: RootRouteChildren = {
   MiamsRoute: MiamsRoute,
   PlanningRoute: PlanningRoute,
   PlatformerRoute: PlatformerRoute,
+  ScamWinnerOmgRoute: ScamWinnerOmgRoute,
   SchedulerRoute: SchedulerRoute,
   SettingsRoute: SettingsRoute,
   VisuelRoute: VisuelRoute,

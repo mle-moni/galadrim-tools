@@ -3,6 +3,7 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Building2, CalendarDays, Map as MapIcon } from "lucide-react";
 import { io } from "socket.io-client";
+import confetti from "canvas-confetti";
 
 import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
@@ -20,7 +21,14 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
-import { END_HOUR, START_HOUR, THEME_ME, THEME_OTHER } from "./constants";
+import {
+    END_HOUR,
+    START_HOUR,
+    THEME_ENTRETIEN_FINAL,
+    THEME_ME,
+    THEME_MILESTONE,
+    THEME_OTHER,
+} from "./constants";
 import type { Reservation, Room } from "./types";
 
 import { meQueryOptions } from "@/integrations/backend/auth";
@@ -39,6 +47,24 @@ import {
     useDeleteRoomReservationMutation,
     useUpdateRoomReservationMutation,
 } from "@/integrations/backend/reservations";
+
+const ENTRETIEN_FINAL_QUERY = "entretien final";
+
+function includesEntretienFinal(value: string | null | undefined) {
+    return (value ?? "").toLocaleLowerCase().includes(ENTRETIEN_FINAL_QUERY);
+}
+
+function isEntretienFinalReservation(reservation: ApiRoomReservationWithUser) {
+    return (
+        includesEntretienFinal(reservation.title) ||
+        includesEntretienFinal(reservation.titleComputed) ||
+        includesEntretienFinal(reservation.user?.username)
+    );
+}
+
+function isIdMultipleOf(id: number, modulo: number) {
+    return id > 0 && id % modulo === 0;
+}
 
 function formatFloorLabel(floor: number) {
     if (floor === 1) return "1er étage";
@@ -281,6 +307,15 @@ export default function SchedulerPage(props: {
 
                 if (clampedEndTime <= clampedStartTime) return null;
 
+                const isFinalInterview = isEntretienFinalReservation(reservation);
+
+                let color = isMine ? THEME_ME : THEME_OTHER;
+                if (isFinalInterview) {
+                    color = THEME_ENTRETIEN_FINAL;
+                } else if (isIdMultipleOf(reservation.id, 1000)) {
+                    color = THEME_MILESTONE;
+                }
+
                 return {
                     id: reservation.id,
                     roomId: reservation.officeRoomId,
@@ -288,7 +323,7 @@ export default function SchedulerPage(props: {
                     owner: reservation.titleComputed,
                     startTime: clampedStartTime,
                     endTime: clampedEndTime,
-                    color: isMine ? THEME_ME : THEME_OTHER,
+                    color,
                     canEdit: isMine || isEventAdmin,
                 };
             })
@@ -398,9 +433,84 @@ export default function SchedulerPage(props: {
         socket.on("connect", authenticate);
         socket.on("auth", authenticate);
 
+        const fireConfettiAtReservationTop = (reservation: ApiRoomReservationWithUser) => {
+            const column = document.getElementById(`room-col-${reservation.officeRoomId}`);
+            if (!column) return;
+
+            const rect = column.getBoundingClientRect();
+            const height = column.clientHeight || rect.height;
+            if (!height) return;
+
+            const startTime = new Date(reservation.start);
+            const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
+            const scheduleStartMinutes = START_HOUR * 60;
+            const scheduleEndMinutes = END_HOUR * 60;
+
+            const clampedMinutes = Math.min(
+                scheduleEndMinutes,
+                Math.max(scheduleStartMinutes, startMinutes),
+            );
+
+            const offsetMinutes = clampedMinutes - scheduleStartMinutes;
+
+            const pixelsPerHour = height / (END_HOUR - START_HOUR);
+            const topWithinColumn = (offsetMinutes / 60) * pixelsPerHour;
+
+            const rawX = (rect.left + rect.width / 2) / window.innerWidth;
+            const rawY = (rect.top + topWithinColumn) / window.innerHeight;
+
+            const x = Math.min(0.98, Math.max(0.02, rawX));
+            const y = Math.min(0.98, Math.max(0.02, rawY));
+
+            confetti({
+                particleCount: 140,
+                spread: 85,
+                startVelocity: 45,
+                origin: { x, y },
+            });
+
+            confetti({
+                particleCount: 90,
+                spread: 120,
+                startVelocity: 55,
+                origin: { x: Math.max(0.02, x - 0.08), y: Math.max(0.02, y - 0.1) },
+            });
+
+            confetti({
+                particleCount: 90,
+                spread: 120,
+                startVelocity: 55,
+                origin: { x: Math.min(0.98, x + 0.08), y: Math.max(0.02, y - 0.1) },
+            });
+        };
+
+        const handleCreateRoomReservation = (
+            reservation: ApiRoomReservationWithUser,
+            opts: { removeOptimistic?: boolean } = {},
+        ) => {
+            upsertRoomReservation(reservation, opts);
+
+            const isFinalInterview = isEntretienFinalReservation(reservation);
+
+            if (!isFinalInterview && isIdMultipleOf(reservation.id, 1000)) {
+                requestAnimationFrame(() => {
+                    fireConfettiAtReservationTop(reservation);
+                });
+            }
+
+            if (
+                !isFinalInterview &&
+                isIdMultipleOf(reservation.id, 10000) &&
+                reservation.userId === socketUserId
+            ) {
+                router.history.push("/scamWinnerOmg");
+            }
+        };
+
         socket.on("createRoomReservation", (reservation: ApiRoomReservationWithUser) =>
-            upsertRoomReservation(reservation, { removeOptimistic: true }),
+            handleCreateRoomReservation(reservation, { removeOptimistic: true }),
         );
+
         socket.on("updateRoomReservation", (reservation: ApiRoomReservationWithUser) =>
             upsertRoomReservation(reservation),
         );
@@ -413,7 +523,7 @@ export default function SchedulerPage(props: {
             socket.removeAllListeners();
             socket.close();
         };
-    }, [hasOfficeMaps, queryClient, socketToken, socketUserId]);
+    }, [hasOfficeMaps, queryClient, router.history, socketToken, socketUserId]);
 
     const handleAddReservation = (input: Pick<Reservation, "roomId" | "startTime" | "endTime">) => {
         if (!selectedOfficeId || !meQuery.data) return;

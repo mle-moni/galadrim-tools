@@ -10,3 +10,6 @@ export const TIME_COLUMN_WIDTH = 60;
 export const THEME_ME = "bg-[#dbe6fe]/70 border-[#1e3ad7] text-[#171e54]";
 
 export const THEME_OTHER = "bg-muted border-border text-muted-foreground";
+
+export const THEME_MILESTONE = "bg-yellow-300/80 border-yellow-700 text-yellow-950";
+export const THEME_ENTRETIEN_FINAL = "bg-red-600/85 border-red-900 text-white";
