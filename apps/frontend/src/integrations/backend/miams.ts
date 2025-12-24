@@ -121,14 +121,50 @@ export function useToggleRestaurantChoiceMutation() {
 
     return useMutation({
         mutationFn: (restaurantId: number) => toggleRestaurantChoice(restaurantId),
-        onSuccess: async (data, restaurantId) => {
+        onSuccess: (data, restaurantId) => {
+            const me = queryClient.getQueryData<IUserData>(queryKeys.me()) ?? null;
+            const userId = me?.id ?? null;
+            const prevDailyChoice = me?.dailyChoice ?? null;
+
+            const nextDailyChoice = "choice" in data ? restaurantId : null;
+
             queryClient.setQueryData<IUserData>(queryKeys.me(), (old) => {
                 if (!old) return old;
-                const nextDailyChoice = "choice" in data ? restaurantId : null;
                 return { ...old, dailyChoice: nextDailyChoice };
             });
 
-            await queryClient.invalidateQueries({ queryKey: queryKeys.restaurants() });
+            if (userId === null) return;
+
+            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
+                if (!old) return old;
+
+                return old.map((restaurant) => {
+                    let nextChoices = restaurant.choices;
+
+                    // Remove choice from previous restaurant when switching.
+                    if (
+                        prevDailyChoice !== null &&
+                        prevDailyChoice !== nextDailyChoice &&
+                        restaurant.id === prevDailyChoice
+                    ) {
+                        nextChoices = nextChoices.filter((id) => id !== userId);
+                    }
+
+                    // Update clicked restaurant.
+                    if (restaurant.id === restaurantId) {
+                        if (nextDailyChoice === restaurantId) {
+                            if (!nextChoices.includes(userId)) {
+                                nextChoices = [...nextChoices, userId];
+                            }
+                        } else {
+                            nextChoices = nextChoices.filter((id) => id !== userId);
+                        }
+                    }
+
+                    if (nextChoices === restaurant.choices) return restaurant;
+                    return { ...restaurant, choices: nextChoices };
+                });
+            });
         },
     });
 }

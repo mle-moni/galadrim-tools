@@ -1,20 +1,20 @@
 import { useMemo, useState } from "react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Check, ExternalLink, Pencil, RefreshCcw, Trash2, UtensilsCrossed } from "lucide-react";
+import { ExternalLink, Pencil, RefreshCcw, Trash2 } from "lucide-react";
 import type { IRestaurant, NotesOption } from "@galadrim-tools/shared";
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 import { meQueryOptions } from "@/integrations/backend/auth";
 import { getApiUrl } from "@/integrations/backend/client";
@@ -35,6 +35,7 @@ import {
 } from "@/integrations/backend/miams";
 
 import MiamsMap from "./MiamsMap";
+import { MiamsSidebar } from "./MiamsSidebar";
 import { RestaurantEditorSheet } from "./RestaurantEditorSheet";
 import { useMiamsSocketSync } from "./use-miams-socket-sync";
 
@@ -58,6 +59,8 @@ const MAX_ZOOM = 18;
 
 export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?: number }) {
     const router = useRouter();
+
+    const [mobileListOpen, setMobileListOpen] = useState(false);
 
     const meQuery = useQuery(meQueryOptions());
     const restaurantsQuery = useQuery(restaurantsQueryOptions());
@@ -90,6 +93,31 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
 
     const [search, setSearch] = useState("");
     const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+
+    const toggleTagId = (tagId: number) => {
+        setSelectedTagIds((old) => {
+            if (old.includes(tagId)) {
+                return old.filter((id) => id !== tagId);
+            }
+            return [...old, tagId];
+        });
+    };
+
+    const createTag = () => {
+        const name = window.prompt("Nouveau tag");
+        if (name == null) return;
+
+        const trimmed = name.trim();
+        if (trimmed === "") return;
+
+        createTagMutation.mutate({ name: trimmed });
+    };
+
+    const openCreateRestaurantEditor = () => {
+        setEditorMode("create");
+        setEditorRestaurant(null);
+        setEditorOpen(true);
+    };
 
     const selectedRestaurant = useMemo(() => {
         if (!props.selectedRestaurantId) return null;
@@ -131,6 +159,23 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
         return [selectedRestaurant, ...filteredRestaurants];
     }, [filteredRestaurants, selectedRestaurant]);
 
+    const restaurantChoices = useMemo(() => {
+        const restaurants = restaurantsQuery.data ?? [];
+
+        return restaurants
+            .filter((restaurant) => restaurant.choices.length > 0)
+            .slice()
+            .sort((a, b) => {
+                const byCount = b.choices.length - a.choices.length;
+                if (byCount !== 0) return byCount;
+                return a.name.localeCompare(b.name);
+            });
+    }, [restaurantsQuery.data]);
+
+    const totalDailyChoices = useMemo(() => {
+        return restaurantChoices.reduce((acc, r) => acc + r.choices.length, 0);
+    }, [restaurantChoices]);
+
     const toggleChoiceMutation = useToggleRestaurantChoiceMutation();
     const upsertNoteMutation = useUpsertRestaurantNoteMutation();
 
@@ -168,145 +213,48 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
     return (
         <div className="flex h-full min-h-0 w-full">
             <aside className="hidden w-80 min-w-80 flex-col border-r bg-card md:flex">
-                <div className="p-4">
-                    <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                            <UtensilsCrossed className="h-5 w-5" />
-                            <div className="text-lg font-semibold">Restaurants</div>
-                        </div>
-
-                        {meId !== null && (
-                            <Button
-                                type="button"
-                                size="sm"
-                                onClick={() => {
-                                    setEditorMode("create");
-                                    setEditorRestaurant(null);
-                                    setEditorOpen(true);
-                                }}
-                            >
-                                Nouveau
-                            </Button>
-                        )}
-                    </div>
-                    <div className="mt-3 flex flex-col gap-2">
-                        <Input
-                            placeholder="Rechercher…"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-
-                        <div className="flex items-center gap-2">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        type="button"
-                                        className="flex-1"
-                                    >
-                                        Tags
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start" className="w-64">
-                                    {(tagsQuery.data ?? []).map((tag) => {
-                                        const isSelected = selectedTagIds.includes(tag.id);
-
-                                        return (
-                                            <DropdownMenuItem
-                                                key={tag.id}
-                                                onSelect={(e) => {
-                                                    e.preventDefault();
-
-                                                    setSelectedTagIds((old) => {
-                                                        if (old.includes(tag.id)) {
-                                                            return old.filter(
-                                                                (id) => id !== tag.id,
-                                                            );
-                                                        }
-                                                        return [...old, tag.id];
-                                                    });
-                                                }}
-                                            >
-                                                <span className="flex-1 truncate">{tag.name}</span>
-                                                {isSelected && <Check className="h-4 w-4" />}
-                                            </DropdownMenuItem>
-                                        );
-                                    })}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                type="button"
-                                onClick={() => setSelectedTagIds([])}
-                                disabled={selectedTagIds.length === 0}
-                            >
-                                Reset
-                            </Button>
-
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                type="button"
-                                disabled={createTagMutation.isPending || meId === null}
-                                onClick={() => {
-                                    const name = window.prompt("Nouveau tag");
-                                    if (name == null) return;
-
-                                    const trimmed = name.trim();
-                                    if (trimmed === "") return;
-
-                                    createTagMutation.mutate({ name: trimmed });
-                                }}
-                            >
-                                Nouveau tag
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-
-                <Separator />
-
-                <ScrollArea className="min-h-0 flex-1">
-                    <div className="flex flex-col gap-1 p-2">
-                        {filteredRestaurants.map((restaurant) => {
-                            const isSelected = restaurant.id === props.selectedRestaurantId;
-
-                            return (
-                                <Link
-                                    key={restaurant.id}
-                                    to="/miams"
-                                    search={{ restaurantId: restaurant.id, zoom: zoomFromSearch }}
-                                    className={`flex flex-col gap-1 rounded-md border px-3 py-2 text-left transition-colors hover:bg-muted/50 ${
-                                        isSelected
-                                            ? "border-primary bg-muted/40"
-                                            : "border-transparent"
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between gap-2">
-                                        <div className="truncate text-sm font-medium">
-                                            {restaurant.name}
-                                        </div>
-                                        {restaurant.averagePrice != null && (
-                                            <div className="text-xs text-muted-foreground">
-                                                {formatPrice(restaurant.averagePrice)}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                                        <div className="truncate">
-                                            {restaurant.tags.map((t) => t.name).join(", ")}
-                                        </div>
-                                        <div>{restaurant.choices.length}</div>
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </ScrollArea>
+                <MiamsSidebar
+                    meId={meId}
+                    search={search}
+                    onSearchChange={setSearch}
+                    tags={tagsQuery.data ?? []}
+                    selectedTagIds={selectedTagIds}
+                    onToggleTagId={toggleTagId}
+                    onResetTags={() => setSelectedTagIds([])}
+                    isCreatingTag={createTagMutation.isPending}
+                    onCreateTag={createTag}
+                    canCreateRestaurant={meId !== null}
+                    onCreateRestaurant={openCreateRestaurantEditor}
+                    restaurants={filteredRestaurants}
+                    selectedRestaurantId={props.selectedRestaurantId}
+                    zoom={zoomFromSearch}
+                />
             </aside>
+
+            <Sheet open={mobileListOpen} onOpenChange={setMobileListOpen}>
+                <SheetContent side="left" className="p-0">
+                    <MiamsSidebar
+                        meId={meId}
+                        search={search}
+                        onSearchChange={setSearch}
+                        tags={tagsQuery.data ?? []}
+                        selectedTagIds={selectedTagIds}
+                        onToggleTagId={toggleTagId}
+                        onResetTags={() => setSelectedTagIds([])}
+                        isCreatingTag={createTagMutation.isPending}
+                        onCreateTag={createTag}
+                        canCreateRestaurant={meId !== null}
+                        onCreateRestaurant={() => {
+                            setMobileListOpen(false);
+                            openCreateRestaurantEditor();
+                        }}
+                        restaurants={filteredRestaurants}
+                        selectedRestaurantId={props.selectedRestaurantId}
+                        zoom={zoomFromSearch}
+                        onAfterSelectRestaurant={() => setMobileListOpen(false)}
+                    />
+                </SheetContent>
+            </Sheet>
 
             <main className="relative isolate min-h-0 flex-1">
                 {isLoading ? (
@@ -718,29 +666,115 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                     </div>
                 )}
 
-                <div className="absolute left-4 top-4 md:hidden">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="secondary" size="sm" type="button">
-                                Restaurants
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-72">
-                            {filteredRestaurants.slice(0, 30).map((restaurant) => (
-                                <DropdownMenuItem
-                                    key={restaurant.id}
-                                    onSelect={() => {
-                                        const params = new URLSearchParams();
-                                        params.set("restaurantId", String(restaurant.id));
-                                        params.set("zoom", String(zoomFromSearch));
-                                        router.history.push(`/miams?${params.toString()}`);
-                                    }}
-                                >
-                                    <span className="truncate">{restaurant.name}</span>
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                <div className="absolute left-4 top-4 z-40 md:hidden">
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setMobileListOpen(true)}
+                    >
+                        Liste
+                    </Button>
+                </div>
+
+                <div
+                    className={`absolute right-4 top-4 z-40 w-[340px] max-w-[calc(100vw-2rem)] ${
+                        selectedRestaurant ? "md:right-[476px]" : ""
+                    }`}
+                >
+                    <div className="rounded-md border bg-card/95 shadow-lg backdrop-blur">
+                        <Accordion
+                            type="single"
+                            collapsible
+                            defaultValue={restaurantChoices.length > 0 ? "choices" : undefined}
+                        >
+                            <AccordionItem value="choices" className="border-b-0">
+                                <AccordionTrigger className="px-3">
+                                    <div className="flex w-full items-center justify-between pr-2">
+                                        <span>Choix du jour des galadrimeurs</span>
+                                        <span className="text-xs text-muted-foreground">
+                                            {totalDailyChoices}
+                                        </span>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-3">
+                                    {restaurantChoices.length > 0 ? (
+                                        <div className="max-h-[70vh] space-y-3 overflow-auto pb-2">
+                                            {restaurantChoices.map((restaurant, index) => {
+                                                const chosen =
+                                                    meId !== null &&
+                                                    restaurant.choices.includes(meId);
+
+                                                const names = restaurant.choices
+                                                    .flatMap((id) => {
+                                                        const name = usernameById.get(id);
+                                                        return name ? [name] : [];
+                                                    })
+                                                    .join(", ");
+
+                                                return (
+                                                    <div key={restaurant.id} className="space-y-1">
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <Button
+                                                                type="button"
+                                                                variant="link"
+                                                                className={`h-auto min-w-0 justify-start p-0 text-left ${
+                                                                    chosen ? "text-green-600" : ""
+                                                                }`}
+                                                                onClick={() => {
+                                                                    const params =
+                                                                        new URLSearchParams();
+                                                                    params.set(
+                                                                        "restaurantId",
+                                                                        String(restaurant.id),
+                                                                    );
+                                                                    params.set(
+                                                                        "zoom",
+                                                                        String(zoomFromSearch),
+                                                                    );
+                                                                    router.history.push(
+                                                                        `/miams?${params.toString()}`,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <span className="truncate">
+                                                                    {index + 1}. {restaurant.name}
+                                                                </span>
+                                                            </Button>
+
+                                                            <Button
+                                                                type="button"
+                                                                variant="secondary"
+                                                                size="sm"
+                                                                className="h-7 w-10 rounded-full p-0"
+                                                                onClick={() =>
+                                                                    toggleChoiceMutation.mutate(
+                                                                        restaurant.id,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {restaurant.choices.length}
+                                                            </Button>
+                                                        </div>
+
+                                                        {names && (
+                                                            <div className="text-xs text-muted-foreground">
+                                                                {names}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        <div className="py-2 text-sm text-muted-foreground">
+                                            Aucun choix pour le moment
+                                        </div>
+                                    )}
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
                 </div>
             </main>
 
