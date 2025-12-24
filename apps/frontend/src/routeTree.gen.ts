@@ -17,6 +17,7 @@ import { Route as PlatformerRouteImport } from './routes/platformer'
 import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as MiamsRouteImport } from './routes/miams'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as IdeasRouteImport } from './routes/ideas'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRightsRouteImport } from './routes/admin.rights'
@@ -63,6 +64,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IdeasRoute = IdeasRouteImport.update({
+  id: '/ideas',
+  path: '/ideas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -92,6 +98,7 @@ const AdminCreateUserRoute = AdminCreateUserRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/ideas': typeof IdeasRoute
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/ideas': typeof IdeasRoute
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/ideas': typeof IdeasRoute
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/ideas'
     | '/login'
     | '/miams'
     | '/planning'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/ideas'
     | '/login'
     | '/miams'
     | '/planning'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/ideas'
     | '/login'
     | '/miams'
     | '/planning'
@@ -186,6 +198,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  IdeasRoute: typeof IdeasRoute
   LoginRoute: typeof LoginRoute
   MiamsRoute: typeof MiamsRoute
   PlanningRoute: typeof PlanningRoute
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ideas': {
+      id: '/ideas'
+      path: '/ideas'
+      fullPath: '/ideas'
+      preLoaderRoute: typeof IdeasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -309,6 +329,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  IdeasRoute: IdeasRoute,
   LoginRoute: LoginRoute,
   MiamsRoute: MiamsRoute,
   PlanningRoute: PlanningRoute,

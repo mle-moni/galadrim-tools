@@ -88,6 +88,18 @@ export async function updateNotificationsSettings(
     return res.json;
 }
 
+export async function readNotifications(): Promise<{ message: string }> {
+    const res = await fetchBackendJson<{ message: string }, ApiError>("/readNotifications", "POST");
+
+    if (!res.ok) {
+        throw new Error(
+            getErrorMessage(res.json, "Impossible de marquer les notifications comme lues"),
+        );
+    }
+
+    return res.json;
+}
+
 export type UpdateProfileInput = {
     username: string;
     email: string;

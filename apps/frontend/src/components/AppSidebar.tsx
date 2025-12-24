@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { INotification, IUserData } from "@galadrim-tools/shared";
+import * as Dialog from "@radix-ui/react-dialog";
 import {
+    Bell,
     CalendarDays,
     ExternalLink,
     LogOut,
@@ -9,6 +12,7 @@ import {
     Settings,
     Shield,
     Utensils,
+    X,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,16 +21,81 @@ import { ADMIN_TAB_RIGHTS, hasSomeRights } from "@/lib/rights";
 import Avatar from "@/components/Avatar";
 import { Sidebar, useSidebar } from "@/components/ui/sidebar";
 import { meQueryOptions } from "@/integrations/backend/auth";
-import { logout } from "@/integrations/backend/settings";
+import { logout, readNotifications } from "@/integrations/backend/settings";
 import { queryKeys } from "@/integrations/backend/query-keys";
 import { cn } from "@/lib/utils";
 
 const navItemBase =
     "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70 disabled:cursor-not-allowed disabled:opacity-50";
 
+type NotificationTarget = { kind: "internal"; to: string } | { kind: "external"; href: string };
+
+function resolveNotificationTarget(link: string | null | undefined): NotificationTarget | null {
+    if (!link) return null;
+
+    const trimmed = link.trim();
+    if (trimmed === "") return null;
+
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+        return { kind: "external", href: trimmed };
+    }
+
+    if (trimmed.startsWith("/saveur")) {
+        try {
+            const url = new URL(trimmed, "https://galadrim.invalid");
+            const params = url.searchParams;
+
+            const restaurantId = params.get("restaurant-id") ?? params.get("restaurantId");
+            if (restaurantId) {
+                params.delete("restaurant-id");
+                params.set("restaurantId", restaurantId);
+            }
+
+            const query = params.toString();
+            return { kind: "internal", to: query ? `/miams?${query}` : "/miams" };
+        } catch {
+            return { kind: "internal", to: "/miams" };
+        }
+    }
+
+    if (trimmed.startsWith("/office-rooms")) {
+        return { kind: "internal", to: "/planning" };
+    }
+
+    if (trimmed.startsWith("/profile")) {
+        return { kind: "internal", to: "/settings" };
+    }
+
+    if (trimmed.startsWith("/ideas")) {
+        return { kind: "internal", to: trimmed };
+    }
+
+    if (
+        trimmed === "/" ||
+        trimmed.startsWith("/planning") ||
+        trimmed.startsWith("/miams") ||
+        trimmed.startsWith("/settings") ||
+        trimmed.startsWith("/admin") ||
+        trimmed.startsWith("/platformer") ||
+        trimmed.startsWith("/scheduler") ||
+        trimmed.startsWith("/visuel") ||
+        trimmed.startsWith("/scamWinnerOmg")
+    ) {
+        return { kind: "internal", to: trimmed };
+    }
+
+    if (trimmed.startsWith("/")) {
+        return { kind: "internal", to: trimmed };
+    }
+
+    return null;
+}
+
 export default function AppSidebar() {
     const router = useRouter();
     const queryClient = useQueryClient();
+
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
 
     const pathname = useRouterState({ select: (s) => s.location.pathname });
     const { isMobile, open, openMobile } = useSidebar();
@@ -35,6 +104,42 @@ export default function AppSidebar() {
     const meQuery = useQuery(meQueryOptions());
     const username = meQuery.data?.username ?? "Moi";
     const avatarUrl = meQuery.data?.imageUrl ?? null;
+
+    const notifications = useMemo<INotification[]>(() => {
+        const list = meQuery.data?.notifications ?? [];
+        return list
+            .slice()
+            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0));
+    }, [meQuery.data?.notifications]);
+
+    const unreadCount = useMemo(() => {
+        return notifications.reduce((acc, n) => acc + (n.read ? 0 : 1), 0);
+    }, [notifications]);
+
+    const readNotificationsMutation = useMutation<
+        { message: string },
+        Error,
+        void,
+        { previous?: IUserData }
+    >({
+        mutationFn: async () => readNotifications(),
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: queryKeys.me(), exact: true });
+            const previous = queryClient.getQueryData<IUserData>(queryKeys.me());
+            queryClient.setQueryData<IUserData>(queryKeys.me(), (old) => {
+                if (!old) return old;
+                return {
+                    ...old,
+                    notifications: old.notifications.map((n) => ({ ...n, read: true })),
+                };
+            });
+            return { previous };
+        },
+        onError: (_error, _variables, context) => {
+            if (!context?.previous) return;
+            queryClient.setQueryData<IUserData>(queryKeys.me(), context.previous);
+        },
+    });
 
     const userRights = meQuery.data?.rights ?? 0;
     const canSeeAdmin = hasSomeRights(userRights, ADMIN_TAB_RIGHTS);
@@ -126,7 +231,146 @@ export default function AppSidebar() {
 
                         <div className="flex items-center gap-2 px-4">
                             <Avatar src={avatarUrl} alt={username} size={24} className="h-6 w-6" />
-                            <span className="text-sm font-medium">{username}</span>
+                            <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                                {username}
+                            </span>
+
+                            <Dialog.Root
+                                open={notificationsOpen}
+                                onOpenChange={(next) => {
+                                    setNotificationsOpen(next);
+                                    if (!next) return;
+                                    if (unreadCount === 0) return;
+                                    readNotificationsMutation.mutate();
+                                }}
+                            >
+                                <Dialog.Trigger asChild>
+                                    <button
+                                        type="button"
+                                        className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70"
+                                    >
+                                        <Bell className="h-4 w-4" />
+                                        <span className="sr-only">Ouvrir les notifications</span>
+                                        {unreadCount > 0 ? (
+                                            <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white">
+                                                {unreadCount > 99 ? "99+" : unreadCount}
+                                            </span>
+                                        ) : null}
+                                    </button>
+                                </Dialog.Trigger>
+
+                                <Dialog.Portal>
+                                    <Dialog.Overlay className="fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm" />
+                                    <Dialog.Content className="fixed left-1/2 top-1/2 z-[100] w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-lg border border-slate-700 bg-black p-4 text-white shadow-xl">
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div className="min-w-0">
+                                                <Dialog.Title className="text-base font-semibold">
+                                                    Notifications
+                                                </Dialog.Title>
+                                            </div>
+
+                                            <Dialog.Close asChild>
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70"
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                    <span className="sr-only">Fermer</span>
+                                                </button>
+                                            </Dialog.Close>
+                                        </div>
+
+                                        <div className="mt-4 max-h-[60vh] overflow-auto">
+                                            {notifications.length === 0 ? (
+                                                <div className="text-sm text-white/70">
+                                                    Aucune notification.
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col gap-2">
+                                                    {notifications.map((notification) => {
+                                                        const target = resolveNotificationTarget(
+                                                            notification.link,
+                                                        );
+
+                                                        const sharedClassName = cn(
+                                                            "rounded-md border px-3 py-2 text-left transition-colors",
+                                                            notification.read
+                                                                ? "border-slate-800 bg-slate-900/20"
+                                                                : "border-slate-700 bg-slate-900/40",
+                                                            target &&
+                                                                "hover:bg-slate-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70",
+                                                        );
+
+                                                        const content = (
+                                                            <>
+                                                                <div className="flex items-start justify-between gap-3">
+                                                                    <div className="min-w-0 flex-1">
+                                                                        <div className="text-sm font-semibold">
+                                                                            {notification.title}
+                                                                        </div>
+                                                                        <div className="mt-0.5 whitespace-pre-wrap text-sm text-white/80">
+                                                                            {notification.text}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="shrink-0 text-xs text-white/60">
+                                                                        {new Date(
+                                                                            notification.createdAt,
+                                                                        ).toLocaleDateString()}
+                                                                    </div>
+                                                                </div>
+
+                                                                {target?.kind === "external" && (
+                                                                    <div className="mt-2 flex items-center gap-1 text-xs text-white/60">
+                                                                        <ExternalLink className="h-3 w-3" />
+                                                                        <span>Ouvrir le lien</span>
+                                                                    </div>
+                                                                )}
+                                                            </>
+                                                        );
+
+                                                        if (!target) {
+                                                            return (
+                                                                <div
+                                                                    key={notification.id}
+                                                                    className={sharedClassName}
+                                                                >
+                                                                    {content}
+                                                                </div>
+                                                            );
+                                                        }
+
+                                                        return (
+                                                            <button
+                                                                key={notification.id}
+                                                                type="button"
+                                                                className={sharedClassName}
+                                                                onClick={() => {
+                                                                    setNotificationsOpen(false);
+
+                                                                    if (
+                                                                        target.kind === "external"
+                                                                    ) {
+                                                                        window.open(
+                                                                            target.href,
+                                                                            "_blank",
+                                                                            "noopener,noreferrer",
+                                                                        );
+                                                                        return;
+                                                                    }
+
+                                                                    router.history.push(target.to);
+                                                                }}
+                                                            >
+                                                                {content}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </Dialog.Content>
+                                </Dialog.Portal>
+                            </Dialog.Root>
                         </div>
 
                         <nav className="flex flex-col gap-1 px-4">
