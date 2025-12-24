@@ -298,7 +298,7 @@ export default function VisuelPage(props: {
                                 <div className="flex-1">
                                     <OfficeFloorCanvas
                                         key={`${floor.id}-${visibleIndex}`}
-                                        rooms={rooms.filter((r) => r.isBookable && !r.isPhonebox)}
+                                        rooms={rooms.filter((r) => !r.isPhonebox)}
                                         reservations={reservationsQuery.data ?? []}
                                         onRoomClick={handleRoomClick}
                                     />

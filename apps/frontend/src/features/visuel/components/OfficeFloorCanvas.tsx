@@ -92,11 +92,13 @@ export default function OfficeFloorCanvas(props: {
 
     const hoveredRoomReservedNow = useMemo(() => {
         if (!hoveredRoom) return null;
+        if (!hoveredRoom.isBookable) return null;
         return isReservedNow(hoveredRoom.id, props.reservations, now);
     }, [hoveredRoom, now, props.reservations]);
 
     const hoveredRoomActiveReservation = useMemo(() => {
         if (!hoveredRoom) return null;
+        if (!hoveredRoom.isBookable) return null;
         return getActiveReservation(hoveredRoom.id, props.reservations, now);
     }, [hoveredRoom, now, props.reservations]);
 
@@ -111,7 +113,7 @@ export default function OfficeFloorCanvas(props: {
 
         const rect = tooltip.getBoundingClientRect();
         setTooltipSize({ width: rect.width, height: rect.height });
-    }, [hoveredRoom, hoveredRoomReservedNow]);
+    }, [hoveredRoom]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -130,11 +132,19 @@ export default function OfficeFloorCanvas(props: {
             const polygon = room.config.points.map((p) => getCanvasCoordinates(p, canvas));
             if (polygon.length < 3) continue;
 
-            const reserved = isReservedNow(room.id, props.reservations, now);
+            const reserved = room.isBookable && isReservedNow(room.id, props.reservations, now);
             const isHovered = hoveredRoomId === room.id;
 
-            const fill = reserved ? "#fecaca" : "#dcfce7"; // error-200 / success-100
-            const hoverFill = reserved ? "#fca5a5" : "#bbf7d0"; // error-300 / success-200
+            const fill = !room.isBookable
+                ? "#e2e8f0" // slate-200
+                : reserved
+                  ? "#fecaca" // red-200
+                  : "#dcfce7"; // green-100
+            const hoverFill = !room.isBookable
+                ? "#cbd5e1" // slate-300
+                : reserved
+                  ? "#fca5a5" // red-300
+                  : "#bbf7d0"; // green-200
 
             ctx.beginPath();
             polygon.forEach((pt, idx) => {
@@ -146,7 +156,13 @@ export default function OfficeFloorCanvas(props: {
             ctx.fillStyle = isHovered ? hoverFill : fill;
             ctx.fill();
 
-            ctx.strokeStyle = reserved ? "#fca5a5" : "#bbf7d0";
+            ctx.strokeStyle = !room.isBookable
+                ? isHovered
+                    ? "#64748b"
+                    : "#94a3b8" // slate-500 / slate-400
+                : reserved
+                  ? "#fca5a5" // red-300
+                  : "#bbf7d0"; // green-200
             ctx.lineWidth = isHovered ? 1.5 : 1;
             ctx.stroke();
         }
@@ -184,7 +200,9 @@ export default function OfficeFloorCanvas(props: {
                     }}
                 >
                     <div className="font-semibold text-foreground">{hoveredRoom.name}</div>
-                    {hoveredRoomReservedNow !== null && (
+                    {!hoveredRoom.isBookable ? (
+                        <div className="text-slate-600">Non réservable</div>
+                    ) : hoveredRoomReservedNow !== null ? (
                         <div
                             className={
                                 hoveredRoomReservedNow ? "text-destructive" : "text-emerald-700"
@@ -194,7 +212,7 @@ export default function OfficeFloorCanvas(props: {
                                 ? `Occupée${hoveredRoomActiveReservation ? ` par ${getReservationOwnerLabel(hoveredRoomActiveReservation)}` : ""}`
                                 : "Libre"}
                         </div>
-                    )}
+                    ) : null}
                 </div>
             )}
 
@@ -207,13 +225,16 @@ export default function OfficeFloorCanvas(props: {
                     if (!canvas) return;
 
                     const rect = canvas.getBoundingClientRect();
-                    const x = event.clientX - rect.left;
-                    const y = event.clientY - rect.top;
+                    const scaleX = rect.width ? canvas.width / rect.width : 1;
+                    const scaleY = rect.height ? canvas.height / rect.height : 1;
+
+                    const x = (event.clientX - rect.left) * scaleX;
+                    const y = (event.clientY - rect.top) * scaleY;
 
                     const hovered = getRoomAtPoint(props.rooms, { x, y }, canvas);
                     setHoveredRoomId(hovered?.id ?? null);
                     setHoveredPoint(hovered ? { x, y } : null);
-                    canvas.style.cursor = hovered ? "pointer" : "default";
+                    canvas.style.cursor = hovered?.isBookable ? "pointer" : "default";
                 }}
                 onMouseLeave={() => {
                     const canvas = canvasRef.current;
@@ -227,11 +248,15 @@ export default function OfficeFloorCanvas(props: {
                     if (!canvas) return;
 
                     const rect = canvas.getBoundingClientRect();
-                    const x = event.clientX - rect.left;
-                    const y = event.clientY - rect.top;
+                    const scaleX = rect.width ? canvas.width / rect.width : 1;
+                    const scaleY = rect.height ? canvas.height / rect.height : 1;
+
+                    const x = (event.clientX - rect.left) * scaleX;
+                    const y = (event.clientY - rect.top) * scaleY;
 
                     const clicked = getRoomAtPoint(props.rooms, { x, y }, canvas);
                     if (!clicked) return;
+                    if (!clicked.isBookable) return;
                     props.onRoomClick(clicked);
                 }}
                 style={{ display: "block" }}
