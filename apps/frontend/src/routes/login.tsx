@@ -14,7 +14,7 @@ import { queryKeys } from "@/integrations/backend/query-keys";
 
 export const Route = createFileRoute("/login")({
     validateSearch: (search: Record<string, unknown>) => ({
-        redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+        redirect: search.redirect as string | undefined,
     }),
     component: LoginRoute,
 });

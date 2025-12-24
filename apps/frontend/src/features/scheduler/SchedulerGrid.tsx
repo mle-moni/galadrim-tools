@@ -63,12 +63,17 @@ export default function SchedulerGrid({
         const update = () => setContainerHeight(container.clientHeight);
         update();
 
-        if (typeof ResizeObserver === "undefined") {
+        const globalWithResizeObserver = globalThis as unknown as {
+            ResizeObserver?: typeof ResizeObserver;
+        };
+        const ResizeObserverImpl = globalWithResizeObserver.ResizeObserver;
+
+        if (!ResizeObserverImpl) {
             window.addEventListener("resize", update);
             return () => window.removeEventListener("resize", update);
         }
 
-        const observer = new ResizeObserver(() => update());
+        const observer = new ResizeObserverImpl(() => update());
         observer.observe(container);
         return () => observer.disconnect();
     }, []);
@@ -141,7 +146,15 @@ export default function SchedulerGrid({
                 behavior: "smooth",
             });
         });
-    }, [containerHeight, currentDate, gridHeight, isSpoofedNow, pixelsPerHour, spoofedNowMs]);
+    }, [
+        containerHeight,
+        currentDate,
+        currentTime,
+        gridHeight,
+        isSpoofedNow,
+        pixelsPerHour,
+        spoofedNowMs,
+    ]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
     const selectionActivateDelayMs = 100;

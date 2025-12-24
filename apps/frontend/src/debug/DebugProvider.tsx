@@ -26,10 +26,11 @@ function defaultState(): DebugState {
 }
 
 function loadFromSessionStorage<T>(key: string): T | null {
-    if (typeof window === "undefined") return null;
+    const storage = globalThis.window?.sessionStorage;
+    if (!storage) return null;
 
     try {
-        const raw = window.sessionStorage.getItem(key);
+        const raw = storage.getItem(key);
         if (!raw) return null;
         return JSON.parse(raw) as T;
     } catch {
@@ -38,20 +39,22 @@ function loadFromSessionStorage<T>(key: string): T | null {
 }
 
 function saveToSessionStorage(key: string, value: unknown) {
-    if (typeof window === "undefined") return;
+    const storage = globalThis.window?.sessionStorage;
+    if (!storage) return;
 
     try {
-        window.sessionStorage.setItem(key, JSON.stringify(value));
+        storage.setItem(key, JSON.stringify(value));
     } catch {
         // ignore
     }
 }
 
 function removeFromSessionStorage(key: string) {
-    if (typeof window === "undefined") return;
+    const storage = globalThis.window?.sessionStorage;
+    if (!storage) return;
 
     try {
-        window.sessionStorage.removeItem(key);
+        storage.removeItem(key);
     } catch {
         // ignore
     }
@@ -69,20 +72,8 @@ function loadDebugState(canSpoof: boolean): DebugState {
     >(DEBUG_STATE_KEY);
 
     if (stored) {
-        const nowRaw =
-            typeof stored.nowRaw === "string"
-                ? stored.nowRaw
-                : typeof stored.fakeNowRaw === "string"
-                  ? stored.fakeNowRaw
-                  : null;
-
-        const nowDraft =
-            typeof stored.nowDraft === "string"
-                ? stored.nowDraft
-                : typeof stored.fakeNowDraft === "string"
-                  ? stored.fakeNowDraft
-                  : nowRaw ?? "";
-
+        const nowRaw = (stored.nowRaw ?? stored.fakeNowRaw ?? null) as string | null;
+        const nowDraft = (stored.nowDraft ?? stored.fakeNowDraft ?? nowRaw ?? "") as string;
         const enabled = Boolean(stored.enabled ?? Boolean(nowRaw));
 
         return { enabled, nowRaw, nowDraft };
@@ -90,7 +81,7 @@ function loadDebugState(canSpoof: boolean): DebugState {
 
     const scheduler =
         loadFromSessionStorage<Partial<{ devNowRaw: unknown }>>(SCHEDULER_DEBUG_STATE_KEY);
-    const devNowRaw = typeof scheduler?.devNowRaw === "string" ? scheduler.devNowRaw : null;
+    const devNowRaw = (scheduler?.devNowRaw ?? null) as string | null;
     if (devNowRaw) {
         return { enabled: true, nowRaw: devNowRaw, nowDraft: devNowRaw };
     }

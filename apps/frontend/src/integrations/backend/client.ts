@@ -4,8 +4,7 @@ const DEFAULT_API_URL = "http://localhost:3333";
 
 export function getApiUrl() {
     const url = import.meta.env.VITE_API_URL;
-    if (typeof url === "string" && url.length > 0) return url;
-    return DEFAULT_API_URL;
+    return url ? String(url) : DEFAULT_API_URL;
 }
 
 export function getSocketApiUrl() {
@@ -58,16 +57,16 @@ export async function fetchBackendJson<TSuccess, TError = unknown>(
 }
 
 export const isApiError = (error: unknown): error is ApiError => {
-    return typeof (error as ApiError)?.error === "string";
+    return Boolean((error as ApiError)?.error);
 };
 
 export function isApiSchemaError(error: unknown): error is ApiErrors {
-    return typeof (error as ApiErrors)?.errors === "object";
+    return Boolean((error as ApiErrors)?.errors);
 }
 
 export const isAdonisApiError = (error: unknown): error is AdonisApiError => {
     const errorCast = error as AdonisApiError;
-    return typeof errorCast?.code === "string" && typeof errorCast?.message === "string";
+    return Boolean(errorCast?.code && errorCast?.message);
 };
 
 export const getErrorMessage = (

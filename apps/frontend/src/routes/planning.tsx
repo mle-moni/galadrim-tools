@@ -4,12 +4,8 @@ import SchedulerPage from "@/features/scheduler/SchedulerPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
 
 function parseOptionalNumber(value: unknown): number | undefined {
-    if (typeof value === "number" && Number.isFinite(value)) return value;
-    if (typeof value === "string" && value.trim() !== "") {
-        const parsed = Number(value);
-        if (Number.isFinite(parsed)) return parsed;
-    }
-    return undefined;
+    if (value == null) return undefined;
+    return Number(value);
 }
 
 export const Route = createFileRoute("/planning")({

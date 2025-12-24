@@ -69,7 +69,7 @@ export default function SchedulerPage(props: {
         if (!officesQuery.data) return;
 
         const hasExplicitOfficeSelection =
-            typeof props.focusedRoomId === "number" || typeof props.initialOfficeId === "number";
+            props.focusedRoomId != null || props.initialOfficeId != null;
         if (selectedOfficeId !== null && !hasExplicitOfficeSelection) return;
 
         const availableOfficeIds = new Set(officesQuery.data.map((o) => o.id));
@@ -78,16 +78,16 @@ export default function SchedulerPage(props: {
 
         let desiredOfficeId: number | null = null;
 
-        if (typeof props.focusedRoomId === "number") {
+        if (props.focusedRoomId != null) {
             const room = roomsById.get(props.focusedRoomId);
             const floor = room ? floorsById.get(room.officeFloorId) : undefined;
             const officeIdFromRoom = floor?.officeId;
-            if (typeof officeIdFromRoom === "number" && availableOfficeIds.has(officeIdFromRoom)) {
+            if (officeIdFromRoom != null && availableOfficeIds.has(officeIdFromRoom)) {
                 desiredOfficeId = officeIdFromRoom;
             }
         }
 
-        if (desiredOfficeId === null && typeof props.initialOfficeId === "number") {
+        if (desiredOfficeId === null && props.initialOfficeId != null) {
             if (availableOfficeIds.has(props.initialOfficeId)) {
                 desiredOfficeId = props.initialOfficeId;
             }
@@ -95,7 +95,7 @@ export default function SchedulerPage(props: {
 
         if (desiredOfficeId === null) {
             const officeIdFromMe = meQuery.data?.officeId;
-            if (typeof officeIdFromMe === "number" && availableOfficeIds.has(officeIdFromMe)) {
+            if (officeIdFromMe != null && availableOfficeIds.has(officeIdFromMe)) {
                 desiredOfficeId = officeIdFromMe;
             } else {
                 desiredOfficeId = officesQuery.data[0]?.id ?? null;
@@ -127,7 +127,7 @@ export default function SchedulerPage(props: {
         const floorIdsForOffice = new Set(floorsForOffice.map((f) => f.id));
 
         const hasExplicitFloorSelection =
-            typeof props.focusedRoomId === "number" || typeof props.initialFloorId === "number";
+            props.focusedRoomId != null || props.initialFloorId != null;
 
         if (!hasExplicitFloorSelection) {
             if (selectedFloorId !== null) {
@@ -138,14 +138,14 @@ export default function SchedulerPage(props: {
 
         let desiredFloorId: number | null = null;
 
-        if (typeof props.focusedRoomId === "number") {
+        if (props.focusedRoomId != null) {
             const room = (officeRoomsQuery.data ?? []).find((r) => r.id === props.focusedRoomId);
             if (room && floorIdsForOffice.has(room.officeFloorId)) {
                 desiredFloorId = room.officeFloorId;
             }
         }
 
-        if (desiredFloorId === null && typeof props.initialFloorId === "number") {
+        if (desiredFloorId === null && props.initialFloorId != null) {
             if (floorIdsForOffice.has(props.initialFloorId)) {
                 desiredFloorId = props.initialFloorId;
             }
@@ -302,8 +302,8 @@ export default function SchedulerPage(props: {
 
     useEffect(() => {
         if (!hasOfficeMaps) return;
-        if (typeof socketUserId !== "number") return;
-        if (typeof socketToken !== "string" || socketToken.length === 0) return;
+        if (socketUserId == null) return;
+        if (!socketToken) return;
 
         const socket = io(getSocketApiUrl(), { transports: ["websocket"] });
         const roomReservationsRootKey = ["roomReservations"] as const;
@@ -354,12 +354,7 @@ export default function SchedulerPage(props: {
                             const rEndMs = Date.parse(r.end);
 
                             const parsedTimesMatch =
-                                Number.isFinite(reservationStartMs) &&
-                                Number.isFinite(reservationEndMs) &&
-                                Number.isFinite(rStartMs) &&
-                                Number.isFinite(rEndMs) &&
-                                rStartMs === reservationStartMs &&
-                                rEndMs === reservationEndMs;
+                                rStartMs === reservationStartMs && rEndMs === reservationEndMs;
 
                             const stringTimesMatch =
                                 r.start === reservation.start && r.end === reservation.end;
@@ -410,9 +405,7 @@ export default function SchedulerPage(props: {
             upsertRoomReservation(reservation),
         );
         socket.on("deleteRoomReservation", (reservationId: unknown) => {
-            const id = typeof reservationId === "number" ? reservationId : Number(reservationId);
-            if (!Number.isFinite(id)) return;
-            removeRoomReservation(id);
+            removeRoomReservation(Number(reservationId));
         });
 
         return () => {

@@ -13,9 +13,7 @@ export function parseDebugNow(raw: string, baseDate?: Date): Date | null {
         return next;
     }
 
-    const parsed = new Date(trimmed);
-    if (!Number.isFinite(parsed.getTime())) return null;
-    return parsed;
+    return new Date(trimmed);
 }
 
 export function parseSpoofedNow(raw: string, baseDate?: Date): Date | null {

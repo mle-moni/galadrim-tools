@@ -170,7 +170,7 @@ export function useCreateRoomReservationMutation(opts: {
                 const optimisticId = context?.optimisticId;
 
                 const next = old.filter((r) => {
-                    if (typeof optimisticId === "number" && r.id === optimisticId) return false;
+                    if (r.id === optimisticId) return false;
                     return r.id !== data.reservation.id;
                 });
 

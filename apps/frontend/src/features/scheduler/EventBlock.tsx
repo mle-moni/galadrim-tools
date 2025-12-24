@@ -23,8 +23,26 @@ export default function EventBlock({
     const durationMinutes = Math.round(
         (event.endTime.getTime() - event.startTime.getTime()) / 60000,
     );
+
     const isInline = durationMinutes <= 30;
     const isCompact = durationMinutes <= 60;
+    const minHeight = isInline ? 18 : 20;
+
+    const containerClasses = cn(
+        "absolute flex select-none overflow-hidden rounded-md border-l-[6px] shadow-sm transition-none",
+        event.canEdit ? "cursor-pointer" : "cursor-default",
+        event.color,
+        isInline
+            ? "flex-row items-center gap-2 px-2 py-1"
+            : isCompact
+              ? "flex-col gap-0.5 p-1.5"
+              : "flex-col p-2",
+        !event.canEdit
+            ? "z-10"
+            : isSelected
+              ? "z-50 ring-2 ring-[#1e3ad7] ring-offset-2 ring-offset-background"
+              : "z-10 hover:z-40 hover:brightness-95",
+    );
 
     const handleMouseDown = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -45,27 +63,11 @@ export default function EventBlock({
         onDelete(event.id);
     };
 
-    const minHeight = isInline ? 18 : 20;
-
     return (
         <div
             onMouseDown={handleMouseDown}
             onDoubleClick={handleDoubleClick}
-            className={cn(
-                "absolute flex select-none overflow-hidden rounded-md border-l-[6px] shadow-sm transition-none",
-                event.canEdit ? "cursor-pointer" : "cursor-default",
-                event.color,
-                isInline
-                    ? "flex-row items-center gap-2 px-2 py-1"
-                    : isCompact
-                      ? "flex-col gap-0.5 p-1.5"
-                      : "flex-col p-2",
-                !event.canEdit
-                    ? "z-10"
-                    : isSelected
-                      ? "z-50 ring-2 ring-[#1e3ad7] ring-offset-2 ring-offset-background"
-                      : "z-10 hover:z-40 hover:brightness-95",
-            )}
+            className={containerClasses}
             style={{
                 top: `${event.top}px`,
                 height: `${Math.max(event.height, minHeight)}px`,
