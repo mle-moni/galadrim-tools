@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Building2, CalendarDays, Map as MapIcon } from "lucide-react";
 import { io } from "socket.io-client";
@@ -51,6 +51,7 @@ export default function SchedulerPage(props: {
     focusedRoomId?: number;
 }) {
     const clock = useClock();
+    const router = useRouter();
 
     const [currentDate, setCurrentDate] = useState<Date>(() => clock.now());
     const [isFiveMinuteSlots, setIsFiveMinuteSlots] = useState(false);
@@ -473,19 +474,18 @@ export default function SchedulerPage(props: {
                     {selectedOfficeName ?? "Chargement…"}
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-64 bg-card shadow-lg">
                 {(officesQuery.data ?? []).map((office: ApiOffice) => (
-                    <DropdownMenuItem key={office.id} asChild>
-                        <Link
-                            to="/planning"
-                            search={{
-                                officeId: office.id,
-                                floorId: undefined,
-                                roomId: undefined,
-                            }}
-                        >
-                            {office.name}
-                        </Link>
+                    <DropdownMenuItem
+                        key={office.id}
+                        className="cursor-pointer"
+                        onSelect={() => {
+                            const params = new URLSearchParams();
+                            params.set("officeId", String(office.id));
+                            router.history.push(`/planning?${params.toString()}`);
+                        }}
+                    >
+                        <span className="truncate">{office.name}</span>
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
