@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ExternalLink, Pencil, RefreshCcw, Trash2 } from "lucide-react";
+import { ExternalLink, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
 import type { IRestaurant, NotesOption } from "@galadrim-tools/shared";
 
 import {
@@ -294,7 +294,7 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                                     <span className="truncate">{selectedRestaurant.name}</span>
                                     <Button
                                         variant="ghost"
-                                        size="sm"
+                                        size="icon-sm"
                                         type="button"
                                         onClick={() => {
                                             const params = new URLSearchParams();
@@ -302,7 +302,8 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                                             router.history.push(`/miams?${params.toString()}`);
                                         }}
                                     >
-                                        Fermer
+                                        <X className="h-4 w-4" />
+                                        <span className="sr-only">Fermer</span>
                                     </Button>
                                 </CardTitle>
                                 <CardDescription className="flex flex-wrap items-center gap-2">
