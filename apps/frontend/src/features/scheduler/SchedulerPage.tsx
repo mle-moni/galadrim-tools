@@ -338,18 +338,35 @@ export default function SchedulerPage(props: {
                 (old) => {
                     if (!old) return old;
 
+                    const reservationStartMs = Date.parse(reservation.start);
+                    const reservationEndMs = Date.parse(reservation.end);
+
                     return old.filter((r) => {
                         if (r.id === reservation.id) return false;
+
                         if (
                             opts.removeOptimistic &&
                             r.id < 0 &&
                             r.officeRoomId === reservation.officeRoomId &&
-                            r.start === reservation.start &&
-                            r.end === reservation.end &&
                             r.userId === reservation.userId
                         ) {
-                            return false;
+                            const rStartMs = Date.parse(r.start);
+                            const rEndMs = Date.parse(r.end);
+
+                            const parsedTimesMatch =
+                                Number.isFinite(reservationStartMs) &&
+                                Number.isFinite(reservationEndMs) &&
+                                Number.isFinite(rStartMs) &&
+                                Number.isFinite(rEndMs) &&
+                                rStartMs === reservationStartMs &&
+                                rEndMs === reservationEndMs;
+
+                            const stringTimesMatch =
+                                r.start === reservation.start && r.end === reservation.end;
+
+                            if (parsedTimesMatch || stringTimesMatch) return false;
                         }
+
                         return true;
                     });
                 },

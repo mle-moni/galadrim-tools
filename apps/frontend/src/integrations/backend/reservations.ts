@@ -166,9 +166,22 @@ export function useCreateRoomReservationMutation(opts: {
             queryClient.setQueryData(queryKey, context.previous);
         },
         onSuccess: (data, _input, context) => {
-            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old) =>
-                old?.map((r) => (r.id === context?.optimisticId ? data.reservation : r)),
-            );
+            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) => {
+                const optimisticId = context?.optimisticId;
+
+                const next = old.filter((r) => {
+                    if (typeof optimisticId === "number" && r.id === optimisticId) return false;
+                    return r.id !== data.reservation.id;
+                });
+
+                next.push(data.reservation);
+                next.sort((a, b) => {
+                    if (a.start === b.start) return a.id - b.id;
+                    return a.start < b.start ? -1 : 1;
+                });
+
+                return next;
+            });
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey });
