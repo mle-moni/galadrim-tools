@@ -16,7 +16,11 @@ import { Route as PlatformerRouteImport } from './routes/platformer'
 import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as MiamsRouteImport } from './routes/miams'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRightsRouteImport } from './routes/admin.rights'
+import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
+import { Route as AdminCreateUserRouteImport } from './routes/admin.createUser'
 
 const VisuelRoute = VisuelRouteImport.update({
   id: '/visuel',
@@ -53,14 +57,35 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRightsRoute = AdminRightsRouteImport.update({
+  id: '/rights',
+  path: '/rights',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminNotificationsRoute = AdminNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCreateUserRoute = AdminCreateUserRouteImport.update({
+  id: '/createUser',
+  path: '/createUser',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
@@ -68,9 +93,13 @@ export interface FileRoutesByFullPath {
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
+  '/admin/createUser': typeof AdminCreateUserRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
+  '/admin/rights': typeof AdminRightsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
@@ -78,10 +107,14 @@ export interface FileRoutesByTo {
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
+  '/admin/createUser': typeof AdminCreateUserRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
+  '/admin/rights': typeof AdminRightsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
@@ -89,11 +122,15 @@ export interface FileRoutesById {
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
+  '/admin/createUser': typeof AdminCreateUserRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
+  '/admin/rights': typeof AdminRightsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/login'
     | '/miams'
     | '/planning'
@@ -101,9 +138,13 @@ export interface FileRouteTypes {
     | '/scheduler'
     | '/settings'
     | '/visuel'
+    | '/admin/createUser'
+    | '/admin/notifications'
+    | '/admin/rights'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/login'
     | '/miams'
     | '/planning'
@@ -111,9 +152,13 @@ export interface FileRouteTypes {
     | '/scheduler'
     | '/settings'
     | '/visuel'
+    | '/admin/createUser'
+    | '/admin/notifications'
+    | '/admin/rights'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/login'
     | '/miams'
     | '/planning'
@@ -121,10 +166,14 @@ export interface FileRouteTypes {
     | '/scheduler'
     | '/settings'
     | '/visuel'
+    | '/admin/createUser'
+    | '/admin/notifications'
+    | '/admin/rights'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   LoginRoute: typeof LoginRoute
   MiamsRoute: typeof MiamsRoute
   PlanningRoute: typeof PlanningRoute
@@ -185,6 +234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -192,11 +248,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/rights': {
+      id: '/admin/rights'
+      path: '/rights'
+      fullPath: '/admin/rights'
+      preLoaderRoute: typeof AdminRightsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/notifications': {
+      id: '/admin/notifications'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AdminNotificationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/createUser': {
+      id: '/admin/createUser'
+      path: '/createUser'
+      fullPath: '/admin/createUser'
+      preLoaderRoute: typeof AdminCreateUserRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminCreateUserRoute: typeof AdminCreateUserRoute
+  AdminNotificationsRoute: typeof AdminNotificationsRoute
+  AdminRightsRoute: typeof AdminRightsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCreateUserRoute: AdminCreateUserRoute,
+  AdminNotificationsRoute: AdminNotificationsRoute,
+  AdminRightsRoute: AdminRightsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   LoginRoute: LoginRoute,
   MiamsRoute: MiamsRoute,
   PlanningRoute: PlanningRoute,

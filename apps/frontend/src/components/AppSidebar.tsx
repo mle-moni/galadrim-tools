@@ -1,8 +1,18 @@
 import { useEffect } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, ExternalLink, LogOut, RefreshCcw, Settings, Utensils } from "lucide-react";
+import {
+    CalendarDays,
+    ExternalLink,
+    LogOut,
+    RefreshCcw,
+    Settings,
+    Shield,
+    Utensils,
+} from "lucide-react";
 import { toast } from "sonner";
+
+import { ADMIN_TAB_RIGHTS, hasSomeRights } from "@/lib/rights";
 
 import Avatar from "@/components/Avatar";
 import { Sidebar, useSidebar } from "@/components/ui/sidebar";
@@ -26,9 +36,13 @@ export default function AppSidebar() {
     const username = meQuery.data?.username ?? "Moi";
     const avatarUrl = meQuery.data?.imageUrl ?? null;
 
+    const userRights = meQuery.data?.rights ?? 0;
+    const canSeeAdmin = hasSomeRights(userRights, ADMIN_TAB_RIGHTS);
+
     const isPlanningActive = pathname.startsWith("/planning");
     const isMiamsActive = pathname.startsWith("/miams");
     const isSettingsActive = pathname.startsWith("/settings");
+    const isAdminActive = pathname.startsWith("/admin");
 
     const logoutMutation = useMutation({
         mutationFn: logout,
@@ -143,6 +157,21 @@ export default function AppSidebar() {
                                 <span className="flex-1">Restaurants</span>
                                 <span className="text-xs font-medium text-slate-400">R</span>
                             </Link>
+
+                            {canSeeAdmin && (
+                                <Link
+                                    to="/admin"
+                                    search={{}}
+                                    aria-current={isAdminActive ? "page" : undefined}
+                                    className={cn(
+                                        navItemBase,
+                                        isAdminActive && "bg-slate-800/50 text-white",
+                                    )}
+                                >
+                                    <Shield className="h-4 w-4" />
+                                    <span className="flex-1">Administration</span>
+                                </Link>
+                            )}
                         </nav>
                     </div>
 

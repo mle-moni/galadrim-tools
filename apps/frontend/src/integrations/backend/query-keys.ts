@@ -15,4 +15,8 @@ export const queryKeys = {
 
     // Users
     users: () => ["users"] as const,
+
+    // Admin
+    adminUserRights: () => ["admin", "userRights"] as const,
+    adminDashboard: () => ["admin", "dashboard"] as const,
 };

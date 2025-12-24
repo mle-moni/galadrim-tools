@@ -17,6 +17,15 @@ export function getCanvasCoordinates(point: RoomPoint, canvas: HTMLCanvasElement
     };
 }
 
+export function getDbCoordinates(point: RoomPoint, canvas: HTMLCanvasElement) {
+    const { widthRatio, heightRatio } = getWidthHeightRatio(canvas);
+
+    return {
+        x: Math.floor(point.x / widthRatio),
+        y: Math.floor(point.y / heightRatio),
+    };
+}
+
 export function isPointInPolygon(point: RoomPoint, polygon: RoomPoint[]): boolean {
     let inside = false;
     const numPoints = polygon.length;
