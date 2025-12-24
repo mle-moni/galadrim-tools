@@ -1,16 +1,63 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, ExternalLink, LogOut, Settings, Utensils } from "lucide-react";
 
-import { Sidebar } from "@/components/ui/sidebar";
+import Avatar from "@/components/Avatar";
+import { Sidebar, useSidebar } from "@/components/ui/sidebar";
+import { meQueryOptions } from "@/integrations/backend/auth";
 import { cn } from "@/lib/utils";
 
 const navItemBase =
-    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70";
+    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70";
 
 export default function AppSidebar() {
+    const router = useRouter();
     const pathname = useRouterState({ select: (s) => s.location.pathname });
+    const { isMobile, open, openMobile } = useSidebar();
+    const isSidebarVisible = isMobile ? openMobile : open;
+
+    const meQuery = useQuery(meQueryOptions());
+    const username = meQuery.data?.username ?? "Moi";
+    const avatarUrl = meQuery.data?.imageUrl ?? null;
+
     const isPlanningActive = pathname.startsWith("/planning");
-    const isVisuelActive = pathname.startsWith("/visuel");
+    const isMiamsActive = pathname.startsWith("/miams");
+
+    useEffect(() => {
+        if (!isSidebarVisible) return;
+
+        const isEditableElement = (target: EventTarget | null) => {
+            if (!(target instanceof HTMLElement)) return false;
+            return (
+                target.isContentEditable ||
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.tagName === "SELECT"
+            );
+        };
+
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.defaultPrevented) return;
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+            if (isEditableElement(e.target) || isEditableElement(document.activeElement)) return;
+
+            const key = e.key.toLowerCase();
+            if (key === "s") {
+                e.preventDefault();
+                router.history.push("/planning");
+            }
+
+            if (key === "r") {
+                e.preventDefault();
+                router.history.push("/miams");
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [isSidebarVisible, router.history]);
 
     return (
         <Sidebar collapsible="offcanvas" variant="sidebar">
@@ -44,8 +91,8 @@ export default function AppSidebar() {
                         </div>
 
                         <div className="flex items-center gap-2 px-4">
-                            <div className="h-6 w-6 rounded-full bg-gradient-to-br from-amber-400 via-orange-300 to-emerald-500" />
-                            <span className="text-sm font-medium">Damien</span>
+                            <Avatar src={avatarUrl} alt={username} size={24} className="h-6 w-6" />
+                            <span className="text-sm font-medium">{username}</span>
                         </div>
 
                         <nav className="flex flex-col gap-1 px-4">
@@ -55,7 +102,7 @@ export default function AppSidebar() {
                                 aria-current={isPlanningActive ? "page" : undefined}
                                 className={cn(
                                     navItemBase,
-                                    isPlanningActive && "bg-slate-800/50 text-white"
+                                    isPlanningActive && "bg-slate-800/50 text-white",
                                 )}
                             >
                                 <CalendarDays className="h-4 w-4" />
@@ -64,12 +111,12 @@ export default function AppSidebar() {
                             </Link>
 
                             <Link
-                                to="/visuel"
+                                to="/miams"
                                 search={{}}
-                                aria-current={isVisuelActive ? "page" : undefined}
+                                aria-current={isMiamsActive ? "page" : undefined}
                                 className={cn(
                                     navItemBase,
-                                    isVisuelActive && "bg-slate-800/50 text-white"
+                                    isMiamsActive && "bg-slate-800/50 text-white",
                                 )}
                             >
                                 <Utensils className="h-4 w-4" />
@@ -88,10 +135,7 @@ export default function AppSidebar() {
                             <LogOut className="h-4 w-4" />
                             <span className="flex-1">Se déconnecter</span>
                         </button>
-                        <a
-                            href="https://forest.galadrim.fr"
-                            className={navItemBase}
-                        >
+                        <a href="https://forest.galadrim.fr" className={navItemBase}>
                             <ExternalLink className="h-4 w-4" />
                             <span className="flex-1">Retourner sur 🌳 Forest</span>
                         </a>

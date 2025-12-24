@@ -13,6 +13,7 @@ import { Route as VisuelRouteImport } from './routes/visuel'
 import { Route as SchedulerRouteImport } from './routes/scheduler'
 import { Route as PlatformerRouteImport } from './routes/platformer'
 import { Route as PlanningRouteImport } from './routes/planning'
+import { Route as MiamsRouteImport } from './routes/miams'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -36,6 +37,11 @@ const PlanningRoute = PlanningRouteImport.update({
   path: '/planning',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MiamsRoute = MiamsRouteImport.update({
+  id: '/miams',
+  path: '/miams',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -50,6 +56,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
   '/scheduler': typeof SchedulerRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
   '/scheduler': typeof SchedulerRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
   '/scheduler': typeof SchedulerRoute
@@ -77,16 +86,25 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/miams'
     | '/planning'
     | '/platformer'
     | '/scheduler'
     | '/visuel'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/planning' | '/platformer' | '/scheduler' | '/visuel'
+  to:
+    | '/'
+    | '/login'
+    | '/miams'
+    | '/planning'
+    | '/platformer'
+    | '/scheduler'
+    | '/visuel'
   id:
     | '__root__'
     | '/'
     | '/login'
+    | '/miams'
     | '/planning'
     | '/platformer'
     | '/scheduler'
@@ -96,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  MiamsRoute: typeof MiamsRoute
   PlanningRoute: typeof PlanningRoute
   PlatformerRoute: typeof PlatformerRoute
   SchedulerRoute: typeof SchedulerRoute
@@ -132,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanningRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/miams': {
+      id: '/miams'
+      path: '/miams'
+      fullPath: '/miams'
+      preLoaderRoute: typeof MiamsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -152,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  MiamsRoute: MiamsRoute,
   PlanningRoute: PlanningRoute,
   PlatformerRoute: PlatformerRoute,
   SchedulerRoute: SchedulerRoute,
