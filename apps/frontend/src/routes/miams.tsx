@@ -1,8 +1,24 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
+import MiamsPage from "@/features/miams/MiamsPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
 
+function parseOptionalInt(value: unknown): number | undefined {
+    if (value == null) return undefined;
+
+    const text = String(value);
+    if (!/^\d+$/.test(text)) return undefined;
+
+    return +text;
+}
+
 export const Route = createFileRoute("/miams")({
+    validateSearch: (
+        search: Record<string, unknown>,
+    ): { restaurantId?: number; zoom?: number } => ({
+        restaurantId: parseOptionalInt(search.restaurantId),
+        zoom: parseOptionalInt(search.zoom),
+    }),
     beforeLoad: async ({ context, location }) => {
         try {
             await context.queryClient.ensureQueryData(meQueryOptions());
@@ -19,10 +35,6 @@ export const Route = createFileRoute("/miams")({
 });
 
 function MiamsRoute() {
-    return (
-        <div className="flex h-full w-full flex-col gap-2 overflow-auto p-6">
-            <h1 className="text-2xl font-semibold">Restaurants</h1>
-            <p className="text-sm text-muted-foreground">Page en construction.</p>
-        </div>
-    );
+    const { restaurantId, zoom } = Route.useSearch();
+    return <MiamsPage selectedRestaurantId={restaurantId} zoom={zoom} />;
 }

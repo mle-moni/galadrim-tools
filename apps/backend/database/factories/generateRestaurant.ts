@@ -27,19 +27,39 @@ const getRestaurantDto = async () => {
 
     await imageAttachmentFromBufferOrStream(buffer, imageName);
 
+    const area = faker.helpers.arrayElement(["paris", "nantes"] as const);
+
+    const coords =
+        area === "paris"
+            ? {
+                  lat: +faker.location.latitude({
+                      min: 48.86143981275648,
+                      max: 48.87755839830862,
+                      precision: 8,
+                  }),
+                  lng: +faker.location.longitude({
+                      min: 2.3366975784301762,
+                      max: 2.364892959594727,
+                      precision: 8,
+                  }),
+              }
+            : {
+                  lat: +faker.location.latitude({
+                      min: 47.206,
+                      max: 47.224,
+                      precision: 8,
+                  }),
+                  lng: +faker.location.longitude({
+                      min: -1.57,
+                      max: -1.55,
+                      precision: 8,
+                  }),
+              };
+
     return {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-        lat: +faker.location.latitude({
-            min: 48.86143981275648,
-            max: 48.87755839830862,
-            precision: 8,
-        }),
-        lng: +faker.location.longitude({
-            min: 2.3366975784301762,
-            max: 2.364892959594727,
-            precision: 8,
-        }),
+        ...coords,
         image,
         averagePrice: faker.helpers.arrayElement([8, 11, 11.5, 12, 14.5, 16, null] as const),
     };
