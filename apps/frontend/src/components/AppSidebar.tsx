@@ -1,18 +1,23 @@
 import { useEffect } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { CalendarDays, ExternalLink, LogOut, Settings, Utensils } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CalendarDays, ExternalLink, LogOut, RefreshCcw, Settings, Utensils } from "lucide-react";
+import { toast } from "sonner";
 
 import Avatar from "@/components/Avatar";
 import { Sidebar, useSidebar } from "@/components/ui/sidebar";
 import { meQueryOptions } from "@/integrations/backend/auth";
+import { logout } from "@/integrations/backend/settings";
+import { queryKeys } from "@/integrations/backend/query-keys";
 import { cn } from "@/lib/utils";
 
 const navItemBase =
-    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70";
+    "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70 disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function AppSidebar() {
     const router = useRouter();
+    const queryClient = useQueryClient();
+
     const pathname = useRouterState({ select: (s) => s.location.pathname });
     const { isMobile, open, openMobile } = useSidebar();
     const isSidebarVisible = isMobile ? openMobile : open;
@@ -23,6 +28,21 @@ export default function AppSidebar() {
 
     const isPlanningActive = pathname.startsWith("/planning");
     const isMiamsActive = pathname.startsWith("/miams");
+    const isSettingsActive = pathname.startsWith("/settings");
+
+    const logoutMutation = useMutation({
+        mutationFn: logout,
+        onSuccess: async () => {
+            queryClient.removeQueries({ queryKey: queryKeys.me(), exact: true });
+            await router.invalidate();
+            router.history.push("/login");
+        },
+        onError: async () => {
+            queryClient.removeQueries({ queryKey: queryKeys.me(), exact: true });
+            await router.invalidate();
+            router.history.push("/login");
+        },
+    });
 
     useEffect(() => {
         if (!isSidebarVisible) return;
@@ -127,13 +147,42 @@ export default function AppSidebar() {
                     </div>
 
                     <div className="flex flex-col gap-1 px-4 pb-6">
-                        <button type="button" className={navItemBase}>
+                        <Link
+                            to="/settings"
+                            search={{}}
+                            aria-current={isSettingsActive ? "page" : undefined}
+                            className={cn(
+                                navItemBase,
+                                isSettingsActive && "bg-slate-800/50 text-white",
+                            )}
+                        >
                             <Settings className="h-4 w-4" />
                             <span className="flex-1">Paramètres</span>
-                        </button>
-                        <button type="button" className={navItemBase}>
-                            <LogOut className="h-4 w-4" />
-                            <span className="flex-1">Se déconnecter</span>
+                        </Link>
+                        <button
+                            type="button"
+                            className={navItemBase}
+                            onClick={() => {
+                                const promise = logoutMutation.mutateAsync();
+                                toast.promise(promise, {
+                                    loading: "Déconnexion…",
+                                    success: (data) => data.notification,
+                                    error: (error) =>
+                                        error instanceof Error
+                                            ? error.message
+                                            : "Impossible de se déconnecter",
+                                });
+                            }}
+                            disabled={logoutMutation.isPending}
+                        >
+                            {logoutMutation.isPending ? (
+                                <RefreshCcw className="h-4 w-4 animate-spin" />
+                            ) : (
+                                <LogOut className="h-4 w-4" />
+                            )}
+                            <span className="flex-1">
+                                {logoutMutation.isPending ? "" : "Se déconnecter"}
+                            </span>
                         </button>
                         <a href="https://forest.galadrim.fr" className={navItemBase}>
                             <ExternalLink className="h-4 w-4" />

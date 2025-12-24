@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisuelRouteImport } from './routes/visuel'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SchedulerRouteImport } from './routes/scheduler'
 import { Route as PlatformerRouteImport } from './routes/platformer'
 import { Route as PlanningRouteImport } from './routes/planning'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const VisuelRoute = VisuelRouteImport.update({
   id: '/visuel',
   path: '/visuel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchedulerRoute = SchedulerRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
   '/scheduler': typeof SchedulerRoute
+  '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
   '/scheduler': typeof SchedulerRoute
+  '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
   '/scheduler': typeof SchedulerRoute
+  '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/planning'
     | '/platformer'
     | '/scheduler'
+    | '/settings'
     | '/visuel'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/planning'
     | '/platformer'
     | '/scheduler'
+    | '/settings'
     | '/visuel'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/planning'
     | '/platformer'
     | '/scheduler'
+    | '/settings'
     | '/visuel'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   PlanningRoute: typeof PlanningRoute
   PlatformerRoute: typeof PlatformerRoute
   SchedulerRoute: typeof SchedulerRoute
+  SettingsRoute: typeof SettingsRoute
   VisuelRoute: typeof VisuelRoute
 }
 
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/visuel'
       fullPath: '/visuel'
       preLoaderRoute: typeof VisuelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/scheduler': {
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanningRoute: PlanningRoute,
   PlatformerRoute: PlatformerRoute,
   SchedulerRoute: SchedulerRoute,
+  SettingsRoute: SettingsRoute,
   VisuelRoute: VisuelRoute,
 }
 export const routeTree = rootRouteImport

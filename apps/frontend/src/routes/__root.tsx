@@ -12,6 +12,7 @@ import type { QueryClient } from "@tanstack/react-query";
 
 import AppSidebar from "@/components/AppSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import DebugDevtools from "@/debug/devtools";
@@ -80,6 +81,7 @@ function RootComponent() {
         return (
             <>
                 <Outlet />
+                <Toaster position="top-right" />
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",
@@ -103,6 +105,7 @@ function RootComponent() {
             <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
                 <Outlet />
             </SidebarInset>
+            <Toaster position="top-right" />
             <TanStackDevtools
                 config={{
                     position: "bottom-right",
