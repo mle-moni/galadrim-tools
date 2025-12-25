@@ -189,7 +189,7 @@ export default function IdeasPage(props: { ideaId?: number }) {
 
     return (
         <div className="h-full min-h-0 w-full overflow-auto bg-white">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 p-4 md:p-6">
+            <div className="flex w-full flex-col gap-4 p-4 md:p-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                         <div className="text-2xl font-semibold tracking-tight">Boîte à idées</div>
@@ -204,51 +204,53 @@ export default function IdeasPage(props: { ideaId?: number }) {
                     </Button>
                 </div>
 
-                <div className="flex gap-4 overflow-x-auto pb-2">
-                    <KanbanColumn
-                        title="À faire"
-                        state="TODO"
-                        ideas={todoIdeas}
-                        meId={meId}
-                        isIdeasAdmin={isIdeasAdmin}
-                        usersById={usersById}
-                        isBusy={isBusy}
-                        onOpenComments={openComments}
-                        onVote={voteIdea}
-                        onDelete={deleteIdea}
-                        canMoveIdea={canMoveIdea}
-                        onMoveIdea={moveIdea}
-                    />
+                <div className="w-full overflow-x-auto pb-2">
+                    <div className="mx-auto flex w-fit gap-4">
+                        <KanbanColumn
+                            title="À faire"
+                            state="TODO"
+                            ideas={todoIdeas}
+                            meId={meId}
+                            isIdeasAdmin={isIdeasAdmin}
+                            usersById={usersById}
+                            isBusy={isBusy}
+                            onOpenComments={openComments}
+                            onVote={voteIdea}
+                            onDelete={deleteIdea}
+                            canMoveIdea={canMoveIdea}
+                            onMoveIdea={moveIdea}
+                        />
 
-                    <KanbanColumn
-                        title="En cours"
-                        state="DOING"
-                        ideas={doingIdeas}
-                        meId={meId}
-                        isIdeasAdmin={isIdeasAdmin}
-                        usersById={usersById}
-                        isBusy={isBusy}
-                        onOpenComments={openComments}
-                        onVote={voteIdea}
-                        onDelete={deleteIdea}
-                        canMoveIdea={canMoveIdea}
-                        onMoveIdea={moveIdea}
-                    />
+                        <KanbanColumn
+                            title="En cours"
+                            state="DOING"
+                            ideas={doingIdeas}
+                            meId={meId}
+                            isIdeasAdmin={isIdeasAdmin}
+                            usersById={usersById}
+                            isBusy={isBusy}
+                            onOpenComments={openComments}
+                            onVote={voteIdea}
+                            onDelete={deleteIdea}
+                            canMoveIdea={canMoveIdea}
+                            onMoveIdea={moveIdea}
+                        />
 
-                    <KanbanColumn
-                        title="Terminées"
-                        state="DONE"
-                        ideas={doneIdeas}
-                        meId={meId}
-                        isIdeasAdmin={isIdeasAdmin}
-                        usersById={usersById}
-                        isBusy={isBusy}
-                        onOpenComments={openComments}
-                        onVote={voteIdea}
-                        onDelete={deleteIdea}
-                        canMoveIdea={canMoveIdea}
-                        onMoveIdea={moveIdea}
-                    />
+                        <KanbanColumn
+                            title="Terminées"
+                            state="DONE"
+                            ideas={doneIdeas}
+                            meId={meId}
+                            isIdeasAdmin={isIdeasAdmin}
+                            usersById={usersById}
+                            isBusy={isBusy}
+                            onOpenComments={openComments}
+                            onVote={voteIdea}
+                            onDelete={deleteIdea}
+                            canMoveIdea={canMoveIdea}
+                            onMoveIdea={moveIdea}
+                        />
+                    </div>
                 </div>
 
                 <div className="rounded-lg border bg-slate-50/40 p-3">
@@ -272,7 +274,7 @@ export default function IdeasPage(props: { ideaId?: number }) {
 
                     {refusedOpen && (
                         <ScrollArea className="mt-3 max-h-[60vh] pr-2">
-                            <IdeaList
+                            <RefusedIdeasGrid
                                 ideas={refusedIdeas}
                                 meId={meId}
                                 isIdeasAdmin={isIdeasAdmin}
@@ -344,7 +346,7 @@ function KanbanColumn(props: KanbanColumnProps) {
                 dropRef(node);
             }}
             className={cn(
-                "flex h-[70vh] w-[340px] shrink-0 flex-col rounded-lg border bg-slate-50/40 p-3",
+                "flex h-[70vh] w-[380px] shrink-0 flex-col rounded-lg border bg-slate-50/40 p-3",
                 ringClass,
             )}
         >
@@ -412,6 +414,50 @@ function IdeaList(props: {
                         onDelete={props.onDelete}
                         isBusy={props.isBusy}
                     />
+                );
+            })}
+        </div>
+    );
+}
+
+function RefusedIdeasGrid(props: {
+    ideas: IIdea[];
+    meId: number | null;
+    isIdeasAdmin: boolean;
+    usersById: Map<number, ApiUserShort>;
+    isBusy: boolean;
+    forceBad?: boolean;
+    onOpenComments: (ideaId: number) => void;
+    onVote: (ideaId: number, next: boolean) => void;
+    onDelete: (ideaId: number) => void;
+}) {
+    if (props.ideas.length === 0) {
+        return (
+            <div className="rounded-md border bg-white/50 p-4 text-sm text-muted-foreground">
+                Rien à afficher.
+            </div>
+        );
+    }
+
+    return (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+            {props.ideas.map((idea) => {
+                const isBad = props.forceBad ? true : isIdeaBad(idea.reactions);
+
+                return (
+                    <div key={idea.id} className="min-w-0">
+                        <IdeaCard
+                            idea={idea}
+                            meId={props.meId}
+                            isBad={isBad}
+                            isIdeasAdmin={props.isIdeasAdmin}
+                            usersById={props.usersById}
+                            onOpenComments={() => props.onOpenComments(idea.id)}
+                            onVote={props.onVote}
+                            onDelete={props.onDelete}
+                            isBusy={props.isBusy}
+                        />
+                    </div>
                 );
             })}
         </div>
