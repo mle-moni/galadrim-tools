@@ -12,6 +12,7 @@ import {
     RefreshCcw,
     Settings,
     Shield,
+    Sparkles,
     Utensils,
     X,
 } from "lucide-react";
@@ -148,6 +149,7 @@ export default function AppSidebar() {
     const isPlanningActive = pathname.startsWith("/planning");
     const isIdeasActive = pathname.startsWith("/ideas");
     const isMiamsActive = pathname.startsWith("/miams");
+    const isGalakiActive = pathname.startsWith("/games/galaki");
     const isSettingsActive = pathname.startsWith("/settings");
     const isAdminActive = pathname.startsWith("/admin");
 
@@ -421,6 +423,19 @@ export default function AppSidebar() {
                                 <Utensils className="h-4 w-4" />
                                 <span className="flex-1">Restaurants</span>
                                 <span className="text-xs font-medium text-slate-400">R</span>
+                            </Link>
+
+                            <Link
+                                to="/games/galaki"
+                                search={{}}
+                                aria-current={isGalakiActive ? "page" : undefined}
+                                className={cn(
+                                    navItemBase,
+                                    isGalakiActive && "bg-slate-800/50 text-white",
+                                )}
+                            >
+                                <Sparkles className="h-4 w-4" />
+                                <span className="flex-1">Galaki</span>
                             </Link>
 
                             {canSeeAdmin && (

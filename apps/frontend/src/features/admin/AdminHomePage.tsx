@@ -1,9 +1,18 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-import { useQuery } from "@tanstack/react-query";
-import { BellPlus, LayoutDashboard, Map as MapIcon, Users } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+    BellPlus,
+    LayoutDashboard,
+    Map as MapIcon,
+    RefreshCcw,
+    Sparkles,
+    Users,
+} from "lucide-react";
+import { toast } from "sonner";
 
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 import AdminCreateUserPage from "@/features/admin/AdminCreateUserPage";
 import AdminDashboardSection from "@/features/admin/AdminDashboardSection";
@@ -12,9 +21,42 @@ import AdminOfficeRoomsEditor from "@/features/admin/AdminOfficeRoomsEditor";
 import AdminUserRightsPage from "@/features/admin/AdminUserRightsPage";
 
 import { meQueryOptions } from "@/integrations/backend/auth";
+import { refreshPortraitGuessGame } from "@/integrations/backend/portraitGuessGame";
 import { hasRights } from "@/lib/rights";
 
 type IconComponent = (props: { className?: string }) => ReactNode;
+
+const ADMIN_SECTION_STORAGE_PREFIX = "galadrim.admin.accordion";
+
+function getAdminSectionStorageKey(id: string) {
+    return `${ADMIN_SECTION_STORAGE_PREFIX}.${id}.open`;
+}
+
+function readStoredBoolean(key: string): boolean | null {
+    if (typeof window === "undefined") return null;
+
+    try {
+        const raw = window.localStorage.getItem(key);
+        if (raw === null) return null;
+        if (raw === "1") return true;
+        if (raw === "0") return false;
+        if (raw === "true") return true;
+        if (raw === "false") return false;
+        return null;
+    } catch {
+        return null;
+    }
+}
+
+function writeStoredBoolean(key: string, value: boolean) {
+    if (typeof window === "undefined") return;
+
+    try {
+        window.localStorage.setItem(key, value ? "1" : "0");
+    } catch {
+        // ignore
+    }
+}
 
 function Section({
     title,
@@ -29,11 +71,21 @@ function Section({
     icon: IconComponent;
     children: ReactNode;
 }) {
+    const storageKey = getAdminSectionStorageKey(id);
+    const [open, setOpen] = useState(() => readStoredBoolean(storageKey) ?? true);
+
+    useEffect(() => {
+        writeStoredBoolean(storageKey, open);
+    }, [open, storageKey]);
+
     return (
         <details
             id={id}
             className="group rounded-lg border border-border/60 bg-muted/10 open:bg-muted/20"
-            open
+            open={open}
+            onToggle={(e) => {
+                setOpen(e.currentTarget.open);
+            }}
         >
             <summary className="flex cursor-pointer items-start gap-3 px-4 py-3 select-none">
                 <Icon className="mt-0.5 h-4 w-4" />
@@ -44,6 +96,46 @@ function Section({
             </summary>
             <div className="px-4 pb-4">{children}</div>
         </details>
+    );
+}
+
+function AdminGalakiRefreshCard() {
+    const refreshMutation = useMutation({
+        mutationFn: refreshPortraitGuessGame,
+    });
+
+    return (
+        <Card className="w-full">
+            <CardHeader>
+                <CardTitle>Portraits (refresh)</CardTitle>
+                <CardDescription>
+                    Normalement rafraîchi via cron. Déclenche une resynchronisation manuelle depuis
+                    la source.
+                </CardDescription>
+            </CardHeader>
+            <CardFooter className="justify-end">
+                <Button
+                    variant="outline"
+                    onClick={() => {
+                        const promise = refreshMutation.mutateAsync();
+                        toast.promise(promise, {
+                            loading: "Rafraîchissement Galaki…",
+                            success: (data) => data.message ?? "OK",
+                            error: (error) =>
+                                error instanceof Error
+                                    ? error.message
+                                    : "Impossible de rafraîchir Galaki",
+                        });
+                    }}
+                    disabled={refreshMutation.isPending}
+                >
+                    {refreshMutation.isPending ? (
+                        <RefreshCcw className="h-4 w-4 animate-spin" />
+                    ) : null}
+                    Rafraîchir
+                </Button>
+            </CardFooter>
+        </Card>
     );
 }
 
@@ -62,6 +154,17 @@ export default function AdminHomePage() {
 
     return (
         <div className="flex flex-col gap-6">
+            {canSeeDashboard && (
+                <Section
+                    id="galaki"
+                    title="Galaki"
+                    description="Rafraîchir les portraits (cron)."
+                    icon={Sparkles}
+                >
+                    <AdminGalakiRefreshCard />
+                </Section>
+            )}
+
             {canManageUsers && (
                 <Section
                     id="manage-users"

@@ -19,6 +19,9 @@ export const queryKeys = {
     // Users
     users: () => ["users"] as const,
 
+    // Games
+    portraitGuessGame: () => ["portraitGuessGame"] as const,
+
     // Admin
     adminUserRights: () => ["admin", "userRights"] as const,
     adminDashboard: () => ["admin", "dashboard"] as const,

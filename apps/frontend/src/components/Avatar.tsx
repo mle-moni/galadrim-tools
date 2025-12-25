@@ -25,14 +25,17 @@ export default function Avatar({
     const resolvedSrc = !src || fallbackActive ? fallbackSrc : src;
 
     return (
-        <img
-            src={resolvedSrc}
-            alt={alt}
-            width={size}
-            height={size}
-            loading="lazy"
-            className={cn("shrink-0 rounded-full object-cover", className)}
-            onError={() => setFallbackActive(true)}
-        />
+        <div
+            className={cn("shrink-0 overflow-hidden rounded-full", className)}
+            style={{ width: size, height: size }}
+        >
+            <img
+                src={resolvedSrc}
+                alt={alt}
+                loading="lazy"
+                className="block h-full w-full object-cover"
+                onError={() => setFallbackActive(true)}
+            />
+        </div>
     );
 }
