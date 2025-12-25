@@ -2,6 +2,9 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
 import { DebugProvider } from "./debug/DebugProvider.tsx";
 
@@ -39,9 +42,11 @@ if (rootElement && !rootElement.innerHTML) {
     root.render(
         <StrictMode>
             <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
-                <DebugProvider>
-                    <RouterProvider router={router} />
-                </DebugProvider>
+                <DndProvider backend={HTML5Backend}>
+                    <DebugProvider>
+                        <RouterProvider router={router} />
+                    </DebugProvider>
+                </DndProvider>
             </TanStackQueryProvider.Provider>
         </StrictMode>,
     );

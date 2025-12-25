@@ -13,6 +13,9 @@ export const queryKeys = {
     tags: () => ["tags"] as const,
     rewind: (userId: number | null) => ["rewind", userId ?? "me"] as const,
 
+    // Ideas
+    ideas: () => ["ideas"] as const,
+
     // Users
     users: () => ["users"] as const,
 

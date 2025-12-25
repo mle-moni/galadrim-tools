@@ -7,6 +7,7 @@ import {
     Bell,
     CalendarDays,
     ExternalLink,
+    Lightbulb,
     LogOut,
     RefreshCcw,
     Settings,
@@ -145,6 +146,7 @@ export default function AppSidebar() {
     const canSeeAdmin = hasSomeRights(userRights, ADMIN_TAB_RIGHTS);
 
     const isPlanningActive = pathname.startsWith("/planning");
+    const isIdeasActive = pathname.startsWith("/ideas");
     const isMiamsActive = pathname.startsWith("/miams");
     const isSettingsActive = pathname.startsWith("/settings");
     const isAdminActive = pathname.startsWith("/admin");
@@ -186,6 +188,11 @@ export default function AppSidebar() {
             if (key === "s") {
                 e.preventDefault();
                 router.history.push("/planning");
+            }
+
+            if (key === "i") {
+                e.preventDefault();
+                router.history.push("/ideas");
             }
 
             if (key === "r") {
@@ -386,6 +393,20 @@ export default function AppSidebar() {
                                 <CalendarDays className="h-4 w-4" />
                                 <span className="flex-1">Salles de réunion</span>
                                 <span className="text-xs font-medium text-slate-400">S</span>
+                            </Link>
+
+                            <Link
+                                to="/ideas"
+                                search={{}}
+                                aria-current={isIdeasActive ? "page" : undefined}
+                                className={cn(
+                                    navItemBase,
+                                    isIdeasActive && "bg-slate-800/50 text-white",
+                                )}
+                            >
+                                <Lightbulb className="h-4 w-4" />
+                                <span className="flex-1">Boîte à idées</span>
+                                <span className="text-xs font-medium text-slate-400">I</span>
                             </Link>
 
                             <Link
