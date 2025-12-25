@@ -37,6 +37,7 @@ export default class UserSeeder extends BaseSeeder {
                     "RIGHTS_ADMIN",
                     "USER_ADMIN",
                     "DASHBOARD_ADMIN",
+                    "IDEAS_ADMIN",
                 ]),
             },
             {
