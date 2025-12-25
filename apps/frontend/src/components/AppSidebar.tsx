@@ -7,6 +7,7 @@ import {
     Bell,
     CalendarDays,
     ExternalLink,
+    GitBranch,
     Lightbulb,
     LogOut,
     RefreshCcw,
@@ -493,6 +494,15 @@ export default function AppSidebar() {
                                 {logoutMutation.isPending ? "" : "Se déconnecter"}
                             </span>
                         </button>
+                        <a
+                            href="https://github.com/mle-moni/galadrim-tools"
+                            target="_blank"
+                            rel="noreferrer"
+                            className={navItemBase}
+                        >
+                            <GitBranch className="h-4 w-4" />
+                            <span className="flex-1">Contribuer</span>
+                        </a>
                         <a href="https://forest.galadrim.fr" className={navItemBase}>
                             <ExternalLink className="h-4 w-4" />
                             <span className="flex-1">Retourner sur 🌳 Forest</span>
