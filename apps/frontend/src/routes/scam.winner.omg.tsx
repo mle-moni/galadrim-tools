@@ -7,7 +7,7 @@ import { meQueryOptions } from "@/integrations/backend/auth";
 import { startOfDayIso } from "@/integrations/backend/date";
 import { roomReservationsQueryOptions } from "@/integrations/backend/reservations";
 
-export const Route = createFileRoute("/scamWinnerOmg")({
+export const Route = createFileRoute("/scam/winner/omg")({
     beforeLoad: async ({ context, location }) => {
         const me = await context.queryClient.ensureQueryData(meQueryOptions()).catch(() => {
             throw redirect({

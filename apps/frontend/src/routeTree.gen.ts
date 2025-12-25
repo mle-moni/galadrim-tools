@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisuelRouteImport } from './routes/visuel'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SchedulerRouteImport } from './routes/scheduler'
-import { Route as ScamWinnerOmgRouteImport } from './routes/scamWinnerOmg'
 import { Route as PlatformerRouteImport } from './routes/platformer'
 import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as MiamsRouteImport } from './routes/miams'
@@ -20,9 +19,11 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as IdeasRouteImport } from './routes/ideas'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ScamWinnerOmgLegacyRouteImport } from './routes/scamWinnerOmg.legacy'
 import { Route as AdminRightsRouteImport } from './routes/admin.rights'
 import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
 import { Route as AdminCreateUserRouteImport } from './routes/admin.createUser'
+import { Route as ScamWinnerOmgRouteImport } from './routes/scam.winner.omg'
 
 const VisuelRoute = VisuelRouteImport.update({
   id: '/visuel',
@@ -37,11 +38,6 @@ const SettingsRoute = SettingsRouteImport.update({
 const SchedulerRoute = SchedulerRouteImport.update({
   id: '/scheduler',
   path: '/scheduler',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScamWinnerOmgRoute = ScamWinnerOmgRouteImport.update({
-  id: '/scamWinnerOmg',
-  path: '/scamWinnerOmg',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlatformerRoute = PlatformerRouteImport.update({
@@ -79,6 +75,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScamWinnerOmgLegacyRoute = ScamWinnerOmgLegacyRouteImport.update({
+  id: '/scamWinnerOmg/legacy',
+  path: '/scamWinnerOmg/legacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRightsRoute = AdminRightsRouteImport.update({
   id: '/rights',
   path: '/rights',
@@ -94,6 +95,11 @@ const AdminCreateUserRoute = AdminCreateUserRouteImport.update({
   path: '/createUser',
   getParentRoute: () => AdminRoute,
 } as any)
+const ScamWinnerOmgRoute = ScamWinnerOmgRouteImport.update({
+  id: '/scam/winner/omg',
+  path: '/scam/winner/omg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,13 +109,14 @@ export interface FileRoutesByFullPath {
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
-  '/scamWinnerOmg': typeof ScamWinnerOmgRoute
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
   '/admin/createUser': typeof AdminCreateUserRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/rights': typeof AdminRightsRoute
+  '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
+  '/scam/winner/omg': typeof ScamWinnerOmgRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -119,13 +126,14 @@ export interface FileRoutesByTo {
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
-  '/scamWinnerOmg': typeof ScamWinnerOmgRoute
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
   '/admin/createUser': typeof AdminCreateUserRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/rights': typeof AdminRightsRoute
+  '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
+  '/scam/winner/omg': typeof ScamWinnerOmgRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -136,13 +144,14 @@ export interface FileRoutesById {
   '/miams': typeof MiamsRoute
   '/planning': typeof PlanningRoute
   '/platformer': typeof PlatformerRoute
-  '/scamWinnerOmg': typeof ScamWinnerOmgRoute
   '/scheduler': typeof SchedulerRoute
   '/settings': typeof SettingsRoute
   '/visuel': typeof VisuelRoute
   '/admin/createUser': typeof AdminCreateUserRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/rights': typeof AdminRightsRoute
+  '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
+  '/scam/winner/omg': typeof ScamWinnerOmgRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -154,13 +163,14 @@ export interface FileRouteTypes {
     | '/miams'
     | '/planning'
     | '/platformer'
-    | '/scamWinnerOmg'
     | '/scheduler'
     | '/settings'
     | '/visuel'
     | '/admin/createUser'
     | '/admin/notifications'
     | '/admin/rights'
+    | '/scamWinnerOmg/legacy'
+    | '/scam/winner/omg'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -170,13 +180,14 @@ export interface FileRouteTypes {
     | '/miams'
     | '/planning'
     | '/platformer'
-    | '/scamWinnerOmg'
     | '/scheduler'
     | '/settings'
     | '/visuel'
     | '/admin/createUser'
     | '/admin/notifications'
     | '/admin/rights'
+    | '/scamWinnerOmg/legacy'
+    | '/scam/winner/omg'
   id:
     | '__root__'
     | '/'
@@ -186,13 +197,14 @@ export interface FileRouteTypes {
     | '/miams'
     | '/planning'
     | '/platformer'
-    | '/scamWinnerOmg'
     | '/scheduler'
     | '/settings'
     | '/visuel'
     | '/admin/createUser'
     | '/admin/notifications'
     | '/admin/rights'
+    | '/scamWinnerOmg/legacy'
+    | '/scam/winner/omg'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -203,10 +215,11 @@ export interface RootRouteChildren {
   MiamsRoute: typeof MiamsRoute
   PlanningRoute: typeof PlanningRoute
   PlatformerRoute: typeof PlatformerRoute
-  ScamWinnerOmgRoute: typeof ScamWinnerOmgRoute
   SchedulerRoute: typeof SchedulerRoute
   SettingsRoute: typeof SettingsRoute
   VisuelRoute: typeof VisuelRoute
+  ScamWinnerOmgLegacyRoute: typeof ScamWinnerOmgLegacyRoute
+  ScamWinnerOmgRoute: typeof ScamWinnerOmgRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -230,13 +243,6 @@ declare module '@tanstack/react-router' {
       path: '/scheduler'
       fullPath: '/scheduler'
       preLoaderRoute: typeof SchedulerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/scamWinnerOmg': {
-      id: '/scamWinnerOmg'
-      path: '/scamWinnerOmg'
-      fullPath: '/scamWinnerOmg'
-      preLoaderRoute: typeof ScamWinnerOmgRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/platformer': {
@@ -288,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scamWinnerOmg/legacy': {
+      id: '/scamWinnerOmg/legacy'
+      path: '/scamWinnerOmg/legacy'
+      fullPath: '/scamWinnerOmg/legacy'
+      preLoaderRoute: typeof ScamWinnerOmgLegacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/rights': {
       id: '/admin/rights'
       path: '/rights'
@@ -308,6 +321,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/createUser'
       preLoaderRoute: typeof AdminCreateUserRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/scam/winner/omg': {
+      id: '/scam/winner/omg'
+      path: '/scam/winner/omg'
+      fullPath: '/scam/winner/omg'
+      preLoaderRoute: typeof ScamWinnerOmgRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -334,10 +354,11 @@ const rootRouteChildren: RootRouteChildren = {
   MiamsRoute: MiamsRoute,
   PlanningRoute: PlanningRoute,
   PlatformerRoute: PlatformerRoute,
-  ScamWinnerOmgRoute: ScamWinnerOmgRoute,
   SchedulerRoute: SchedulerRoute,
   SettingsRoute: SettingsRoute,
   VisuelRoute: VisuelRoute,
+  ScamWinnerOmgLegacyRoute: ScamWinnerOmgLegacyRoute,
+  ScamWinnerOmgRoute: ScamWinnerOmgRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
