@@ -81,7 +81,7 @@ function RootComponent() {
         return (
             <>
                 <Outlet />
-                <Toaster position="top-right" />
+                <Toaster position="top-center" />
                 <TanStackDevtools
                     config={{
                         position: "bottom-right",
@@ -105,7 +105,7 @@ function RootComponent() {
             <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
                 <Outlet />
             </SidebarInset>
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
             <TanStackDevtools
                 config={{
                     position: "bottom-right",
