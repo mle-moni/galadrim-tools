@@ -503,7 +503,7 @@ export default function SchedulerPage(props: {
                 isIdMultipleOf(reservation.id, 10000) &&
                 reservation.userId === socketUserId
             ) {
-                router.history.push("/scamWinnerOmg");
+                router.history.push("/scam/winner/omg");
             }
         };
 
