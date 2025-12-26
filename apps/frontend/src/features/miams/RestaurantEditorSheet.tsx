@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import type { IRestaurant, ITag } from "@galadrim-tools/shared";
 
 import { Button } from "@/components/ui/button";
@@ -242,8 +243,12 @@ export function RestaurantEditorSheet(props: {
                                                 setNewTagName("");
                                                 setCreateTagOpen(false);
                                                 setTagSearch("");
-                                            } catch {
-                                                // ignore
+                                            } catch (error) {
+                                                toast.error(
+                                                    error instanceof Error
+                                                        ? error.message
+                                                        : "Impossible de créer ce tag",
+                                                );
                                             }
                                         }}
                                     >
