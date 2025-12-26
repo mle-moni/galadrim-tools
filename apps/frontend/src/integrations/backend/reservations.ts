@@ -183,6 +183,9 @@ export function useCreateRoomReservationMutation(opts: {
                 return next;
             });
         },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey, exact: true });
+        },
     });
 }
 
@@ -227,6 +230,9 @@ export function useUpdateRoomReservationMutation(opts: {
                 old.map((r) => (r.id === data.reservation.id ? data.reservation : r)),
             );
         },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey, exact: true });
+        },
     });
 }
 
@@ -253,6 +259,9 @@ export function useDeleteRoomReservationMutation(opts: {
         onError: (_error, _input, context) => {
             if (!context?.previous) return;
             queryClient.setQueryData(queryKey, context.previous);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey, exact: true });
         },
     });
 }
