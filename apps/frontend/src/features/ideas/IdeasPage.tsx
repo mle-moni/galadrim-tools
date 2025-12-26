@@ -193,9 +193,6 @@ export default function IdeasPage(props: { ideaId?: number }) {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                         <div className="text-2xl font-semibold tracking-tight">Boîte à idées</div>
-                        <div className="text-sm text-muted-foreground">
-                            Propose des améliorations, vote, et commente.
-                        </div>
                     </div>
 
                     <Button type="button" onClick={() => setCreateOpen(true)}>
