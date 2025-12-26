@@ -45,6 +45,35 @@ const DEFAULT_CANVAS_WIDTH = 900;
 
 const DEFAULT_NEW_ROOM_SIZE = 100;
 
+const ROOM_FILL_UNBOOKABLE = "rgba(148,163,184,0.10)";
+const ROOM_FILL_SELECTED = "rgba(59,130,246,0.24)";
+const ROOM_FILL_HOVERED = "rgba(59,130,246,0.14)";
+const ROOM_FILL_DEFAULT = "rgba(148,163,184,0.08)";
+
+const ROOM_STROKE_SELECTED = "rgba(59,130,246,0.85)";
+const ROOM_STROKE_HOVERED = "rgba(59,130,246,0.55)";
+const ROOM_STROKE_DEFAULT = "rgba(148,163,184,0.35)";
+
+function getRoomCanvasStyles(opts: {
+    isBookable: boolean;
+    isSelected: boolean;
+    isHovered: boolean;
+}) {
+    if (!opts.isBookable) {
+        return { fill: ROOM_FILL_UNBOOKABLE, stroke: ROOM_STROKE_DEFAULT };
+    }
+
+    if (opts.isSelected) {
+        return { fill: ROOM_FILL_SELECTED, stroke: ROOM_STROKE_SELECTED };
+    }
+
+    if (opts.isHovered) {
+        return { fill: ROOM_FILL_HOVERED, stroke: ROOM_STROKE_HOVERED };
+    }
+
+    return { fill: ROOM_FILL_DEFAULT, stroke: ROOM_STROKE_DEFAULT };
+}
+
 function getRoomAtPoint(
     rooms: ApiOfficeRoom[],
     point: { x: number; y: number },
@@ -134,7 +163,6 @@ function MapEditorCanvas(props: {
     ) => {
         const rect = canvas.getBoundingClientRect();
 
-        // Convert CSS pixel coordinates to canvas (attribute) coordinates.
         const scaleX = rect.width ? canvas.width / rect.width : 1;
         const scaleY = rect.height ? canvas.height / rect.height : 1;
 
@@ -187,19 +215,11 @@ function MapEditorCanvas(props: {
             const isSelected = props.selectedRoom?.id === room.id;
             const isHovered = props.hoveredRoomId === room.id;
 
-            const fill = !room.isBookable
-                ? "rgba(148,163,184,0.10)"
-                : isSelected
-                  ? "rgba(59,130,246,0.24)"
-                  : isHovered
-                    ? "rgba(59,130,246,0.14)"
-                    : "rgba(148,163,184,0.08)";
-
-            const stroke = isSelected
-                ? "rgba(59,130,246,0.85)"
-                : isHovered
-                  ? "rgba(59,130,246,0.55)"
-                  : "rgba(148,163,184,0.35)";
+            const { fill, stroke } = getRoomCanvasStyles({
+                isBookable: room.isBookable,
+                isSelected,
+                isHovered,
+            });
 
             ctx.beginPath();
             polygon.forEach((pt, idx) => {
