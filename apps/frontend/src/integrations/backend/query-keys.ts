@@ -11,7 +11,7 @@ export const queryKeys = {
     // Miams (restaurants)
     restaurants: () => ["restaurants"] as const,
     tags: () => ["tags"] as const,
-    rewind: (userId: number | null) => ["rewind", userId ?? "me"] as const,
+    rewind: (userId: number | null) => ["rewind", { userId: userId ?? "me" }] as const,
 
     // Ideas
     ideas: () => ["ideas"] as const,
