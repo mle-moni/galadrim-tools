@@ -7,6 +7,26 @@ import { useQueryClient } from "@tanstack/react-query";
 import { getSocketApiUrl } from "@/integrations/backend/client";
 import { queryKeys } from "@/integrations/backend/query-keys";
 
+function parseId(payload: unknown): number | null {
+    if (typeof payload === "number") {
+        return Number.isFinite(payload) ? payload : null;
+    }
+
+    if (typeof payload === "string") {
+        const trimmed = payload.trim();
+        if (trimmed === "") return null;
+        const parsed = Number(trimmed);
+        return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    if (payload && typeof payload === "object" && "id" in payload) {
+        const maybeId = (payload as { id?: unknown }).id;
+        return parseId(maybeId);
+    }
+
+    return null;
+}
+
 function upsertRestaurantInList(restaurants: IRestaurant[], restaurant: IRestaurant) {
     const existingIndex = restaurants.findIndex((r) => r.id === restaurant.id);
     if (existingIndex === -1) return [restaurant, ...restaurants];
@@ -80,9 +100,8 @@ export function useMiamsSocketSync(me: IUserData | undefined) {
         });
 
         socket.on("deleteRestaurant", (payload: unknown) => {
-            const restaurantId = +(
-                (payload as { id?: number } | null)?.id ?? (payload as unknown as string | number)
-            );
+            const restaurantId = parseId(payload);
+            if (restaurantId == null) return;
 
             queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
                 if (!old) return old;
@@ -105,9 +124,8 @@ export function useMiamsSocketSync(me: IUserData | undefined) {
         });
 
         socket.on("deleteTag", (payload: unknown) => {
-            const tagId = +(
-                (payload as { id?: number } | null)?.id ?? (payload as unknown as string | number)
-            );
+            const tagId = parseId(payload);
+            if (tagId == null) return;
 
             queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => {
                 if (!old) return old;
@@ -138,7 +156,8 @@ export function useMiamsSocketSync(me: IUserData | undefined) {
         });
 
         socket.on("deleteRestaurantReview", (reviewId: unknown) => {
-            const deletedId = +(reviewId as unknown as string | number);
+            const deletedId = parseId(reviewId);
+            if (deletedId == null) return;
 
             queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
                 if (!old) return old;
