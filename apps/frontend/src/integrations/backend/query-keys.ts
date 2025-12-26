@@ -21,6 +21,8 @@ export const queryKeys = {
 
     // Games
     portraitGuessGame: () => ["portraitGuessGame"] as const,
+    matrices: () => ["matrices"] as const,
+    codeNamesGames: () => ["codeNamesGames"] as const,
 
     // Admin
     adminUserRights: () => ["admin", "userRights"] as const,

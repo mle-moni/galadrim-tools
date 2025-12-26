@@ -8,6 +8,7 @@ import {
     CalendarDays,
     ExternalLink,
     GitBranch,
+    Puzzle,
     Lightbulb,
     LogOut,
     RefreshCcw,
@@ -151,6 +152,7 @@ export default function AppSidebar() {
     const isIdeasActive = pathname.startsWith("/ideas");
     const isMiamsActive = pathname.startsWith("/miams");
     const isGalakiActive = pathname.startsWith("/games/galaki");
+    const isCodeNamesActive = pathname.startsWith("/games/code-names");
     const isSettingsActive = pathname.startsWith("/settings");
     const isAdminActive = pathname.startsWith("/admin");
 
@@ -437,6 +439,19 @@ export default function AppSidebar() {
                             >
                                 <Sparkles className="h-4 w-4" />
                                 <span className="flex-1">Galaki</span>
+                            </Link>
+
+                            <Link
+                                to="/games/code-names"
+                                search={{}}
+                                aria-current={isCodeNamesActive ? "page" : undefined}
+                                className={cn(
+                                    navItemBase,
+                                    isCodeNamesActive && "bg-slate-800/50 text-white",
+                                )}
+                            >
+                                <Puzzle className="h-4 w-4" />
+                                <span className="flex-1">Code Names</span>
                             </Link>
 
                             {canSeeAdmin && (

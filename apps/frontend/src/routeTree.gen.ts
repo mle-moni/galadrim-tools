@@ -21,6 +21,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScamWinnerOmgLegacyRouteImport } from './routes/scamWinnerOmg.legacy'
 import { Route as GamesGalakiRouteImport } from './routes/games.galaki'
+import { Route as GamesCodeNamesRouteImport } from './routes/games.code-names'
 import { Route as AdminRightsRouteImport } from './routes/admin.rights'
 import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
 import { Route as AdminCreateUserRouteImport } from './routes/admin.createUser'
@@ -86,6 +87,11 @@ const GamesGalakiRoute = GamesGalakiRouteImport.update({
   path: '/games/galaki',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesCodeNamesRoute = GamesCodeNamesRouteImport.update({
+  id: '/games/code-names',
+  path: '/games/code-names',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRightsRoute = AdminRightsRouteImport.update({
   id: '/rights',
   path: '/rights',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/admin/createUser': typeof AdminCreateUserRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/rights': typeof AdminRightsRoute
+  '/games/code-names': typeof GamesCodeNamesRoute
   '/games/galaki': typeof GamesGalakiRoute
   '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
   '/scam/winner/omg': typeof ScamWinnerOmgRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/admin/createUser': typeof AdminCreateUserRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/rights': typeof AdminRightsRoute
+  '/games/code-names': typeof GamesCodeNamesRoute
   '/games/galaki': typeof GamesGalakiRoute
   '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
   '/scam/winner/omg': typeof ScamWinnerOmgRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/admin/createUser': typeof AdminCreateUserRoute
   '/admin/notifications': typeof AdminNotificationsRoute
   '/admin/rights': typeof AdminRightsRoute
+  '/games/code-names': typeof GamesCodeNamesRoute
   '/games/galaki': typeof GamesGalakiRoute
   '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
   '/scam/winner/omg': typeof ScamWinnerOmgRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/admin/createUser'
     | '/admin/notifications'
     | '/admin/rights'
+    | '/games/code-names'
     | '/games/galaki'
     | '/scamWinnerOmg/legacy'
     | '/scam/winner/omg'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/admin/createUser'
     | '/admin/notifications'
     | '/admin/rights'
+    | '/games/code-names'
     | '/games/galaki'
     | '/scamWinnerOmg/legacy'
     | '/scam/winner/omg'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/admin/createUser'
     | '/admin/notifications'
     | '/admin/rights'
+    | '/games/code-names'
     | '/games/galaki'
     | '/scamWinnerOmg/legacy'
     | '/scam/winner/omg'
@@ -230,6 +242,7 @@ export interface RootRouteChildren {
   SchedulerRoute: typeof SchedulerRoute
   SettingsRoute: typeof SettingsRoute
   VisuelRoute: typeof VisuelRoute
+  GamesCodeNamesRoute: typeof GamesCodeNamesRoute
   GamesGalakiRoute: typeof GamesGalakiRoute
   ScamWinnerOmgLegacyRoute: typeof ScamWinnerOmgLegacyRoute
   ScamWinnerOmgRoute: typeof ScamWinnerOmgRoute
@@ -321,6 +334,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesGalakiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games/code-names': {
+      id: '/games/code-names'
+      path: '/games/code-names'
+      fullPath: '/games/code-names'
+      preLoaderRoute: typeof GamesCodeNamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/rights': {
       id: '/admin/rights'
       path: '/rights'
@@ -377,6 +397,7 @@ const rootRouteChildren: RootRouteChildren = {
   SchedulerRoute: SchedulerRoute,
   SettingsRoute: SettingsRoute,
   VisuelRoute: VisuelRoute,
+  GamesCodeNamesRoute: GamesCodeNamesRoute,
   GamesGalakiRoute: GamesGalakiRoute,
   ScamWinnerOmgLegacyRoute: ScamWinnerOmgLegacyRoute,
   ScamWinnerOmgRoute: ScamWinnerOmgRoute,
