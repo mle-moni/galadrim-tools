@@ -56,6 +56,11 @@ export default function SchedulerGrid({
     const dragActivateTimeoutRef = useRef<number | null>(null);
     const autoScrollKeyRef = useRef<string | null>(null);
 
+    const internalRoomColumnRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
+    const internalRoomHeaderRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
+    const effectiveRoomColumnRefs = roomColumnRefs ?? internalRoomColumnRefs;
+    const effectiveRoomHeaderRefs = roomHeaderRefs ?? internalRoomHeaderRefs;
+
     const clock = useClock();
     const currentTime = useNow({ baseDate: currentDate, intervalMs: 60_000 });
     const isSpoofedNow = clock.isSpoofed({ baseDate: currentDate });
@@ -97,21 +102,16 @@ export default function SchedulerGrid({
 
     const getRoomHeaderElement = useCallback(
         (roomId: number) => {
-            return (
-                roomHeaderRefs?.current.get(roomId) ??
-                document.getElementById(`room-header-${roomId}`)
-            );
+            return effectiveRoomHeaderRefs.current.get(roomId) ?? null;
         },
-        [roomHeaderRefs],
+        [effectiveRoomHeaderRefs],
     );
 
     const getRoomColumnElement = useCallback(
         (roomId: number) => {
-            return (
-                roomColumnRefs?.current.get(roomId) ?? document.getElementById(`room-col-${roomId}`)
-            );
+            return effectiveRoomColumnRefs.current.get(roomId) ?? null;
         },
-        [roomColumnRefs],
+        [effectiveRoomColumnRefs],
     );
 
     useEffect(() => {
@@ -178,6 +178,47 @@ export default function SchedulerGrid({
     ]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
+
+    const renderDragSelection = (roomId: number) => {
+        if (!dragSelection || dragSelection.roomId !== roomId) return null;
+
+        const selectionStart =
+            dragSelection.endTime < dragSelection.startTime
+                ? dragSelection.endTime
+                : dragSelection.startTime;
+        const selectionEnd =
+            dragSelection.endTime < dragSelection.startTime
+                ? dragSelection.startTime
+                : dragSelection.endTime;
+
+        const endTime =
+            selectionEnd.getTime() === selectionStart.getTime()
+                ? new Date(selectionStart.getTime() + intervalMinutes * MS_PER_MINUTE)
+                : selectionEnd;
+
+        return (
+            <div
+                className={cn(
+                    "pointer-events-none absolute z-50 flex flex-col justify-center rounded-md border-l-[6px] border-[#1e3ad7] bg-[#dbe6fe]/50 pl-2 transition-opacity",
+                    dragSelection.isActive ? "opacity-70" : "opacity-25",
+                )}
+                style={{
+                    top: getPixelsFromTime(selectionStart, pixelsPerHour),
+                    height: Math.max(
+                        getPixelsFromTime(endTime, pixelsPerHour) -
+                            getPixelsFromTime(selectionStart, pixelsPerHour),
+                        10,
+                    ),
+                    left: "2%",
+                    width: "96%",
+                }}
+            >
+                <div className="font-mono text-[12px] font-bold text-[#171e54]">
+                    {formatTime(selectionStart)} - {formatTime(endTime)}
+                </div>
+            </div>
+        );
+    };
 
     const handleWheel = (e: React.WheelEvent) => {
         const container = containerRef.current;
@@ -451,7 +492,9 @@ export default function SchedulerGrid({
                             <div
                                 key={room.id}
                                 id={`room-header-${room.id}`}
-                                ref={(el) => roomHeaderRefs?.current.set(room.id, el)}
+                                ref={(el) => {
+                                    effectiveRoomHeaderRefs.current.set(room.id, el);
+                                }}
                                 className={cn(
                                     "flex h-10 w-52 flex-shrink-0 items-center justify-center border-b border-r bg-muted/30 text-sm font-semibold text-foreground shadow-sm",
                                     focusedRoomId === room.id && "bg-accent/30",
@@ -517,7 +560,9 @@ export default function SchedulerGrid({
                                 >
                                     <div
                                         id={`room-col-${room.id}`}
-                                        ref={(el) => roomColumnRefs?.current.set(room.id, el)}
+                                        ref={(el) => {
+                                            effectiveRoomColumnRefs.current.set(room.id, el);
+                                        }}
                                         className={cn(
                                             "relative",
                                             focusedRoomId === room.id
@@ -561,62 +606,7 @@ export default function SchedulerGrid({
                                             />
                                         ))}
 
-                                        {dragSelection &&
-                                            dragSelection.roomId === room.id &&
-                                            (() => {
-                                                const selectionStart =
-                                                    dragSelection.endTime < dragSelection.startTime
-                                                        ? dragSelection.endTime
-                                                        : dragSelection.startTime;
-                                                const selectionEnd =
-                                                    dragSelection.endTime < dragSelection.startTime
-                                                        ? dragSelection.startTime
-                                                        : dragSelection.endTime;
-
-                                                const endTime =
-                                                    selectionEnd.getTime() ===
-                                                    selectionStart.getTime()
-                                                        ? new Date(
-                                                              selectionStart.getTime() +
-                                                                  intervalMinutes * MS_PER_MINUTE,
-                                                          )
-                                                        : selectionEnd;
-
-                                                return (
-                                                    <div
-                                                        className={cn(
-                                                            "pointer-events-none absolute z-50 flex flex-col justify-center rounded-md border-l-[6px] border-[#1e3ad7] bg-[#dbe6fe]/50 pl-2 transition-opacity",
-                                                            dragSelection.isActive
-                                                                ? "opacity-70"
-                                                                : "opacity-25",
-                                                        )}
-                                                        style={{
-                                                            top: getPixelsFromTime(
-                                                                selectionStart,
-                                                                pixelsPerHour,
-                                                            ),
-                                                            height: Math.max(
-                                                                getPixelsFromTime(
-                                                                    endTime,
-                                                                    pixelsPerHour,
-                                                                ) -
-                                                                    getPixelsFromTime(
-                                                                        selectionStart,
-                                                                        pixelsPerHour,
-                                                                    ),
-                                                                10,
-                                                            ),
-                                                            left: "2%",
-                                                            width: "96%",
-                                                        }}
-                                                    >
-                                                        <div className="font-mono text-[12px] font-bold text-[#171e54]">
-                                                            {formatTime(selectionStart)} -{" "}
-                                                            {formatTime(endTime)}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })()}
+                                        {renderDragSelection(room.id)}
                                     </div>
                                 </div>
                             ))}
