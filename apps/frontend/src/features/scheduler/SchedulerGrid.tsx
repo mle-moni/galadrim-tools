@@ -18,6 +18,9 @@ import EventBlock from "./EventBlock";
 const HEADER_HEIGHT = 40;
 const DEFAULT_PIXELS_PER_HOUR = 80;
 
+const MS_PER_MINUTE = 60_000;
+const SELECTION_ACTIVATE_DELAY_MS = 100;
+
 interface SchedulerGridProps {
     currentDate: Date;
     rooms: Room[];
@@ -157,7 +160,6 @@ export default function SchedulerGrid({
     ]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
-    const selectionActivateDelayMs = 100;
 
     const handleWheel = (e: React.WheelEvent) => {
         const container = containerRef.current;
@@ -211,7 +213,7 @@ export default function SchedulerGrid({
         const durationMinutes =
             (movingState.originalReservation.endTime.getTime() -
                 movingState.originalReservation.startTime.getTime()) /
-            60000;
+            MS_PER_MINUTE;
 
         if (newStartMinutes < minMinutes) newStartMinutes = minMinutes;
         if (newStartMinutes + durationMinutes > maxMinutes) {
@@ -221,7 +223,7 @@ export default function SchedulerGrid({
         const newStart = new Date(currentDate);
         newStart.setHours(Math.floor(newStartMinutes / 60), newStartMinutes % 60, 0, 0);
 
-        const newEnd = new Date(newStart.getTime() + durationMinutes * 60000);
+        const newEnd = new Date(newStart.getTime() + durationMinutes * MS_PER_MINUTE);
 
         setMovingState((prev) =>
             prev
@@ -266,7 +268,7 @@ export default function SchedulerGrid({
         if (snappedStart >= endOfDay) return;
 
         const snappedEnd = new Date(
-            Math.min(snappedStart.getTime() + intervalMinutes * 60000, endOfDay.getTime()),
+            Math.min(snappedStart.getTime() + intervalMinutes * MS_PER_MINUTE, endOfDay.getTime()),
         );
 
         if (dragActivateTimeoutRef.current !== null) {
@@ -289,7 +291,7 @@ export default function SchedulerGrid({
                 return { ...prev, isActive: true };
             });
             dragActivateTimeoutRef.current = null;
-        }, selectionActivateDelayMs);
+        }, SELECTION_ACTIVATE_DELAY_MS);
     };
 
     const handleDragStartEvent = (e: React.MouseEvent, event: Reservation) => {
@@ -343,7 +345,7 @@ export default function SchedulerGrid({
 
                 const rawEndTime =
                     selectionEnd.getTime() === selectionStart.getTime()
-                        ? new Date(selectionStart.getTime() + intervalMinutes * 60000)
+                        ? new Date(selectionStart.getTime() + intervalMinutes * MS_PER_MINUTE)
                         : selectionEnd;
 
                 const endTime = rawEndTime > endOfDay ? endOfDay : rawEndTime;
@@ -556,7 +558,7 @@ export default function SchedulerGrid({
                                                     selectionStart.getTime()
                                                         ? new Date(
                                                               selectionStart.getTime() +
-                                                                  intervalMinutes * 60000,
+                                                                  intervalMinutes * MS_PER_MINUTE,
                                                           )
                                                         : selectionEnd;
 

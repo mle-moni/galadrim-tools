@@ -71,6 +71,56 @@ function formatFloorLabel(floor: number) {
     return `${floor}ème étage`;
 }
 
+function fireConfettiAtReservationTop(reservation: ApiRoomReservationWithUser) {
+    const column = document.getElementById(`room-col-${reservation.officeRoomId}`);
+    if (!column) return;
+
+    const rect = column.getBoundingClientRect();
+    const height = column.clientHeight || rect.height;
+    if (!height) return;
+
+    const startTime = new Date(reservation.start);
+    const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
+    const scheduleStartMinutes = START_HOUR * 60;
+    const scheduleEndMinutes = END_HOUR * 60;
+
+    const clampedMinutes = Math.min(
+        scheduleEndMinutes,
+        Math.max(scheduleStartMinutes, startMinutes),
+    );
+    const offsetMinutes = clampedMinutes - scheduleStartMinutes;
+
+    const pixelsPerHour = height / (END_HOUR - START_HOUR);
+    const topWithinColumn = (offsetMinutes / 60) * pixelsPerHour;
+
+    const rawX = (rect.left + rect.width / 2) / window.innerWidth;
+    const rawY = (rect.top + topWithinColumn) / window.innerHeight;
+
+    const x = Math.min(0.98, Math.max(0.02, rawX));
+    const y = Math.min(0.98, Math.max(0.02, rawY));
+
+    confetti({
+        particleCount: 140,
+        spread: 85,
+        startVelocity: 45,
+        origin: { x, y },
+    });
+
+    confetti({
+        particleCount: 90,
+        spread: 120,
+        startVelocity: 55,
+        origin: { x: Math.max(0.02, x - 0.08), y: Math.max(0.02, y - 0.1) },
+    });
+
+    confetti({
+        particleCount: 90,
+        spread: 120,
+        startVelocity: 55,
+        origin: { x: Math.min(0.98, x + 0.08), y: Math.max(0.02, y - 0.1) },
+    });
+}
+
 export default function SchedulerPage(props: {
     initialOfficeId?: number;
     initialFloorId?: number;
@@ -432,57 +482,6 @@ export default function SchedulerPage(props: {
 
         socket.on("connect", authenticate);
         socket.on("auth", authenticate);
-
-        const fireConfettiAtReservationTop = (reservation: ApiRoomReservationWithUser) => {
-            const column = document.getElementById(`room-col-${reservation.officeRoomId}`);
-            if (!column) return;
-
-            const rect = column.getBoundingClientRect();
-            const height = column.clientHeight || rect.height;
-            if (!height) return;
-
-            const startTime = new Date(reservation.start);
-            const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
-            const scheduleStartMinutes = START_HOUR * 60;
-            const scheduleEndMinutes = END_HOUR * 60;
-
-            const clampedMinutes = Math.min(
-                scheduleEndMinutes,
-                Math.max(scheduleStartMinutes, startMinutes),
-            );
-
-            const offsetMinutes = clampedMinutes - scheduleStartMinutes;
-
-            const pixelsPerHour = height / (END_HOUR - START_HOUR);
-            const topWithinColumn = (offsetMinutes / 60) * pixelsPerHour;
-
-            const rawX = (rect.left + rect.width / 2) / window.innerWidth;
-            const rawY = (rect.top + topWithinColumn) / window.innerHeight;
-
-            const x = Math.min(0.98, Math.max(0.02, rawX));
-            const y = Math.min(0.98, Math.max(0.02, rawY));
-
-            confetti({
-                particleCount: 140,
-                spread: 85,
-                startVelocity: 45,
-                origin: { x, y },
-            });
-
-            confetti({
-                particleCount: 90,
-                spread: 120,
-                startVelocity: 55,
-                origin: { x: Math.max(0.02, x - 0.08), y: Math.max(0.02, y - 0.1) },
-            });
-
-            confetti({
-                particleCount: 90,
-                spread: 120,
-                startVelocity: 55,
-                origin: { x: Math.min(0.98, x + 0.08), y: Math.max(0.02, y - 0.1) },
-            });
-        };
 
         const handleCreateRoomReservation = (
             reservation: ApiRoomReservationWithUser,
