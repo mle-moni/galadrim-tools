@@ -1,31 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { Check, UtensilsCrossed } from "lucide-react";
-import type { IRestaurant, ITag } from "@galadrim-tools/shared";
+import { UtensilsCrossed } from "lucide-react";
+import type { IRestaurant } from "@galadrim-tools/shared";
 
 import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 export function MiamsSidebar(props: {
-    meId: number | null;
-
     search: string;
     onSearchChange: (search: string) => void;
-
-    tags: ITag[];
-    selectedTagIds: number[];
-    onToggleTagId: (tagId: number) => void;
-    onResetTags: () => void;
-
-    isCreatingTag: boolean;
-    onCreateTag: () => void;
 
     canCreateRestaurant: boolean;
     onCreateRestaurant: () => void;
@@ -35,6 +19,10 @@ export function MiamsSidebar(props: {
     zoom: number;
     onAfterSelectRestaurant?: () => void;
 }) {
+    const trimmedSearch = props.search.trim();
+    const suggestions = trimmedSearch ? props.restaurants.slice(0, 5) : [];
+    const listRestaurants = trimmedSearch ? props.restaurants.slice(5) : props.restaurants;
+
     return (
         <div className="flex h-full min-h-0 flex-col">
             <div className="p-4">
@@ -57,67 +45,40 @@ export function MiamsSidebar(props: {
                         value={props.search}
                         onChange={(e) => props.onSearchChange(e.target.value)}
                     />
-
-                    <div className="flex items-center gap-2">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    type="button"
-                                    className="flex-1"
-                                >
-                                    Tags
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-64">
-                                {props.tags.map((tag) => {
-                                    const isSelected = props.selectedTagIds.includes(tag.id);
-
-                                    return (
-                                        <DropdownMenuItem
-                                            key={tag.id}
-                                            onSelect={(e) => {
-                                                e.preventDefault();
-                                                props.onToggleTagId(tag.id);
-                                            }}
-                                        >
-                                            <span className="flex-1 truncate">{tag.name}</span>
-                                            {isSelected && <Check className="h-4 w-4" />}
-                                        </DropdownMenuItem>
-                                    );
-                                })}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            type="button"
-                            onClick={props.onResetTags}
-                            disabled={props.selectedTagIds.length === 0}
-                        >
-                            Reset
-                        </Button>
-
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            type="button"
-                            disabled={props.isCreatingTag || props.meId === null}
-                            onClick={props.onCreateTag}
-                        >
-                            Nouveau tag
-                        </Button>
-                    </div>
                 </div>
+
+                {suggestions.length > 0 && (
+                    <div className="mt-3 rounded-md border bg-card/50 p-1">
+                        {suggestions.map((restaurant) => {
+                            const isSelected = restaurant.id === props.selectedRestaurantId;
+
+                            return (
+                                <Button
+                                    key={restaurant.id}
+                                    asChild
+                                    type="button"
+                                    variant={isSelected ? "secondary" : "ghost"}
+                                    className="h-9 w-full justify-start"
+                                >
+                                    <Link
+                                        to="/miams"
+                                        search={{ restaurantId: restaurant.id, zoom: props.zoom }}
+                                        onClick={() => props.onAfterSelectRestaurant?.()}
+                                    >
+                                        {restaurant.name}
+                                    </Link>
+                                </Button>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
             <Separator />
 
             <ScrollArea className="min-h-0 flex-1">
                 <div className="flex flex-col gap-1 p-2">
-                    {props.restaurants.map((restaurant) => {
+                    {listRestaurants.map((restaurant) => {
                         const isSelected = restaurant.id === props.selectedRestaurantId;
 
                         return (

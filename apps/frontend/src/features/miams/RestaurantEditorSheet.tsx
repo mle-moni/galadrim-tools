@@ -15,6 +15,8 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet";
 
+import { useCreateTagMutation } from "@/integrations/backend/miams";
+
 export type RestaurantEditorValues = {
     name: string;
     description: string;
@@ -70,11 +72,28 @@ export function RestaurantEditorSheet(props: {
     const [values, setValues] = useState<RestaurantEditorValues>(() =>
         buildInitialValues(props.restaurant),
     );
+    const [tagSearch, setTagSearch] = useState("");
+    const [createTagOpen, setCreateTagOpen] = useState(false);
+    const [newTagName, setNewTagName] = useState("");
+
+    const createTagMutation = useCreateTagMutation();
 
     useEffect(() => {
         if (!props.open) return;
         setValues(buildInitialValues(props.restaurant));
+        setTagSearch("");
+        setCreateTagOpen(false);
+        setNewTagName("");
     }, [props.open, props.restaurant]);
+
+    const normalizedTagSearch = tagSearch.trim().toLowerCase();
+    const selectedTags = props.tags.filter((tag) => values.tagIds.includes(tag.id));
+    const availableTags = props.tags
+        .filter((tag) => !values.tagIds.includes(tag.id))
+        .filter((tag) => {
+            if (!normalizedTagSearch) return true;
+            return tag.name.toLowerCase().includes(normalizedTagSearch);
+        });
 
     const lat = parseNumberText(values.lat);
     const lng = parseNumberText(values.lng);
@@ -177,39 +196,115 @@ export function RestaurantEditorSheet(props: {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label>Tags (min 1)</Label>
-                            <div className="flex flex-wrap gap-2">
-                                {props.tags.map((tag) => {
-                                    const isSelected = values.tagIds.includes(tag.id);
+                            <div className="flex items-center justify-between gap-2">
+                                <Label>Tags (min 1)</Label>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={createTagMutation.isPending}
+                                    onClick={() => setCreateTagOpen((open) => !open)}
+                                >
+                                    Ajouter un tag
+                                </Button>
+                            </div>
 
-                                    return (
-                                        <Button
-                                            key={tag.id}
-                                            type="button"
-                                            size="sm"
-                                            variant={isSelected ? "secondary" : "outline"}
-                                            onClick={() => {
+                            {createTagOpen && (
+                                <div className="flex items-center gap-2">
+                                    <Input
+                                        placeholder="Nom du tag"
+                                        value={newTagName}
+                                        onChange={(e) => setNewTagName(e.target.value)}
+                                    />
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        disabled={
+                                            createTagMutation.isPending || newTagName.trim() === ""
+                                        }
+                                        onClick={async () => {
+                                            const name = newTagName.trim();
+                                            if (name === "") return;
+
+                                            try {
+                                                const tag = await createTagMutation.mutateAsync({
+                                                    name,
+                                                });
+
                                                 setValues((old) => {
-                                                    if (old.tagIds.includes(tag.id)) {
-                                                        return {
-                                                            ...old,
-                                                            tagIds: old.tagIds.filter(
-                                                                (id) => id !== tag.id,
-                                                            ),
-                                                        };
-                                                    }
+                                                    if (old.tagIds.includes(tag.id)) return old;
                                                     return {
                                                         ...old,
                                                         tagIds: [...old.tagIds, tag.id],
                                                     };
                                                 });
+
+                                                setNewTagName("");
+                                                setCreateTagOpen(false);
+                                                setTagSearch("");
+                                            } catch {
+                                                // ignore
+                                            }
+                                        }}
+                                    >
+                                        {createTagMutation.isPending ? "Ajout…" : "Ajouter"}
+                                    </Button>
+                                </div>
+                            )}
+
+                            <Input
+                                placeholder="Rechercher un tag…"
+                                value={tagSearch}
+                                onChange={(e) => setTagSearch(e.target.value)}
+                            />
+
+                            {selectedTags.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                    {selectedTags.map((tag) => (
+                                        <Button
+                                            key={tag.id}
+                                            type="button"
+                                            size="sm"
+                                            variant="secondary"
+                                            onClick={() => {
+                                                setValues((old) => ({
+                                                    ...old,
+                                                    tagIds: old.tagIds.filter(
+                                                        (id) => id !== tag.id,
+                                                    ),
+                                                }));
                                             }}
                                         >
                                             {tag.name}
                                         </Button>
-                                    );
-                                })}
-                            </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {availableTags.length > 0 ? (
+                                <div className="flex flex-wrap gap-2">
+                                    {availableTags.map((tag) => (
+                                        <Button
+                                            key={tag.id}
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => {
+                                                setValues((old) => ({
+                                                    ...old,
+                                                    tagIds: [...old.tagIds, tag.id],
+                                                }));
+                                            }}
+                                        >
+                                            {tag.name}
+                                        </Button>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="text-sm text-muted-foreground">
+                                    Pas de tags trouvés.
+                                </div>
+                            )}
                         </div>
 
                         <div className="grid gap-2">

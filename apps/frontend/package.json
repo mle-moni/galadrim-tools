@@ -33,6 +33,7 @@
         "canvas-confetti": "^1.9.3",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "fuse.js": "^7.1.0",
         "leaflet": "^1.9.4",
         "lucide-react": "^0.544.0",
         "react": "^19.2.0",

@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
+import Fuse from "fuse.js";
 import type { IRestaurant, NotesOption } from "@galadrim-tools/shared";
 
 import {
@@ -25,7 +26,6 @@ import {
     tagsQueryOptions,
     useCreateRestaurantMutation,
     useCreateRestaurantReviewMutation,
-    useCreateTagMutation,
     useDeleteRestaurantMutation,
     useDeleteRestaurantReviewMutation,
     useToggleRestaurantChoiceMutation,
@@ -92,26 +92,12 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
     }, [meQuery.data?.officeId, officesQuery.data]);
 
     const [search, setSearch] = useState("");
-    const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
 
-    const toggleTagId = (tagId: number) => {
-        setSelectedTagIds((old) => {
-            if (old.includes(tagId)) {
-                return old.filter((id) => id !== tagId);
-            }
-            return [...old, tagId];
-        });
-    };
-
-    const createTag = () => {
-        const name = window.prompt("Nouveau tag");
-        if (name == null) return;
-
-        const trimmed = name.trim();
-        if (trimmed === "") return;
-
-        createTagMutation.mutate({ name: trimmed });
-    };
+    useEffect(() => {
+        if (props.selectedRestaurantId != null) {
+            setSearch("");
+        }
+    }, [props.selectedRestaurantId]);
 
     const openCreateRestaurantEditor = () => {
         setEditorMode("create");
@@ -124,33 +110,26 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
         return restaurantsQuery.data?.find((r) => r.id === props.selectedRestaurantId) ?? null;
     }, [props.selectedRestaurantId, restaurantsQuery.data]);
 
+    const restaurantsFuse = useMemo(() => {
+        return new Fuse(restaurantsQuery.data ?? [], {
+            includeScore: true,
+            keys: ["name", "description", "tags.name"],
+        });
+    }, [restaurantsQuery.data]);
+
     const filteredRestaurants = useMemo(() => {
         const restaurants = restaurantsQuery.data ?? [];
-        const trimmedSearch = search.trim().toLowerCase();
-        const selectedTagSet = new Set(selectedTagIds);
+        const trimmedSearch = search.trim();
 
-        return restaurants
-            .filter((restaurant) => {
-                if (selectedTagSet.size === 0) return true;
-                return restaurant.tags.some((t) => selectedTagSet.has(t.id));
-            })
-            .filter((restaurant) => {
-                if (!trimmedSearch) return true;
+        if (!trimmedSearch) {
+            return restaurants.slice().sort((a, b) => a.name.localeCompare(b.name));
+        }
 
-                const haystacks = [
-                    restaurant.name,
-                    restaurant.description,
-                    ...restaurant.tags.map((t) => t.name),
-                ]
-                    .filter(Boolean)
-                    .join(" ")
-                    .toLowerCase();
-
-                return haystacks.includes(trimmedSearch);
-            })
-            .slice()
-            .sort((a, b) => a.name.localeCompare(b.name));
-    }, [restaurantsQuery.data, search, selectedTagIds]);
+        return restaurantsFuse
+            .search(trimmedSearch)
+            .filter((result) => (result.score ?? 0) < 0.5)
+            .map((result) => result.item);
+    }, [restaurantsFuse, restaurantsQuery.data, search]);
 
     const restaurantsForMap = useMemo(() => {
         if (!selectedRestaurant) return filteredRestaurants;
@@ -182,7 +161,6 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
     const createRestaurantMutation = useCreateRestaurantMutation();
     const updateRestaurantMutation = useUpdateRestaurantMutation();
     const deleteRestaurantMutation = useDeleteRestaurantMutation();
-    const createTagMutation = useCreateTagMutation();
 
     const createReviewMutation = useCreateRestaurantReviewMutation();
     const deleteReviewMutation = useDeleteRestaurantReviewMutation();
@@ -214,15 +192,8 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
         <div className="flex h-full min-h-0 w-full">
             <aside className="hidden w-80 min-w-80 flex-col border-r bg-card md:flex">
                 <MiamsSidebar
-                    meId={meId}
                     search={search}
                     onSearchChange={setSearch}
-                    tags={tagsQuery.data ?? []}
-                    selectedTagIds={selectedTagIds}
-                    onToggleTagId={toggleTagId}
-                    onResetTags={() => setSelectedTagIds([])}
-                    isCreatingTag={createTagMutation.isPending}
-                    onCreateTag={createTag}
                     canCreateRestaurant={meId !== null}
                     onCreateRestaurant={openCreateRestaurantEditor}
                     restaurants={filteredRestaurants}
@@ -234,15 +205,8 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
             <Sheet open={mobileListOpen} onOpenChange={setMobileListOpen}>
                 <SheetContent side="left" className="p-0">
                     <MiamsSidebar
-                        meId={meId}
                         search={search}
                         onSearchChange={setSearch}
-                        tags={tagsQuery.data ?? []}
-                        selectedTagIds={selectedTagIds}
-                        onToggleTagId={toggleTagId}
-                        onResetTags={() => setSelectedTagIds([])}
-                        isCreatingTag={createTagMutation.isPending}
-                        onCreateTag={createTag}
                         canCreateRestaurant={meId !== null}
                         onCreateRestaurant={() => {
                             setMobileListOpen(false);
@@ -375,12 +339,14 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
 
                                 <div className="flex flex-wrap gap-2">
                                     {selectedRestaurant.tags.map((t) => (
-                                        <span
+                                        <button
                                             key={t.id}
-                                            className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground"
+                                            type="button"
+                                            className="rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground hover:bg-muted/80"
+                                            onClick={() => setSearch(t.name)}
                                         >
                                             {t.name}
-                                        </span>
+                                        </button>
                                     ))}
                                 </div>
 
