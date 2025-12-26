@@ -2,11 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import SchedulerPage from "@/features/scheduler/SchedulerPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-
-function parseOptionalNumber(value: unknown): number | undefined {
-    if (value == null) return undefined;
-    return Number(value);
-}
+import { parseOptionalNumber } from "@/lib/parse";
 
 export const Route = createFileRoute("/planning")({
     validateSearch: (

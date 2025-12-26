@@ -2,11 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import VisuelPage from "@/features/visuel/VisuelPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-
-function parseOptionalNumber(value: unknown): number | undefined {
-    if (value == null) return undefined;
-    return Number(value);
-}
+import { parseOptionalNumber } from "@/lib/parse";
 
 export const Route = createFileRoute("/visuel")({
     validateSearch: (search: Record<string, unknown>): { officeId?: number; floorId?: number } => ({
