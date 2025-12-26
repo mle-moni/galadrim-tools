@@ -55,6 +55,13 @@ function resolveBackendUrl(pathOrUrl: string) {
     return `${base}${pathOrUrl.startsWith("/") ? "" : "/"}${pathOrUrl}`;
 }
 
+function buildMiamsSearchParams(input: { restaurantId?: number; zoom?: number }) {
+    const params = new URLSearchParams();
+    if (input.restaurantId != null) params.set("restaurantId", String(input.restaurantId));
+    if (input.zoom != null) params.set("zoom", String(input.zoom));
+    return params;
+}
+
 const MAX_ZOOM = 18;
 
 export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?: number }) {
@@ -234,17 +241,17 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                         userId={meId}
                         zoom={zoomFromSearch}
                         onZoomChange={(zoom) => {
-                            const params = new URLSearchParams();
-                            if (props.selectedRestaurantId != null) {
-                                params.set("restaurantId", String(props.selectedRestaurantId));
-                            }
-                            params.set("zoom", String(zoom));
+                            const params = buildMiamsSearchParams({
+                                restaurantId: props.selectedRestaurantId,
+                                zoom,
+                            });
                             router.history.replace(`/miams?${params.toString()}`);
                         }}
                         onSelectRestaurantId={(restaurantId) => {
-                            const params = new URLSearchParams();
-                            params.set("restaurantId", String(restaurantId));
-                            params.set("zoom", String(zoomFromSearch));
+                            const params = buildMiamsSearchParams({
+                                restaurantId,
+                                zoom: zoomFromSearch,
+                            });
                             router.history.push(`/miams?${params.toString()}`);
                         }}
                     />
@@ -261,8 +268,9 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                                         size="icon-sm"
                                         type="button"
                                         onClick={() => {
-                                            const params = new URLSearchParams();
-                                            params.set("zoom", String(zoomFromSearch));
+                                            const params = buildMiamsSearchParams({
+                                                zoom: zoomFromSearch,
+                                            });
                                             router.history.push(`/miams?${params.toString()}`);
                                         }}
                                     >
@@ -690,15 +698,11 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                                                                 }`}
                                                                 onClick={() => {
                                                                     const params =
-                                                                        new URLSearchParams();
-                                                                    params.set(
-                                                                        "restaurantId",
-                                                                        String(restaurant.id),
-                                                                    );
-                                                                    params.set(
-                                                                        "zoom",
-                                                                        String(zoomFromSearch),
-                                                                    );
+                                                                        buildMiamsSearchParams({
+                                                                            restaurantId:
+                                                                                restaurant.id,
+                                                                            zoom: zoomFromSearch,
+                                                                        });
                                                                     router.history.push(
                                                                         `/miams?${params.toString()}`,
                                                                     );
@@ -760,8 +764,9 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                             onSuccess: (restaurant) => {
                                 setEditorOpen(false);
 
-                                const params = new URLSearchParams();
-                                params.set("restaurantId", String(restaurant.id));
+                                const params = buildMiamsSearchParams({
+                                    restaurantId: restaurant.id,
+                                });
                                 router.history.push(`/miams?${params.toString()}`);
                             },
                         });
@@ -780,8 +785,9 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                                 setEditorOpen(false);
                                 setEditorRestaurant(restaurant);
 
-                                const params = new URLSearchParams();
-                                params.set("restaurantId", String(restaurant.id));
+                                const params = buildMiamsSearchParams({
+                                    restaurantId: restaurant.id,
+                                });
                                 router.history.push(`/miams?${params.toString()}`);
                             },
                         },
