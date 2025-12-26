@@ -158,7 +158,7 @@ export default function AdminHomePage() {
                 <Section
                     id="galaki"
                     title="Galaki"
-                    description="Rafraîchir les portraits (cron)."
+                    description="Rafraîchir les portraits."
                     icon={Sparkles}
                 >
                     <AdminGalakiRefreshCard />
@@ -183,7 +183,7 @@ export default function AdminHomePage() {
                 <Section
                     id="map-editor"
                     title="Éditeur de plan"
-                    description="Créer et modifier les salles de réunion (EVENT_ADMIN)."
+                    description="Créer et modifier les salles de réunion."
                     icon={MapIcon}
                 >
                     <AdminOfficeRoomsEditor />
