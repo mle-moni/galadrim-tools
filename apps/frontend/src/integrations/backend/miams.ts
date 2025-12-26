@@ -26,7 +26,6 @@ export function restaurantsQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.restaurants(),
         queryFn: fetchRestaurants,
-        staleTime: 30 * 1000,
         retry: false,
     });
 }
@@ -45,7 +44,6 @@ export function tagsQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.tags(),
         queryFn: fetchTags,
-        staleTime: 30 * 1000,
         retry: false,
     });
 }
@@ -72,13 +70,11 @@ export function useCreateTagMutation() {
 
     return useMutation({
         mutationFn: (input: CreateTagInput) => createTag(input),
-        onSuccess: async (tag) => {
+        onSuccess: (tag) => {
             queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => {
                 if (!old) return [tag];
                 return [tag, ...old.filter((t) => t.id !== tag.id)];
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.tags() });
         },
     });
 }
@@ -440,13 +436,11 @@ export function useCreateRestaurantMutation() {
 
     return useMutation({
         mutationFn: (input: UpsertRestaurantInput) => createRestaurant(input),
-        onSuccess: async (restaurant) => {
+        onSuccess: (restaurant) => {
             queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
                 if (!old) return [restaurant];
                 return [restaurant, ...old.filter((r) => r.id !== restaurant.id)];
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.restaurants() });
         },
     });
 }
@@ -476,13 +470,11 @@ export function useUpdateRestaurantMutation() {
 
     return useMutation({
         mutationFn: (input: UpsertRestaurantInput) => updateRestaurant(input),
-        onSuccess: async (restaurant) => {
+        onSuccess: (restaurant) => {
             queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
                 if (!old) return [restaurant];
                 return old.map((r) => (r.id === restaurant.id ? restaurant : r));
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.restaurants() });
         },
     });
 }
@@ -514,13 +506,11 @@ export function useDeleteRestaurantMutation() {
 
     return useMutation({
         mutationFn: (input: DeleteRestaurantInput) => deleteRestaurant(input),
-        onSuccess: async (data) => {
+        onSuccess: (data) => {
             queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
                 if (!old) return old;
                 return old.filter((r) => r.id !== data.id);
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.restaurants() });
         },
     });
 }

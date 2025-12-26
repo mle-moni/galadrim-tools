@@ -23,7 +23,6 @@ export function officesQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.offices(),
         queryFn: () => fetchAdominModel<ApiOffice>("Office"),
-        staleTime: 5 * 60 * 1000,
         retry: false,
     });
 }
@@ -32,7 +31,6 @@ export function officeFloorsQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.officeFloors(),
         queryFn: () => fetchAdominModel<ApiOfficeFloor>("OfficeFloor"),
-        staleTime: 5 * 60 * 1000,
         retry: false,
     });
 }
@@ -41,7 +39,6 @@ export function officeRoomsQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.officeRooms(),
         queryFn: () => fetchAdominModel<ApiOfficeRoom>("OfficeRoom"),
-        staleTime: 5 * 60 * 1000,
         retry: false,
     });
 }

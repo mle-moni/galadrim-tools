@@ -23,7 +23,6 @@ export function usersQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.users(),
         queryFn: fetchUsers,
-        staleTime: 5 * 60 * 1000,
         retry: false,
     });
 }

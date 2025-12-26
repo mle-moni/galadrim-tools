@@ -15,7 +15,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-import { fetchUserRights, updateUserRights } from "@/integrations/backend/admin";
+import {
+    fetchUserRights,
+    updateUserRights,
+    type ApiUserRights,
+} from "@/integrations/backend/admin";
 import { queryKeys } from "@/integrations/backend/query-keys";
 import { RIGHTS, type AllRights, hasRights } from "@/lib/rights";
 
@@ -64,8 +68,13 @@ export default function AdminUserRightsPage() {
 
     const saveMutation = useMutation({
         mutationFn: updateUserRights,
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.adminUserRights() });
+        onSuccess: (_data, input) => {
+            queryClient.setQueryData<ApiUserRights[]>(queryKeys.adminUserRights(), (old) => {
+                if (!old) return old;
+                return old.map((user) =>
+                    user.id === input.id ? { ...user, rights: input.rights } : user,
+                );
+            });
         },
     });
 

@@ -59,7 +59,6 @@ export function ideasQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.ideas(),
         queryFn: fetchIdeas,
-        staleTime: 30 * 1000,
         retry: false,
     });
 }
@@ -89,15 +88,13 @@ export function useCreateIdeaMutation(meId: number | null) {
 
     return useMutation({
         mutationFn: (input: CreateIdeaInput) => createIdea(input),
-        onSuccess: async (idea) => {
+        onSuccess: (idea) => {
             const withOwner = meId === null ? idea : { ...idea, isOwner: true };
 
             queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
                 if (!old) return [withOwner];
                 return upsertIdeaInList(old, withOwner);
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.ideas() });
         },
     });
 }
@@ -134,13 +131,11 @@ export function useUpdateIdeaMutation() {
 
     return useMutation({
         mutationFn: (input: UpdateIdeaInput) => updateIdea(input),
-        onSuccess: async (idea) => {
+        onSuccess: (idea) => {
             queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
                 if (!old) return [idea];
                 return upsertIdeaInList(old, idea);
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.ideas() });
         },
     });
 }
@@ -163,13 +158,11 @@ export function useDeleteIdeaMutation() {
 
     return useMutation({
         mutationFn: (input: DeleteIdeaInput) => deleteIdea(input),
-        onSuccess: async (_value, input) => {
+        onSuccess: (_value, input) => {
             queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
                 if (!old) return old;
                 return old.filter((idea) => idea.id !== input.ideaId);
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.ideas() });
         },
     });
 }
@@ -209,7 +202,7 @@ export function useToggleIdeaVoteMutation() {
 
     return useMutation({
         mutationFn: (input: ToggleIdeaVoteInput) => toggleIdeaVote(input),
-        onSuccess: async (_data, input) => {
+        onSuccess: (_data, input) => {
             queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
                 if (!old) return old;
 
@@ -232,8 +225,6 @@ export function useToggleIdeaVoteMutation() {
                     return { ...idea, reactions: nextReactions };
                 });
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.ideas() });
         },
     });
 }
@@ -268,7 +259,7 @@ export function useCreateIdeaCommentMutation() {
 
     return useMutation({
         mutationFn: (input: CreateIdeaCommentInput) => createIdeaComment(input),
-        onSuccess: async (comment, input) => {
+        onSuccess: (comment, input) => {
             queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
                 if (!old) return old;
 
@@ -277,8 +268,6 @@ export function useCreateIdeaCommentMutation() {
                     return { ...idea, comments: [...idea.comments, comment] };
                 });
             });
-
-            await queryClient.invalidateQueries({ queryKey: queryKeys.ideas() });
         },
     });
 }

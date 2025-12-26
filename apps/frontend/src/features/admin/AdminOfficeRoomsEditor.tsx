@@ -514,8 +514,18 @@ export default function AdminOfficeRoomsEditor() {
 
     const createMutation = useMutation({
         mutationFn: createOfficeRoom,
-        onSuccess: async (created) => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.officeRooms() });
+        onSuccess: (created) => {
+            queryClient.setQueryData<ApiOfficeRoom[]>(queryKeys.officeRooms(), (old) => {
+                if (!old) return [created];
+
+                const existingIndex = old.findIndex((room) => room.id === created.id);
+                if (existingIndex === -1) return [created, ...old];
+
+                const next = old.slice();
+                next[existingIndex] = created;
+                return next;
+            });
+
             setSelectedRoomId(created.id);
             setSelectedPointIndex(null);
         },
@@ -523,16 +533,30 @@ export default function AdminOfficeRoomsEditor() {
 
     const updateMutation = useMutation({
         mutationFn: updateOfficeRoom,
-        onSuccess: async (updated) => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.officeRooms() });
+        onSuccess: (updated) => {
+            queryClient.setQueryData<ApiOfficeRoom[]>(queryKeys.officeRooms(), (old) => {
+                if (!old) return [updated];
+
+                const existingIndex = old.findIndex((room) => room.id === updated.id);
+                if (existingIndex === -1) return [updated, ...old];
+
+                const next = old.slice();
+                next[existingIndex] = updated;
+                return next;
+            });
+
             setDraftRoom(cloneRoom(updated));
         },
     });
 
     const deleteMutation = useMutation({
         mutationFn: deleteOfficeRoom,
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: queryKeys.officeRooms() });
+        onSuccess: (data) => {
+            queryClient.setQueryData<ApiOfficeRoom[]>(queryKeys.officeRooms(), (old) => {
+                if (!old) return old;
+                return old.filter((room) => room.id !== data.id);
+            });
+
             setSelectedRoomId("");
             setDraftRoom(null);
             setSelectedPointIndex(null);
