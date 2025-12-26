@@ -55,8 +55,9 @@ export default function AdminUserRightsPage() {
 
     useEffect(() => {
         if (selectedUserId !== "") return;
-        if (users.length === 0) return;
-        setSelectedUserId(users[0]!.id);
+        const firstUser = users[0];
+        if (!firstUser) return;
+        setSelectedUserId(firstUser.id);
     }, [selectedUserId, users]);
 
     useEffect(() => {
