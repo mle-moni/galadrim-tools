@@ -45,7 +45,7 @@ function saveToSessionStorage(key: string, value: unknown) {
     try {
         storage.setItem(key, JSON.stringify(value));
     } catch {
-        // ignore
+        // sessionStorage can throw (quota/private mode)
     }
 }
 
@@ -56,7 +56,7 @@ function removeFromSessionStorage(key: string) {
     try {
         storage.removeItem(key);
     } catch {
-        // ignore
+        // sessionStorage can throw (quota/private mode)
     }
 }
 

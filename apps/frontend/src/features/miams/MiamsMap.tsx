@@ -18,7 +18,6 @@ import {
 
 const NANTES_COORDINATES_VALUES: [number, number] = [47.2126404424623, -1.5642226533183083];
 
-// Old Saveur values
 const DEFAULT_ZOOM = 17;
 const MAX_ZOOM = 18;
 const SELECTED_ZOOM = MAX_ZOOM;

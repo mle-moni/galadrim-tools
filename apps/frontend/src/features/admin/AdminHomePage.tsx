@@ -54,7 +54,7 @@ function writeStoredBoolean(key: string, value: boolean) {
     try {
         window.localStorage.setItem(key, value ? "1" : "0");
     } catch {
-        // ignore
+        // localStorage can throw (quota/private mode)
     }
 }
 

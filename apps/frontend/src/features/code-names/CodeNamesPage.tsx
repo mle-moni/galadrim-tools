@@ -281,9 +281,7 @@ export default function CodeNamesPage(props: { gameId?: number }) {
             .then((created) => {
                 router.history.push(`/games/code-names?gameId=${created.id}`);
             })
-            .catch(() => {
-                // toast handled
-            });
+            .catch(() => {});
     };
 
     const submitRound = () => {
@@ -324,9 +322,7 @@ export default function CodeNamesPage(props: { gameId?: number }) {
                 setClueWord("");
                 setClueNumber("1");
             })
-            .catch(() => {
-                // toast handled
-            });
+            .catch(() => {});
     };
 
     const resetToCreate = () => {
@@ -375,9 +371,7 @@ export default function CodeNamesPage(props: { gameId?: number }) {
                                         .then(() => {
                                             router.history.push("/games/code-names");
                                         })
-                                        .catch(() => {
-                                            // toast handled
-                                        });
+                                        .catch(() => {});
                                 }}
                             >
                                 <Trash2 className="h-4 w-4" />

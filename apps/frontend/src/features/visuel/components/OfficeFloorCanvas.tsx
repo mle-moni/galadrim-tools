@@ -124,7 +124,6 @@ export default function OfficeFloorCanvas(props: {
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-        // Background
         ctx.fillStyle = "rgba(0,0,0,0)";
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
