@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { ADMIN_TAB_RIGHTS, hasSomeRights } from '@/lib/rights'
+import { ADMIN_TAB_RIGHTS, hasRights, hasSomeRights } from '@/lib/rights'
 
 import Avatar from '@/components/Avatar'
 import { Sidebar, useSidebar } from '@/components/ui/sidebar'
@@ -170,6 +170,7 @@ export default function AppSidebar() {
 
     const userRights = meQuery.data?.rights ?? 0
     const canSeeAdmin = hasSomeRights(userRights, ADMIN_TAB_RIGHTS)
+    const canSeeCodeNames = hasRights(userRights, ['CODE_NAMES_ADMIN'])
 
     const isPlanningActive = pathname.startsWith('/planning')
     const isIdeasActive = pathname.startsWith('/ideas')
@@ -527,21 +528,23 @@ export default function AppSidebar() {
                                 <span className="flex-1">Galaki</span>
                             </Link>
 
-                            <Link
-                                to="/games/code-names"
-                                search={{}}
-                                aria-current={
-                                    isCodeNamesActive ? 'page' : undefined
-                                }
-                                className={cn(
-                                    navItemBase,
-                                    isCodeNamesActive &&
-                                        'bg-slate-800/50 text-white',
-                                )}
-                            >
-                                <Puzzle className="h-4 w-4" />
-                                <span className="flex-1">Code Names</span>
-                            </Link>
+                            {canSeeCodeNames && (
+                                <Link
+                                    to="/games/code-names"
+                                    search={{}}
+                                    aria-current={
+                                        isCodeNamesActive ? 'page' : undefined
+                                    }
+                                    className={cn(
+                                        navItemBase,
+                                        isCodeNamesActive &&
+                                            'bg-slate-800/50 text-white',
+                                    )}
+                                >
+                                    <Puzzle className="h-4 w-4" />
+                                    <span className="flex-1">Code Names</span>
+                                </Link>
+                            )}
 
                             {canSeeAdmin && (
                                 <Link
