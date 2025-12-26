@@ -1,6 +1,16 @@
 import type { LayoutEvent, Reservation } from "./types";
 import { START_HOUR } from "./constants";
 
+const ENTRETIEN_FINAL_QUERY = "entretien final";
+
+export function includesEntretienFinal(value: string | null | undefined) {
+    return (value ?? "").toLocaleLowerCase().includes(ENTRETIEN_FINAL_QUERY);
+}
+
+export function isIdMultipleOf(id: number, modulo: number) {
+    return id > 0 && id % modulo === 0;
+}
+
 export function getPixelsFromTime(date: Date, pixelsPerHour: number) {
     const hours = date.getHours();
     const minutes = date.getMinutes();
