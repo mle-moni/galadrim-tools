@@ -39,6 +39,12 @@ import { useElementSize } from "@/features/visuel/utils/useElementSize";
 
 const ASPECT_RATIO = 1980 / 1080;
 
+const MIN_CANVAS_WIDTH = 420;
+const MAX_CANVAS_WIDTH = 1100;
+const DEFAULT_CANVAS_WIDTH = 900;
+
+const DEFAULT_NEW_ROOM_SIZE = 100;
+
 function getRoomAtPoint(
     rooms: ApiOfficeRoom[],
     point: { x: number; y: number },
@@ -56,9 +62,11 @@ function getRoomAtPoint(
 
 function makeDefaultRoomPolygon(originInDbCoords: RoomPoint): { points: RoomPoint[] } {
     const p1 = originInDbCoords;
-    const p2 = { x: p1.x + 100, y: p1.y };
-    const p3 = { x: p1.x + 100, y: p1.y + 100 };
-    const p4 = { x: p1.x, y: p1.y + 100 };
+    const size = DEFAULT_NEW_ROOM_SIZE;
+
+    const p2 = { x: p1.x + size, y: p1.y };
+    const p3 = { x: p1.x + size, y: p1.y + size };
+    const p4 = { x: p1.x, y: p1.y + size };
     return { points: [p1, p2, p3, p4] };
 }
 
@@ -100,7 +108,10 @@ function MapEditorCanvas(props: {
     const { width: wrapperWidth } = useElementSize(wrapperRef);
 
     const canvasWidth = useMemo(() => {
-        const target = Math.min(1100, Math.max(420, Math.floor(wrapperWidth || 900)));
+        const target = Math.min(
+            MAX_CANVAS_WIDTH,
+            Math.max(MIN_CANVAS_WIDTH, Math.floor(wrapperWidth || DEFAULT_CANVAS_WIDTH)),
+        );
         return target;
     }, [wrapperWidth]);
 
@@ -315,7 +326,7 @@ function MapEditorCanvas(props: {
                         try {
                             canvas.releasePointerCapture(event.pointerId);
                         } catch {
-                            // ignore
+                            // releasePointerCapture can throw in some browsers
                         }
                     }
 
@@ -327,7 +338,7 @@ function MapEditorCanvas(props: {
                         try {
                             canvas.releasePointerCapture(event.pointerId);
                         } catch {
-                            // ignore
+                            // releasePointerCapture can throw in some browsers
                         }
                     }
 
@@ -729,9 +740,7 @@ export default function AdminOfficeRoomsEditor() {
                                                     : "Impossible de créer la salle",
                                         });
 
-                                        await promise.catch(() => {
-                                            // toast handled
-                                        });
+                                        await promise.catch(() => {});
                                     }}
                                 />
                             )}
