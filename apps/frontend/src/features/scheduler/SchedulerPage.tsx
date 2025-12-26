@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Building2, CalendarDays, Map as MapIcon } from "lucide-react";
@@ -30,6 +30,7 @@ import {
     THEME_OTHER,
 } from "./constants";
 import type { Reservation, Room } from "./types";
+import { includesEntretienFinal, isIdMultipleOf } from "./utils";
 
 import { meQueryOptions } from "@/integrations/backend/auth";
 import { getSocketApiUrl } from "@/integrations/backend/client";
@@ -48,12 +49,6 @@ import {
     useUpdateRoomReservationMutation,
 } from "@/integrations/backend/reservations";
 
-const ENTRETIEN_FINAL_QUERY = "entretien final";
-
-function includesEntretienFinal(value: string | null | undefined) {
-    return (value ?? "").toLocaleLowerCase().includes(ENTRETIEN_FINAL_QUERY);
-}
-
 function isEntretienFinalReservation(reservation: ApiRoomReservationWithUser) {
     return (
         includesEntretienFinal(reservation.title) ||
@@ -62,17 +57,16 @@ function isEntretienFinalReservation(reservation: ApiRoomReservationWithUser) {
     );
 }
 
-function isIdMultipleOf(id: number, modulo: number) {
-    return id > 0 && id % modulo === 0;
-}
-
 function formatFloorLabel(floor: number) {
     if (floor === 1) return "1er étage";
     return `${floor}ème étage`;
 }
 
-function fireConfettiAtReservationTop(reservation: ApiRoomReservationWithUser) {
-    const column = document.getElementById(`room-col-${reservation.officeRoomId}`);
+function fireConfettiAtReservationTop(
+    reservation: ApiRoomReservationWithUser,
+    getRoomColumnElement: (officeRoomId: number) => HTMLElement | null,
+) {
+    const column = getRoomColumnElement(reservation.officeRoomId);
     if (!column) return;
 
     const rect = column.getBoundingClientRect();
@@ -135,6 +129,9 @@ export default function SchedulerPage(props: {
     const [selectedFloorId, setSelectedFloorId] = useState<number | null>(null);
 
     const queryClient = useQueryClient();
+
+    const roomColumnRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
+    const roomHeaderRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
 
     const meQuery = useQuery(meQueryOptions());
     const officesQuery = useQuery(officesQueryOptions());
@@ -393,6 +390,10 @@ export default function SchedulerPage(props: {
         const socket = io(getSocketApiUrl(), { transports: ["websocket"] });
         const roomReservationsRootKey = ["roomReservations"] as const;
 
+        const getRoomColumnElement = (officeRoomId: number) => {
+            return roomColumnRefs.current.get(officeRoomId) ?? null;
+        };
+
         const getOfficeIdForRoomId = (officeRoomId: number): number | null => {
             const officeRooms = queryClient.getQueryData<ApiOfficeRoom[]>(queryKeys.officeRooms());
             const officeFloors = queryClient.getQueryData<ApiOfficeFloor[]>(
@@ -493,7 +494,7 @@ export default function SchedulerPage(props: {
 
             if (!isFinalInterview && isIdMultipleOf(reservation.id, 1000)) {
                 requestAnimationFrame(() => {
-                    fireConfettiAtReservationTop(reservation);
+                    fireConfettiAtReservationTop(reservation, getRoomColumnElement);
                 });
             }
 
@@ -659,6 +660,8 @@ export default function SchedulerPage(props: {
                         onDeleteReservation={handleDeleteReservation}
                         isFiveMinuteSlots={isFiveMinuteSlots}
                         focusedRoomId={props.focusedRoomId}
+                        roomColumnRefs={roomColumnRefs}
+                        roomHeaderRefs={roomHeaderRefs}
                     />
                 ) : (
                     <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">

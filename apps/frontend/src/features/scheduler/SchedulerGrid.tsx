@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useClock, useNow } from "@/debug/clock";
 import { cn } from "@/lib/utils";
@@ -30,6 +30,8 @@ interface SchedulerGridProps {
     onDeleteReservation: (id: Reservation["id"]) => void;
     isFiveMinuteSlots: boolean;
     focusedRoomId?: number;
+    roomColumnRefs?: React.MutableRefObject<Map<number, HTMLDivElement | null>>;
+    roomHeaderRefs?: React.MutableRefObject<Map<number, HTMLDivElement | null>>;
 }
 
 interface MovingState {
@@ -47,6 +49,8 @@ export default function SchedulerGrid({
     onDeleteReservation,
     isFiveMinuteSlots,
     focusedRoomId,
+    roomColumnRefs,
+    roomHeaderRefs,
 }: SchedulerGridProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const dragActivateTimeoutRef = useRef<number | null>(null);
@@ -91,6 +95,25 @@ export default function SchedulerGrid({
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
     const [hoveredRoomId, setHoveredRoomId] = useState<number | null>(null);
 
+    const getRoomHeaderElement = useCallback(
+        (roomId: number) => {
+            return (
+                roomHeaderRefs?.current.get(roomId) ??
+                document.getElementById(`room-header-${roomId}`)
+            );
+        },
+        [roomHeaderRefs],
+    );
+
+    const getRoomColumnElement = useCallback(
+        (roomId: number) => {
+            return (
+                roomColumnRefs?.current.get(roomId) ?? document.getElementById(`room-col-${roomId}`)
+            );
+        },
+        [roomColumnRefs],
+    );
+
     useEffect(() => {
         if (!focusedRoomId) return;
         if (!rooms.some((r) => r.id === focusedRoomId)) return;
@@ -98,7 +121,7 @@ export default function SchedulerGrid({
         const container = containerRef.current;
         if (!container) return;
 
-        const roomHeader = document.getElementById(`room-header-${focusedRoomId}`);
+        const roomHeader = getRoomHeaderElement(focusedRoomId);
         if (!roomHeader) return;
 
         const containerRect = container.getBoundingClientRect();
@@ -114,7 +137,7 @@ export default function SchedulerGrid({
             top: container.scrollTop,
             behavior: "smooth",
         });
-    }, [focusedRoomId, rooms]);
+    }, [focusedRoomId, getRoomHeaderElement, rooms]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -171,7 +194,7 @@ export default function SchedulerGrid({
     const handleSelectionMove = (e: React.MouseEvent) => {
         if (!dragSelection) return;
 
-        const gridContent = document.getElementById(`room-col-${dragSelection.roomId}`);
+        const gridContent = getRoomColumnElement(dragSelection.roomId);
         if (!gridContent) return;
 
         const rect = gridContent.getBoundingClientRect();
@@ -191,7 +214,7 @@ export default function SchedulerGrid({
     const handleEventMove = (e: React.MouseEvent) => {
         if (!movingState || !hoveredRoomId) return;
 
-        const gridContent = document.getElementById(`room-col-${hoveredRoomId}`);
+        const gridContent = getRoomColumnElement(hoveredRoomId);
         if (!gridContent) return;
 
         const rect = gridContent.getBoundingClientRect();
@@ -292,7 +315,7 @@ export default function SchedulerGrid({
     const handleDragStartEvent = (e: React.MouseEvent, event: Reservation) => {
         if (!event.canEdit) return;
 
-        const gridContent = document.getElementById(`room-col-${event.roomId}`);
+        const gridContent = getRoomColumnElement(event.roomId);
         if (!gridContent) return;
 
         const rect = gridContent.getBoundingClientRect();
@@ -428,6 +451,7 @@ export default function SchedulerGrid({
                             <div
                                 key={room.id}
                                 id={`room-header-${room.id}`}
+                                ref={(el) => roomHeaderRefs?.current.set(room.id, el)}
                                 className={cn(
                                     "flex h-10 w-52 flex-shrink-0 items-center justify-center border-b border-r bg-muted/30 text-sm font-semibold text-foreground shadow-sm",
                                     focusedRoomId === room.id && "bg-accent/30",
@@ -493,6 +517,7 @@ export default function SchedulerGrid({
                                 >
                                     <div
                                         id={`room-col-${room.id}`}
+                                        ref={(el) => roomColumnRefs?.current.set(room.id, el)}
                                         className={cn(
                                             "relative",
                                             focusedRoomId === room.id
