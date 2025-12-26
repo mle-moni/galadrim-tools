@@ -6,39 +6,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { getSocketApiUrl } from "@/integrations/backend/client";
 import { queryKeys } from "@/integrations/backend/query-keys";
-
-function parseId(payload: unknown): number | null {
-    if (typeof payload === "number") {
-        return Number.isFinite(payload) ? payload : null;
-    }
-
-    if (typeof payload === "string") {
-        const trimmed = payload.trim();
-        if (trimmed === "") return null;
-        const parsed = Number(trimmed);
-        return Number.isFinite(parsed) ? parsed : null;
-    }
-
-    if (payload && typeof payload === "object" && "id" in payload) {
-        const maybeId = (payload as { id?: unknown }).id;
-        return parseId(maybeId);
-    }
-
-    return null;
-}
-
-function upsertRestaurantInList(restaurants: IRestaurant[], restaurant: IRestaurant) {
-    const existingIndex = restaurants.findIndex((r) => r.id === restaurant.id);
-    if (existingIndex === -1) return [restaurant, ...restaurants];
-
-    const next = restaurants.slice();
-    next[existingIndex] = restaurant;
-    return next;
-}
-
-function removeRestaurantFromList(restaurants: IRestaurant[], restaurantId: number) {
-    return restaurants.filter((r) => r.id !== restaurantId);
-}
+import { removeById, upsertById } from "@/lib/collections";
+import { parseId } from "@/lib/parse";
 
 function upsertReviewInRestaurant(restaurant: IRestaurant, review: IReview) {
     const nextReviews = [review, ...restaurant.reviews.filter((r) => r.id !== review.id)];
@@ -48,19 +17,6 @@ function upsertReviewInRestaurant(restaurant: IRestaurant, review: IReview) {
 function removeReviewFromRestaurant(restaurant: IRestaurant, reviewId: number) {
     const nextReviews = restaurant.reviews.filter((r) => r.id !== reviewId);
     return { ...restaurant, reviews: nextReviews };
-}
-
-function upsertTagInList(tags: ITag[], tag: ITag) {
-    const existingIndex = tags.findIndex((t) => t.id === tag.id);
-    if (existingIndex === -1) return [tag, ...tags];
-
-    const next = tags.slice();
-    next[existingIndex] = tag;
-    return next;
-}
-
-function removeTagFromList(tags: ITag[], tagId: number) {
-    return tags.filter((t) => t.id !== tagId);
 }
 
 export function useMiamsSocketSync(me: IUserData | undefined) {
@@ -86,51 +42,39 @@ export function useMiamsSocketSync(me: IUserData | undefined) {
         socket.on("auth", authenticate);
 
         socket.on("createRestaurant", (restaurant: IRestaurant) => {
-            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
-                if (!old) return [restaurant];
-                return upsertRestaurantInList(old, restaurant);
-            });
+            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) =>
+                upsertById(old, restaurant),
+            );
         });
 
         socket.on("updateRestaurant", (restaurant: IRestaurant) => {
-            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
-                if (!old) return [restaurant];
-                return upsertRestaurantInList(old, restaurant);
-            });
+            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) =>
+                upsertById(old, restaurant),
+            );
         });
 
         socket.on("deleteRestaurant", (payload: unknown) => {
             const restaurantId = parseId(payload);
             if (restaurantId == null) return;
 
-            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
-                if (!old) return old;
-                return removeRestaurantFromList(old, restaurantId);
-            });
+            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) =>
+                removeById(old, restaurantId),
+            );
         });
 
         socket.on("createTag", (tag: ITag) => {
-            queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => {
-                if (!old) return [tag];
-                return upsertTagInList(old, tag);
-            });
+            queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => upsertById(old, tag));
         });
 
         socket.on("updateTag", (tag: ITag) => {
-            queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => {
-                if (!old) return [tag];
-                return upsertTagInList(old, tag);
-            });
+            queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => upsertById(old, tag));
         });
 
         socket.on("deleteTag", (payload: unknown) => {
             const tagId = parseId(payload);
             if (tagId == null) return;
 
-            queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => {
-                if (!old) return old;
-                return removeTagFromList(old, tagId);
-            });
+            queryClient.setQueryData<ITag[]>(queryKeys.tags(), (old) => removeById(old, tagId));
         });
 
         socket.on("createRestaurantReview", (review: IReview) => {
@@ -175,10 +119,9 @@ export function useMiamsSocketSync(me: IUserData | undefined) {
                 return { ...old, dailyChoice: restaurant.id };
             });
 
-            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) => {
-                if (!old) return [restaurant];
-                return upsertRestaurantInList(old, restaurant);
-            });
+            queryClient.setQueryData<IRestaurant[]>(queryKeys.restaurants(), (old) =>
+                upsertById(old, restaurant),
+            );
         });
 
         return () => {

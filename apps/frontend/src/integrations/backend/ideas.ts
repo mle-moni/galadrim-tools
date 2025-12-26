@@ -4,6 +4,8 @@ import { queryOptions, useMutation, useQueryClient } from "@tanstack/react-query
 import { APPLICATION_JSON_HEADERS, fetchBackendJson, getErrorMessage } from "./client";
 import { queryKeys } from "./query-keys";
 
+import { removeById, upsertById } from "../../lib/collections";
+
 type ApiIdeaComment = Omit<IIdeaComment, "createdAt"> & {
     createdAt?: string | Date;
 };
@@ -26,23 +28,6 @@ export function normalizeIdea(idea: ApiIdea): IIdea {
         createdAt: new Date(idea.createdAt),
         comments: idea.comments.map(normalizeIdeaComment),
     };
-}
-
-function upsertIdeaInList(ideas: IIdea[], incoming: IIdea) {
-    const existingIndex = ideas.findIndex((i) => i.id === incoming.id);
-    if (existingIndex === -1) return [incoming, ...ideas];
-
-    const previous = ideas[existingIndex];
-    const merged: IIdea = {
-        ...previous,
-        ...incoming,
-        // Some websocket / update events aren't personalized and may lose ownership.
-        isOwner: previous.isOwner || incoming.isOwner,
-    };
-
-    const next = ideas.slice();
-    next[existingIndex] = merged;
-    return next;
 }
 
 export async function fetchIdeas(): Promise<IIdea[]> {
@@ -91,10 +76,14 @@ export function useCreateIdeaMutation(meId: number | null) {
         onSuccess: (idea) => {
             const withOwner = meId === null ? idea : { ...idea, isOwner: true };
 
-            queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
-                if (!old) return [withOwner];
-                return upsertIdeaInList(old, withOwner);
-            });
+            queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) =>
+                upsertById(old, withOwner, (previous, next) => ({
+                    ...previous,
+                    ...next,
+                    // Some websocket / update events aren't personalized and may lose ownership.
+                    isOwner: previous.isOwner || next.isOwner,
+                })),
+            );
         },
     });
 }
@@ -132,10 +121,14 @@ export function useUpdateIdeaMutation() {
     return useMutation({
         mutationFn: (input: UpdateIdeaInput) => updateIdea(input),
         onSuccess: (idea) => {
-            queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
-                if (!old) return [idea];
-                return upsertIdeaInList(old, idea);
-            });
+            queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) =>
+                upsertById(old, idea, (previous, next) => ({
+                    ...previous,
+                    ...next,
+                    // Some websocket / update events aren't personalized and may lose ownership.
+                    isOwner: previous.isOwner || next.isOwner,
+                })),
+            );
         },
     });
 }
@@ -159,10 +152,9 @@ export function useDeleteIdeaMutation() {
     return useMutation({
         mutationFn: (input: DeleteIdeaInput) => deleteIdea(input),
         onSuccess: (_value, input) => {
-            queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) => {
-                if (!old) return old;
-                return old.filter((idea) => idea.id !== input.ideaId);
-            });
+            queryClient.setQueryData<IIdea[]>(queryKeys.ideas(), (old) =>
+                removeById(old, input.ideaId),
+            );
         },
     });
 }
