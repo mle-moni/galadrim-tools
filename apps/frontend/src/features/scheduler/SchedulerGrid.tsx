@@ -66,17 +66,12 @@ export default function SchedulerGrid({
         const update = () => setContainerHeight(container.clientHeight);
         update();
 
-        const globalWithResizeObserver = globalThis as unknown as {
-            ResizeObserver?: typeof ResizeObserver;
-        };
-        const ResizeObserverImpl = globalWithResizeObserver.ResizeObserver;
-
-        if (!ResizeObserverImpl) {
+        if (typeof ResizeObserver === "undefined") {
             window.addEventListener("resize", update);
             return () => window.removeEventListener("resize", update);
         }
 
-        const observer = new ResizeObserverImpl(() => update());
+        const observer = new ResizeObserver(() => update());
         observer.observe(container);
         return () => observer.disconnect();
     }, []);
