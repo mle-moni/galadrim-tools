@@ -163,11 +163,10 @@ function ScamWinnerOmgPage() {
 
     const popupCount = 14;
 
-    const basePopups = useMemo(() => {
+    const [basePopups] = useState<ScamPopup[]>(() => {
         if (typeof window === "undefined") return [];
         return Array.from({ length: popupCount }, (_, idx) => createPopup(idx));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    });
 
     useEffect(() => {
         setPopups(basePopups);
