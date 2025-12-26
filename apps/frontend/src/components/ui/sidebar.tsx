@@ -503,10 +503,8 @@ function SidebarMenuButton({
         return button;
     }
 
-    const tooltipProps =
-        (tooltip as unknown as { constructor?: unknown })?.constructor === String
-            ? ({ children: tooltip as string } as React.ComponentProps<typeof TooltipContent>)
-            : (tooltip as React.ComponentProps<typeof TooltipContent>);
+    const tooltipProps: React.ComponentProps<typeof TooltipContent> =
+        typeof tooltip === "string" ? { children: tooltip } : tooltip;
 
     return (
         <Tooltip>

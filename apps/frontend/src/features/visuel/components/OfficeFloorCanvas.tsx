@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 
 import { useNow } from "@/debug/clock";
 
@@ -102,6 +102,54 @@ export default function OfficeFloorCanvas(props: {
         return getActiveReservation(hoveredRoom.id, props.reservations, now);
     }, [hoveredRoom, now, props.reservations]);
 
+    const tooltipStyle = useMemo<CSSProperties | undefined>(() => {
+        if (!hoveredRoom || !hoveredPoint) return undefined;
+
+        const offset = 20;
+        const width = tooltipSize?.width ?? 220;
+        const height = tooltipSize?.height ?? 48;
+
+        const canFitRight = hoveredPoint.x + offset + width <= canvasWidth;
+        const preferredLeft = canFitRight
+            ? hoveredPoint.x + offset
+            : hoveredPoint.x - offset - width;
+        const left = Math.min(Math.max(0, preferredLeft), canvasWidth - width);
+
+        const canFitAbove = hoveredPoint.y - offset - height >= 0;
+        const preferredTop = canFitAbove
+            ? hoveredPoint.y - offset - height
+            : hoveredPoint.y + offset;
+        const top = Math.min(Math.max(0, preferredTop), canvasHeight - height);
+
+        return { left, top };
+    }, [
+        canvasHeight,
+        canvasWidth,
+        hoveredPoint,
+        hoveredRoom,
+        tooltipSize?.height,
+        tooltipSize?.width,
+    ]);
+
+    const hoveredRoomStatus = useMemo(() => {
+        if (!hoveredRoom) return null;
+
+        if (!hoveredRoom.isBookable) {
+            return { className: "text-slate-600", text: "Non réservable" };
+        }
+
+        if (hoveredRoomReservedNow === null) return null;
+
+        if (hoveredRoomReservedNow) {
+            const owner = hoveredRoomActiveReservation
+                ? ` par ${getReservationOwnerLabel(hoveredRoomActiveReservation)}`
+                : "";
+            return { className: "text-destructive", text: `Occupée${owner}` };
+        }
+
+        return { className: "text-emerald-700", text: "Libre" };
+    }, [hoveredRoom, hoveredRoomActiveReservation, hoveredRoomReservedNow]);
+
     useLayoutEffect(() => {
         if (!hoveredRoom) {
             setTooltipSize(null);
@@ -173,45 +221,12 @@ export default function OfficeFloorCanvas(props: {
                 <div
                     ref={tooltipRef}
                     className="pointer-events-none absolute z-50 max-w-[220px] rounded-md border bg-background/95 px-2 py-1 text-xs shadow-sm backdrop-blur"
-                    style={{
-                        left: (() => {
-                            const offset = 20;
-                            const width = tooltipSize?.width ?? 220;
-
-                            const canFitRight = hoveredPoint.x + offset + width <= canvasWidth;
-                            const preferred = canFitRight
-                                ? hoveredPoint.x + offset
-                                : hoveredPoint.x - offset - width;
-
-                            return Math.min(Math.max(0, preferred), canvasWidth - width);
-                        })(),
-                        top: (() => {
-                            const offset = 20;
-                            const height = tooltipSize?.height ?? 48;
-
-                            const canFitAbove = hoveredPoint.y - offset - height >= 0;
-                            const preferred = canFitAbove
-                                ? hoveredPoint.y - offset - height
-                                : hoveredPoint.y + offset;
-
-                            return Math.min(Math.max(0, preferred), canvasHeight - height);
-                        })(),
-                    }}
+                    style={tooltipStyle}
                 >
                     <div className="font-semibold text-foreground">{hoveredRoom.name}</div>
-                    {!hoveredRoom.isBookable ? (
-                        <div className="text-slate-600">Non réservable</div>
-                    ) : hoveredRoomReservedNow !== null ? (
-                        <div
-                            className={
-                                hoveredRoomReservedNow ? "text-destructive" : "text-emerald-700"
-                            }
-                        >
-                            {hoveredRoomReservedNow
-                                ? `Occupée${hoveredRoomActiveReservation ? ` par ${getReservationOwnerLabel(hoveredRoomActiveReservation)}` : ""}`
-                                : "Libre"}
-                        </div>
-                    ) : null}
+                    {hoveredRoomStatus && (
+                        <div className={hoveredRoomStatus.className}>{hoveredRoomStatus.text}</div>
+                    )}
                 </div>
             )}
 
