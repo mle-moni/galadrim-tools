@@ -19,9 +19,13 @@ import { cn } from "@/lib/utils";
 import { IDEA_DND_TYPE, type IdeaDragItem } from "./dnd";
 import { formatFullDateFr, formatRelativeTimeFr, getIdeaVoteCounts } from "./ideas-utils";
 
+const TILT_BUCKETS = 11;
+const TILT_MIDDLE_BUCKET = 5;
+const TILT_STEP_DEG = 0.2;
+
 function getDeterministicTilt(ideaId: number) {
-    const bucket = ideaId % 11; // 0..10
-    return (bucket - 5) * 0.2; // ~ -1..1deg
+    const bucket = ideaId % TILT_BUCKETS;
+    return (bucket - TILT_MIDDLE_BUCKET) * TILT_STEP_DEG;
 }
 
 function formatVoters(
