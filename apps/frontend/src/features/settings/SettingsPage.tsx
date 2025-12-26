@@ -48,23 +48,12 @@ function isNotificationEnabled(settings: number, notification: NotificationKey) 
 }
 
 function toggleNotificationSetting(settings: number, notification: NotificationKey) {
-    const shouldAdd = !isNotificationEnabled(settings, notification);
-    const delta = shouldAdd ? NOTIFICATION_MASKS[notification] : -NOTIFICATION_MASKS[notification];
-    return settings + delta;
+    return settings ^ NOTIFICATION_MASKS[notification];
 }
 
 async function copyToClipboard(text: string) {
     try {
-        const permissions = await navigator.permissions.query({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            name: "clipboard-write",
-        });
-
-        if (permissions.state !== "granted" && permissions.state !== "prompt") {
-            return false;
-        }
-
+        if (!navigator.clipboard?.writeText) return false;
         await navigator.clipboard.writeText(text);
         return true;
     } catch {
@@ -598,9 +587,7 @@ export default function SettingsPage() {
                                                 );
                                             }
                                         })
-                                        .catch(() => {
-                                            // Error toast handled by toast.promise.
-                                        });
+                                        .catch(() => {});
                                 }}
                                 disabled={tokenMutation.isPending}
                             >
