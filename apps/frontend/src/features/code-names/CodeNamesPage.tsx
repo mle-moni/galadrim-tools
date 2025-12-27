@@ -185,7 +185,7 @@ export default function CodeNamesPage(props: { gameId?: number }) {
     const games = gamesQuery.data ?? [];
     const game = games.find((g) => g.id === props.gameId) ?? null;
 
-    const canDeleteGame = !hasRights(meQuery.data?.rights ?? 0, ["CODE_NAMES_ADMIN"]);
+    const canDeleteGame = hasRights(meQuery.data?.rights ?? 0, ["CODE_NAMES_ADMIN"]);
 
     const userOptions = useMemo<UserOption[]>(() => {
         const users = usersQuery.data ?? [];
