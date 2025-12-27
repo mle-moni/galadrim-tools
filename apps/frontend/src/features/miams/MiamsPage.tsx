@@ -117,6 +117,14 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
         return restaurantsQuery.data?.find((r) => r.id === props.selectedRestaurantId) ?? null;
     }, [props.selectedRestaurantId, restaurantsQuery.data]);
 
+    const sortedSelectedRestaurantReviews = useMemo(() => {
+        if (!selectedRestaurant) return [];
+
+        return selectedRestaurant.reviews
+            .slice()
+            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+    }, [selectedRestaurant]);
+
     const restaurantsFuse = useMemo(() => {
         return new Fuse(restaurantsQuery.data ?? [], {
             includeScore: true,
@@ -508,127 +516,118 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            {selectedRestaurant.reviews
-                                                .slice()
-                                                .sort((a, b) =>
-                                                    a.createdAt < b.createdAt ? 1 : -1,
-                                                )
-                                                .map((review) => (
-                                                    <div
-                                                        key={review.id}
-                                                        className="rounded-md border bg-card px-3 py-2"
-                                                    >
-                                                        <div className="flex items-center justify-between gap-2">
-                                                            <div className="flex min-w-0 items-center gap-2">
-                                                                <div className="truncate text-xs text-muted-foreground">
-                                                                    {usernameById.get(
-                                                                        review.userId,
-                                                                    ) ?? "Utilisateur inconnu"}
+                                            {sortedSelectedRestaurantReviews.map((review) => (
+                                                <div
+                                                    key={review.id}
+                                                    className="rounded-md border bg-card px-3 py-2"
+                                                >
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <div className="flex min-w-0 items-center gap-2">
+                                                            <div className="truncate text-xs text-muted-foreground">
+                                                                {usernameById.get(review.userId) ??
+                                                                    "Utilisateur inconnu"}
+                                                            </div>
+
+                                                            {(isMiamAdmin ||
+                                                                review.userId === meId) && (
+                                                                <div className="flex items-center gap-1">
+                                                                    <Button
+                                                                        type="button"
+                                                                        size="icon"
+                                                                        variant="ghost"
+                                                                        className="h-7 w-7"
+                                                                        disabled={
+                                                                            updateReviewMutation.isPending
+                                                                        }
+                                                                        onClick={() => {
+                                                                            const nextComment =
+                                                                                window.prompt(
+                                                                                    "Modifier l'avis",
+                                                                                    review.comment,
+                                                                                );
+                                                                            if (nextComment == null)
+                                                                                return;
+
+                                                                            const trimmed =
+                                                                                nextComment.trim();
+                                                                            if (trimmed === "")
+                                                                                return;
+
+                                                                            updateReviewMutation.mutate(
+                                                                                {
+                                                                                    restaurantId:
+                                                                                        selectedRestaurant.id,
+                                                                                    reviewId:
+                                                                                        review.id,
+                                                                                    comment:
+                                                                                        trimmed,
+                                                                                },
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        <Pencil className="h-4 w-4" />
+                                                                        <span className="sr-only">
+                                                                            Modifier
+                                                                        </span>
+                                                                    </Button>
+
+                                                                    <Button
+                                                                        type="button"
+                                                                        size="icon"
+                                                                        variant="ghost"
+                                                                        className="h-7 w-7"
+                                                                        disabled={
+                                                                            deleteReviewMutation.isPending
+                                                                        }
+                                                                        onClick={() => {
+                                                                            const ok =
+                                                                                window.confirm(
+                                                                                    "Supprimer cet avis ?",
+                                                                                );
+                                                                            if (!ok) return;
+
+                                                                            deleteReviewMutation.mutate(
+                                                                                {
+                                                                                    restaurantId:
+                                                                                        selectedRestaurant.id,
+                                                                                    reviewId:
+                                                                                        review.id,
+                                                                                },
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                        <span className="sr-only">
+                                                                            Supprimer
+                                                                        </span>
+                                                                    </Button>
                                                                 </div>
-
-                                                                {(isMiamAdmin ||
-                                                                    review.userId === meId) && (
-                                                                    <div className="flex items-center gap-1">
-                                                                        <Button
-                                                                            type="button"
-                                                                            size="icon"
-                                                                            variant="ghost"
-                                                                            className="h-7 w-7"
-                                                                            disabled={
-                                                                                updateReviewMutation.isPending
-                                                                            }
-                                                                            onClick={() => {
-                                                                                const nextComment =
-                                                                                    window.prompt(
-                                                                                        "Modifier l'avis",
-                                                                                        review.comment,
-                                                                                    );
-                                                                                if (
-                                                                                    nextComment ==
-                                                                                    null
-                                                                                )
-                                                                                    return;
-
-                                                                                const trimmed =
-                                                                                    nextComment.trim();
-                                                                                if (trimmed === "")
-                                                                                    return;
-
-                                                                                updateReviewMutation.mutate(
-                                                                                    {
-                                                                                        restaurantId:
-                                                                                            selectedRestaurant.id,
-                                                                                        reviewId:
-                                                                                            review.id,
-                                                                                        comment:
-                                                                                            trimmed,
-                                                                                    },
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            <Pencil className="h-4 w-4" />
-                                                                            <span className="sr-only">
-                                                                                Modifier
-                                                                            </span>
-                                                                        </Button>
-
-                                                                        <Button
-                                                                            type="button"
-                                                                            size="icon"
-                                                                            variant="ghost"
-                                                                            className="h-7 w-7"
-                                                                            disabled={
-                                                                                deleteReviewMutation.isPending
-                                                                            }
-                                                                            onClick={() => {
-                                                                                const ok =
-                                                                                    window.confirm(
-                                                                                        "Supprimer cet avis ?",
-                                                                                    );
-                                                                                if (!ok) return;
-
-                                                                                deleteReviewMutation.mutate(
-                                                                                    {
-                                                                                        restaurantId:
-                                                                                            selectedRestaurant.id,
-                                                                                        reviewId:
-                                                                                            review.id,
-                                                                                    },
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            <Trash2 className="h-4 w-4" />
-                                                                            <span className="sr-only">
-                                                                                Supprimer
-                                                                            </span>
-                                                                        </Button>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                            <div className="shrink-0 text-xs text-muted-foreground">
-                                                                {new Date(
-                                                                    review.createdAt,
-                                                                ).toLocaleDateString()}
-                                                            </div>
+                                                            )}
                                                         </div>
-                                                        <div className="mt-1 whitespace-pre-wrap text-sm">
-                                                            {review.comment}
+                                                        <div className="shrink-0 text-xs text-muted-foreground">
+                                                            {new Date(
+                                                                review.createdAt,
+                                                            ).toLocaleDateString()}
                                                         </div>
-
-                                                        {review.image?.url && (
-                                                            <img
-                                                                src={resolveBackendUrl(
-                                                                    review.image.url,
-                                                                )}
-                                                                alt=""
-                                                                className="mt-2 max-h-56 w-full rounded-md border object-cover"
-                                                                loading="lazy"
-                                                            />
-                                                        )}
                                                     </div>
-                                                ))}
+                                                    <div className="mt-1 whitespace-pre-wrap text-sm">
+                                                        {review.comment}
+                                                    </div>
 
-                                            {selectedRestaurant.reviews.length === 0 && (
+                                                    {review.image?.url && (
+                                                        <img
+                                                            src={resolveBackendUrl(
+                                                                review.image.url,
+                                                            )}
+                                                            alt=""
+                                                            className="mt-2 max-h-56 w-full rounded-md border object-cover"
+                                                            loading="lazy"
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+
+                                            {sortedSelectedRestaurantReviews.length === 0 && (
                                                 <div className="text-sm text-muted-foreground">
                                                     Aucun avis.
                                                 </div>
