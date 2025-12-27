@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
 
 import { useClock } from "@/debug/clock";
+
+import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
 
 import FloorTabSelector from "@/components/FloorTabSelector";
 import OfficePicker from "@/components/OfficePicker";
@@ -62,8 +64,6 @@ export default function SchedulerPage(props: {
 
     const [currentDate, setCurrentDate] = useState<Date>(() => clock.now());
     const [isFiveMinuteSlots, setIsFiveMinuteSlots] = useState(false);
-    const [selectedOfficeId, setSelectedOfficeId] = useState<number | null>(null);
-    const [selectedFloorId, setSelectedFloorId] = useState<number | null>(null);
 
     const queryClient = useQueryClient();
 
@@ -75,103 +75,15 @@ export default function SchedulerPage(props: {
     const officeFloorsQuery = useQuery(officeFloorsQueryOptions());
     const officeRoomsQuery = useQuery(officeRoomsQueryOptions());
 
-    useEffect(() => {
-        if (!officesQuery.data) return;
-
-        const hasExplicitOfficeSelection =
-            props.focusedRoomId != null || props.initialOfficeId != null;
-        if (selectedOfficeId !== null && !hasExplicitOfficeSelection) return;
-
-        const availableOfficeIds = new Set(officesQuery.data.map((o) => o.id));
-        const floorsById = new Map((officeFloorsQuery.data ?? []).map((f) => [f.id, f]));
-        const roomsById = new Map((officeRoomsQuery.data ?? []).map((r) => [r.id, r]));
-
-        let desiredOfficeId: number | null = null;
-
-        if (props.focusedRoomId != null) {
-            const room = roomsById.get(props.focusedRoomId);
-            const floor = room ? floorsById.get(room.officeFloorId) : undefined;
-            const officeIdFromRoom = floor?.officeId;
-            if (officeIdFromRoom != null && availableOfficeIds.has(officeIdFromRoom)) {
-                desiredOfficeId = officeIdFromRoom;
-            }
-        }
-
-        if (desiredOfficeId === null && props.initialOfficeId != null) {
-            if (availableOfficeIds.has(props.initialOfficeId)) {
-                desiredOfficeId = props.initialOfficeId;
-            }
-        }
-
-        if (desiredOfficeId === null) {
-            const officeIdFromMe = meQuery.data?.officeId;
-            if (officeIdFromMe != null && availableOfficeIds.has(officeIdFromMe)) {
-                desiredOfficeId = officeIdFromMe;
-            } else {
-                desiredOfficeId = officesQuery.data[0]?.id ?? null;
-            }
-        }
-
-        if (desiredOfficeId !== null && desiredOfficeId !== selectedOfficeId) {
-            setSelectedOfficeId(desiredOfficeId);
-        }
-    }, [
-        meQuery.data?.officeId,
-        officeFloorsQuery.data,
-        officeRoomsQuery.data,
-        officesQuery.data,
-        props.focusedRoomId,
-        props.initialOfficeId,
-        selectedOfficeId,
-    ]);
-
-    useEffect(() => {
-        if (selectedOfficeId === null) {
-            setSelectedFloorId(null);
-            return;
-        }
-
-        const floorsForOffice = (officeFloorsQuery.data ?? []).filter(
-            (f) => f.officeId === selectedOfficeId,
-        );
-        const floorIdsForOffice = new Set(floorsForOffice.map((f) => f.id));
-
-        const hasExplicitFloorSelection =
-            props.focusedRoomId != null || props.initialFloorId != null;
-
-        if (!hasExplicitFloorSelection) {
-            if (selectedFloorId !== null) {
-                setSelectedFloorId(null);
-            }
-            return;
-        }
-
-        let desiredFloorId: number | null = null;
-
-        if (props.focusedRoomId != null) {
-            const room = (officeRoomsQuery.data ?? []).find((r) => r.id === props.focusedRoomId);
-            if (room && floorIdsForOffice.has(room.officeFloorId)) {
-                desiredFloorId = room.officeFloorId;
-            }
-        }
-
-        if (desiredFloorId === null && props.initialFloorId != null) {
-            if (floorIdsForOffice.has(props.initialFloorId)) {
-                desiredFloorId = props.initialFloorId;
-            }
-        }
-
-        if (desiredFloorId !== selectedFloorId) {
-            setSelectedFloorId(desiredFloorId);
-        }
-    }, [
-        officeFloorsQuery.data,
-        officeRoomsQuery.data,
-        props.focusedRoomId,
-        props.initialFloorId,
-        selectedFloorId,
-        selectedOfficeId,
-    ]);
+    const { selectedOfficeId, selectedFloorId } = useOfficeFloorSelection({
+        offices: officesQuery.data ?? [],
+        floors: officeFloorsQuery.data ?? [],
+        rooms: officeRoomsQuery.data ?? [],
+        meOfficeId: meQuery.data?.officeId ?? null,
+        initialOfficeId: props.initialOfficeId,
+        initialFloorId: props.initialFloorId,
+        focusedRoomId: props.focusedRoomId,
+    });
 
     const dayIso = useMemo(() => startOfDayIso(currentDate), [currentDate]);
     const officeIdForQueries = selectedOfficeId;

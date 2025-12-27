@@ -7,6 +7,8 @@ import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
 import { useNow } from "@/debug/clock";
 
+import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
+
 import FloorTabSelector from "@/components/FloorTabSelector";
 import OfficePicker from "@/components/OfficePicker";
 import PageTitle from "@/components/PageTitle";
@@ -38,35 +40,13 @@ export default function VisuelPage(props: {
     const officeFloorsQuery = useQuery(officeFloorsQueryOptions());
     const officeRoomsQuery = useQuery(officeRoomsQueryOptions());
 
-    const [selectedOfficeId, setSelectedOfficeId] = useState<number | null>(null);
-    const [selectedFloorId, setSelectedFloorId] = useState<number | null>(null);
-
-    useEffect(() => {
-        if (!officesQuery.data) return;
-        const availableOfficeIds = new Set(officesQuery.data.map((o) => o.id));
-
-        if (props.initialOfficeId && availableOfficeIds.has(props.initialOfficeId)) {
-            setSelectedOfficeId(props.initialOfficeId);
-            return;
-        }
-
-        if (selectedOfficeId !== null) return;
-
-        const firstOfficeId = officesQuery.data[0]?.id ?? null;
-        if (firstOfficeId !== null) setSelectedOfficeId(firstOfficeId);
-    }, [officesQuery.data, props.initialOfficeId, selectedOfficeId]);
-
-    useEffect(() => {
-        if (!officeFloorsQuery.data) return;
-
-        if (props.initialFloorId === undefined) {
-            setSelectedFloorId(null);
-            return;
-        }
-
-        const floorsById = new Set(officeFloorsQuery.data.map((f) => f.id));
-        setSelectedFloorId(floorsById.has(props.initialFloorId) ? props.initialFloorId : null);
-    }, [officeFloorsQuery.data, props.initialFloorId]);
+    const { selectedOfficeId, selectedFloorId } = useOfficeFloorSelection({
+        offices: officesQuery.data ?? [],
+        floors: officeFloorsQuery.data ?? [],
+        rooms: officeRoomsQuery.data ?? [],
+        initialOfficeId: props.initialOfficeId,
+        initialFloorId: props.initialFloorId,
+    });
 
     const selectedOfficeName = useMemo(() => {
         if (!officesQuery.data) return undefined;
