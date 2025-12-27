@@ -19,14 +19,14 @@ const ideas = [
     {
         id: 10,
         userId: 1,
-        state: "TODO",
+        state: "TODO" as const,
         isAnonymous: false,
         text: "[SEED] Refusée: ajouter un captcha sur chaque clic",
     },
     {
         id: 11,
         userId: 2,
-        state: "TODO",
+        state: "TODO" as const,
         isAnonymous: false,
         text: "[SEED] Refusée: supprimer le bouton logout (pour toujours)",
     },
