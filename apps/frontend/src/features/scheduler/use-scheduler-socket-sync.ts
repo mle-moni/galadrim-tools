@@ -163,13 +163,39 @@ export function useSchedulerSocketSync(opts: {
             queryClient.setQueriesData<ApiRoomReservationWithUser[]>(
                 { queryKey: targetQueryKey, exact: true },
                 (old) => {
-                    if (!old) return old;
+                    const reservationStartMs = Date.parse(reservation.start);
+                    const reservationEndMs = Date.parse(reservation.end);
 
-                    const next = [...old, reservation];
+                    const next = (old ?? []).filter((r) => {
+                        if (r.id === reservation.id) return false;
+
+                        if (
+                            opts2.removeOptimistic &&
+                            r.id < 0 &&
+                            r.officeRoomId === reservation.officeRoomId &&
+                            r.userId === reservation.userId
+                        ) {
+                            const rStartMs = Date.parse(r.start);
+                            const rEndMs = Date.parse(r.end);
+
+                            const parsedTimesMatch =
+                                rStartMs === reservationStartMs && rEndMs === reservationEndMs;
+
+                            const stringTimesMatch =
+                                r.start === reservation.start && r.end === reservation.end;
+
+                            if (parsedTimesMatch || stringTimesMatch) return false;
+                        }
+
+                        return true;
+                    });
+
+                    next.push(reservation);
                     next.sort((a, b) => {
                         if (a.start === b.start) return a.id - b.id;
                         return a.start < b.start ? -1 : 1;
                     });
+
                     return next;
                 },
             );
