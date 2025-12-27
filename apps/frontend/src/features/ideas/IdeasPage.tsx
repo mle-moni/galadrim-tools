@@ -9,6 +9,7 @@ import type { IIdea, IdeaState } from "@galadrim-tools/shared";
 
 import { useDrop } from "react-dnd";
 
+import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -189,104 +190,108 @@ export default function IdeasPage(props: { ideaId?: number }) {
 
     return (
         <div className="h-full min-h-0 w-full overflow-auto bg-white">
-            <div className="flex w-full flex-col gap-4 p-4 md:p-6">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="min-w-0">
-                        <div className="text-2xl font-semibold tracking-tight">Boîte à idées</div>
-                    </div>
-
-                    <Button type="button" onClick={() => setCreateOpen(true)}>
-                        <Lightbulb className="h-4 w-4" />
-                        J'ai une idée
-                    </Button>
-                </div>
-
-                <div className="w-full overflow-x-auto pb-2">
-                    <div className="mx-auto flex w-fit gap-4">
-                        <KanbanColumn
-                            title="À faire"
-                            state="TODO"
-                            ideas={todoIdeas}
-                            meId={meId}
-                            isIdeasAdmin={isIdeasAdmin}
-                            usersById={usersById}
-                            isBusy={isBusy}
-                            onOpenComments={openComments}
-                            onVote={voteIdea}
-                            onDelete={deleteIdea}
-                            canMoveIdea={canMoveIdea}
-                            onMoveIdea={moveIdea}
-                        />
-
-                        <KanbanColumn
-                            title="En cours"
-                            state="DOING"
-                            ideas={doingIdeas}
-                            meId={meId}
-                            isIdeasAdmin={isIdeasAdmin}
-                            usersById={usersById}
-                            isBusy={isBusy}
-                            onOpenComments={openComments}
-                            onVote={voteIdea}
-                            onDelete={deleteIdea}
-                            canMoveIdea={canMoveIdea}
-                            onMoveIdea={moveIdea}
-                        />
-
-                        <KanbanColumn
-                            title="Terminées"
-                            state="DONE"
-                            ideas={doneIdeas}
-                            meId={meId}
-                            isIdeasAdmin={isIdeasAdmin}
-                            usersById={usersById}
-                            isBusy={isBusy}
-                            onOpenComments={openComments}
-                            onVote={voteIdea}
-                            onDelete={deleteIdea}
-                            canMoveIdea={canMoveIdea}
-                            onMoveIdea={moveIdea}
-                        />
-                    </div>
-                </div>
-
-                <div className="rounded-lg border bg-slate-50/40 p-3">
-                    <div className="flex items-center justify-between gap-3">
-                        <div className="text-sm font-semibold text-slate-900">Refusées</div>
-                        <div className="flex items-center gap-2">
-                            <span className="rounded-md bg-black/5 px-2 py-0.5 text-xs text-slate-700">
-                                {refusedIdeas.length}
-                            </span>
-                            <Button
-                                type="button"
-                                size="sm"
-                                variant="outline"
-                                disabled={refusedIdeas.length === 0}
-                                onClick={() => setRefusedOpen((v) => !v)}
-                            >
-                                {refusedOpen ? "Masquer" : "Afficher"}
-                            </Button>
+            <div className="flex w-full flex-col">
+                <header className="border-b bg-background px-4 py-3 md:px-6 md:py-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0">
+                            <PageTitle icon={Lightbulb}>Boîte à idées</PageTitle>
                         </div>
-                    </div>
 
-                    {refusedOpen && (
-                        <ScrollArea className="mt-3 max-h-[60vh] pr-2">
-                            <RefusedIdeasGrid
-                                ideas={refusedIdeas}
+                        <Button type="button" onClick={() => setCreateOpen(true)}>
+                            <Lightbulb className="h-4 w-4" />
+                            J'ai une idée
+                        </Button>
+                    </div>
+                </header>
+
+                <div className="flex w-full flex-col gap-4 px-4 py-4 md:px-6 md:py-6">
+                    <div className="w-full overflow-x-auto pb-2">
+                        <div className="mx-auto flex w-fit gap-4">
+                            <KanbanColumn
+                                title="À faire"
+                                state="TODO"
+                                ideas={todoIdeas}
                                 meId={meId}
                                 isIdeasAdmin={isIdeasAdmin}
                                 usersById={usersById}
                                 isBusy={isBusy}
-                                forceBad
                                 onOpenComments={openComments}
                                 onVote={voteIdea}
                                 onDelete={deleteIdea}
+                                canMoveIdea={canMoveIdea}
+                                onMoveIdea={moveIdea}
                             />
-                        </ScrollArea>
-                    )}
-                </div>
 
-                {(meQuery.isLoading || ideasQuery.isLoading) && <IdeasLoadingSkeleton />}
+                            <KanbanColumn
+                                title="En cours"
+                                state="DOING"
+                                ideas={doingIdeas}
+                                meId={meId}
+                                isIdeasAdmin={isIdeasAdmin}
+                                usersById={usersById}
+                                isBusy={isBusy}
+                                onOpenComments={openComments}
+                                onVote={voteIdea}
+                                onDelete={deleteIdea}
+                                canMoveIdea={canMoveIdea}
+                                onMoveIdea={moveIdea}
+                            />
+
+                            <KanbanColumn
+                                title="Terminées"
+                                state="DONE"
+                                ideas={doneIdeas}
+                                meId={meId}
+                                isIdeasAdmin={isIdeasAdmin}
+                                usersById={usersById}
+                                isBusy={isBusy}
+                                onOpenComments={openComments}
+                                onVote={voteIdea}
+                                onDelete={deleteIdea}
+                                canMoveIdea={canMoveIdea}
+                                onMoveIdea={moveIdea}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg border bg-slate-50/40 p-3">
+                        <div className="flex items-center justify-between gap-3">
+                            <div className="text-sm font-semibold text-slate-900">Refusées</div>
+                            <div className="flex items-center gap-2">
+                                <span className="rounded-md bg-black/5 px-2 py-0.5 text-xs text-slate-700">
+                                    {refusedIdeas.length}
+                                </span>
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={refusedIdeas.length === 0}
+                                    onClick={() => setRefusedOpen((v) => !v)}
+                                >
+                                    {refusedOpen ? "Masquer" : "Afficher"}
+                                </Button>
+                            </div>
+                        </div>
+
+                        {refusedOpen && (
+                            <ScrollArea className="mt-3 max-h-[60vh] pr-2">
+                                <RefusedIdeasGrid
+                                    ideas={refusedIdeas}
+                                    meId={meId}
+                                    isIdeasAdmin={isIdeasAdmin}
+                                    usersById={usersById}
+                                    isBusy={isBusy}
+                                    forceBad
+                                    onOpenComments={openComments}
+                                    onVote={voteIdea}
+                                    onDelete={deleteIdea}
+                                />
+                            </ScrollArea>
+                        )}
+                    </div>
+
+                    {(meQuery.isLoading || ideasQuery.isLoading) && <IdeasLoadingSkeleton />}
+                </div>
             </div>
 
             <CreateIdeaSheet open={createOpen} onOpenChange={setCreateOpen} meId={meId} />

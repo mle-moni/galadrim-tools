@@ -1,20 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Building2 } from "lucide-react";
+import { CalendarDays, Map as MapIcon } from "lucide-react";
 
-import type { ApiOffice, ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
+import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
 import { useNow } from "@/debug/clock";
 
-import { Button } from "@/components/ui/button";
 import FloorTabSelector from "@/components/FloorTabSelector";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import OfficePicker from "@/components/OfficePicker";
+import PageTitle from "@/components/PageTitle";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { startOfDayIso } from "@/integrations/backend/date";
@@ -197,65 +193,55 @@ export default function VisuelPage(props: {
 
     return (
         <div className="flex h-full min-h-0 flex-col bg-background">
-            <header className="border-b border-slate-100 bg-background px-6 pb-0 pt-4">
+            <header className="border-b border-slate-100 bg-background px-4 py-3 md:px-6 md:py-4">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                        <h1 className="text-[20px] font-semibold leading-6 tracking-[-0.5px] text-slate-950">
+                        <PageTitle
+                            icon={CalendarDays}
+                            className="text-slate-950"
+                            iconClassName="text-slate-500"
+                        >
                             Salles de réunions
-                        </h1>
+                        </PageTitle>
                     </div>
 
                     <div className="flex flex-wrap items-center justify-end gap-4">
-                        <div className="flex items-center rounded-lg bg-slate-100 p-0.5">
-                            <Link
-                                to="/planning"
-                                search={planningSearch}
-                                className={cn(
-                                    "rounded-md px-3 py-1.5 text-sm font-medium leading-6 text-slate-700",
-                                    isPlanningActive && "bg-white",
-                                )}
+                        <div className="flex items-center rounded-md border bg-card p-1">
+                            <Button
+                                asChild
+                                size="sm"
+                                variant={isPlanningActive ? "secondary" : "ghost"}
+                                className="h-8"
                             >
-                                Planning
-                            </Link>
-                            <Link
-                                to="/visuel"
-                                search={currentSearch}
-                                className={cn(
-                                    "rounded-lg px-3 py-1.5 text-sm font-medium leading-6 text-slate-700",
-                                    isVisuelActive && "bg-white",
-                                )}
+                                <Link to="/planning" search={planningSearch}>
+                                    <CalendarDays className="h-4 w-4" />
+                                    Planning
+                                </Link>
+                            </Button>
+                            <Button
+                                asChild
+                                size="sm"
+                                variant={isVisuelActive ? "secondary" : "ghost"}
+                                className="h-8"
                             >
-                                Visuel
-                            </Link>
+                                <Link to="/visuel" search={currentSearch}>
+                                    <MapIcon className="h-4 w-4" />
+                                    Visuel
+                                </Link>
+                            </Button>
                         </div>
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    className="h-10 gap-2 rounded-md border-slate-300 bg-white px-3 py-2 text-sm font-semibold leading-6 text-slate-800 shadow-none"
-                                    type="button"
-                                >
-                                    <Building2 className="h-5 w-5 text-slate-500" />
-                                    {selectedOfficeName ?? "Chargement…"}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                {(officesQuery.data ?? []).map((office: ApiOffice) => (
-                                    <DropdownMenuItem key={office.id} asChild>
-                                        <Link
-                                            to="/visuel"
-                                            search={{
-                                                officeId: office.id,
-                                                floorId: undefined,
-                                            }}
-                                        >
-                                            {office.name}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <OfficePicker
+                            offices={officesQuery.data ?? []}
+                            selectedOfficeName={selectedOfficeName}
+                            onSelectOfficeId={(officeId) => {
+                                router.history.push(
+                                    `/visuel?${new URLSearchParams({
+                                        officeId: String(officeId),
+                                    }).toString()}`,
+                                );
+                            }}
+                        />
                     </div>
                 </div>
 

@@ -80,6 +80,75 @@ function resolveNotificationTarget(link: string | null | undefined): Notificatio
     return null;
 }
 
+function NotificationListItem({
+    notification,
+    onClose,
+    onNavigate,
+}: {
+    notification: INotification;
+    onClose: () => void;
+    onNavigate: (target: NotificationTarget) => void;
+}) {
+    const target = resolveNotificationTarget(notification.link);
+
+    const sharedClassName = cn(
+        "rounded-md border px-3 py-2 text-left transition-colors",
+        notification.read ? "border-slate-800 bg-slate-900/20" : "border-slate-700 bg-slate-900/40",
+        target &&
+            "hover:bg-slate-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70",
+    );
+
+    const content = (
+        <>
+            <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                    <div className="text-sm font-semibold">{notification.title}</div>
+                    <div className="mt-0.5 whitespace-pre-wrap text-sm text-white/80">
+                        {notification.text}
+                    </div>
+                </div>
+                <div className="shrink-0 text-xs text-white/60">
+                    {new Date(notification.createdAt).toLocaleDateString()}
+                </div>
+            </div>
+
+            {target?.kind === "external" && (
+                <div className="mt-2 flex items-center gap-1 text-xs text-white/60">
+                    <ExternalLink className="h-3 w-3" />
+                    <span>Ouvrir le lien</span>
+                </div>
+            )}
+        </>
+    );
+
+    if (!target) {
+        return <div className={sharedClassName}>{content}</div>;
+    }
+
+    return (
+        <button
+            type="button"
+            className={sharedClassName}
+            onClick={() => {
+                onClose();
+                onNavigate(target);
+            }}
+        >
+            {content}
+        </button>
+    );
+}
+
+function isEditableElement(target: EventTarget | null) {
+    if (!(target instanceof HTMLElement)) return false;
+    return (
+        target.isContentEditable ||
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT"
+    );
+}
+
 export default function AppSidebar() {
     const router = useRouter();
     const queryClient = useQueryClient();
@@ -162,18 +231,12 @@ export default function AppSidebar() {
         },
     });
 
+    const navigateTo = useMemo(() => {
+        return (to: string) => router.history.push(to);
+    }, [router.history]);
+
     useEffect(() => {
         if (!isSidebarVisible) return;
-
-        const isEditableElement = (target: EventTarget | null) => {
-            if (!(target instanceof HTMLElement)) return false;
-            return (
-                target.isContentEditable ||
-                target.tagName === "INPUT" ||
-                target.tagName === "TEXTAREA" ||
-                target.tagName === "SELECT"
-            );
-        };
 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.defaultPrevented) return;
@@ -184,23 +247,23 @@ export default function AppSidebar() {
             const key = e.key.toLowerCase();
             if (key === "s") {
                 e.preventDefault();
-                router.history.push("/planning");
+                navigateTo("/planning");
             }
 
             if (key === "i") {
                 e.preventDefault();
-                router.history.push("/ideas");
+                navigateTo("/ideas");
             }
 
             if (key === "r") {
                 e.preventDefault();
-                router.history.push("/miams");
+                navigateTo("/miams");
             }
         };
 
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [isSidebarVisible, router.history]);
+    }, [isSidebarVisible, navigateTo]);
 
     return (
         <Sidebar collapsible="offcanvas" variant="sidebar">
@@ -291,84 +354,27 @@ export default function AppSidebar() {
                                                 </div>
                                             ) : (
                                                 <div className="flex flex-col gap-2">
-                                                    {notifications.map((notification) => {
-                                                        const target = resolveNotificationTarget(
-                                                            notification.link,
-                                                        );
+                                                    {notifications.map((notification) => (
+                                                        <NotificationListItem
+                                                            key={notification.id}
+                                                            notification={notification}
+                                                            onClose={() =>
+                                                                setNotificationsOpen(false)
+                                                            }
+                                                            onNavigate={(target) => {
+                                                                if (target.kind === "external") {
+                                                                    window.open(
+                                                                        target.href,
+                                                                        "_blank",
+                                                                        "noopener,noreferrer",
+                                                                    );
+                                                                    return;
+                                                                }
 
-                                                        const sharedClassName = cn(
-                                                            "rounded-md border px-3 py-2 text-left transition-colors",
-                                                            notification.read
-                                                                ? "border-slate-800 bg-slate-900/20"
-                                                                : "border-slate-700 bg-slate-900/40",
-                                                            target &&
-                                                                "hover:bg-slate-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70",
-                                                        );
-
-                                                        const content = (
-                                                            <>
-                                                                <div className="flex items-start justify-between gap-3">
-                                                                    <div className="min-w-0 flex-1">
-                                                                        <div className="text-sm font-semibold">
-                                                                            {notification.title}
-                                                                        </div>
-                                                                        <div className="mt-0.5 whitespace-pre-wrap text-sm text-white/80">
-                                                                            {notification.text}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="shrink-0 text-xs text-white/60">
-                                                                        {new Date(
-                                                                            notification.createdAt,
-                                                                        ).toLocaleDateString()}
-                                                                    </div>
-                                                                </div>
-
-                                                                {target?.kind === "external" && (
-                                                                    <div className="mt-2 flex items-center gap-1 text-xs text-white/60">
-                                                                        <ExternalLink className="h-3 w-3" />
-                                                                        <span>Ouvrir le lien</span>
-                                                                    </div>
-                                                                )}
-                                                            </>
-                                                        );
-
-                                                        if (!target) {
-                                                            return (
-                                                                <div
-                                                                    key={notification.id}
-                                                                    className={sharedClassName}
-                                                                >
-                                                                    {content}
-                                                                </div>
-                                                            );
-                                                        }
-
-                                                        return (
-                                                            <button
-                                                                key={notification.id}
-                                                                type="button"
-                                                                className={sharedClassName}
-                                                                onClick={() => {
-                                                                    setNotificationsOpen(false);
-
-                                                                    if (
-                                                                        target.kind === "external"
-                                                                    ) {
-                                                                        window.open(
-                                                                            target.href,
-                                                                            "_blank",
-                                                                            "noopener,noreferrer",
-                                                                        );
-                                                                        return;
-                                                                    }
-
-                                                                    router.history.push(target.to);
-                                                                }}
-                                                            >
-                                                                {content}
-                                                            </button>
-                                                        );
-                                                    })}
+                                                                router.history.push(target.to);
+                                                            }}
+                                                        />
+                                                    ))}
                                                 </div>
                                             )}
                                         </div>

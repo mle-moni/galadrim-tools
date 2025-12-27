@@ -1,19 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Building2, CalendarDays, Map as MapIcon } from "lucide-react";
-import type { ApiOffice } from "@galadrim-tools/shared";
+import { CalendarDays, Map as MapIcon } from "lucide-react";
 
 import { useClock } from "@/debug/clock";
 
 import FloorTabSelector from "@/components/FloorTabSelector";
+import OfficePicker from "@/components/OfficePicker";
 import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import SchedulerGrid from "./SchedulerGrid";
@@ -406,29 +400,15 @@ export default function SchedulerPage(props: {
     );
 
     const officeSelector = (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-2" type="button">
-                    <Building2 className="h-4 w-4" />
-                    {selectedOfficeName ?? "Chargement…"}
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 bg-card shadow-lg">
-                {(officesQuery.data ?? []).map((office: ApiOffice) => (
-                    <DropdownMenuItem
-                        key={office.id}
-                        className="cursor-pointer"
-                        onSelect={() => {
-                            const params = new URLSearchParams();
-                            params.set("officeId", String(office.id));
-                            router.history.push(`/planning?${params.toString()}`);
-                        }}
-                    >
-                        <span className="truncate">{office.name}</span>
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <OfficePicker
+            offices={officesQuery.data ?? []}
+            selectedOfficeName={selectedOfficeName}
+            onSelectOfficeId={(officeId) => {
+                const params = new URLSearchParams();
+                params.set("officeId", String(officeId));
+                router.history.push(`/planning?${params.toString()}`);
+            }}
+        />
     );
 
     const floorFilters = (

@@ -8,12 +8,12 @@ import { END_HOUR, HOURS_COUNT, START_HOUR, TIME_COLUMN_WIDTH } from "./constant
 import type { DragSelection, Reservation, Room } from "./types";
 import {
     calculateEventLayout,
-    formatTime,
     getPixelsFromTime,
     getTimeFromPixels,
     roundToNearestMinutes,
 } from "./utils";
-import EventBlock from "./EventBlock";
+import SchedulerRoomColumn from "./SchedulerRoomColumn";
+import SchedulerTimeColumn from "./SchedulerTimeColumn";
 
 const HEADER_HEIGHT = 40;
 const DEFAULT_PIXELS_PER_HOUR = 80;
@@ -178,47 +178,6 @@ export default function SchedulerGrid({
     ]);
 
     const intervalMinutes = isFiveMinuteSlots ? 5 : 15;
-
-    const renderDragSelection = (roomId: number) => {
-        if (!dragSelection || dragSelection.roomId !== roomId) return null;
-
-        const selectionStart =
-            dragSelection.endTime < dragSelection.startTime
-                ? dragSelection.endTime
-                : dragSelection.startTime;
-        const selectionEnd =
-            dragSelection.endTime < dragSelection.startTime
-                ? dragSelection.startTime
-                : dragSelection.endTime;
-
-        const endTime =
-            selectionEnd.getTime() === selectionStart.getTime()
-                ? new Date(selectionStart.getTime() + intervalMinutes * MS_PER_MINUTE)
-                : selectionEnd;
-
-        return (
-            <div
-                className={cn(
-                    "pointer-events-none absolute z-50 flex flex-col justify-center rounded-md border-l-[6px] border-[#1e3ad7] bg-[#dbe6fe]/50 pl-2 transition-opacity",
-                    dragSelection.isActive ? "opacity-70" : "opacity-25",
-                )}
-                style={{
-                    top: getPixelsFromTime(selectionStart, pixelsPerHour),
-                    height: Math.max(
-                        getPixelsFromTime(endTime, pixelsPerHour) -
-                            getPixelsFromTime(selectionStart, pixelsPerHour),
-                        10,
-                    ),
-                    left: "2%",
-                    width: "96%",
-                }}
-            >
-                <div className="font-mono text-[12px] font-bold text-[#171e54]">
-                    {formatTime(selectionStart)} - {formatTime(endTime)}
-                </div>
-            </div>
-        );
-    };
 
     const handleWheel = (e: React.WheelEvent) => {
         const container = containerRef.current;
@@ -531,102 +490,41 @@ export default function SchedulerGrid({
                             className="sticky left-0 z-[70] flex flex-shrink-0 flex-col border-r bg-background shadow-sm"
                             style={{ width: TIME_COLUMN_WIDTH }}
                         >
-                            <div className="relative" style={{ height: gridHeight }}>
-                                {hourIntervals.map((hour) => (
-                                    <div
-                                        key={hour}
-                                        className="relative w-full box-border border-b border-border/50"
-                                        style={{ height: pixelsPerHour }}
-                                    >
-                                        <span className="absolute top-2 left-0 right-0 text-center font-mono text-xs font-medium text-muted-foreground">
-                                            {hour.toString().padStart(2, "0")}:00
-                                        </span>
-
-                                        {shouldShowHalfHour(hour) && (
-                                            <span className="absolute top-[50%] left-0 right-0 -translate-y-1/2 text-center font-mono text-xs font-medium text-muted-foreground">
-                                                {hour.toString().padStart(2, "0")}:30
-                                            </span>
-                                        )}
-                                    </div>
-                                ))}
-
-                                <span className="absolute bottom-2 left-0 right-0 text-center font-mono text-xs font-medium text-muted-foreground">
-                                    {END_HOUR.toString().padStart(2, "0")}:00
-                                </span>
-
-                                {showCurrentLine && (
-                                    <div
-                                        className="absolute left-0 right-0 z-30 -translate-y-1/2 text-center"
-                                        style={{ top: currentLineTop }}
-                                    >
-                                        <span className="rounded-sm bg-background/80 px-1 py-0.5 font-mono text-xs font-bold text-foreground shadow-sm backdrop-blur-[1px]">
-                                            {formatTime(currentTime)}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
+                            <SchedulerTimeColumn
+                                hourIntervals={hourIntervals}
+                                pixelsPerHour={pixelsPerHour}
+                                gridHeight={gridHeight}
+                                shouldShowHalfHour={shouldShowHalfHour}
+                                showCurrentLine={showCurrentLine}
+                                currentLineTop={currentLineTop}
+                                currentTime={currentTime}
+                            />
                         </div>
 
                         <div className="flex min-w-max">
                             {rooms.map((room) => (
-                                <div
+                                <SchedulerRoomColumn
                                     key={room.id}
-                                    className={cn(
-                                        "group relative w-52 flex-shrink-0 border-r",
-                                        focusedRoomId === room.id && "bg-accent/10",
-                                    )}
-                                >
-                                    <div
-                                        id={`room-col-${room.id}`}
-                                        ref={(el) => {
-                                            effectiveRoomColumnRefs.current.set(room.id, el);
-                                        }}
-                                        className={cn(
-                                            "relative",
-                                            focusedRoomId === room.id
-                                                ? "bg-accent/10"
-                                                : "bg-background",
-                                        )}
-                                        style={{ height: gridHeight }}
-                                        onMouseEnter={() => setHoveredRoomId(room.id)}
-                                        onMouseDown={(e) => handleMouseDownOnGrid(e, room.id)}
-                                    >
-                                        {hourIntervals.map((hour, idx) => (
-                                            <div
-                                                key={hour}
-                                                className="pointer-events-none absolute w-full box-border border-b border-border/40"
-                                                style={{
-                                                    top: idx * pixelsPerHour,
-                                                    height: pixelsPerHour,
-                                                }}
-                                            >
-                                                <div className="relative top-[50%] h-full w-full border-b border-dashed border-border/30" />
-                                            </div>
-                                        ))}
-
-                                        {showCurrentLine && (
-                                            <div
-                                                className="pointer-events-none absolute z-30 flex w-full items-center border-t-2 border-destructive"
-                                                style={{ top: currentLineTop }}
-                                            >
-                                                <div className="-ml-1 h-2 w-2 rounded-full bg-destructive" />
-                                            </div>
-                                        )}
-
-                                        {(roomEventsByRoomId.get(room.id) ?? []).map((event) => (
-                                            <EventBlock
-                                                key={event.id}
-                                                event={event}
-                                                isSelected={selectedEventId === event.id}
-                                                onSelect={setSelectedEventId}
-                                                onDelete={onDeleteReservation}
-                                                onDragStart={(e) => handleDragStartEvent(e, event)}
-                                            />
-                                        ))}
-
-                                        {renderDragSelection(room.id)}
-                                    </div>
-                                </div>
+                                    room={room}
+                                    focusedRoomId={focusedRoomId}
+                                    gridHeight={gridHeight}
+                                    pixelsPerHour={pixelsPerHour}
+                                    hourIntervals={hourIntervals}
+                                    events={roomEventsByRoomId.get(room.id) ?? []}
+                                    selectedEventId={selectedEventId}
+                                    onSelectEventId={setSelectedEventId}
+                                    onDeleteReservation={onDeleteReservation}
+                                    onDragStartEvent={handleDragStartEvent}
+                                    onMouseEnter={() => setHoveredRoomId(room.id)}
+                                    onMouseDown={(e) => handleMouseDownOnGrid(e, room.id)}
+                                    setRoomColumnRef={(el) => {
+                                        effectiveRoomColumnRefs.current.set(room.id, el);
+                                    }}
+                                    dragSelection={dragSelection}
+                                    intervalMinutes={intervalMinutes}
+                                    showCurrentLine={showCurrentLine}
+                                    currentLineTop={currentLineTop}
+                                />
                             ))}
                         </div>
                     </div>

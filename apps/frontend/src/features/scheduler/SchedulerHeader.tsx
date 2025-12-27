@@ -1,5 +1,8 @@
 import type React from "react";
 
+import { CalendarDays } from "lucide-react";
+
+import PageTitle from "@/components/PageTitle";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -59,9 +62,7 @@ export default function SchedulerHeader({
             <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4">
                 <div className="flex min-w-0 items-center gap-3">
                     {leading}
-                    <h1 className="truncate text-xl font-semibold tracking-tight">
-                        Salles de réunions
-                    </h1>
+                    <PageTitle icon={CalendarDays}>Salles de réunions</PageTitle>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-end gap-3">
