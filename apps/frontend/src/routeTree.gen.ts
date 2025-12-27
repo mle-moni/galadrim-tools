@@ -20,7 +20,6 @@ import { Route as IdeasRouteImport } from './routes/ideas'
 import { Route as GetOtpRouteImport } from './routes/getOtp'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ScamWinnerOmgLegacyRouteImport } from './routes/scamWinnerOmg.legacy'
 import { Route as GamesGalakiRouteImport } from './routes/games.galaki'
 import { Route as GamesCodeNamesRouteImport } from './routes/games.code-names'
 import { Route as AdminRightsRouteImport } from './routes/admin.rights'
@@ -83,11 +82,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ScamWinnerOmgLegacyRoute = ScamWinnerOmgLegacyRouteImport.update({
-  id: '/scamWinnerOmg/legacy',
-  path: '/scamWinnerOmg/legacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GamesGalakiRoute = GamesGalakiRouteImport.update({
   id: '/games/galaki',
   path: '/games/galaki',
@@ -136,7 +130,6 @@ export interface FileRoutesByFullPath {
   '/admin/rights': typeof AdminRightsRoute
   '/games/code-names': typeof GamesCodeNamesRoute
   '/games/galaki': typeof GamesGalakiRoute
-  '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
   '/scam/winner/omg': typeof ScamWinnerOmgRoute
 }
 export interface FileRoutesByTo {
@@ -156,7 +149,6 @@ export interface FileRoutesByTo {
   '/admin/rights': typeof AdminRightsRoute
   '/games/code-names': typeof GamesCodeNamesRoute
   '/games/galaki': typeof GamesGalakiRoute
-  '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
   '/scam/winner/omg': typeof ScamWinnerOmgRoute
 }
 export interface FileRoutesById {
@@ -177,7 +169,6 @@ export interface FileRoutesById {
   '/admin/rights': typeof AdminRightsRoute
   '/games/code-names': typeof GamesCodeNamesRoute
   '/games/galaki': typeof GamesGalakiRoute
-  '/scamWinnerOmg/legacy': typeof ScamWinnerOmgLegacyRoute
   '/scam/winner/omg': typeof ScamWinnerOmgRoute
 }
 export interface FileRouteTypes {
@@ -199,7 +190,6 @@ export interface FileRouteTypes {
     | '/admin/rights'
     | '/games/code-names'
     | '/games/galaki'
-    | '/scamWinnerOmg/legacy'
     | '/scam/winner/omg'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -219,7 +209,6 @@ export interface FileRouteTypes {
     | '/admin/rights'
     | '/games/code-names'
     | '/games/galaki'
-    | '/scamWinnerOmg/legacy'
     | '/scam/winner/omg'
   id:
     | '__root__'
@@ -239,7 +228,6 @@ export interface FileRouteTypes {
     | '/admin/rights'
     | '/games/code-names'
     | '/games/galaki'
-    | '/scamWinnerOmg/legacy'
     | '/scam/winner/omg'
   fileRoutesById: FileRoutesById
 }
@@ -257,7 +245,6 @@ export interface RootRouteChildren {
   VisuelRoute: typeof VisuelRoute
   GamesCodeNamesRoute: typeof GamesCodeNamesRoute
   GamesGalakiRoute: typeof GamesGalakiRoute
-  ScamWinnerOmgLegacyRoute: typeof ScamWinnerOmgLegacyRoute
   ScamWinnerOmgRoute: typeof ScamWinnerOmgRoute
 }
 
@@ -340,13 +327,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/scamWinnerOmg/legacy': {
-      id: '/scamWinnerOmg/legacy'
-      path: '/scamWinnerOmg/legacy'
-      fullPath: '/scamWinnerOmg/legacy'
-      preLoaderRoute: typeof ScamWinnerOmgLegacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/games/galaki': {
       id: '/games/galaki'
       path: '/games/galaki'
@@ -420,7 +400,6 @@ const rootRouteChildren: RootRouteChildren = {
   VisuelRoute: VisuelRoute,
   GamesCodeNamesRoute: GamesCodeNamesRoute,
   GamesGalakiRoute: GamesGalakiRoute,
-  ScamWinnerOmgLegacyRoute: ScamWinnerOmgLegacyRoute,
   ScamWinnerOmgRoute: ScamWinnerOmgRoute,
 }
 export const routeTree = rootRouteImport
