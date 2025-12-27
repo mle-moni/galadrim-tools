@@ -51,15 +51,17 @@ function getNotePalette(idea: IIdea, isBad: boolean) {
     if (idea.state === "DONE") return { bg: "#dcfce7", border: "#86efac" };
     if (isBad) return { bg: "#e2e8f0", border: "#cbd5e1" };
 
+    const defaultPalette = { bg: "#fef9c3", border: "#fde047" };
+
     const palettes = [
-        { bg: "#fef9c3", border: "#fde047" }, // yellow
+        defaultPalette, // yellow
         { bg: "#ffedd5", border: "#fdba74" }, // orange
         { bg: "#e0f2fe", border: "#7dd3fc" }, // sky
         { bg: "#fae8ff", border: "#e9d5ff" }, // violet-ish
         { bg: "#ffe4e6", border: "#fda4af" }, // rose
     ];
 
-    return palettes[idea.id % palettes.length] ?? palettes[0]!;
+    return palettes[idea.id % palettes.length] ?? defaultPalette;
 }
 
 export default function IdeaCard(props: {

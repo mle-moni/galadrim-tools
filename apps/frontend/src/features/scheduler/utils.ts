@@ -64,7 +64,8 @@ function applyColumnLayout(cluster: LayoutEvent[]) {
 
         let columnIndex = -1;
         for (let i = 0; i < columnEndTimesMs.length; i++) {
-            if (startMs >= columnEndTimesMs[i]!) {
+            const columnEndMs = columnEndTimesMs[i];
+            if (columnEndMs !== undefined && startMs >= columnEndMs) {
                 columnIndex = i;
                 break;
             }
@@ -74,10 +75,11 @@ function applyColumnLayout(cluster: LayoutEvent[]) {
             columnIndex = columnEndTimesMs.length;
             columnEndTimesMs.push(event.endTime.getTime());
         } else {
-            columnEndTimesMs[columnIndex] = Math.max(
-                columnEndTimesMs[columnIndex]!,
-                event.endTime.getTime(),
-            );
+            const previousEndMs = columnEndTimesMs[columnIndex];
+            columnEndTimesMs[columnIndex] =
+                previousEndMs === undefined
+                    ? event.endTime.getTime()
+                    : Math.max(previousEndMs, event.endTime.getTime());
         }
 
         columnByEvent.set(event, columnIndex);

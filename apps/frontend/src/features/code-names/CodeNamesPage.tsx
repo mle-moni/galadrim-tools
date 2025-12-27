@@ -106,7 +106,9 @@ function setCell(matrix: MatrixDto, idx: number, next: DrawableMatrixChar): Matr
 }
 
 function nextChar(current: DrawableMatrixChar): DrawableMatrixChar {
-    return MATRIX_CHAR[(MATRIX_CHAR.indexOf(current) + 1) % MATRIX_CHAR.length]!;
+    const currentIndex = MATRIX_CHAR.indexOf(current);
+    const nextIndex = (currentIndex + 1) % MATRIX_CHAR.length;
+    return MATRIX_CHAR[nextIndex] ?? MATRIX_CHAR[0];
 }
 
 function UserCombobox(props: {
@@ -253,7 +255,8 @@ export default function CodeNamesPage(props: { gameId?: number }) {
         return getMatrixCandidates(matrix, matrices);
     }, [matrix, matrices]);
 
-    const displayMatrix = showResult && candidates.length === 1 ? candidates[0]! : matrix;
+    const onlyCandidate = candidates.length === 1 ? candidates[0] : undefined;
+    const displayMatrix = showResult && onlyCandidate ? onlyCandidate : matrix;
 
     const spyMasterOptions = useMemo(() => {
         if (!game) return [];
@@ -281,7 +284,9 @@ export default function CodeNamesPage(props: { gameId?: number }) {
             .then((created) => {
                 router.history.push(`/games/code-names?gameId=${created.id}`);
             })
-            .catch(() => {});
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     const submitRound = () => {
@@ -322,7 +327,9 @@ export default function CodeNamesPage(props: { gameId?: number }) {
                 setClueWord("");
                 setClueNumber("1");
             })
-            .catch(() => {});
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     const resetToCreate = () => {
@@ -371,7 +378,9 @@ export default function CodeNamesPage(props: { gameId?: number }) {
                                         .then(() => {
                                             router.history.push("/games/code-names");
                                         })
-                                        .catch(() => {});
+                                        .catch((error) => {
+                                            console.error(error);
+                                        });
                                 }}
                             >
                                 <Trash2 className="h-4 w-4" />
