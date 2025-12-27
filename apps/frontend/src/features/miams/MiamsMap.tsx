@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 
 import { useEffect, useMemo, useRef } from "react";
-import type { LeafletMouseEvent } from "leaflet";
+import type { LeafletEventHandlerFnMap, LeafletMouseEvent } from "leaflet";
 import type { ApiOffice, IRestaurant } from "@galadrim-tools/shared";
 import { toast } from "sonner";
 
@@ -106,8 +106,10 @@ export default function MiamsMap(props: {
     const selectedRestaurant = useMemo(() => {
         if (props.selectedRestaurantId == null) return null;
 
-        const selectedId = String(props.selectedRestaurantId);
-        return props.restaurants.find((restaurant) => String(restaurant.id) === selectedId) ?? null;
+        return (
+            props.restaurants.find((restaurant) => restaurant.id === props.selectedRestaurantId) ??
+            null
+        );
     }, [props.restaurants, props.selectedRestaurantId]);
 
     const selectedRestaurantCenter = useMemo((): [number, number] | null => {
@@ -118,8 +120,7 @@ export default function MiamsMap(props: {
     const selectedOfficeCenter = useMemo((): [number, number] | null => {
         if (props.selectedOfficeId == null) return null;
 
-        const selectedId = String(props.selectedOfficeId);
-        const office = props.offices.find((o) => String(o.id) === selectedId) ?? null;
+        const office = props.offices.find((o) => o.id === props.selectedOfficeId) ?? null;
         if (!office) return null;
 
         return [office.lat, office.lng];
@@ -142,6 +143,19 @@ export default function MiamsMap(props: {
     }, [props.restaurants, selectedOfficeCenter, selectedRestaurantCenter]);
 
     const selectedRestaurantZoom = props.zoom ?? SELECTED_ZOOM;
+
+    const restaurantMarkerEventHandlers = useMemo(() => {
+        const onSelect = props.onSelectRestaurantId;
+        if (!onSelect) return null;
+
+        const map = new Map<number, LeafletEventHandlerFnMap>();
+        for (const restaurant of props.restaurants) {
+            map.set(restaurant.id, {
+                click: () => onSelect(restaurant.id),
+            });
+        }
+        return map;
+    }, [props.onSelectRestaurantId, props.restaurants]);
 
     return (
         <MapContainer
@@ -197,9 +211,7 @@ export default function MiamsMap(props: {
                         key={restaurant.id}
                         position={[restaurant.lat, restaurant.lng]}
                         icon={icon}
-                        eventHandlers={{
-                            click: () => props.onSelectRestaurantId?.(restaurant.id),
-                        }}
+                        eventHandlers={restaurantMarkerEventHandlers?.get(restaurant.id)}
                     />
                 );
             })}
