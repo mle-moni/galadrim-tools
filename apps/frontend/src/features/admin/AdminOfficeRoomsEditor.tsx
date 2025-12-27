@@ -73,12 +73,12 @@ function SelectRow(props: {
     offices: ApiOffice[];
     floors: ApiOfficeFloor[];
     rooms: ApiOfficeRoom[];
-    selectedOfficeId: number | "";
-    selectedFloorId: number | "";
-    selectedRoomId: number | "";
-    onOfficeChange: (id: number | "") => void;
-    onFloorChange: (id: number | "") => void;
-    onRoomChange: (id: number | "") => void;
+    selectedOfficeId: number | null;
+    selectedFloorId: number | null;
+    selectedRoomId: number | null;
+    onOfficeChange: (id: number | null) => void;
+    onFloorChange: (id: number | null) => void;
+    onRoomChange: (id: number | null) => void;
 }) {
     const selectClassName =
         "border-input bg-transparent shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 flex h-9 w-full rounded-md border px-3 py-1 text-sm outline-none focus-visible:ring-[3px]";
@@ -90,9 +90,9 @@ function SelectRow(props: {
                 <select
                     id="admin-map-office"
                     className={selectClassName}
-                    value={props.selectedOfficeId}
+                    value={props.selectedOfficeId ?? ""}
                     onChange={(e) => {
-                        props.onOfficeChange(e.target.value === "" ? "" : Number(e.target.value));
+                        props.onOfficeChange(e.target.value === "" ? null : Number(e.target.value));
                     }}
                 >
                     <option value="" disabled>
@@ -114,10 +114,10 @@ function SelectRow(props: {
                 <select
                     id="admin-map-floor"
                     className={selectClassName}
-                    value={props.selectedFloorId}
-                    disabled={props.selectedOfficeId === ""}
+                    value={props.selectedFloorId ?? ""}
+                    disabled={props.selectedOfficeId == null}
                     onChange={(e) => {
-                        props.onFloorChange(e.target.value === "" ? "" : Number(e.target.value));
+                        props.onFloorChange(e.target.value === "" ? null : Number(e.target.value));
                     }}
                 >
                     <option value="" disabled>
@@ -139,10 +139,10 @@ function SelectRow(props: {
                 <select
                     id="admin-map-room"
                     className={selectClassName}
-                    value={props.selectedRoomId}
-                    disabled={props.selectedFloorId === ""}
+                    value={props.selectedRoomId ?? ""}
+                    disabled={props.selectedFloorId == null}
                     onChange={(e) => {
-                        props.onRoomChange(e.target.value === "" ? "" : Number(e.target.value));
+                        props.onRoomChange(e.target.value === "" ? null : Number(e.target.value));
                     }}
                 >
                     <option value="">Aucune</option>
@@ -171,9 +171,9 @@ export default function AdminOfficeRoomsEditor() {
     const floors = floorsQuery.data ?? [];
     const rooms = roomsQuery.data ?? [];
 
-    const [selectedOfficeId, setSelectedOfficeId] = useState<number | "">("");
-    const [selectedFloorId, setSelectedFloorId] = useState<number | "">("");
-    const [selectedRoomId, setSelectedRoomId] = useState<number | "">("");
+    const [selectedOfficeId, setSelectedOfficeId] = useState<number | null>(null);
+    const [selectedFloorId, setSelectedFloorId] = useState<number | null>(null);
+    const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
 
     const [hoveredRoomId, setHoveredRoomId] = useState<number | null>(null);
     const [draftRoom, setDraftRoom] = useState<DraftRoom | null>(null);
@@ -181,26 +181,26 @@ export default function AdminOfficeRoomsEditor() {
     const [activeCanvas, setActiveCanvas] = useState<HTMLCanvasElement | null>(null);
 
     const floorsForOffice = useMemo(() => {
-        if (selectedOfficeId === "") return [];
+        if (selectedOfficeId == null) return [];
         return floors.filter((f) => f.officeId === selectedOfficeId);
     }, [floors, selectedOfficeId]);
 
     const roomsForFloor = useMemo(() => {
-        if (selectedFloorId === "") return [];
+        if (selectedFloorId == null) return [];
         return rooms.filter((r) => r.officeFloorId === selectedFloorId);
     }, [rooms, selectedFloorId]);
 
     useEffect(() => {
-        if (selectedOfficeId !== "") return;
+        if (selectedOfficeId != null) return;
         const first = offices[0]?.id;
         if (first !== undefined) setSelectedOfficeId(first);
     }, [offices, selectedOfficeId]);
 
     useEffect(() => {
-        if (selectedOfficeId === "") return;
+        if (selectedOfficeId == null) return;
         const availableFloors = floorsForOffice.slice().sort((a, b) => a.floor - b.floor);
         if (availableFloors.length === 0) {
-            setSelectedFloorId("");
+            setSelectedFloorId(null);
             return;
         }
         const stillValid = availableFloors.some((f) => f.id === selectedFloorId);
@@ -211,14 +211,14 @@ export default function AdminOfficeRoomsEditor() {
     }, [floorsForOffice, selectedFloorId, selectedOfficeId]);
 
     useEffect(() => {
-        if (selectedFloorId === "") {
-            setSelectedRoomId("");
+        if (selectedFloorId == null) {
+            setSelectedRoomId(null);
             setDraftRoom(null);
             setSelectedPointIndex(null);
             return;
         }
 
-        if (selectedRoomId === "") {
+        if (selectedRoomId == null) {
             setDraftRoom(null);
             setSelectedPointIndex(null);
             return;
@@ -226,7 +226,7 @@ export default function AdminOfficeRoomsEditor() {
 
         const room = roomsForFloor.find((r) => r.id === selectedRoomId);
         if (!room) {
-            setSelectedRoomId("");
+            setSelectedRoomId(null);
             setDraftRoom(null);
             setSelectedPointIndex(null);
             return;
@@ -266,17 +266,17 @@ export default function AdminOfficeRoomsEditor() {
                 removeById(old, data.id),
             );
 
-            setSelectedRoomId("");
+            setSelectedRoomId(null);
             setDraftRoom(null);
             setSelectedPointIndex(null);
         },
     });
 
     const selectedOffice =
-        selectedOfficeId === "" ? null : offices.find((o) => o.id === selectedOfficeId) ?? null;
+        selectedOfficeId == null ? null : offices.find((o) => o.id === selectedOfficeId) ?? null;
 
     const selectedFloor =
-        selectedFloorId === "" ? null : floors.find((f) => f.id === selectedFloorId) ?? null;
+        selectedFloorId == null ? null : floors.find((f) => f.id === selectedFloorId) ?? null;
 
     return (
         <div className="flex flex-col gap-4">
@@ -298,15 +298,15 @@ export default function AdminOfficeRoomsEditor() {
                         selectedRoomId={selectedRoomId}
                         onOfficeChange={(id) => {
                             setSelectedOfficeId(id);
-                            setSelectedFloorId("");
-                            setSelectedRoomId("");
+                            setSelectedFloorId(null);
+                            setSelectedRoomId(null);
                             setDraftRoom(null);
                             setSelectedPointIndex(null);
                             setActiveCanvas(null);
                         }}
                         onFloorChange={(id) => {
                             setSelectedFloorId(id);
-                            setSelectedRoomId("");
+                            setSelectedRoomId(null);
                             setDraftRoom(null);
                             setSelectedPointIndex(null);
                             setActiveCanvas(null);
@@ -334,12 +334,12 @@ export default function AdminOfficeRoomsEditor() {
                                     variant="outline"
                                     size="sm"
                                     disabled={
-                                        selectedFloorId === "" ||
+                                        selectedFloorId == null ||
                                         activeCanvas === null ||
                                         createMutation.isPending
                                     }
                                     onClick={() => {
-                                        if (selectedFloorId === "") return;
+                                        if (selectedFloorId == null) return;
                                         if (!activeCanvas) return;
 
                                         const newName = prompt("Nom pour la salle");
@@ -377,7 +377,7 @@ export default function AdminOfficeRoomsEditor() {
                                 </Button>
                             </div>
 
-                            {selectedFloorId !== "" && (
+                            {selectedFloorId != null && (
                                 <MapEditorCanvas
                                     rooms={roomsForFloor}
                                     selectedRoom={draftRoom}
@@ -422,10 +422,13 @@ export default function AdminOfficeRoomsEditor() {
                                         const newName = prompt("Nom pour la salle");
                                         if (!newName) return;
 
+                                        const floorId = selectedFloorId;
+                                        if (floorId == null) return;
+
                                         const promise = createMutation.mutateAsync({
                                             name: newName,
                                             config: JSON.stringify(config),
-                                            officeFloor: selectedFloorId,
+                                            officeFloor: floorId,
                                             isBookable: true,
                                             isPhonebox: false,
                                         });
@@ -439,7 +442,9 @@ export default function AdminOfficeRoomsEditor() {
                                                     : "Impossible de créer la salle",
                                         });
 
-                                        await promise.catch(() => {});
+                                        await promise.catch((error) => {
+                                            console.error(error);
+                                        });
                                     }}
                                 />
                             )}
@@ -504,7 +509,7 @@ export default function AdminOfficeRoomsEditor() {
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => {
-                                                        setSelectedRoomId("");
+                                                        setSelectedRoomId(null);
                                                         setDraftRoom(null);
                                                         setSelectedPointIndex(null);
                                                     }}
@@ -643,7 +648,7 @@ export default function AdminOfficeRoomsEditor() {
                                         <Button
                                             onClick={() => {
                                                 if (!draftRoom) return;
-                                                if (selectedFloorId === "") return;
+                                                if (selectedFloorId == null) return;
 
                                                 const promise = updateMutation.mutateAsync({
                                                     id: draftRoom.id,
@@ -666,7 +671,7 @@ export default function AdminOfficeRoomsEditor() {
                                             disabled={
                                                 updateMutation.isPending ||
                                                 draftRoom.name.trim() === "" ||
-                                                selectedFloorId === ""
+                                                selectedFloorId == null
                                             }
                                         >
                                             {updateMutation.isPending ? (

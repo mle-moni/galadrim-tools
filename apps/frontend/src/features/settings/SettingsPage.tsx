@@ -75,7 +75,7 @@ export default function SettingsPage() {
     const [profileAvatarFile, setProfileAvatarFile] = useState<File | null>(null);
     const [profileTouched, setProfileTouched] = useState(false);
 
-    const [officeId, setOfficeId] = useState<number | "">("");
+    const [officeId, setOfficeId] = useState<number | null>(null);
 
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -100,7 +100,7 @@ export default function SettingsPage() {
 
         setProfileUsername(me.username);
         setProfileEmail(me.email);
-        setOfficeId(me.officeId ?? "");
+        setOfficeId(me.officeId ?? null);
     }, [me, profileTouched]);
 
     useEffect(() => {
@@ -429,11 +429,11 @@ export default function SettingsPage() {
                                 <Label htmlFor="settings-office">Locaux par défaut</Label>
                                 <select
                                     id="settings-office"
-                                    value={officeId}
+                                    value={officeId ?? ""}
                                     disabled={officesQuery.isLoading || officesQuery.isError}
                                     onChange={(e) => {
                                         const next =
-                                            e.target.value === "" ? "" : Number(e.target.value);
+                                            e.target.value === "" ? null : Number(e.target.value);
                                         setOfficeId(next);
                                     }}
                                     className="border-input bg-transparent shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 dark:bg-input/30 flex h-9 w-full rounded-md border px-3 py-1 text-sm outline-none focus-visible:ring-[3px]"
@@ -452,7 +452,7 @@ export default function SettingsPage() {
                         <CardFooter className="justify-end">
                             <Button
                                 onClick={() => {
-                                    if (officeId === "") {
+                                    if (officeId == null) {
                                         toast.error("Sélectionnez un bureau.");
                                         return;
                                     }
@@ -467,7 +467,7 @@ export default function SettingsPage() {
                                                 : "Impossible de sauvegarder les paramètres",
                                     });
                                 }}
-                                disabled={officeMutation.isPending || officeId === ""}
+                                disabled={officeMutation.isPending || officeId == null}
                             >
                                 {officeMutation.isPending ? (
                                     <RefreshCcw className="h-4 w-4 animate-spin" />
