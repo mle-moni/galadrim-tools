@@ -55,10 +55,15 @@ async function fetchRoomReservations(officeId: number, dayIso: string) {
     return res.json;
 }
 
-export function roomReservationsQueryOptions(officeId: number, dayIso: string) {
+export function roomReservationsQueryOptions(officeId: number | null, dayIso: string) {
     return queryOptions({
         queryKey: queryKeys.roomReservations(officeId, dayIso),
-        queryFn: () => fetchRoomReservations(officeId, dayIso),
+        queryFn: () => {
+            if (officeId == null) {
+                throw new Error("Office non sélectionné");
+            }
+            return fetchRoomReservations(officeId, dayIso);
+        },
         retry: false,
     });
 }
@@ -124,7 +129,7 @@ type ClockLike = {
 };
 
 export function useCreateRoomReservationMutation(opts: {
-    officeId: number;
+    officeId: number | null;
     dayIso: string;
     clock?: ClockLike;
     me: Pick<IUserData, "id" | "username">;
@@ -133,8 +138,12 @@ export function useCreateRoomReservationMutation(opts: {
     const queryKey = queryKeys.roomReservations(opts.officeId, opts.dayIso);
 
     return useMutation({
-        mutationFn: (input: CreateRoomReservationInput) =>
-            createRoomReservation(opts.officeId, input),
+        mutationFn: (input: CreateRoomReservationInput) => {
+            if (opts.officeId == null) {
+                throw new Error("Office non sélectionné");
+            }
+            return createRoomReservation(opts.officeId, input);
+        },
         onMutate: async (input) => {
             await queryClient.cancelQueries({ queryKey });
 
@@ -190,15 +199,19 @@ export function useCreateRoomReservationMutation(opts: {
 }
 
 export function useUpdateRoomReservationMutation(opts: {
-    officeId: number;
+    officeId: number | null;
     dayIso: string;
 }) {
     const queryClient = useQueryClient();
     const queryKey = queryKeys.roomReservations(opts.officeId, opts.dayIso);
 
     return useMutation({
-        mutationFn: (input: UpdateRoomReservationInput) =>
-            updateRoomReservation(opts.officeId, input),
+        mutationFn: (input: UpdateRoomReservationInput) => {
+            if (opts.officeId == null) {
+                throw new Error("Office non sélectionné");
+            }
+            return updateRoomReservation(opts.officeId, input);
+        },
         onMutate: async (input) => {
             await queryClient.cancelQueries({ queryKey });
 
@@ -237,14 +250,19 @@ export function useUpdateRoomReservationMutation(opts: {
 }
 
 export function useDeleteRoomReservationMutation(opts: {
-    officeId: number;
+    officeId: number | null;
     dayIso: string;
 }) {
     const queryClient = useQueryClient();
     const queryKey = queryKeys.roomReservations(opts.officeId, opts.dayIso);
 
     return useMutation({
-        mutationFn: (reservationId: number) => deleteRoomReservation(opts.officeId, reservationId),
+        mutationFn: (reservationId: number) => {
+            if (opts.officeId == null) {
+                throw new Error("Office non sélectionné");
+            }
+            return deleteRoomReservation(opts.officeId, reservationId);
+        },
         onMutate: async (reservationId) => {
             await queryClient.cancelQueries({ queryKey });
 

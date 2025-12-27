@@ -180,11 +180,11 @@ export default function SchedulerPage(props: {
     ]);
 
     const dayIso = useMemo(() => startOfDayIso(currentDate), [currentDate]);
-    const officeIdForQueries = selectedOfficeId ?? 0;
+    const officeIdForQueries = selectedOfficeId;
 
     const reservationsQuery = useQuery({
         ...roomReservationsQueryOptions(officeIdForQueries, dayIso),
-        enabled: selectedOfficeId !== null,
+        enabled: officeIdForQueries != null,
     });
 
     const reservationsError =
@@ -345,7 +345,7 @@ export default function SchedulerPage(props: {
     });
 
     const handleAddReservation = (input: Pick<Reservation, "roomId" | "startTime" | "endTime">) => {
-        if (!selectedOfficeId || !meQuery.data) return;
+        if (selectedOfficeId == null || !meQuery.data) return;
 
         const scheduleEnd = new Date(currentDate);
         scheduleEnd.setHours(END_HOUR, 0, 0, 0);
@@ -363,7 +363,7 @@ export default function SchedulerPage(props: {
     };
 
     const handleUpdateReservation = (updatedReservation: Reservation) => {
-        if (!selectedOfficeId) return;
+        if (selectedOfficeId == null) return;
 
         const scheduleEnd = new Date(currentDate);
         scheduleEnd.setHours(END_HOUR, 0, 0, 0);
@@ -384,7 +384,7 @@ export default function SchedulerPage(props: {
     };
 
     const handleDeleteReservation = (id: number) => {
-        if (!selectedOfficeId) return;
+        if (selectedOfficeId == null) return;
         deleteReservationMutation.mutate(id);
     };
 

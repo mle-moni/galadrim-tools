@@ -144,7 +144,7 @@ function ScamWinnerOmgPage() {
 
     const dayIso = startOfDayIso(new Date());
     const reservationsQuery = useQuery({
-        ...roomReservationsQueryOptions(officeId ?? 0, dayIso),
+        ...roomReservationsQueryOptions(officeId ?? null, dayIso),
         enabled: officeId != null,
     });
 

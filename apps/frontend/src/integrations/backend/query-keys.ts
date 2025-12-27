@@ -5,7 +5,7 @@ export const queryKeys = {
     offices: () => ["offices"] as const,
     officeFloors: () => ["officeFloors"] as const,
     officeRooms: () => ["officeRooms"] as const,
-    roomReservations: (officeId: number, dayIso: string) =>
+    roomReservations: (officeId: number | null, dayIso: string) =>
         ["roomReservations", officeId, dayIso] as const,
 
     // Miams (restaurants)

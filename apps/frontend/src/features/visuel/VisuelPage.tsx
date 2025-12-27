@@ -95,11 +95,11 @@ export default function VisuelPage(props: {
 
     const now = useNow({ intervalMs: 60_000 });
     const dayIso = useMemo(() => startOfDayIso(now), [now]);
-    const officeIdForQueries = selectedOfficeId ?? 0;
+    const officeIdForQueries = selectedOfficeId;
 
     const reservationsQuery = useQuery({
         ...roomReservationsQueryOptions(officeIdForQueries, dayIso),
-        enabled: selectedOfficeId !== null,
+        enabled: officeIdForQueries != null,
     });
 
     const roomsByFloorId = useMemo(() => {
