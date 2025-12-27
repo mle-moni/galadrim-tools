@@ -5,7 +5,7 @@ import confetti from "canvas-confetti";
 import type { QueryClient } from "@tanstack/react-query";
 import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
-import { parseId } from "@galadrim-tools/shared";
+import { parseId } from "@/lib/parse";
 
 import { getSocketApiUrl } from "@/integrations/backend/client";
 import { startOfDayIso } from "@/integrations/backend/date";

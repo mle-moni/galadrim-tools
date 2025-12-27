@@ -1,5 +1,15 @@
+function getLocalStorage(): Storage | null {
+    if (typeof window === "undefined") return null;
+
+    try {
+        return window.localStorage;
+    } catch {
+        return null;
+    }
+}
+
 export function readStoredBoolean(key: string): boolean | null {
-    const storage = (globalThis as any).localStorage;
+    const storage = getLocalStorage();
     if (!storage) return null;
 
     try {

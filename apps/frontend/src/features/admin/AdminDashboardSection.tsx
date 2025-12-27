@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { formatBytes, formatDuration } from "@galadrim-tools/shared";
+import { formatBytes, formatDuration } from "@/lib/format";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";

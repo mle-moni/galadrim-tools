@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 
-import { readStoredBoolean } from "@galadrim-tools/shared";
+import { readStoredBoolean } from "@/lib/storage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
     BellPlus,

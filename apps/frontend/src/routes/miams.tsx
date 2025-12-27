@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import MiamsPage from "@/features/miams/MiamsPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-import { parseOptionalInt } from "@galadrim-tools/shared";
+import { parseOptionalInt } from "@/lib/parse";
 
 export const Route = createFileRoute("/miams")({
     validateSearch: (

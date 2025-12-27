@@ -3,7 +3,8 @@ import { fr } from "date-fns/locale";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { isEditableElement, type INotification, type IUserData } from "@galadrim-tools/shared";
+import type { INotification, IUserData } from "@galadrim-tools/shared";
+import { isEditableElement } from "@/lib/dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
     Bell,

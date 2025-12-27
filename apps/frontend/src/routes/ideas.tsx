@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import IdeasPage from "@/features/ideas/IdeasPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-import { parseOptionalInt } from "@galadrim-tools/shared";
+import { parseOptionalInt } from "@/lib/parse";
 
 export const Route = createFileRoute("/ideas")({
     validateSearch: (search: Record<string, unknown>): { ideaId?: number } => ({

@@ -7,7 +7,3 @@ export * from "./rights";
 export * from "./rooms";
 export * from "./saveur";
 export * from "./user";
-export * from "./format";
-export * from "./storage";
-export * from "./parse";
-export * from "./dom";

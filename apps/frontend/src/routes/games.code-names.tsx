@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-import { parseOptionalInt } from "@galadrim-tools/shared";
+import { parseOptionalInt } from "@/lib/parse";
 
 import CodeNamesPage from "@/features/code-names/CodeNamesPage";
 import { meQueryOptions } from "@/integrations/backend/auth";

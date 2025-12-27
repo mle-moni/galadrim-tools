@@ -1,4 +1,4 @@
-import { isEditableElement } from "@galadrim-tools/shared";
+import { isEditableElement } from "@/lib/dom";
 import { useEffect, useRef } from "react";
 import {
     Outlet,
