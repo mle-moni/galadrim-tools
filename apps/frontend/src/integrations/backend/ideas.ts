@@ -257,6 +257,12 @@ export function useCreateIdeaCommentMutation() {
 
                 return old.map((idea) => {
                     if (idea.id !== input.ideaId) return idea;
+
+                    // Ideas are eager-loaded with their comments, and the backend also pushes idea updates
+                    // over websockets. Depending on timing, the newly created comment may already be in
+                    // cache by the time the HTTP mutation resolves. Skip appending to avoid duplicates.
+                    if (idea.comments.some((c) => c.id === comment.id)) return idea;
+
                     return { ...idea, comments: [...idea.comments, comment] };
                 });
             });
