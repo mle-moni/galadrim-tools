@@ -35,6 +35,29 @@ export async function fetchMe(): Promise<IUserData> {
     return res.json;
 }
 
+export type GetOtpInput = {
+    email: string;
+};
+
+export type GetOtpResponse = {
+    notification: string;
+};
+
+export async function getOtp(input: GetOtpInput): Promise<GetOtpResponse> {
+    const data = new FormData();
+    data.append("email", input.email);
+
+    const res = await fetchBackendJson<GetOtpResponse, ApiError>("/getOtp", "POST", {
+        body: data,
+    });
+
+    if (!res.ok) {
+        throw new Error(getErrorMessage(res.json, "Impossible d'envoyer l'email"));
+    }
+
+    return res.json;
+}
+
 export function meQueryOptions() {
     return queryOptions({
         queryKey: queryKeys.me(),

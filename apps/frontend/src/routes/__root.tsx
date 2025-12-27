@@ -32,7 +32,7 @@ function RootComponent() {
     const router = useRouter();
     const pathname = useRouterState({ select: (s) => s.location.pathname });
     const href = useRouterState({ select: (s) => s.location.href });
-    const isAuthRoute = pathname.startsWith("/login");
+    const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/getOtp");
 
     const hrefRef = useRef(href);
     const pathnameRef = useRef(pathname);

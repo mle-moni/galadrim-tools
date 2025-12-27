@@ -17,6 +17,7 @@ import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as MiamsRouteImport } from './routes/miams'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as GetOtpRouteImport } from './routes/getOtp'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScamWinnerOmgLegacyRouteImport } from './routes/scamWinnerOmg.legacy'
@@ -65,6 +66,11 @@ const LoginRoute = LoginRouteImport.update({
 const IdeasRoute = IdeasRouteImport.update({
   id: '/ideas',
   path: '/ideas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetOtpRoute = GetOtpRouteImport.update({
+  id: '/getOtp',
+  path: '/getOtp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -116,6 +122,7 @@ const ScamWinnerOmgRoute = ScamWinnerOmgRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/getOtp': typeof GetOtpRoute
   '/ideas': typeof IdeasRoute
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/getOtp': typeof GetOtpRoute
   '/ideas': typeof IdeasRoute
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/getOtp': typeof GetOtpRoute
   '/ideas': typeof IdeasRoute
   '/login': typeof LoginRoute
   '/miams': typeof MiamsRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/getOtp'
     | '/ideas'
     | '/login'
     | '/miams'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/getOtp'
     | '/ideas'
     | '/login'
     | '/miams'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/getOtp'
     | '/ideas'
     | '/login'
     | '/miams'
@@ -234,6 +246,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  GetOtpRoute: typeof GetOtpRoute
   IdeasRoute: typeof IdeasRoute
   LoginRoute: typeof LoginRoute
   MiamsRoute: typeof MiamsRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/ideas'
       fullPath: '/ideas'
       preLoaderRoute: typeof IdeasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/getOtp': {
+      id: '/getOtp'
+      path: '/getOtp'
+      fullPath: '/getOtp'
+      preLoaderRoute: typeof GetOtpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -389,6 +409,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  GetOtpRoute: GetOtpRoute,
   IdeasRoute: IdeasRoute,
   LoginRoute: LoginRoute,
   MiamsRoute: MiamsRoute,
