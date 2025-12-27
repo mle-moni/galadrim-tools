@@ -25,14 +25,39 @@ function defaultState(): DebugState {
     return { enabled: false, nowRaw: null, nowDraft: "" };
 }
 
-function loadFromSessionStorage<T>(key: string): T | null {
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function asStringOrNull(value: unknown): string | null {
+    if (typeof value === "string") return value;
+    return null;
+}
+
+function asString(value: unknown, fallback: string): string {
+    if (typeof value === "string") return value;
+    return fallback;
+}
+
+function asBoolean(value: unknown, fallback: boolean): boolean {
+    if (typeof value === "boolean") return value;
+    if (typeof value === "number") return value !== 0;
+    if (typeof value === "string") {
+        const trimmed = value.trim().toLowerCase();
+        if (trimmed === "true") return true;
+        if (trimmed === "false") return false;
+    }
+    return fallback;
+}
+
+function loadFromSessionStorage(key: string): unknown | null {
     const storage = globalThis.window?.sessionStorage;
     if (!storage) return null;
 
     try {
         const raw = storage.getItem(key);
         if (!raw) return null;
-        return JSON.parse(raw) as T;
+        return JSON.parse(raw) as unknown;
     } catch {
         return null;
     }
@@ -67,23 +92,22 @@ function shouldPersist(state: DebugState) {
 function loadDebugState(canSpoof: boolean): DebugState {
     if (!canSpoof) return defaultState();
 
-    const stored = loadFromSessionStorage<
-        Partial<DebugState> & Partial<{ fakeNowRaw: unknown; fakeNowDraft: unknown }>
-    >(DEBUG_STATE_KEY);
+    const stored = loadFromSessionStorage(DEBUG_STATE_KEY);
 
-    if (stored) {
-        const nowRaw = (stored.nowRaw ?? stored.fakeNowRaw ?? null) as string | null;
-        const nowDraft = (stored.nowDraft ?? stored.fakeNowDraft ?? nowRaw ?? "") as string;
-        const enabled = Boolean(stored.enabled ?? Boolean(nowRaw));
+    if (isRecord(stored)) {
+        const nowRaw = asStringOrNull(stored.nowRaw ?? stored.fakeNowRaw ?? null);
+        const nowDraft = asString(stored.nowDraft ?? stored.fakeNowDraft ?? nowRaw ?? "", "");
+        const enabled = asBoolean(stored.enabled, Boolean(nowRaw));
 
         return { enabled, nowRaw, nowDraft };
     }
 
-    const scheduler =
-        loadFromSessionStorage<Partial<{ devNowRaw: unknown }>>(SCHEDULER_DEBUG_STATE_KEY);
-    const devNowRaw = (scheduler?.devNowRaw ?? null) as string | null;
-    if (devNowRaw) {
-        return { enabled: true, nowRaw: devNowRaw, nowDraft: devNowRaw };
+    const scheduler = loadFromSessionStorage(SCHEDULER_DEBUG_STATE_KEY);
+    if (isRecord(scheduler)) {
+        const devNowRaw = asStringOrNull(scheduler.devNowRaw ?? null);
+        if (devNowRaw) {
+            return { enabled: true, nowRaw: devNowRaw, nowDraft: devNowRaw };
+        }
     }
 
     return defaultState();
