@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { useMemo, useState } from "react";
 
 import { ExternalLink, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
@@ -353,7 +355,9 @@ export default function MiamsSelectedRestaurantCard(props: {
                                                 )}
                                             </div>
                                             <div className="shrink-0 text-xs text-muted-foreground">
-                                                {new Date(review.createdAt).toLocaleDateString()}
+                                                {format(new Date(review.createdAt), "P", {
+                                                    locale: fr,
+                                                })}
                                             </div>
                                         </div>
                                         <div className="mt-1 whitespace-pre-wrap text-sm">

@@ -1,5 +1,7 @@
 import type React from "react";
 
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { CalendarDays } from "lucide-react";
 
 import PageTitle from "@/components/PageTitle";
@@ -34,11 +36,7 @@ export default function SchedulerHeader({
     const clock = useClock();
 
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString("fr-FR", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-        });
+        return format(date, "EEEE d MMMM", { locale: fr });
     };
 
     const handlePrevDay = () => {

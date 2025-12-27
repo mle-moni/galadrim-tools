@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export function parseDebugNow(raw: string, baseDate?: Date): Date | null {
     const trimmed = raw.trim();
     if (!trimmed) return null;
@@ -25,10 +27,7 @@ export function parseFakeNow(raw: string, baseDate?: Date): Date | null {
 }
 
 export function formatHHMM(date: Date): string {
-    return `${date.getHours().toString().padStart(2, "0")}:${date
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}`;
+    return format(date, "HH:mm");
 }
 
 export function isTimeOnlyRaw(raw: string | null): boolean {

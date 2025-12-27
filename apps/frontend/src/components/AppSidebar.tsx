@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -108,7 +110,7 @@ function NotificationListItem({
                     </div>
                 </div>
                 <div className="shrink-0 text-xs text-white/60">
-                    {new Date(notification.createdAt).toLocaleDateString()}
+                    {format(new Date(notification.createdAt), "P", { locale: fr })}
                 </div>
             </div>
 

@@ -1,4 +1,6 @@
 import type { LayoutEvent, Reservation } from "./types";
+import { format } from "date-fns";
+
 import { START_HOUR } from "./constants";
 
 const ENTRETIEN_FINAL_QUERY = "entretien final";
@@ -35,10 +37,7 @@ export function roundToNearestMinutes(date: Date, interval = 15) {
 }
 
 export function formatTime(date: Date) {
-    return date.toLocaleTimeString("fr-FR", {
-        hour: "2-digit",
-        minute: "2-digit",
-    });
+    return format(date, "HH:mm");
 }
 
 function sortReservationsForLayout(a: Reservation, b: Reservation) {
