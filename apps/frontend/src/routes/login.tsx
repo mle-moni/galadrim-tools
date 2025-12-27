@@ -12,9 +12,24 @@ import { Label } from "@/components/ui/label";
 import { login, meQueryOptions } from "@/integrations/backend/auth";
 import { queryKeys } from "@/integrations/backend/query-keys";
 
+function normalizeRedirectToPath(value: unknown): string | undefined {
+    if (typeof value !== "string") return undefined;
+    const trimmed = value.trim();
+    if (trimmed === "") return undefined;
+
+    try {
+        const url = new URL(trimmed, "http://internal");
+        const path = `${url.pathname}${url.search}${url.hash}`;
+        if (!path.startsWith("/") || path.startsWith("//")) return undefined;
+        return path;
+    } catch {
+        return undefined;
+    }
+}
+
 export const Route = createFileRoute("/login")({
     validateSearch: (search: Record<string, unknown>) => ({
-        redirect: search.redirect as string | undefined,
+        redirect: normalizeRedirectToPath(search.redirect),
     }),
     component: LoginRoute,
 });
