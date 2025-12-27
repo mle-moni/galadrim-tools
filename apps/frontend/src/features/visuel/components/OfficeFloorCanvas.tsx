@@ -13,31 +13,39 @@ const BASE_WIDTH = 1980;
 const BASE_HEIGHT = 1080;
 const ASPECT_RATIO = BASE_WIDTH / BASE_HEIGHT;
 
-function isReservedNow(roomId: number, reservations: ApiRoomReservationWithUser[], now: Date) {
-    return reservations.some((r) => {
-        if (r.officeRoomId !== roomId) return false;
-        const start = new Date(r.start);
-        const end = new Date(r.end);
-        return start < now && now < end;
-    });
-}
-
-function getActiveReservation(
-    roomId: number,
+function getActiveReservationsByRoomId(
     reservations: ApiRoomReservationWithUser[],
     now: Date,
-): ApiRoomReservationWithUser | null {
-    const active = reservations.filter((r) => {
-        if (r.officeRoomId !== roomId) return false;
-        const start = new Date(r.start);
-        const end = new Date(r.end);
-        return start < now && now < end;
-    });
+): Map<number, ApiRoomReservationWithUser> {
+    const nowMs = now.getTime();
 
-    if (active.length === 0) return null;
+    const earliestByRoom = new Map<
+        number,
+        {
+            reservation: ApiRoomReservationWithUser;
+            startMs: number;
+        }
+    >();
 
-    active.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
-    return active[0] ?? null;
+    for (const reservation of reservations) {
+        const startMs = Date.parse(reservation.start);
+        const endMs = Date.parse(reservation.end);
+        if (!Number.isFinite(startMs) || !Number.isFinite(endMs)) continue;
+
+        if (!(startMs < nowMs && nowMs < endMs)) continue;
+
+        const existing = earliestByRoom.get(reservation.officeRoomId);
+        if (!existing || startMs < existing.startMs) {
+            earliestByRoom.set(reservation.officeRoomId, { reservation, startMs });
+        }
+    }
+
+    const activeByRoom = new Map<number, ApiRoomReservationWithUser>();
+    for (const [roomId, value] of earliestByRoom) {
+        activeByRoom.set(roomId, value.reservation);
+    }
+
+    return activeByRoom;
 }
 
 function getReservationOwnerLabel(reservation: ApiRoomReservationWithUser): string {
@@ -90,17 +98,25 @@ export default function OfficeFloorCanvas(props: {
 
     const now = useNow({ intervalMs: 60_000 });
 
+    const activeReservationsByRoomId = useMemo(() => {
+        return getActiveReservationsByRoomId(props.reservations, now);
+    }, [now, props.reservations]);
+
+    const reservedRoomIds = useMemo(() => {
+        return new Set(activeReservationsByRoomId.keys());
+    }, [activeReservationsByRoomId]);
+
     const hoveredRoomReservedNow = useMemo(() => {
         if (!hoveredRoom) return null;
         if (!hoveredRoom.isBookable) return null;
-        return isReservedNow(hoveredRoom.id, props.reservations, now);
-    }, [hoveredRoom, now, props.reservations]);
+        return reservedRoomIds.has(hoveredRoom.id);
+    }, [hoveredRoom, reservedRoomIds]);
 
     const hoveredRoomActiveReservation = useMemo(() => {
         if (!hoveredRoom) return null;
         if (!hoveredRoom.isBookable) return null;
-        return getActiveReservation(hoveredRoom.id, props.reservations, now);
-    }, [hoveredRoom, now, props.reservations]);
+        return activeReservationsByRoomId.get(hoveredRoom.id) ?? null;
+    }, [activeReservationsByRoomId, hoveredRoom]);
 
     const tooltipStyle = useMemo<CSSProperties | undefined>(() => {
         if (!hoveredRoom || !hoveredPoint) return undefined;
@@ -179,7 +195,7 @@ export default function OfficeFloorCanvas(props: {
             const polygon = room.config.points.map((p) => getCanvasCoordinates(p, canvas));
             if (polygon.length < 3) continue;
 
-            const reserved = room.isBookable && isReservedNow(room.id, props.reservations, now);
+            const reserved = room.isBookable && reservedRoomIds.has(room.id);
             const isHovered = hoveredRoomId === room.id;
 
             const fill = !room.isBookable
@@ -213,7 +229,7 @@ export default function OfficeFloorCanvas(props: {
             ctx.lineWidth = isHovered ? 1.5 : 1;
             ctx.stroke();
         }
-    }, [canvasHeight, canvasWidth, hoveredRoomId, now, props.reservations, props.rooms]);
+    }, [canvasHeight, canvasWidth, hoveredRoomId, props.rooms, reservedRoomIds]);
 
     return (
         <div ref={wrapperRef} className="relative h-[275px] w-full max-w-[500px]">
