@@ -275,9 +275,8 @@ export default function VisuelPage(props: {
             <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
                 <div style={{ height: topSpacer }} />
 
-                {visibleFloors.slice(startIndex, endIndex).map((floor: ApiOfficeFloor, idx) => {
+                {visibleFloors.slice(startIndex, endIndex).map((floor: ApiOfficeFloor) => {
                     const rooms = roomsByFloorId.get(floor.id) ?? [];
-                    const visibleIndex = startIndex + idx;
                     const isDimmed = selectedFloorId !== null && floor.id !== selectedFloorId;
 
                     return (
@@ -297,7 +296,6 @@ export default function VisuelPage(props: {
 
                                 <div className="flex-1">
                                     <OfficeFloorCanvas
-                                        key={`${floor.id}-${visibleIndex}`}
                                         rooms={rooms.filter((r) => !r.isPhonebox)}
                                         reservations={reservationsQuery.data ?? []}
                                         onRoomClick={handleRoomClick}
