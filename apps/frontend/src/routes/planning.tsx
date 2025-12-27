@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import SchedulerPage from "@/features/scheduler/SchedulerPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-import { parseOptionalNumber } from "@/lib/parse";
+import { parseOptionalNumber } from "@galadrim-tools/shared";
 
 export const Route = createFileRoute("/planning")({
     validateSearch: (

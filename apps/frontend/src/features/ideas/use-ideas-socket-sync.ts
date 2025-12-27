@@ -8,7 +8,7 @@ import { getSocketApiUrl } from "@/integrations/backend/client";
 import { normalizeIdea } from "@/integrations/backend/ideas";
 import { queryKeys } from "@/integrations/backend/query-keys";
 import { removeById, upsertById } from "@/lib/collections";
-import { parseId } from "@/lib/parse";
+import { parseId } from "@galadrim-tools/shared";
 
 type ApiIdea = Parameters<typeof normalizeIdea>[0];
 

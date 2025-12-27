@@ -1,16 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
+import { parseOptionalInt } from "@galadrim-tools/shared";
+
 import CodeNamesPage from "@/features/code-names/CodeNamesPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-
-function parseOptionalInt(value: unknown): number | undefined {
-    if (value == null) return undefined;
-
-    const text = String(value);
-    if (!/^\d+$/.test(text)) return undefined;
-
-    return +text;
-}
 
 export const Route = createFileRoute("/games/code-names")({
     validateSearch: (search: Record<string, unknown>): { gameId?: number } => ({

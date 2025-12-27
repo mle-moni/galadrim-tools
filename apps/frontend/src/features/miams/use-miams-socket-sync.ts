@@ -7,7 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { getSocketApiUrl } from "@/integrations/backend/client";
 import { queryKeys } from "@/integrations/backend/query-keys";
 import { removeById, upsertById } from "@/lib/collections";
-import { parseId } from "@/lib/parse";
+import { parseId } from "@galadrim-tools/shared";
 
 function upsertReviewInRestaurant(restaurant: IRestaurant, review: IReview) {
     const nextReviews = [review, ...restaurant.reviews.filter((r) => r.id !== review.id)];
