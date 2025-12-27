@@ -442,20 +442,38 @@ export default function SchedulerGrid({
         return hour >= focusStart && hour <= focusEnd;
     };
 
-    const getRoomEvents = (roomId: number) => {
-        let roomReservations = reservations.filter((r) => r.roomId === roomId);
+    const reservationsByRoomId = useMemo(() => {
+        const map = new Map<number, Reservation[]>();
+        for (const reservation of reservations) {
+            const existing = map.get(reservation.roomId);
+            if (existing) existing.push(reservation);
+            else map.set(reservation.roomId, [reservation]);
+        }
+        return map;
+    }, [reservations]);
 
-        if (movingState) {
-            roomReservations = roomReservations.filter(
-                (r) => r.id !== movingState.originalReservation.id,
-            );
-            if (movingState.currentReservation.roomId === roomId) {
-                roomReservations.push(movingState.currentReservation);
+    const roomEventsByRoomId = useMemo(() => {
+        const map = new Map<number, ReturnType<typeof calculateEventLayout>>();
+
+        for (const room of rooms) {
+            const base = reservationsByRoomId.get(room.id) ?? [];
+            let roomReservations = base;
+
+            if (movingState) {
+                roomReservations = roomReservations.filter(
+                    (r) => r.id !== movingState.originalReservation.id,
+                );
+
+                if (movingState.currentReservation.roomId === room.id) {
+                    roomReservations = [...roomReservations, movingState.currentReservation];
+                }
             }
+
+            map.set(room.id, calculateEventLayout(roomReservations, pixelsPerHour));
         }
 
-        return calculateEventLayout(roomReservations, pixelsPerHour);
-    };
+        return map;
+    }, [movingState, pixelsPerHour, reservationsByRoomId, rooms]);
 
     const isToday =
         currentTime.getDate() === currentDate.getDate() &&
@@ -595,7 +613,7 @@ export default function SchedulerGrid({
                                             </div>
                                         )}
 
-                                        {getRoomEvents(room.id).map((event) => (
+                                        {(roomEventsByRoomId.get(room.id) ?? []).map((event) => (
                                             <EventBlock
                                                 key={event.id}
                                                 event={event}
