@@ -67,22 +67,14 @@ function saveToSessionStorage(key: string, value: unknown) {
     const storage = globalThis.window?.sessionStorage;
     if (!storage) return;
 
-    try {
-        storage.setItem(key, JSON.stringify(value));
-    } catch {
-        // sessionStorage can throw (quota/private mode)
-    }
+    storage.setItem(key, JSON.stringify(value));
 }
 
 function removeFromSessionStorage(key: string) {
     const storage = globalThis.window?.sessionStorage;
     if (!storage) return;
 
-    try {
-        storage.removeItem(key);
-    } catch {
-        // sessionStorage can throw (quota/private mode)
-    }
+    storage.removeItem(key);
 }
 
 function shouldPersist(state: DebugState) {

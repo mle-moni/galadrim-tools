@@ -51,11 +51,7 @@ function readStoredBoolean(key: string): boolean | null {
 function writeStoredBoolean(key: string, value: boolean) {
     if (typeof window === "undefined") return;
 
-    try {
-        window.localStorage.setItem(key, value ? "1" : "0");
-    } catch {
-        // localStorage can throw (quota/private mode)
-    }
+    window.localStorage.setItem(key, value ? "1" : "0");
 }
 
 function Section({

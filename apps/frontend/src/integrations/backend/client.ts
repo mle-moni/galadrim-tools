@@ -45,12 +45,7 @@ export async function fetchBackendJson<TSuccess, TError = unknown>(
 > {
     const res = await fetchBackend(endpoint, { ...init, method });
 
-    let json: unknown = null;
-    try {
-        json = await res.json();
-    } catch {
-        // ignore non-json responses
-    }
+    const json: unknown = await res.json();
 
     if (res.ok) return { ok: true, status: res.status, json: json as TSuccess };
     return { ok: false, status: res.status, json: json as TError };

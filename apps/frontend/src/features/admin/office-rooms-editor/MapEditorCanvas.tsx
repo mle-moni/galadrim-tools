@@ -288,11 +288,7 @@ export default function MapEditorCanvas(props: {
 
                     const canvas = canvasRef.current;
                     if (canvas) {
-                        try {
-                            canvas.releasePointerCapture(event.pointerId);
-                        } catch {
-                            // releasePointerCapture can throw in some browsers
-                        }
+                        canvas.releasePointerCapture(event.pointerId);
                     }
 
                     setDraggingPointIndex(null);
@@ -300,11 +296,7 @@ export default function MapEditorCanvas(props: {
                 onPointerCancel={(event) => {
                     const canvas = canvasRef.current;
                     if (canvas) {
-                        try {
-                            canvas.releasePointerCapture(event.pointerId);
-                        } catch {
-                            // releasePointerCapture can throw in some browsers
-                        }
+                        canvas.releasePointerCapture(event.pointerId);
                     }
 
                     setDraggingPointIndex(null);
