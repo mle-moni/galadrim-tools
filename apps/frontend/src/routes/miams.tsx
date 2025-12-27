@@ -2,15 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import MiamsPage from "@/features/miams/MiamsPage";
 import { meQueryOptions } from "@/integrations/backend/auth";
-
-function parseOptionalInt(value: unknown): number | undefined {
-    if (value == null) return undefined;
-
-    const text = String(value);
-    if (!/^\d+$/.test(text)) return undefined;
-
-    return +text;
-}
+import { parseOptionalInt } from "@/lib/parse";
 
 export const Route = createFileRoute("/miams")({
     validateSearch: (

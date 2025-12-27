@@ -26,3 +26,13 @@ export function parseOptionalNumber(value: unknown): number | undefined {
     const parsed = parseId(value);
     return parsed == null ? undefined : parsed;
 }
+
+export function parseOptionalInt(value: unknown): number | undefined {
+    if (value == null) return undefined;
+
+    const text = String(value);
+    if (!/^\d+$/.test(text)) return undefined;
+
+    const parsed = Number(text);
+    return Number.isSafeInteger(parsed) ? parsed : undefined;
+}
