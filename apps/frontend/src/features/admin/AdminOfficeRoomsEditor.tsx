@@ -48,14 +48,24 @@ function makeDefaultRoomPolygon(originInDbCoords: RoomPoint): { points: RoomPoin
     return { points: [p1, p2, p3, p4] };
 }
 
+function generatePointId(): string {
+    const uuid = globalThis.crypto?.randomUUID?.();
+    if (uuid) return uuid;
+
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 function cloneRoom(room: ApiOfficeRoom): DraftRoom {
+    const points = room.config.points.map((p) => ({ x: p.x, y: p.y }));
+
     return {
         id: room.id,
         officeFloorId: room.officeFloorId,
         name: room.name,
         isBookable: room.isBookable,
         isPhonebox: room.isPhonebox,
-        config: { points: room.config.points.map((p) => ({ x: p.x, y: p.y })) },
+        config: { points },
+        pointIds: points.map(() => generatePointId()),
     };
 }
 
@@ -384,6 +394,7 @@ export default function AdminOfficeRoomsEditor() {
                                                 config: {
                                                     points: [...prev.config.points, point],
                                                 },
+                                                pointIds: [...prev.pointIds, generatePointId()],
                                             };
                                         });
                                     }}
@@ -513,8 +524,7 @@ export default function AdminOfficeRoomsEditor() {
                                                             selectedPointIndex === idx;
                                                         return (
                                                             <button
-                                                                // biome-ignore lint/suspicious/noArrayIndexKey: stable ordering matters here
-                                                                key={idx}
+                                                                key={draftRoom.pointIds[idx] ?? idx}
                                                                 type="button"
                                                                 className={`flex w-full items-center justify-between gap-2 rounded-md border px-2 py-1 text-left hover:bg-muted/20 ${
                                                                     isSelected
@@ -545,6 +555,12 @@ export default function AdminOfficeRoomsEditor() {
                                                                                             idx,
                                                                                     ),
                                                                                 },
+                                                                                pointIds:
+                                                                                    prev.pointIds.filter(
+                                                                                        (_id, i) =>
+                                                                                            i !==
+                                                                                            idx,
+                                                                                    ),
                                                                             };
                                                                         });
                                                                         setSelectedPointIndex(

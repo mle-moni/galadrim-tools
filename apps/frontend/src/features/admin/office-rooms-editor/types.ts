@@ -7,4 +7,5 @@ export type DraftRoom = {
     isBookable: boolean;
     isPhonebox: boolean;
     config: { points: RoomPoint[] };
+    pointIds: string[];
 };
