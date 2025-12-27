@@ -317,7 +317,7 @@ export default function SchedulerPage(props: {
                     canEdit: isMine || isEventAdmin,
                 };
             })
-            .filter((value) => value !== null);
+            .filter((value): value is Reservation => value !== null);
     }, [currentDate, meId, myRights, reservationsQuery.data]);
 
     const socketUserId = meQuery.data?.id;
