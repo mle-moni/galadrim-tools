@@ -164,7 +164,6 @@ function ScamWinnerOmgPage() {
     const popupCount = 14;
 
     const [basePopups] = useState<ScamPopup[]>(() => {
-        if (typeof window === "undefined") return [];
         return Array.from({ length: popupCount }, (_, idx) => createPopup(idx));
     });
 

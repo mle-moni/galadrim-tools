@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 
+import { readStoredBoolean } from "@galadrim-tools/shared";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
     BellPlus,
@@ -32,25 +33,7 @@ function getAdminSectionStorageKey(id: string) {
     return `${ADMIN_SECTION_STORAGE_PREFIX}.${id}.open`;
 }
 
-function readStoredBoolean(key: string): boolean | null {
-    if (typeof window === "undefined") return null;
-
-    try {
-        const raw = window.localStorage.getItem(key);
-        if (raw === null) return null;
-        if (raw === "1") return true;
-        if (raw === "0") return false;
-        if (raw === "true") return true;
-        if (raw === "false") return false;
-        return null;
-    } catch {
-        return null;
-    }
-}
-
 function writeStoredBoolean(key: string, value: boolean) {
-    if (typeof window === "undefined") return;
-
     window.localStorage.setItem(key, value ? "1" : "0");
 }
 

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { formatBytes, formatDuration } from "@galadrim-tools/shared";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
@@ -6,27 +7,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 import { fetchDashboardInfos } from "@/integrations/backend/admin";
 import { queryKeys } from "@/integrations/backend/query-keys";
-
-function formatBytes(bytes: number) {
-    const units = ["B", "KB", "MB", "GB", "TB"] as const;
-    let value = bytes;
-    let idx = 0;
-    while (value >= 1024 && idx < units.length - 1) {
-        value /= 1024;
-        idx += 1;
-    }
-    return `${value.toFixed(idx === 0 ? 0 : 1)} ${units[idx]}`;
-}
-
-function formatDuration(seconds: number) {
-    const days = Math.floor(seconds / 86400);
-    const hours = Math.floor((seconds % 86400) / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-
-    if (days > 0) return `${days}j ${hours}h`;
-    if (hours > 0) return `${hours}h ${minutes}m`;
-    return `${minutes}m`;
-}
 
 export default function AdminDashboardSection() {
     const dashboardQuery = useQuery({
