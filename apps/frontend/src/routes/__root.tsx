@@ -1,3 +1,4 @@
+import { isEditableElement } from "@galadrim-tools/shared";
 import { useEffect, useRef } from "react";
 import {
     Outlet,
@@ -49,16 +50,6 @@ function RootComponent() {
         if (isAuthRoute) return;
 
         const matcher = createKeySequenceMatcher(KONAMI_SEQUENCE);
-
-        const isEditableElement = (target: EventTarget | null) => {
-            if (!(target instanceof HTMLElement)) return false;
-            return (
-                target.isContentEditable ||
-                target.tagName === "INPUT" ||
-                target.tagName === "TEXTAREA" ||
-                target.tagName === "SELECT"
-            );
-        };
 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.defaultPrevented) return;

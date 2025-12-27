@@ -3,10 +3,11 @@ import { format } from "date-fns";
 
 import { START_HOUR } from "./constants";
 
-const ENTRETIEN_FINAL_QUERY = "entretien final";
+const RED_RESERVATION_QUERIES = ["entretien final", "occupé 🤖"];
 
 export function includesEntretienFinal(value: string | null | undefined) {
-    return (value ?? "").toLocaleLowerCase().includes(ENTRETIEN_FINAL_QUERY);
+    const haystack = (value ?? "").toLocaleLowerCase();
+    return RED_RESERVATION_QUERIES.some((query) => haystack.includes(query));
 }
 
 export function isIdMultipleOf(id: number, modulo: number) {

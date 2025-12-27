@@ -3,7 +3,7 @@ import { fr } from "date-fns/locale";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { INotification, IUserData } from "@galadrim-tools/shared";
+import { isEditableElement, type INotification, type IUserData } from "@galadrim-tools/shared";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
     Bell,
@@ -138,17 +138,6 @@ function NotificationListItem({
         >
             {content}
         </button>
-    );
-}
-
-// prevents sidebar shortcuts from hijacking typing in inputs
-function isEditableElement(target: EventTarget | null) {
-    if (!(target instanceof HTMLElement)) return false;
-    return (
-        target.isContentEditable ||
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.tagName === "SELECT"
     );
 }
 
