@@ -139,6 +139,7 @@ function NotificationListItem({
     );
 }
 
+// prevents sidebar shortcuts from hijacking typing in inputs
 function isEditableElement(target: EventTarget | null) {
     if (!(target instanceof HTMLElement)) return false;
     return (
