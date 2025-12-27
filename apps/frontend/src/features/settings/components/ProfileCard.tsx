@@ -103,7 +103,7 @@ export default function ProfileCard({
                                 }}
                             />
                             <p className="mt-1 text-xs text-muted-foreground">
-                                PNG/JPG, 1MB max (limite serveur).
+                                PNG ou JPG seulement, 1 Mo max
                             </p>
                         </div>
                         {form.avatarFile && (
