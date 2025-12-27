@@ -1,11 +1,13 @@
-import type { ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Shield } from "lucide-react";
 
+import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 
 type AdminShellProps = {
     title: string;
+    icon?: ElementType<{ className?: string }>;
     description?: string;
     backTo?: string;
     children: ReactNode;
@@ -13,30 +15,28 @@ type AdminShellProps = {
 
 export default function AdminShell({
     title,
+    icon = Shield,
     description,
     backTo = "/admin",
     children,
 }: AdminShellProps) {
     return (
-        <div className="flex h-full w-full flex-col gap-6 overflow-auto p-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                    <h1 className="text-2xl font-semibold">{title}</h1>
-                    {description && (
-                        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-                    )}
-                </div>
-                <div className="flex items-center gap-2">
+        <div className="flex h-full w-full flex-col overflow-hidden">
+            <PageHeader
+                title={title}
+                icon={icon}
+                description={description}
+                right={
                     <Button variant="outline" asChild>
                         <Link to={backTo} search={{}}>
                             <ChevronLeft className="h-4 w-4" />
                             Retour
                         </Link>
                     </Button>
-                </div>
-            </div>
+                }
+            />
 
-            {children}
+            <div className="flex-1 overflow-auto px-4 py-4 md:px-6 md:py-6">{children}</div>
         </div>
     );
 }

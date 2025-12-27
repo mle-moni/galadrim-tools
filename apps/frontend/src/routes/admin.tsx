@@ -32,7 +32,7 @@ function AdminRoute() {
     return (
         <AdminShell
             title="Administration"
-            description="Outils internes réservés aux admins (selon vos droits)."
+            description="Outils internes réservés aux admins."
             backTo="/planning"
         >
             <AdminHomePage />

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { RefreshCcw, Sparkles } from "lucide-react";
+
+import PageHeader from "@/components/PageHeader";
 import { toast } from "sonner";
 
 import {
@@ -96,174 +98,174 @@ export default function GalakiPage() {
     const canGrade = Boolean(currentGuess) && !gradeMutation.isPending && imageStatus !== "loading";
 
     return (
-        <div className="flex h-full w-full flex-col gap-6 overflow-auto p-6">
-            <div className="flex items-start justify-between gap-4">
-                <div className="flex min-w-0 items-start gap-3">
-                    <SidebarTrigger className="mt-0.5 md:hidden" />
-                    <div className="min-w-0">
-                        <h1 className="flex items-center gap-2 text-2xl font-semibold">
-                            <Sparkles className="h-5 w-5 text-primary" />
-                            Galaki
-                        </h1>
-                    </div>
-                </div>
+        <div className="flex h-full w-full flex-col overflow-hidden">
+            <PageHeader
+                title="Galaki"
+                icon={Sparkles}
+                iconClassName="text-muted-foreground"
+                right={
+                    <>
+                        <SidebarTrigger className="md:hidden" />
+                        <Button
+                            variant="outline"
+                            onClick={() => guessesQuery.refetch()}
+                            disabled={guessesQuery.isFetching}
+                        >
+                            {guessesQuery.isFetching ? (
+                                <RefreshCcw className="h-4 w-4 animate-spin" />
+                            ) : null}
+                            Rafraîchir
+                        </Button>
+                    </>
+                }
+            />
 
-                <Button
-                    variant="outline"
-                    onClick={() => guessesQuery.refetch()}
-                    disabled={guessesQuery.isFetching}
-                >
-                    {guessesQuery.isFetching ? (
-                        <RefreshCcw className="h-4 w-4 animate-spin" />
-                    ) : null}
-                    Rafraîchir
-                </Button>
-            </div>
+            <div className="flex-1 overflow-auto px-4 py-4 md:px-6 md:py-6">
+                <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Portrait</CardTitle>
+                            <CardDescription>
+                                {total === 0
+                                    ? "Aucun portrait à deviner pour l'instant."
+                                    : currentGuess
+                                      ? `Portrait ${done + 1} / ${total}`
+                                      : `Terminé — ${total} portrait${total > 1 ? "s" : ""}`}
+                            </CardDescription>
+                        </CardHeader>
 
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-4">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Portrait</CardTitle>
-                        <CardDescription>
-                            {total === 0
-                                ? "Aucun portrait à deviner pour l'instant."
-                                : currentGuess
-                                  ? `Portrait ${done + 1} / ${total}`
-                                  : `Terminé — ${total} portrait${total > 1 ? "s" : ""}`}
-                        </CardDescription>
-                    </CardHeader>
-
-                    <CardContent className="flex flex-col gap-4">
-                        {guessesQuery.isLoading && (
-                            <div className="grid gap-4">
-                                <Skeleton className="aspect-square w-full max-w-[420px]" />
-                                <Skeleton className="h-10 w-full" />
-                                <div className="grid gap-2 sm:grid-cols-2">
+                        <CardContent className="flex flex-col gap-4">
+                            {guessesQuery.isLoading && (
+                                <div className="grid gap-4">
+                                    <Skeleton className="aspect-square w-full max-w-[420px]" />
                                     <Skeleton className="h-10 w-full" />
-                                    <Skeleton className="h-10 w-full" />
-                                    <Skeleton className="h-10 w-full" />
-                                    <Skeleton className="h-10 w-full" />
-                                </div>
-                            </div>
-                        )}
-
-                        {guessesQuery.isError && (
-                            <div className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm">
-                                Impossible de charger les portraits.
-                            </div>
-                        )}
-
-                        {!guessesQuery.isLoading && !guessesQuery.isError && currentGuess && (
-                            <>
-                                <div className="overflow-hidden rounded-lg border border-border/60 bg-muted/5">
-                                    <img
-                                        src={resolvePictureUrl(
-                                            currentGuess.portraitGuessable.pictureUrl,
-                                        )}
-                                        alt="Portrait à deviner"
-                                        className="aspect-square w-full object-cover"
-                                        loading="lazy"
-                                        onLoad={() => setImageStatus("loaded")}
-                                        onError={() => setImageStatus("error")}
-                                    />
-                                </div>
-
-                                <Accordion
-                                    type="single"
-                                    collapsible
-                                    value={answerOpen ? "answer" : undefined}
-                                    onValueChange={(value) => setAnswerOpen(value === "answer")}
-                                >
-                                    <AccordionItem value="answer" className="border-none">
-                                        <AccordionTrigger className="rounded-md px-1">
-                                            Réponse
-                                        </AccordionTrigger>
-                                        <AccordionContent className="px-1">
-                                            <div className="rounded-md border border-border/60 bg-muted/10 px-3 py-2 text-sm font-medium">
-                                                {currentGuess.portraitGuessable.guess}
-                                            </div>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
-
-                                <div className="grid gap-2 sm:grid-cols-2">
-                                    {GRADES.map((g) => (
-                                        <Button
-                                            key={g.grade}
-                                            type="button"
-                                            variant="outline"
-                                            className={g.className}
-                                            disabled={!canGrade}
-                                            onClick={() => {
-                                                if (!currentGuess) return;
-
-                                                const previousIndex = currentIndex;
-                                                setAnswerOpen(false);
-                                                setCurrentIndex((idx) => idx + 1);
-
-                                                const promise = gradeMutation.mutateAsync({
-                                                    guessId: currentGuess.id,
-                                                    grade: g.grade,
-                                                });
-
-                                                promise.catch((error) => {
-                                                    setCurrentIndex(previousIndex);
-
-                                                    toast.error(
-                                                        error instanceof Error
-                                                            ? error.message
-                                                            : "Impossible d'enregistrer la réponse",
-                                                    );
-                                                });
-                                            }}
-                                        >
-                                            {g.label}
-                                        </Button>
-                                    ))}
-                                </div>
-
-                                {gradeMutation.isPending && (
-                                    <div className="text-xs text-muted-foreground">
-                                        Enregistrement…
+                                    <div className="grid gap-2 sm:grid-cols-2">
+                                        <Skeleton className="h-10 w-full" />
+                                        <Skeleton className="h-10 w-full" />
+                                        <Skeleton className="h-10 w-full" />
+                                        <Skeleton className="h-10 w-full" />
                                     </div>
-                                )}
-                            </>
-                        )}
-
-                        {!guessesQuery.isLoading &&
-                            !guessesQuery.isError &&
-                            !currentGuess &&
-                            total > 0 && (
-                                <div className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm">
-                                    Plus aucun portrait en attente. Reviens plus tard.
                                 </div>
                             )}
 
-                        {!guessesQuery.isLoading && !guessesQuery.isError && total === 0 && (
-                            <div className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm">
-                                Aucun portrait à deviner pour l'instant. Revenez plus tard.
-                            </div>
-                        )}
-                    </CardContent>
+                            {guessesQuery.isError && (
+                                <div className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm">
+                                    Impossible de charger les portraits.
+                                </div>
+                            )}
 
-                    <CardFooter className="justify-between">
-                        <div className="text-xs text-muted-foreground">
-                            {total > 0 ? `${done} / ${total} validé` : ""}
-                        </div>
-                        {total > 0 && !currentGuess && (
-                            <Button
-                                variant="outline"
-                                onClick={() => {
-                                    setCurrentIndex(0);
-                                    setAnswerOpen(false);
-                                }}
-                                disabled={guessesQuery.isFetching}
-                            >
-                                Recommencer
-                            </Button>
-                        )}
-                    </CardFooter>
-                </Card>
+                            {!guessesQuery.isLoading && !guessesQuery.isError && currentGuess && (
+                                <>
+                                    <div className="overflow-hidden rounded-lg border border-border/60 bg-muted/5">
+                                        <img
+                                            src={resolvePictureUrl(
+                                                currentGuess.portraitGuessable.pictureUrl,
+                                            )}
+                                            alt="Portrait à deviner"
+                                            className="aspect-square w-full object-cover"
+                                            loading="lazy"
+                                            onLoad={() => setImageStatus("loaded")}
+                                            onError={() => setImageStatus("error")}
+                                        />
+                                    </div>
+
+                                    <Accordion
+                                        type="single"
+                                        collapsible
+                                        value={answerOpen ? "answer" : undefined}
+                                        onValueChange={(value) => setAnswerOpen(value === "answer")}
+                                    >
+                                        <AccordionItem value="answer" className="border-none">
+                                            <AccordionTrigger className="rounded-md px-1">
+                                                Réponse
+                                            </AccordionTrigger>
+                                            <AccordionContent className="px-1">
+                                                <div className="rounded-md border border-border/60 bg-muted/10 px-3 py-2 text-sm font-medium">
+                                                    {currentGuess.portraitGuessable.guess}
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
+
+                                    <div className="grid gap-2 sm:grid-cols-2">
+                                        {GRADES.map((g) => (
+                                            <Button
+                                                key={g.grade}
+                                                type="button"
+                                                variant="outline"
+                                                className={g.className}
+                                                disabled={!canGrade}
+                                                onClick={() => {
+                                                    if (!currentGuess) return;
+
+                                                    const previousIndex = currentIndex;
+                                                    setAnswerOpen(false);
+                                                    setCurrentIndex((idx) => idx + 1);
+
+                                                    const promise = gradeMutation.mutateAsync({
+                                                        guessId: currentGuess.id,
+                                                        grade: g.grade,
+                                                    });
+
+                                                    promise.catch((error) => {
+                                                        setCurrentIndex(previousIndex);
+
+                                                        toast.error(
+                                                            error instanceof Error
+                                                                ? error.message
+                                                                : "Impossible d'enregistrer la réponse",
+                                                        );
+                                                    });
+                                                }}
+                                            >
+                                                {g.label}
+                                            </Button>
+                                        ))}
+                                    </div>
+
+                                    {gradeMutation.isPending && (
+                                        <div className="text-xs text-muted-foreground">
+                                            Enregistrement…
+                                        </div>
+                                    )}
+                                </>
+                            )}
+
+                            {!guessesQuery.isLoading &&
+                                !guessesQuery.isError &&
+                                !currentGuess &&
+                                total > 0 && (
+                                    <div className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm">
+                                        Plus aucun portrait en attente. Reviens plus tard.
+                                    </div>
+                                )}
+
+                            {!guessesQuery.isLoading && !guessesQuery.isError && total === 0 && (
+                                <div className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm">
+                                    Aucun portrait à deviner pour l'instant. Revenez plus tard.
+                                </div>
+                            )}
+                        </CardContent>
+
+                        <CardFooter className="justify-between">
+                            <div className="text-xs text-muted-foreground">
+                                {total > 0 ? `${done} / ${total} validé` : ""}
+                            </div>
+                            {total > 0 && !currentGuess && (
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        setCurrentIndex(0);
+                                        setAnswerOpen(false);
+                                    }}
+                                    disabled={guessesQuery.isFetching}
+                                >
+                                    Recommencer
+                                </Button>
+                            )}
+                        </CardFooter>
+                    </Card>
+                </div>
             </div>
         </div>
     );
