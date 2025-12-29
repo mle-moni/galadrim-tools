@@ -161,6 +161,10 @@ export function useCreateRoomReservationMutation(opts: {
                 start: input.start.toISOString(),
                 end: input.end.toISOString(),
                 userId: opts.me.id,
+                user: {
+                    id: opts.me.id,
+                    username: opts.me.username,
+                },
             };
 
             queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) => {

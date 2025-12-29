@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
@@ -10,6 +10,7 @@ import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
 import FloorTabSelector from "@/components/FloorTabSelector";
 import OfficePicker from "@/components/OfficePicker";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import SchedulerGrid from "./SchedulerGrid";
@@ -22,9 +23,12 @@ import {
     THEME_ME,
     THEME_MILESTONE,
     THEME_OTHER,
+    THEME_PERSON_SEARCH_MATCH,
 } from "./constants";
 import type { Reservation, Room } from "./types";
 import { includesEntretienFinal, isIdMultipleOf } from "./utils";
+
+import { normalizeSearchText } from "@/lib/search";
 
 import { meQueryOptions } from "@/integrations/backend/auth";
 import { startOfDayIso } from "@/integrations/backend/date";
@@ -64,6 +68,36 @@ export default function SchedulerPage(props: {
 
     const [currentDate, setCurrentDate] = useState<Date>(() => clock.now());
     const [isFiveMinuteSlots, setIsFiveMinuteSlots] = useState(false);
+
+    const [personSearchOpen, setPersonSearchOpen] = useState(false);
+    const [personSearch, setPersonSearch] = useState("");
+    const personSearchInputRef = useRef<HTMLInputElement>(null);
+
+    const normalizedPersonSearch = useMemo(() => normalizeSearchText(personSearch), [personSearch]);
+
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.defaultPrevented) return;
+            if (e.key.toLowerCase() !== "f") return;
+            if (!(e.ctrlKey || e.metaKey)) return;
+            if (e.altKey) return;
+
+            e.preventDefault();
+            setPersonSearchOpen(true);
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
+
+    useEffect(() => {
+        if (!personSearchOpen) return;
+
+        requestAnimationFrame(() => {
+            personSearchInputRef.current?.focus();
+            personSearchInputRef.current?.select();
+        });
+    }, [personSearchOpen]);
 
     const queryClient = useQueryClient();
 
@@ -203,6 +237,11 @@ export default function SchedulerPage(props: {
 
                 if (clampedEndTime <= clampedStartTime) return null;
 
+                const bookedByUsername = reservation.user?.username ?? null;
+                const isPersonMatch =
+                    normalizedPersonSearch !== "" &&
+                    normalizeSearchText(bookedByUsername).includes(normalizedPersonSearch);
+
                 const isFinalInterview = isEntretienFinalReservation(reservation);
 
                 let color = isMine ? THEME_ME : THEME_OTHER;
@@ -212,11 +251,17 @@ export default function SchedulerPage(props: {
                     color = THEME_MILESTONE;
                 }
 
+                if (isPersonMatch) {
+                    color = THEME_PERSON_SEARCH_MATCH;
+                }
+
                 return {
                     id: reservation.id,
                     roomId: reservation.officeRoomId,
                     title: reservation.title ?? "",
                     owner: reservation.titleComputed,
+                    bookedByUsername,
+                    isPersonMatch,
                     startTime: clampedStartTime,
                     endTime: clampedEndTime,
                     color,
@@ -224,7 +269,67 @@ export default function SchedulerPage(props: {
                 };
             })
             .filter((value): value is Reservation => value !== null);
-    }, [currentDate, meId, myRights, reservationsQuery.data]);
+    }, [currentDate, meId, myRights, normalizedPersonSearch, reservationsQuery.data]);
+
+    const filteredRooms = useMemo(() => {
+        if (normalizedPersonSearch === "") return rooms;
+
+        const roomIdsWithMatch = new Set(
+            reservations.filter((reservation) => reservation.isPersonMatch).map((r) => r.roomId),
+        );
+        return rooms.filter((room) => roomIdsWithMatch.has(room.id));
+    }, [normalizedPersonSearch, reservations, rooms]);
+
+    const usernamesForDay = useMemo(() => {
+        const usernames = new Set<string>();
+        for (const reservation of reservationsQuery.data ?? []) {
+            if (reservation.user?.username) usernames.add(reservation.user.username);
+        }
+        return Array.from(usernames).sort((a, b) => a.localeCompare(b));
+    }, [reservationsQuery.data]);
+
+    const longestCommonPrefix = useCallback((values: string[]) => {
+        if (values.length === 0) return "";
+        if (values.length === 1) return values[0] ?? "";
+
+        let prefix = values[0] ?? "";
+        for (let i = 1; i < values.length; i += 1) {
+            const value = values[i] ?? "";
+            while (prefix !== "" && !value.startsWith(prefix)) {
+                prefix = prefix.slice(0, -1);
+            }
+        }
+        return prefix;
+    }, []);
+
+    const completePersonSearch = useCallback(() => {
+        const raw = personSearch.trim();
+        const needle = normalizeSearchText(raw);
+        if (!needle) return;
+
+        const matches = usernamesForDay
+            .map((username) => ({ username, normalized: normalizeSearchText(username) }))
+            .filter((entry) => entry.normalized.startsWith(needle));
+
+        if (matches.length === 0) return;
+        if (matches.length === 1) {
+            setPersonSearch(matches[0]!.username);
+            return;
+        }
+
+        const commonNormalized = longestCommonPrefix(matches.map((m) => m.normalized));
+        if (commonNormalized.length > needle.length) {
+            setPersonSearch(commonNormalized);
+        }
+    }, [longestCommonPrefix, personSearch, usernamesForDay]);
+
+    const effectiveFocusedRoomId = useMemo(() => {
+        if (!props.focusedRoomId) return props.focusedRoomId;
+        if (normalizedPersonSearch === "") return props.focusedRoomId;
+        if (filteredRooms.some((room) => room.id === props.focusedRoomId))
+            return props.focusedRoomId;
+        return undefined;
+    }, [filteredRooms, normalizedPersonSearch, props.focusedRoomId]);
 
     const socketUserId = meQuery.data?.id;
     const socketToken = meQuery.data?.socketToken;
@@ -294,6 +399,9 @@ export default function SchedulerPage(props: {
         deleteReservationMutation.mutate(id);
     };
 
+    const trimmedPersonSearch = personSearch.trim();
+    const hasPersonFilter = normalizedPersonSearch !== "";
+
     const viewToggle = (
         <div className="flex items-center rounded-md border bg-card p-1">
             <Button asChild size="sm" variant="secondary" className="h-8">
@@ -337,6 +445,9 @@ export default function SchedulerPage(props: {
     );
 
     const isReady = selectedOfficeId !== null && meQuery.data !== undefined;
+    const isReservationsLoading = reservationsQuery.isLoading;
+    const showNoMatches =
+        isReady && hasPersonFilter && !isReservationsLoading && filteredRooms.length === 0;
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -361,22 +472,100 @@ export default function SchedulerPage(props: {
                         {reservationsError}
                     </div>
                 )}
+
                 {isReady ? (
-                    <SchedulerGrid
-                        currentDate={currentDate}
-                        rooms={rooms}
-                        reservations={reservations}
-                        onAddReservation={handleAddReservation}
-                        onUpdateReservation={handleUpdateReservation}
-                        onDeleteReservation={handleDeleteReservation}
-                        isFiveMinuteSlots={isFiveMinuteSlots}
-                        focusedRoomId={props.focusedRoomId}
-                        roomColumnRefs={roomColumnRefs}
-                        roomHeaderRefs={roomHeaderRefs}
-                    />
+                    showNoMatches ? (
+                        <div className="flex flex-1 items-center justify-center px-6">
+                            <div className="max-w-md text-center">
+                                <div className="text-sm font-semibold">
+                                    Aucune réservation trouvée
+                                </div>
+                                <div className="mt-1 text-sm text-muted-foreground">
+                                    Aucune salle réservée par "{trimmedPersonSearch}" ce jour-là.
+                                </div>
+                                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => setPersonSearchOpen(true)}
+                                    >
+                                        Modifier
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        onClick={() => setPersonSearch("")}
+                                    >
+                                        Effacer
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <SchedulerGrid
+                            currentDate={currentDate}
+                            rooms={filteredRooms}
+                            reservations={reservations}
+                            onAddReservation={handleAddReservation}
+                            onUpdateReservation={handleUpdateReservation}
+                            onDeleteReservation={handleDeleteReservation}
+                            isFiveMinuteSlots={isFiveMinuteSlots}
+                            focusedRoomId={effectiveFocusedRoomId}
+                            roomColumnRefs={roomColumnRefs}
+                            roomHeaderRefs={roomHeaderRefs}
+                        />
+                    )
                 ) : (
                     <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
                         Chargement…
+                    </div>
+                )}
+
+                {personSearchOpen && (
+                    <div
+                        className="fixed inset-0 z-[90]"
+                        onMouseDown={(e) => {
+                            if (e.target === e.currentTarget) {
+                                setPersonSearchOpen(false);
+                            }
+                        }}
+                    >
+                        <div className="pointer-events-auto absolute left-1/2 top-4 w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 rounded-lg border bg-background/90 p-3 shadow-xl backdrop-blur">
+                            <div className="flex items-center gap-2">
+                                <Input
+                                    ref={personSearchInputRef}
+                                    value={personSearch}
+                                    onChange={(e) => setPersonSearch(e.target.value)}
+                                    placeholder="Rechercher une personne"
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Escape") {
+                                            setPersonSearchOpen(false);
+                                            return;
+                                        }
+
+                                        if (e.key === "Tab" && !e.shiftKey) {
+                                            e.preventDefault();
+                                            completePersonSearch();
+                                            return;
+                                        }
+
+                                        if (e.key === "Enter") {
+                                            setPersonSearchOpen(false);
+                                        }
+                                    }}
+                                />
+                                {trimmedPersonSearch && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => setPersonSearch("")}
+                                    >
+                                        Effacer
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 )}
             </main>

@@ -11,6 +11,8 @@ export interface Reservation {
     endTime: Date;
     color: string;
     owner: string;
+    bookedByUsername: string | null;
+    isPersonMatch: boolean;
     canEdit: boolean;
 }
 
