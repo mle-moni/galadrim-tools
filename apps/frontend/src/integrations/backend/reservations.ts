@@ -163,10 +163,14 @@ export function useCreateRoomReservationMutation(opts: {
                 userId: opts.me.id,
             };
 
-            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) => [
-                ...old,
-                optimisticReservation,
-            ]);
+            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) => {
+                const next = [...old, optimisticReservation];
+                next.sort((a, b) => {
+                    if (a.start === b.start) return a.id - b.id;
+                    return a.start < b.start ? -1 : 1;
+                });
+                return next;
+            });
 
             return { previous, optimisticId };
         },
@@ -192,9 +196,6 @@ export function useCreateRoomReservationMutation(opts: {
                 return next;
             });
         },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey, exact: true });
-        },
     });
 }
 
@@ -217,8 +218,8 @@ export function useUpdateRoomReservationMutation(opts: {
 
             const previous = queryClient.getQueryData<ApiRoomReservationWithUser[]>(queryKey);
 
-            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) =>
-                old.map((r) =>
+            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) => {
+                const next = old.map((r) =>
                     r.id === input.id
                         ? {
                               ...r,
@@ -229,8 +230,15 @@ export function useUpdateRoomReservationMutation(opts: {
                               end: input.end.toISOString(),
                           }
                         : r,
-                ),
-            );
+                );
+
+                next.sort((a, b) => {
+                    if (a.start === b.start) return a.id - b.id;
+                    return a.start < b.start ? -1 : 1;
+                });
+
+                return next;
+            });
 
             return { previous };
         },
@@ -239,12 +247,14 @@ export function useUpdateRoomReservationMutation(opts: {
             queryClient.setQueryData(queryKey, context.previous);
         },
         onSuccess: (data) => {
-            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) =>
-                old.map((r) => (r.id === data.reservation.id ? data.reservation : r)),
-            );
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey, exact: true });
+            queryClient.setQueryData<ApiRoomReservationWithUser[]>(queryKey, (old = []) => {
+                const next = old.map((r) => (r.id === data.reservation.id ? data.reservation : r));
+                next.sort((a, b) => {
+                    if (a.start === b.start) return a.id - b.id;
+                    return a.start < b.start ? -1 : 1;
+                });
+                return next;
+            });
         },
     });
 }
@@ -277,9 +287,6 @@ export function useDeleteRoomReservationMutation(opts: {
         onError: (_error, _input, context) => {
             if (!context?.previous) return;
             queryClient.setQueryData(queryKey, context.previous);
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey, exact: true });
         },
     });
 }
