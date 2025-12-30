@@ -466,11 +466,11 @@ export default function SchedulerPage(props: {
         isReady && hasPersonFilter && !isReservationsLoading && visibleRooms.length === 0;
 
     const showNoFreeRooms =
-        isReady &&
-        !hasPersonFilter &&
-        showOnlyFreeRooms &&
-        !isReservationsLoading &&
-        visibleRooms.length === 0;
+        isReady && // office + me loaded
+        !hasPersonFilter && // not in person-search mode
+        showOnlyFreeRooms && // toggle ON
+        !isReservationsLoading && // reservations fetched
+        visibleRooms.length === 0; // nothing left to show
 
     return (
         <div className="flex h-full min-h-0 flex-col">
