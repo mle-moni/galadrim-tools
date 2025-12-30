@@ -238,7 +238,21 @@ export function useSchedulerInteractions(input: {
         }
 
         if (movingState) {
-            input.onUpdateReservation(movingState.currentReservation);
+            const { originalReservation, currentReservation } = movingState;
+
+            const hasReservationChanged =
+                currentReservation.roomId !== originalReservation.roomId ||
+                currentReservation.startTime.getTime() !==
+                    originalReservation.startTime.getTime() ||
+                currentReservation.endTime.getTime() !== originalReservation.endTime.getTime();
+
+            // Avoid no-op PUTs when the user simply clicks/double-clicks an event.
+            // These extra updates can race with deletes via sockets + optimistic cache updates,
+            // causing a late update to re-add a reservation that was just deleted.
+            if (hasReservationChanged) {
+                input.onUpdateReservation(currentReservation);
+            }
+
             setMovingState(null);
         }
     };
