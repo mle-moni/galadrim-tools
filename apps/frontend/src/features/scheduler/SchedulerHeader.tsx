@@ -14,8 +14,13 @@ import { useClock } from "@/debug/clock";
 interface SchedulerHeaderProps {
     currentDate: Date;
     onDateChange: (date: Date) => void;
+
     isFiveMinuteSlots: boolean;
     setIsFiveMinuteSlots: (val: boolean) => void;
+
+    showOnlyFreeRooms: boolean;
+    setShowOnlyFreeRooms: (val: boolean) => void;
+
     leading?: React.ReactNode;
 
     viewToggle?: React.ReactNode;
@@ -28,6 +33,8 @@ export default function SchedulerHeader({
     onDateChange,
     isFiveMinuteSlots,
     setIsFiveMinuteSlots,
+    showOnlyFreeRooms,
+    setShowOnlyFreeRooms,
     leading,
     viewToggle,
     officeSelector,
@@ -72,6 +79,17 @@ export default function SchedulerHeader({
                         />
                         <Label htmlFor="five-minute-slots" className="text-sm">
                             Slots de 5 minutes
+                        </Label>
+                    </div>
+
+                    <div className="flex items-center gap-2 rounded-md border bg-card px-3 py-2">
+                        <Switch
+                            id="only-free-rooms"
+                            checked={showOnlyFreeRooms}
+                            onCheckedChange={setShowOnlyFreeRooms}
+                        />
+                        <Label htmlFor="only-free-rooms" className="text-sm">
+                            Salles libres maintenant
                         </Label>
                     </div>
 

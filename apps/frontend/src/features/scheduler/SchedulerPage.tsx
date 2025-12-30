@@ -15,6 +15,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
+import { getBusyRoomIdsAt } from "./availability";
 import { useSchedulerSocketSync } from "./use-scheduler-socket-sync";
 import {
     END_HOUR,
@@ -68,6 +69,7 @@ export default function SchedulerPage(props: {
 
     const [currentDate, setCurrentDate] = useState<Date>(() => clock.now());
     const [isFiveMinuteSlots, setIsFiveMinuteSlots] = useState(false);
+    const [showOnlyFreeRooms, setShowOnlyFreeRooms] = useState(false);
 
     const [personSearchOpen, setPersonSearchOpen] = useState(false);
     const [personSearch, setPersonSearch] = useState("");
@@ -280,6 +282,20 @@ export default function SchedulerPage(props: {
         return rooms.filter((room) => roomIdsWithMatch.has(room.id));
     }, [normalizedPersonSearch, reservations, rooms]);
 
+    const nowForAvailability = useMemo(() => {
+        const now = clock.now();
+        const at = new Date(currentDate);
+        at.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+        return at;
+    }, [clock, currentDate]);
+
+    const visibleRooms = useMemo(() => {
+        if (!showOnlyFreeRooms) return filteredRooms;
+
+        const busyRoomIds = getBusyRoomIdsAt(reservationsQuery.data ?? [], nowForAvailability);
+        return filteredRooms.filter((room) => !busyRoomIds.has(room.id));
+    }, [filteredRooms, nowForAvailability, reservationsQuery.data, showOnlyFreeRooms]);
+
     const usernamesForDay = useMemo(() => {
         const usernames = new Set<string>();
         for (const reservation of reservationsQuery.data ?? []) {
@@ -325,11 +341,10 @@ export default function SchedulerPage(props: {
 
     const effectiveFocusedRoomId = useMemo(() => {
         if (!props.focusedRoomId) return props.focusedRoomId;
-        if (normalizedPersonSearch === "") return props.focusedRoomId;
-        if (filteredRooms.some((room) => room.id === props.focusedRoomId))
+        if (visibleRooms.some((room) => room.id === props.focusedRoomId))
             return props.focusedRoomId;
         return undefined;
-    }, [filteredRooms, normalizedPersonSearch, props.focusedRoomId]);
+    }, [props.focusedRoomId, visibleRooms]);
 
     const socketUserId = meQuery.data?.id;
     const socketToken = meQuery.data?.socketToken;
@@ -446,8 +461,16 @@ export default function SchedulerPage(props: {
 
     const isReady = selectedOfficeId !== null && meQuery.data !== undefined;
     const isReservationsLoading = reservationsQuery.isLoading;
+
     const showNoMatches =
-        isReady && hasPersonFilter && !isReservationsLoading && filteredRooms.length === 0;
+        isReady && hasPersonFilter && !isReservationsLoading && visibleRooms.length === 0;
+
+    const showNoFreeRooms =
+        isReady &&
+        !hasPersonFilter &&
+        showOnlyFreeRooms &&
+        !isReservationsLoading &&
+        visibleRooms.length === 0;
 
     return (
         <div className="flex h-full min-h-0 flex-col">
@@ -461,6 +484,8 @@ export default function SchedulerPage(props: {
                 onDateChange={setCurrentDate}
                 isFiveMinuteSlots={isFiveMinuteSlots}
                 setIsFiveMinuteSlots={setIsFiveMinuteSlots}
+                showOnlyFreeRooms={showOnlyFreeRooms}
+                setShowOnlyFreeRooms={setShowOnlyFreeRooms}
                 viewToggle={viewToggle}
                 officeSelector={officeSelector}
                 floorFilters={floorFilters}
@@ -501,10 +526,28 @@ export default function SchedulerPage(props: {
                                 </div>
                             </div>
                         </div>
+                    ) : showNoFreeRooms ? (
+                        <div className="flex flex-1 items-center justify-center px-6">
+                            <div className="max-w-md text-center">
+                                <div className="text-sm font-semibold">Aucune salle libre</div>
+                                <div className="mt-1 text-sm text-muted-foreground">
+                                    Toutes les salles sont réservées à cette heure.
+                                </div>
+                                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        onClick={() => setShowOnlyFreeRooms(false)}
+                                    >
+                                        Afficher toutes les salles
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     ) : (
                         <SchedulerGrid
                             currentDate={currentDate}
-                            rooms={filteredRooms}
+                            rooms={visibleRooms}
                             reservations={reservations}
                             onAddReservation={handleAddReservation}
                             onUpdateReservation={handleUpdateReservation}
