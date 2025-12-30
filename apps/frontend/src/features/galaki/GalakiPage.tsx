@@ -5,6 +5,8 @@ import { RefreshCcw, Sparkles } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { toast } from "sonner";
 
+import { cn } from "@/lib/utils";
+
 import {
     Accordion,
     AccordionContent,
@@ -172,7 +174,7 @@ export default function GalakiPage() {
                                     <Accordion
                                         type="single"
                                         collapsible
-                                        value={answerOpen ? "answer" : undefined}
+                                        value={answerOpen ? "answer" : ""}
                                         onValueChange={(value) => setAnswerOpen(value === "answer")}
                                     >
                                         <AccordionItem value="answer" className="border-none">
@@ -180,7 +182,12 @@ export default function GalakiPage() {
                                                 Réponse
                                             </AccordionTrigger>
                                             <AccordionContent className="px-1">
-                                                <div className="rounded-md border border-border/60 bg-muted/10 px-3 py-2 text-sm font-medium">
+                                                <div
+                                                    className={cn(
+                                                        "rounded-md border border-border/60 bg-muted/10 px-3 py-2 text-sm font-medium",
+                                                        !answerOpen && "hidden",
+                                                    )}
+                                                >
                                                     {currentGuess.portraitGuessable.guess}
                                                 </div>
                                             </AccordionContent>
