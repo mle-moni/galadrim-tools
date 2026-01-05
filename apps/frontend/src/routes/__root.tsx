@@ -12,6 +12,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 
 import AppSidebar from "@/components/AppSidebar";
+import SeasonalSnowfall from "@/components/SeasonalSnowfall";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -71,6 +72,7 @@ function RootComponent() {
     if (isAuthRoute) {
         return (
             <>
+                <SeasonalSnowfall enabled={!isAuthRoute} />
                 <Outlet />
                 <Toaster position="top-center" />
                 <TanStackDevtools
@@ -91,25 +93,28 @@ function RootComponent() {
     }
 
     return (
-        <SidebarProvider defaultOpen className="h-svh min-h-0">
-            <AppSidebar />
-            <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
-                <Outlet />
-            </SidebarInset>
-            <Toaster position="top-center" />
-            <TanStackDevtools
-                config={{
-                    position: "bottom-right",
-                }}
-                plugins={[
-                    {
-                        name: "Tanstack Router",
-                        render: <TanStackRouterDevtoolsPanel />,
-                    },
-                    TanStackQueryDevtools,
-                    DebugDevtools,
-                ]}
-            />
-        </SidebarProvider>
+        <>
+            <SeasonalSnowfall enabled={!isAuthRoute} />
+            <SidebarProvider defaultOpen className="h-svh min-h-0">
+                <AppSidebar />
+                <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
+                    <Outlet />
+                </SidebarInset>
+                <Toaster position="top-center" />
+                <TanStackDevtools
+                    config={{
+                        position: "bottom-right",
+                    }}
+                    plugins={[
+                        {
+                            name: "Tanstack Router",
+                            render: <TanStackRouterDevtoolsPanel />,
+                        },
+                        TanStackQueryDevtools,
+                        DebugDevtools,
+                    ]}
+                />
+            </SidebarProvider>
+        </>
     );
 }
