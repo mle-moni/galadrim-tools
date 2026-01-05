@@ -5,13 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCreateIdeaMutation } from "@/integrations/backend/ideas";
 
 export default function CreateIdeaSheet(props: {
@@ -43,7 +37,6 @@ export default function CreateIdeaSheet(props: {
                         <Lightbulb className="h-5 w-5" />
                         J'ai une idée
                     </SheetTitle>
-                    <SheetDescription>Propose une amélioration pour Galadrim.</SheetDescription>
                 </SheetHeader>
 
                 <div className="flex flex-col gap-4 px-4 pb-4">

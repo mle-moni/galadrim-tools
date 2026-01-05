@@ -1,22 +1,28 @@
-import { useRef } from "react";
-
 import {
     CheckCircle2,
     CircleDashed,
     MessageCircle,
+    MoreHorizontal,
     ThumbsDown,
     ThumbsUp,
     Trash2,
 } from "lucide-react";
 
-import { useDrag } from "react-dnd";
-
-import type { IIdea, IIdeaNote } from "@galadrim-tools/shared";
+import type { IIdea, IIdeaNote, IdeaState } from "@galadrim-tools/shared";
 
 import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import type { ApiUserShort } from "@/integrations/backend/users";
 import { cn } from "@/lib/utils";
-import { IDEA_DND_TYPE, type IdeaDragItem } from "./dnd";
 import { formatFullDateFr, formatRelativeTimeFr, getIdeaVoteCounts } from "./ideas-utils";
 
 const TILT_BUCKETS = 11;
@@ -47,6 +53,16 @@ function formatVoters(
     return shown.join(", ");
 }
 
+function asciiSum(value: string) {
+    let sum = 0;
+
+    for (let i = 0; i < value.length; i++) {
+        sum += value.charCodeAt(i) & 0x7f;
+    }
+
+    return sum;
+}
+
 function getNotePalette(idea: IIdea, isBad: boolean) {
     if (idea.state === "DONE") return { bg: "#dcfce7", border: "#86efac" };
     if (isBad) return { bg: "#e2e8f0", border: "#cbd5e1" };
@@ -61,7 +77,8 @@ function getNotePalette(idea: IIdea, isBad: boolean) {
         { bg: "#ffe4e6", border: "#fda4af" }, // rose
     ];
 
-    return palettes[idea.id % palettes.length] ?? defaultPalette;
+    const bucket = asciiSum(idea.text) % palettes.length;
+    return palettes[bucket] ?? defaultPalette;
 }
 
 export default function IdeaCard(props: {
@@ -73,6 +90,7 @@ export default function IdeaCard(props: {
     onOpenComments: () => void;
     onVote: (ideaId: number, next: boolean) => void;
     onDelete: (ideaId: number) => void;
+    onSetState?: (ideaId: number, state: IdeaState) => void;
     isBusy?: boolean;
 }) {
     const { idea } = props;
@@ -91,43 +109,16 @@ export default function IdeaCard(props: {
 
     const canModerate = props.isIdeasAdmin || idea.isOwner;
 
-    const skipNextClickRef = useRef(false);
-
-    const [{ isDragging }, dragRef] = useDrag(
-        () => ({
-            type: IDEA_DND_TYPE,
-            item: { ideaId: idea.id } satisfies IdeaDragItem,
-            canDrag: canModerate && !props.isBusy,
-            end: () => {
-                // Avoid opening comments on mouseup after a drag.
-                skipNextClickRef.current = true;
-                window.setTimeout(() => {
-                    skipNextClickRef.current = false;
-                }, 0);
-            },
-            collect: (monitor) => ({
-                isDragging: monitor.isDragging(),
-            }),
-        }),
-        [idea.id, canModerate, props.isBusy],
-    );
-
     const upvoteVoters = formatVoters(idea.reactions, true, props.usersById);
     const downvoteVoters = formatVoters(idea.reactions, false, props.usersById);
 
     return (
         <div
-            ref={(node) => {
-                dragRef(node);
-            }}
             className={cn(
                 "group relative w-full rounded-md border p-4 shadow-sm transition-shadow hover:shadow-md",
                 "before:pointer-events-none before:absolute before:right-0 before:top-0 before:h-6 before:w-6 before:rounded-bl-md before:opacity-80",
                 "after:pointer-events-none after:absolute after:-top-2 after:left-1/2 after:h-5 after:w-20 after:-translate-x-1/2 after:rotate-[-2deg] after:rounded-sm after:bg-white/35 after:shadow-sm",
-                canModerate && !props.isBusy
-                    ? "cursor-grab active:cursor-grabbing"
-                    : "cursor-pointer",
-                isDragging && "opacity-60",
+                "cursor-pointer",
                 "mb-1",
             )}
             style={{
@@ -136,7 +127,6 @@ export default function IdeaCard(props: {
                 transform: `rotate(${tilt}deg)`,
             }}
             onClick={() => {
-                if (skipNextClickRef.current) return;
                 props.onOpenComments();
             }}
             role="button"
@@ -147,11 +137,7 @@ export default function IdeaCard(props: {
                     props.onOpenComments();
                 }
             }}
-            title={
-                canModerate
-                    ? "Cliquer: commentaires · Glisser pour déplacer"
-                    : "Ouvrir les commentaires"
-            }
+            title={canModerate ? "Ouvrir les commentaires" : "Ouvrir les commentaires"}
         >
             <div className="flex items-start justify-between gap-2">
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -183,17 +169,67 @@ export default function IdeaCard(props: {
                         onPointerDown={(e) => e.stopPropagation()}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon-sm"
-                            className="text-slate-700 hover:text-red-600"
-                            title="Supprimer"
-                            disabled={props.isBusy}
-                            onClick={() => props.onDelete(idea.id)}
-                        >
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {props.onSetState && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon-sm"
+                                        className="text-slate-700"
+                                        title="Changer le statut"
+                                        disabled={props.isBusy}
+                                    >
+                                        <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" sideOffset={6}>
+                                    <DropdownMenuLabel>Statut</DropdownMenuLabel>
+                                    <DropdownMenuRadioGroup
+                                        value={idea.state}
+                                        onValueChange={(value) =>
+                                            props.onSetState?.(idea.id, value as IdeaState)
+                                        }
+                                    >
+                                        <DropdownMenuRadioItem value="TODO" disabled={props.isBusy}>
+                                            À faire
+                                        </DropdownMenuRadioItem>
+                                        <DropdownMenuRadioItem
+                                            value="DOING"
+                                            disabled={props.isBusy}
+                                        >
+                                            En cours
+                                        </DropdownMenuRadioItem>
+                                        <DropdownMenuRadioItem value="DONE" disabled={props.isBusy}>
+                                            Terminée
+                                        </DropdownMenuRadioItem>
+                                    </DropdownMenuRadioGroup>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        variant="destructive"
+                                        disabled={props.isBusy}
+                                        onSelect={() => props.onDelete(idea.id)}
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                        Supprimer
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+
+                        {!props.onSetState && (
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon-sm"
+                                className="text-slate-700 hover:text-red-600"
+                                title="Supprimer"
+                                disabled={props.isBusy}
+                                onClick={() => props.onDelete(idea.id)}
+                            >
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        )}
                     </div>
                 )}
             </div>
