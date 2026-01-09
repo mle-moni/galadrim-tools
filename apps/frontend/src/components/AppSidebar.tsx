@@ -291,9 +291,13 @@ export default function AppSidebar() {
 
                         <div className="flex items-center gap-2 px-4">
                             <Avatar src={avatarUrl} alt={username} size={24} className="h-6 w-6" />
-                            <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                            <Link
+                                to="/settings"
+                                search={{}}
+                                className="min-w-0 flex-1 truncate text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70"
+                            >
                                 {username}
-                            </span>
+                            </Link>
 
                             <Dialog.Root
                                 open={notificationsOpen}
