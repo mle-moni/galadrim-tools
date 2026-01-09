@@ -37,6 +37,7 @@ export default class UserSeeder extends BaseSeeder {
                     "RIGHTS_ADMIN",
                     "USER_ADMIN",
                     "DASHBOARD_ADMIN",
+                    "IDEAS_ADMIN",
                 ]),
             },
             {
@@ -52,7 +53,7 @@ export default class UserSeeder extends BaseSeeder {
         const userDtos = [];
         for (let i = 1; i <= 100; i++) {
             userDtos.push({
-                username: faker.internet.userName(),
+                username: faker.internet.username(),
                 email: faker.internet.email(),
                 imageUrl: faker.image.url(),
                 password: "test",

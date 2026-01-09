@@ -1,39 +1,50 @@
-import { NuqsAdapter } from "nuqs/adapters/react-router/v6";
-import { ThemeProvider } from "@mui/material";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { SnackbarProvider, useSnackbar } from "notistack";
-import React, { type FC, type PropsWithChildren } from "react";
-import { createRoot } from "react-dom/client";
-import { AppStore } from "./globalStores/AppStore";
-import { queryClient } from "./queryClient";
-import MainRouter from "./routes/MainRouter";
-import { getTheme } from "./theme";
-import "./theme/react-big-calendar.css";
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 
-const theme = getTheme();
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-const SnackBarSetter: FC<PropsWithChildren<unknown>> = ({ children }) => {
-    const snackbarMethods = useSnackbar();
-    AppStore.notification.setMethods(snackbarMethods);
-    return <>{children}</>;
-};
+import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
+import { DebugProvider } from "./debug/DebugProvider.tsx";
 
-const container = document.getElementById("root");
+import { routeTree } from "./routeTree.gen";
 
-const root = createRoot(container!);
+import "./styles.css";
+import reportWebVitals from "./reportWebVitals.ts";
 
-root.render(
-    <React.StrictMode>
-        <NuqsAdapter>
-            <ThemeProvider theme={theme}>
-                <SnackbarProvider>
-                    <SnackBarSetter>
-                        <QueryClientProvider client={queryClient}>
-                            <MainRouter />
-                        </QueryClientProvider>
-                    </SnackBarSetter>
-                </SnackbarProvider>
-            </ThemeProvider>
-        </NuqsAdapter>
-    </React.StrictMode>,
-);
+const TanStackQueryProviderContext = TanStackQueryProvider.getContext();
+const router = createRouter({
+    routeTree,
+    context: {
+        ...TanStackQueryProviderContext,
+    },
+    defaultPreload: "intent",
+    scrollRestoration: true,
+    defaultStructuralSharing: true,
+    defaultPreloadStaleTime: 0,
+});
+
+declare module "@tanstack/react-router" {
+    interface Register {
+        router: typeof router;
+    }
+}
+
+const rootElement = document.getElementById("app");
+if (rootElement && !rootElement.innerHTML) {
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+        <StrictMode>
+            <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
+                <DndProvider backend={HTML5Backend}>
+                    <DebugProvider>
+                        <RouterProvider router={router} />
+                    </DebugProvider>
+                </DndProvider>
+            </TanStackQueryProvider.Provider>
+        </StrictMode>,
+    );
+}
+
+reportWebVitals();

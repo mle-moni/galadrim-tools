@@ -18,7 +18,19 @@ export default class OfficeRoom extends BaseModel {
     @column()
     declare name: string;
 
-    @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
+    @column({
+        prepare: (value) => JSON.stringify(value),
+        consume: (value) => {
+            if (typeof value === "string") {
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return { points: [] };
+                }
+            }
+            return value as OfficeRoomConfig;
+        },
+    })
     declare config: OfficeRoomConfig;
 
     @column(BOOLEAN_COLUMN)

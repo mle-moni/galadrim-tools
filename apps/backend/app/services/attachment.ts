@@ -4,6 +4,7 @@ import app from "@adonisjs/core/services/app";
 import type { IImage } from "@galadrim-tools/shared";
 import { createReadStream } from "node:fs";
 import fs from "node:fs/promises";
+import path from "node:path";
 import type { Stream } from "node:stream";
 
 type ImageFolder = "restaurant" | "codeNames" | "restaurantReviews" | "avatar";
@@ -36,6 +37,7 @@ export const imageAttachmentFromBufferOrStream = async (
 ): Promise<IImage> => {
     const filePath = getPath(fileName);
 
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.writeFile(filePath, bufferOrStream);
 
     return {

@@ -7,6 +7,100 @@
         <script src="./helpers.js"></script>
         <script src="./animations.js"></script>
         <script src="./gameLoader.js"></script>
+        <script>
+            // patch: avoid blocking the main thread while waiting for the phaser canvas
+            function waitForCanvas(then, tries = 0) {
+                const canvas = document.querySelector("canvas");
+                if (canvas) return then(canvas);
+
+                if (tries > 600) return;
+                requestAnimationFrame(() => waitForCanvas(then, tries + 1));
+            }
+
+            function setChat() {
+                waitForCanvas((canvas) => {
+                    // already initialized (e.g. if setChat gets called twice)
+                    if (document.getElementById("chatBody")) {
+                        return;
+                    }
+
+                    canvas.style.position = "relative";
+
+                    const chatEl = document.createElement("div");
+                    const chatTitle = document.createElement("h3");
+                    chatTitle.innerHTML = "Salon de discussion";
+                    chatTitle.style.textAlign = "center";
+
+                    const chatBody = document.createElement("div");
+                    chatBody.id = "chatBody";
+                    chatBody.style.display = "flex";
+                    chatBody.style.flexDirection = "column";
+
+                    const chatInput = document.createElement("input");
+                    chatInput.id = "chatUserInput";
+                    chatInput.style =
+                        "height: 30px; font-family:'Roboto-Thin'; margin: auto;" +
+                        "padding:10px; font-size:20px; border-width:4px; border-bottom-color: #BCC4CA; border-right-color: #BCC4CA;" +
+                        " border-left-color: white;border-top-color: white; border-radius: 10px;";
+                    chatInput.placeholder = "Dire quelque chose";
+                    chatInput.type = "text";
+                    chatInput.onkeydown = (e) => {
+                        if (e.keyCode === 13) {
+                            const text = chatInput.value;
+                            sendTxt(text);
+                            document.getElementById("chatUserInput").value = "";
+                        } else if (e.keyCode === 32) {
+                            document.getElementById("chatUserInput").value += " ";
+                        }
+                    };
+
+                    chatInput.addEventListener("focus", (e) => {
+                        canRestart = false;
+                    });
+                    chatInput.addEventListener("focusout", (e) => {
+                        canRestart = true;
+                    });
+
+                    chatEl.style.color = "white";
+                    chatBody.style.overflow = "auto";
+                    chatEl.appendChild(chatTitle);
+                    chatEl.appendChild(chatBody);
+                    chatEl.appendChild(chatInput);
+                    chatEl.style.position = "relative";
+                    chatEl.style.backgroundColor = "black";
+                    document.body.appendChild(chatEl);
+
+                    ladder.style.overflow = "auto";
+                    ladder.style.position = "absolute";
+                    ladder.style.top = "10px";
+                    ladder.style.backgroundColor = "black";
+                    ladder.style.color = "white";
+
+                    const updateLayout = () => {
+                        canvas.style.left = window.innerWidth / 2 - 500 + "px";
+
+                        chatBody.style.maxHeight =
+                            window.innerHeight -
+                            canvas.offsetHeight -
+                            20 -
+                            chatTitle.offsetHeight -
+                            chatInput.offsetHeight -
+                            150 +
+                            "px";
+
+                        chatEl.style.left = window.innerWidth / 2 - 500 + "px";
+                        chatEl.style.width = canvas.offsetWidth + "px";
+                        chatEl.style.height = window.innerHeight - canvas.offsetHeight - 20 - 50 + "px";
+
+                        ladder.style.width = canvas.offsetWidth + "px";
+                        ladder.style.left = window.innerWidth / 2 - 500 + "px";
+                    };
+
+                    updateLayout();
+                    window.addEventListener("resize", updateLayout);
+                });
+            }
+        </script>
         <script src="./phaser.min.js"></script>
         <script src="./MainMenu.js"></script>
         <script src="./Level1.js"></script>

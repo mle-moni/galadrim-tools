@@ -18,7 +18,19 @@ export default class OfficeFloor extends BaseModel {
     @column()
     declare floor: number;
 
-    @column({ prepare: (value) => JSON.stringify(value), consume: (value) => JSON.parse(value) })
+    @column({
+        prepare: (value) => JSON.stringify(value),
+        consume: (value) => {
+            if (typeof value === "string") {
+                try {
+                    return JSON.parse(value);
+                } catch {
+                    return {} as OfficeFloorConfig;
+                }
+            }
+            return value as OfficeFloorConfig;
+        },
+    })
     declare config: OfficeFloorConfig;
 
     @computed()
