@@ -27,7 +27,7 @@ export const IconLink = observer<IconLinkProps>(({ Icon, link, title, hidden }) 
             sx={{ padding: [2, 4] }}
         >
             <Fab size="large" variant="circular" color="primary" onClick={() => handleClick(link)}>
-                <Icon />
+                <Icon data-snowfall="bottom" />
             </Fab>
             <Typography sx={{ mt: 2 }}>{title}</Typography>
         </Box>

@@ -20,6 +20,7 @@
         "@emotion/react": "^11.10.4",
         "@emotion/styled": "^11.10.4",
         "@galadrim-tools/shared": "*",
+        "@hdcodedev/snowfall": "^1.0.12",
         "@mui/icons-material": "^5.10.6",
         "@mui/lab": "^5.0.0-alpha.101",
         "@mui/material": "^5.10.7",
@@ -44,7 +45,6 @@
         "react-dom": "^18.2.0",
         "react-leaflet": "^4.0.0",
         "react-router-dom": "^6.4.1",
-        "react-snowfall": "^1.2.1",
         "recharts": "^2.10.3",
         "socket.io-client": "^4.4.0",
         "zod": "^3.19.1"

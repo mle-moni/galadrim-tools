@@ -5,7 +5,7 @@ import { AppStore } from "../globalStores/AppStore";
 import IdeaPage from "../pages/idea/IdeaPage";
 import LoadingPage from "../pages/loading/LoadingPage";
 import { RenouvArtWait } from "../reusableComponents/animations/RenouvArtWait/RenouvArtWait";
-import Snowfall from 'react-snowfall'
+import { DEFAULT_PHYSICS, type PhysicsConfig, useSnowfall } from "@hdcodedev/snowfall";
 
 const OfficeRoomsPage = React.lazy(() => import("../pages/office-rooms/OfficeRoomsPage"));
 const OfficeRoomsAdminPage = React.lazy(
@@ -58,22 +58,29 @@ const AtopLogsPage = React.lazy(() => import("../pages/atopLogs/AtopLogsPage"));
 // ? this was the old cheat page
 // const CodeNamesPage = React.lazy(() => import('../pages/codeNames/CodeNamesPage'))
 
+export const customSnowfallPhysics: PhysicsConfig = {
+    ...DEFAULT_PHYSICS,
+    MAX_FLAKES: 1000,
+    FLAKE_SIZE: {
+        MIN: 1, // Minimum flake radius
+        MAX: 4, // Maximum flake radius
+    },
+};
+
 const MainRouter = () => {
+    const snowfall = useSnowfall();
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <only want to run once>
+    useEffect(() => {
+        snowfall.updatePhysicsConfig(customSnowfallPhysics);
+    }, []);
+
     return (
         <>
             {AppStore.appIsReady ? (
                 <BrowserRouter>
                     <React.Suspense fallback={<LoadingPage />}>
                         <AppRoutes />
-                        <Snowfall
-                            style={{
-                                position: 'fixed',
-                                width: '100vw',
-                                height: '100vh',
-                                zIndex: 6,
-                                color: '#fff',
-                            }}
-                        />
                     </React.Suspense>
                 </BrowserRouter>
             ) : (

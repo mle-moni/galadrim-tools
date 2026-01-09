@@ -32,6 +32,7 @@ export const GaladrimButton = observer<PropsWithChildren<GaladrimButtonProps>>(
     }) => {
         return (
             <LoadingButton
+                data-snowfall="top"
                 startIcon={startIcon}
                 endIcon={endIcon}
                 variant={variant}
