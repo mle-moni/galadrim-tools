@@ -58,14 +58,16 @@ export function MiamsSidebar(props: {
                                     asChild
                                     type="button"
                                     variant={isSelected ? "secondary" : "ghost"}
-                                    className="h-9 w-full justify-start"
+                                    className="h-9 w-full min-w-0 justify-start"
                                 >
                                     <Link
                                         to="/miams"
                                         search={{ restaurantId: restaurant.id, zoom: props.zoom }}
                                         onClick={() => props.onAfterSelectRestaurant?.()}
                                     >
-                                        {restaurant.name}
+                                        <span className="block min-w-0 flex-1 truncate">
+                                            {restaurant.name}
+                                        </span>
                                     </Link>
                                 </Button>
                             );
@@ -76,7 +78,7 @@ export function MiamsSidebar(props: {
 
             <Separator />
 
-            <ScrollArea className="min-h-0 flex-1">
+            <ScrollArea className="min-h-0 flex-1 [&_[data-radix-scroll-area-viewport]>div]:!block">
                 <div className="flex flex-col gap-1 p-2">
                     {listRestaurants.map((restaurant) => {
                         const isSelected = restaurant.id === props.selectedRestaurantId;
@@ -91,8 +93,8 @@ export function MiamsSidebar(props: {
                                     isSelected ? "border-primary bg-muted/40" : "border-transparent"
                                 }`}
                             >
-                                <div className="flex items-center justify-between gap-2">
-                                    <div className="truncate text-sm font-medium">
+                                <div className="flex min-w-0 items-center justify-between gap-2">
+                                    <div className="min-w-0 flex-1 truncate text-sm font-medium">
                                         {restaurant.name}
                                     </div>
                                     {restaurant.averagePrice != null && (
@@ -101,8 +103,8 @@ export function MiamsSidebar(props: {
                                         </div>
                                     )}
                                 </div>
-                                <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                                    <div className="truncate">
+                                <div className="flex min-w-0 items-center justify-between gap-2 text-xs text-muted-foreground">
+                                    <div className="min-w-0 flex-1 truncate">
                                         {restaurant.tags.map((t) => t.name).join(", ")}
                                     </div>
                                     <div>{restaurant.choices.length}</div>

@@ -52,7 +52,7 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
 
     return (
         <div className="flex h-full min-h-0 w-full">
-            <aside className="hidden w-80 min-w-80 flex-col border-r bg-card md:flex">
+            <aside className="hidden w-96 min-w-96 flex-col border-r bg-card md:flex">
                 <MiamsSidebar
                     search={controller.search}
                     onSearchChange={controller.setSearch}
@@ -65,7 +65,7 @@ export default function MiamsPage(props: { selectedRestaurantId?: number; zoom?:
             </aside>
 
             <Sheet open={controller.mobileListOpen} onOpenChange={controller.setMobileListOpen}>
-                <SheetContent side="left" className="p-0">
+                <SheetContent side="left" className="w-96 p-0">
                     <MiamsSidebar
                         search={controller.search}
                         onSearchChange={controller.setSearch}
