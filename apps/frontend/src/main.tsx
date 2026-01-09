@@ -9,6 +9,7 @@ import { queryClient } from "./queryClient";
 import MainRouter from "./routes/MainRouter";
 import { getTheme } from "./theme";
 import "./theme/react-big-calendar.css";
+import { Snowfall, SnowfallProvider } from "@hdcodedev/snowfall";
 
 const theme = getTheme();
 
@@ -29,7 +30,21 @@ root.render(
                 <SnackbarProvider>
                     <SnackBarSetter>
                         <QueryClientProvider client={queryClient}>
-                            <MainRouter />
+                            <SnowfallProvider>
+                                <Snowfall />
+                                <MainRouter />
+                                <div
+                                    data-snowfall="top"
+                                    style={{
+                                        position: "fixed",
+                                        bottom: 0,
+                                        left: 0,
+                                        width: "100vw",
+                                        height: "1px",
+                                        zIndex: 1000,
+                                    }}
+                                />
+                            </SnowfallProvider>
                         </QueryClientProvider>
                     </SnackBarSetter>
                 </SnackbarProvider>
