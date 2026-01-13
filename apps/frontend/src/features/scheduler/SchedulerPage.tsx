@@ -219,7 +219,8 @@ export default function SchedulerPage(props: {
                 id: room.id,
                 name: room.name,
                 floor: floorMap.get(room.officeFloorId) ?? 0,
-            }));
+            }))
+            .sort((a, b) => a.floor - b.floor);
     }, [officeFloorsQuery.data, officeRoomsQuery.data, selectedFloorId, selectedOfficeId]);
 
     const meId = meQuery.data?.id ?? null;
