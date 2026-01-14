@@ -1,4 +1,7 @@
-import Snowfall from "react-snowfall";
+import { useEffect } from "react";
+import { DEFAULT_PHYSICS, Snowfall, SnowfallProvider, useSnowfall } from "@hdcodedev/snowfall";
+import type { ReactNode } from "react";
+import type { PhysicsConfig } from "@hdcodedev/snowfall";
 
 function isInSnowSeason(date: Date): boolean {
     const month = date.getMonth();
@@ -12,20 +15,60 @@ function isInSnowSeason(date: Date): boolean {
     return date >= start && date <= end;
 }
 
-type SeasonalSnowfallProps = {
-    enabled?: boolean;
+export const customSnowfallPhysics: PhysicsConfig = {
+    ...DEFAULT_PHYSICS,
+    MAX_FLAKES: 1000,
+    FLAKE_SIZE: {
+        MIN: 1, // Minimum flake radius
+        MAX: 4, // Maximum flake radius
+    },
 };
 
-export default function SeasonalSnowfall({ enabled = true }: SeasonalSnowfallProps) {
-    const shouldRender = enabled && isInSnowSeason(new Date());
+type SeasonalSnowfallProps = {
+    enabled?: boolean;
+    children: ReactNode;
+};
 
-    if (!shouldRender) return null;
+function SnowfallContent() {
+    const snowfall = useSnowfall();
+
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <only want to run once>
+    useEffect(() => {
+        snowfall.updatePhysicsConfig(customSnowfallPhysics);
+    }, []);
 
     return (
-        <div className="pointer-events-none fixed inset-0 z-[9999] h-svh w-svw motion-reduce:hidden">
-            <div className="relative h-full w-full">
-                <Snowfall color="#e0e0e0" snowflakeCount={200} />
-            </div>
-        </div>
+        <>
+            <Snowfall />
+            <div
+                data-snowfall="top"
+                style={{
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "1px",
+                    zIndex: 1000,
+                }}
+            />
+        </>
+    );
+}
+
+export default function SeasonalSnowfallProvider({
+    enabled = true,
+    children,
+}: SeasonalSnowfallProps) {
+    const shouldRender = enabled && isInSnowSeason(new Date());
+
+    if (!shouldRender) {
+        return <>{children}</>;
+    }
+
+    return (
+        <SnowfallProvider>
+            <SnowfallContent />
+            {children}
+        </SnowfallProvider>
     );
 }

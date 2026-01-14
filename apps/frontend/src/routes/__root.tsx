@@ -1,5 +1,4 @@
-import { isEditableElement } from "@/lib/dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Outlet,
     createRootRouteWithContext,
@@ -11,8 +10,11 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import type { QueryClient } from "@tanstack/react-query";
 
+import { isEditableElement } from "@/lib/dom";
+import { getSidebarStateFromCookie } from "@/lib/sidebar-state";
+
 import AppSidebar from "@/components/AppSidebar";
-import SeasonalSnowfall from "@/components/SeasonalSnowfall";
+import SeasonalSnowfallProvider from "@/components/SeasonalSnowfall";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -20,7 +22,7 @@ import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import DebugDevtools from "@/debug/devtools";
 
 import { unlockPlatformerEasterEgg } from "@/features/platformer/easter-egg";
-import { createKeySequenceMatcher, KONAMI_SEQUENCE } from "@/lib/konami";
+import { KONAMI_SEQUENCE, createKeySequenceMatcher } from "@/lib/konami";
 
 interface MyRouterContext {
     queryClient: QueryClient;
@@ -38,6 +40,9 @@ function RootComponent() {
 
     const hrefRef = useRef(href);
     const pathnameRef = useRef(pathname);
+
+    // Manage sidebar state with cookie persistence
+    const [sidebarOpen, setSidebarOpen] = useState(() => getSidebarStateFromCookie());
 
     useEffect(() => {
         hrefRef.current = href;
@@ -71,8 +76,7 @@ function RootComponent() {
 
     if (isAuthRoute) {
         return (
-            <>
-                <SeasonalSnowfall enabled={!isAuthRoute} />
+            <SeasonalSnowfallProvider enabled={!isAuthRoute}>
                 <Outlet />
                 <Toaster position="top-center" />
                 <TanStackDevtools
@@ -88,14 +92,17 @@ function RootComponent() {
                         DebugDevtools,
                     ]}
                 />
-            </>
+            </SeasonalSnowfallProvider>
         );
     }
 
     return (
-        <>
-            <SeasonalSnowfall enabled={!isAuthRoute} />
-            <SidebarProvider defaultOpen className="h-svh min-h-0">
+        <SeasonalSnowfallProvider enabled={!isAuthRoute}>
+            <SidebarProvider
+                open={sidebarOpen}
+                onOpenChange={setSidebarOpen}
+                className="h-svh min-h-0"
+            >
                 <AppSidebar />
                 <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
                     <Outlet />
@@ -115,6 +122,6 @@ function RootComponent() {
                     ]}
                 />
             </SidebarProvider>
-        </>
+        </SeasonalSnowfallProvider>
     );
 }
