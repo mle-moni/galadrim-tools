@@ -1,4 +1,3 @@
-import { isEditableElement } from "@/lib/dom";
 import { useEffect, useRef } from "react";
 import {
     Outlet,
@@ -11,8 +10,10 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import type { QueryClient } from "@tanstack/react-query";
 
+import { isEditableElement } from "@/lib/dom";
+
 import AppSidebar from "@/components/AppSidebar";
-import SeasonalSnowfall from "@/components/SeasonalSnowfall";
+import SeasonalSnowfallProvider from "@/components/SeasonalSnowfall";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -20,7 +21,7 @@ import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import DebugDevtools from "@/debug/devtools";
 
 import { unlockPlatformerEasterEgg } from "@/features/platformer/easter-egg";
-import { createKeySequenceMatcher, KONAMI_SEQUENCE } from "@/lib/konami";
+import { KONAMI_SEQUENCE, createKeySequenceMatcher } from "@/lib/konami";
 
 interface MyRouterContext {
     queryClient: QueryClient;
@@ -71,8 +72,7 @@ function RootComponent() {
 
     if (isAuthRoute) {
         return (
-            <>
-                <SeasonalSnowfall enabled={!isAuthRoute} />
+            <SeasonalSnowfallProvider enabled={!isAuthRoute}>
                 <Outlet />
                 <Toaster position="top-center" />
                 <TanStackDevtools
@@ -88,13 +88,12 @@ function RootComponent() {
                         DebugDevtools,
                     ]}
                 />
-            </>
+            </SeasonalSnowfallProvider>
         );
     }
 
     return (
-        <>
-            <SeasonalSnowfall enabled={!isAuthRoute} />
+        <SeasonalSnowfallProvider enabled={!isAuthRoute}>
             <SidebarProvider defaultOpen className="h-svh min-h-0">
                 <AppSidebar />
                 <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
@@ -115,6 +114,6 @@ function RootComponent() {
                     ]}
                 />
             </SidebarProvider>
-        </>
+        </SeasonalSnowfallProvider>
     );
 }
