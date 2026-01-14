@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Outlet,
     createRootRouteWithContext,
@@ -11,6 +11,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 
 import { isEditableElement } from "@/lib/dom";
+import { getSidebarStateFromCookie } from "@/lib/sidebar-state";
 
 import AppSidebar from "@/components/AppSidebar";
 import SeasonalSnowfallProvider from "@/components/SeasonalSnowfall";
@@ -39,6 +40,9 @@ function RootComponent() {
 
     const hrefRef = useRef(href);
     const pathnameRef = useRef(pathname);
+
+    // Manage sidebar state with cookie persistence
+    const [sidebarOpen, setSidebarOpen] = useState(() => getSidebarStateFromCookie());
 
     useEffect(() => {
         hrefRef.current = href;
@@ -94,7 +98,11 @@ function RootComponent() {
 
     return (
         <SeasonalSnowfallProvider enabled={!isAuthRoute}>
-            <SidebarProvider defaultOpen className="h-svh min-h-0">
+            <SidebarProvider
+                open={sidebarOpen}
+                onOpenChange={setSidebarOpen}
+                className="h-svh min-h-0"
+            >
                 <AppSidebar />
                 <SidebarInset className="min-h-0 min-w-0 overflow-hidden">
                     <Outlet />
