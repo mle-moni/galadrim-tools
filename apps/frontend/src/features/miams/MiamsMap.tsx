@@ -1,8 +1,8 @@
 import "leaflet/dist/leaflet.css";
 
-import { useEffect, useMemo, useRef } from "react";
-import type { LeafletEventHandlerFnMap, LeafletMouseEvent } from "leaflet";
 import type { ApiOffice, IRestaurant } from "@galadrim-tools/shared";
+import type { LeafletEventHandlerFnMap, LeafletMouseEvent } from "leaflet";
+import { useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
@@ -53,6 +53,7 @@ function FlyToOffice(props: {
 }) {
     const map = useMap();
     const lastKeyRef = useRef<string | null>(null);
+    const initializedRef = useRef(false);
 
     useEffect(() => {
         if (!props.enabled) return;
@@ -63,6 +64,12 @@ function FlyToOffice(props: {
         lastKeyRef.current = key;
 
         const zoom = props.zoom ?? DEFAULT_ZOOM;
+
+        if (!initializedRef.current) {
+            initializedRef.current = true;
+            return;
+        }
+
         map.flyTo(props.center, zoom, { duration: 0.5 });
     }, [props.center, props.enabled, props.zoom, map]);
 
@@ -161,7 +168,7 @@ export default function MiamsMap(props: {
         <MapContainer
             className="relative z-0 h-full w-full"
             center={center}
-            zoom={DEFAULT_ZOOM}
+            zoom={props.zoom ?? DEFAULT_ZOOM}
             maxZoom={MAX_ZOOM}
             scrollWheelZoom
             doubleClickZoom={false}

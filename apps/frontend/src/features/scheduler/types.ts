@@ -1,6 +1,7 @@
 export interface Room {
     id: number;
     name: string;
+    floor: number;
 }
 
 export interface Reservation {

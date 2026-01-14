@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useRouter } from "@tanstack/react-router";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useClock } from "@/debug/clock";
 
@@ -16,7 +16,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
 import { getBusyRoomIdsAt } from "./availability";
-import { useSchedulerSocketSync } from "./use-scheduler-socket-sync";
 import {
     END_HOUR,
     START_HOUR,
@@ -27,6 +26,7 @@ import {
     THEME_PERSON_SEARCH_MATCH,
 } from "./constants";
 import type { Reservation, Room } from "./types";
+import { useSchedulerSocketSync } from "./use-scheduler-socket-sync";
 import { includesEntretienFinal, isIdMultipleOf } from "./utils";
 
 import { normalizeSearchText } from "@/lib/search";
@@ -39,8 +39,8 @@ import {
     officesQueryOptions,
 } from "@/integrations/backend/offices";
 import {
-    roomReservationsQueryOptions,
     type ApiRoomReservationWithUser,
+    roomReservationsQueryOptions,
     useCreateRoomReservationMutation,
     useDeleteRoomReservationMutation,
     useUpdateRoomReservationMutation,
@@ -204,12 +204,23 @@ export default function SchedulerPage(props: {
                 .map((floor) => floor.id),
         );
 
+        const floorMap = new Map(
+            (officeFloorsQuery.data ?? [])
+                .filter((floor) => floor.officeId === selectedOfficeId)
+                .map((floor) => [floor.id, floor.floor] as const),
+        );
+
         return (officeRoomsQuery.data ?? [])
             .filter(
                 (room) =>
                     officeFloorIds.has(room.officeFloorId) && room.isBookable && !room.isPhonebox,
             )
-            .map((room) => ({ id: room.id, name: room.name }));
+            .map((room) => ({
+                id: room.id,
+                name: room.name,
+                floor: floorMap.get(room.officeFloorId) ?? 0,
+            }))
+            .sort((a, b) => a.floor - b.floor);
     }, [officeFloorsQuery.data, officeRoomsQuery.data, selectedFloorId, selectedOfficeId]);
 
     const meId = meQuery.data?.id ?? null;

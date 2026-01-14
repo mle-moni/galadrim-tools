@@ -2,8 +2,8 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useMemo, useState } from "react";
 
-import { ExternalLink, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
 import type { IRestaurant, NotesOption } from "@galadrim-tools/shared";
+import { ExternalLink, Pencil, RefreshCcw, Trash2, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,16 +12,16 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import {
-    getMyNote,
-    formatPrice,
-    resolveBackendUrl,
-    sortByCreatedAtDesc,
     type CreateReviewMutationLike,
     type DeleteRestaurantMutationLike,
     type DeleteReviewMutationLike,
     type ToggleMutationLike,
     type UpdateReviewMutationLike,
     type UpsertNoteMutationLike,
+    formatPrice,
+    getMyNote,
+    resolveBackendUrl,
+    sortByCreatedAtDesc,
 } from "../utils";
 
 const NOTES_EMOJIS: Record<NotesOption, string> = {
@@ -74,14 +74,13 @@ export default function MiamsSelectedRestaurantCard(props: {
         }
 
         for (const note of props.restaurant.notes) {
-            if (props.meId != null && note.userId === props.meId) continue;
             byNote.get(note.note)?.push(note.userId);
         }
 
         const maxVotes = Math.max(1, ...order.map((note) => byNote.get(note)?.length ?? 0));
 
         return { order, byNote, maxVotes };
-    }, [props.meId, props.restaurant.notes]);
+    }, [props.restaurant.notes]);
 
     return (
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-50 p-4 md:inset-y-0 md:left-auto md:right-0 md:w-[460px]">
@@ -237,7 +236,7 @@ export default function MiamsSelectedRestaurantCard(props: {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <div className="text-sm font-medium">Notes des autres</div>
+                        <div className="text-sm font-medium">Notes</div>
                         <div className="flex flex-col gap-2">
                             {notesBreakdown.order.map((value) => {
                                 const voterIds = notesBreakdown.byNote.get(value) ?? [];
