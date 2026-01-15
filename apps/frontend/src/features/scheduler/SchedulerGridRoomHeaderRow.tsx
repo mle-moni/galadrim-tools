@@ -1,12 +1,8 @@
 import { useMemo } from "react";
 
-import { cn } from "@/lib/utils";
-
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
-import { ROOM_HEADER_COLORS } from "./constants";
-import { TIME_COLUMN_WIDTH } from "./constants";
+import { ROOM_HEADER_COLORS, TIME_COLUMN_WIDTH } from "./constants";
 import type { Room } from "./types";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 const frOrdinalRules = new Intl.PluralRules("fr-FR", { type: "ordinal" });
