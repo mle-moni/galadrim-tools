@@ -25,9 +25,19 @@ import {
     THEME_OTHER,
     THEME_PERSON_SEARCH_MATCH,
 } from "./constants";
-import type { Reservation, Room } from "./types";
 import { useSchedulerSocketSync } from "./use-scheduler-socket-sync";
 import { includesEntretienFinal, isIdMultipleOf } from "./utils";
+import type { Reservation, Room } from "./types";
+import type { ApiRoomReservationWithUser } from "@/integrations/backend/reservations";
+import { useClock } from "@/debug/clock";
+
+import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
+
+import FloorTabSelector from "@/components/FloorTabSelector";
+import OfficePicker from "@/components/OfficePicker";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import { normalizeSearchText } from "@/lib/search";
 
@@ -39,7 +49,6 @@ import {
     officesQueryOptions,
 } from "@/integrations/backend/offices";
 import {
-    type ApiRoomReservationWithUser,
     roomReservationsQueryOptions,
     useCreateRoomReservationMutation,
     useDeleteRoomReservationMutation,
@@ -155,19 +164,20 @@ export default function SchedulerPage(props: {
             .sort((a, b) => a.floor - b.floor);
     }, [officeFloorsQuery.data, selectedOfficeId]);
 
-    const floorTabs: { id: number | null; label: string; floor: number | null }[] = useMemo(() => {
-        const base: { id: number | null; label: string; floor: number | null }[] = [
-            { id: null, label: "Tous", floor: null },
-        ];
-        for (const floor of officeFloorsForOffice) {
-            base.push({
-                id: floor.id,
-                label: formatFloorLabel(floor.floor),
-                floor: floor.floor,
-            });
-        }
-        return base;
-    }, [officeFloorsForOffice]);
+    const floorTabs: Array<{ id: number | null; label: string; floor: number | null }> =
+        useMemo(() => {
+            const base: Array<{ id: number | null; label: string; floor: number | null }> = [
+                { id: null, label: "Tous", floor: null },
+            ];
+            for (const floor of officeFloorsForOffice) {
+                base.push({
+                    id: floor.id,
+                    label: formatFloorLabel(floor.floor),
+                    floor: floor.floor,
+                });
+            }
+            return base;
+        }, [officeFloorsForOffice]);
 
     const planningSearch = useMemo(() => {
         return {
@@ -184,7 +194,7 @@ export default function SchedulerPage(props: {
         };
     }, [selectedFloorId, selectedOfficeId]);
 
-    const rooms: Room[] = useMemo(() => {
+    const rooms: Array<Room> = useMemo(() => {
         if (selectedOfficeId === null) return [];
 
         const officeFloorIds = new Set(
@@ -216,7 +226,7 @@ export default function SchedulerPage(props: {
     const meId = meQuery.data?.id ?? null;
     const myRights = meQuery.data?.rights ?? 0;
 
-    const reservations: Reservation[] = useMemo(() => {
+    const reservations: Array<Reservation> = useMemo(() => {
         const isEventAdmin = (myRights & 0b10) !== 0;
 
         const scheduleStart = new Date(currentDate);
@@ -305,7 +315,7 @@ export default function SchedulerPage(props: {
         return Array.from(usernames).sort((a, b) => a.localeCompare(b));
     }, [reservationsQuery.data]);
 
-    const longestCommonPrefix = useCallback((values: string[]) => {
+    const longestCommonPrefix = useCallback((values: Array<string>) => {
         if (values.length === 0) return "";
         if (values.length === 1) return values[0] ?? "";
 
@@ -330,7 +340,7 @@ export default function SchedulerPage(props: {
 
         if (matches.length === 0) return;
         if (matches.length === 1) {
-            setPersonSearch(matches[0]!.username);
+            setPersonSearch(matches[0].username);
             return;
         }
 
@@ -492,7 +502,7 @@ export default function SchedulerPage(props: {
                 floorFilters={floorFilters}
             />
 
-            <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <main className="flex min-h-0 flex-1 flex-col overflow-hidden" data-snowfall="ignore">
                 {reservationsError && (
                     <div className="border-b bg-destructive/10 px-6 py-2 text-sm text-destructive">
                         {reservationsError}

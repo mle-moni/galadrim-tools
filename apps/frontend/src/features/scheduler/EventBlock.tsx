@@ -74,6 +74,7 @@ export default function EventBlock({
                 left: `${event.left}%`,
                 width: `${event.width}%`,
             }}
+            data-snowfall="ignore"
         >
             {isInline ? (
                 <>
