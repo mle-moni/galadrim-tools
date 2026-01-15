@@ -2,6 +2,7 @@ export interface Room {
     id: number;
     name: string;
     floor: number;
+    hasTv: boolean;
 }
 
 export interface Reservation {
