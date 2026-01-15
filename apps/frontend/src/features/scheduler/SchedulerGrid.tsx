@@ -1,23 +1,23 @@
-import type React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { useClock, useNow } from "@/debug/clock";
 
 import { HOURS_COUNT, START_HOUR, TIME_COLUMN_WIDTH } from "./constants";
-import type { Reservation, Room } from "./types";
 import { calculateEventLayout, getPixelsFromTime } from "./utils";
 import SchedulerGridRoomHeaderRow from "./SchedulerGridRoomHeaderRow";
 import SchedulerRoomColumn from "./SchedulerRoomColumn";
 import SchedulerTimeColumn from "./SchedulerTimeColumn";
 import { useSchedulerInteractions } from "./useSchedulerInteractions";
+import type { Reservation, Room } from "./types";
+import type React from "react";
+import { useClock, useNow } from "@/debug/clock";
 
 const HEADER_HEIGHT = 40;
 const DEFAULT_PIXELS_PER_HOUR = 80;
 
 interface SchedulerGridProps {
     currentDate: Date;
-    rooms: Room[];
-    reservations: Reservation[];
+    rooms: Array<Room>;
+    reservations: Array<Reservation>;
     onAddReservation: (reservation: Pick<Reservation, "roomId" | "startTime" | "endTime">) => void;
     onUpdateReservation: (reservation: Reservation) => void;
     onDeleteReservation: (id: Reservation["id"]) => void;
@@ -187,7 +187,7 @@ export default function SchedulerGrid({
     };
 
     const reservationsByRoomId = useMemo(() => {
-        const map = new Map<number, Reservation[]>();
+        const map = new Map<number, Array<Reservation>>();
         for (const reservation of reservations) {
             const existing = map.get(reservation.roomId);
             if (existing) existing.push(reservation);
@@ -234,13 +234,15 @@ export default function SchedulerGrid({
             onMouseMove={interactions.handleGlobalMouseMove}
             onMouseUp={interactions.handleMouseUp}
             onMouseLeave={interactions.handleMouseUp}
+            data-snowfall="ignore"
         >
             <div
                 className="min-h-0 min-w-0 flex-1 overflow-auto bg-background"
                 ref={containerRef}
                 onWheel={handleWheel}
+                data-snowfall="ignore"
             >
-                <div className="min-w-max">
+                <div className="min-w-max" data-snowfall="ignore">
                     <SchedulerGridRoomHeaderRow
                         rooms={rooms}
                         focusedRoomId={focusedRoomId}
@@ -250,7 +252,7 @@ export default function SchedulerGrid({
                         onRoomHover={(roomId) => interactions.setHoveredRoomId(roomId)}
                     />
 
-                    <div className="flex">
+                    <div className="flex" data-snowfall="ignore">
                         <div
                             className="sticky left-0 z-[70] flex flex-shrink-0 flex-col border-r bg-background shadow-sm"
                             style={{ width: TIME_COLUMN_WIDTH }}
@@ -266,7 +268,7 @@ export default function SchedulerGrid({
                             />
                         </div>
 
-                        <div className="flex min-w-max">
+                        <div className="flex min-w-max" data-snowfall="ignore">
                             {rooms.map((room) => (
                                 <SchedulerRoomColumn
                                     key={room.id}

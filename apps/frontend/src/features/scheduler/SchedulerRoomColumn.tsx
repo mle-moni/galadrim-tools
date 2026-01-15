@@ -50,6 +50,7 @@ export default function SchedulerRoomColumn({
                 "group relative w-52 flex-shrink-0 border-r",
                 focusedRoomId === room.id && "bg-accent/10",
             )}
+            data-snowfall="ignore"
         >
             <div
                 id={`room-col-${room.id}`}
@@ -61,6 +62,7 @@ export default function SchedulerRoomColumn({
                 style={{ height: gridHeight }}
                 onMouseEnter={onMouseEnter}
                 onMouseDown={onMouseDown}
+                data-snowfall="ignore"
             >
                 {hourIntervals.map((hour, idx) => (
                     <div
