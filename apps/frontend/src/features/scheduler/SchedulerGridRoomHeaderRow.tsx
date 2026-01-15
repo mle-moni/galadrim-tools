@@ -2,9 +2,21 @@ import { useMemo } from "react";
 
 import { cn } from "@/lib/utils";
 
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 import { ROOM_HEADER_COLORS } from "./constants";
 import { TIME_COLUMN_WIDTH } from "./constants";
 import type { Room } from "./types";
+
+const frOrdinalRules = new Intl.PluralRules("fr-FR", { type: "ordinal" });
+
+function formatFloorLabel(floor: number): string {
+    if (floor === 0) return "Rez-de-chaussée";
+
+    const ordinal = frOrdinalRules.select(floor);
+    const suffix = ordinal === "one" ? "er" : "ème";
+    return `${floor}${suffix} étage`;
+}
 
 export default function SchedulerGridRoomHeaderRow(props: {
     rooms: Room[];
@@ -35,25 +47,32 @@ export default function SchedulerGridRoomHeaderRow(props: {
                 <span className="text-sm font-semibold text-muted-foreground">Heure</span>
             </div>
 
-            {props.rooms.map((room) => (
-                <div
-                    key={room.id}
-                    id={`room-header-${room.id}`}
-                    ref={(el) => {
-                        props.setRoomHeaderRef(room.id, el);
-                    }}
-                    className={cn(
-                        "flex h-10 w-52 flex-shrink-0 items-center justify-center border-b border-r text-sm font-semibold shadow-sm",
-                        floorColors.get(room.floor),
-                        props.focusedRoomId === room.id && "bg-accent/30",
-                    )}
-                    onMouseEnter={() => props.onRoomHover(room.id)}
-                >
-                    <span className="truncate px-2" title={room.name}>
-                        {room.name}
-                    </span>
-                </div>
-            ))}
+            {props.rooms.map((room) => {
+                const floorLabel = formatFloorLabel(room.floor);
+
+                return (
+                    <div
+                        key={room.id}
+                        id={`room-header-${room.id}`}
+                        ref={(el) => {
+                            props.setRoomHeaderRef(room.id, el);
+                        }}
+                        className={cn(
+                            "flex h-10 w-52 flex-shrink-0 items-center justify-center border-b border-r text-sm font-semibold shadow-sm",
+                            floorColors.get(room.floor),
+                            props.focusedRoomId === room.id && "bg-accent/30",
+                        )}
+                        onMouseEnter={() => props.onRoomHover(room.id)}
+                    >
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span className="truncate px-2">{room.name}</span>
+                            </TooltipTrigger>
+                            <TooltipContent>{floorLabel}</TooltipContent>
+                        </Tooltip>
+                    </div>
+                );
+            })}
         </div>
     );
 }
