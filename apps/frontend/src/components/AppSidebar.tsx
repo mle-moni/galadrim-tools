@@ -3,17 +3,15 @@ import { fr } from "date-fns/locale";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { INotification, IUserData } from "@galadrim-tools/shared";
-import { isEditableElement } from "@/lib/dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
     Bell,
     CalendarDays,
     ExternalLink,
     GitBranch,
-    Puzzle,
     Lightbulb,
     LogOut,
+    Puzzle,
     RefreshCcw,
     Settings,
     Shield,
@@ -22,11 +20,13 @@ import {
     X,
 } from "lucide-react";
 import { toast } from "sonner";
+import type { INotification, IUserData } from "@galadrim-tools/shared";
+import { isEditableElement } from "@/lib/dom";
 
 import { ADMIN_TAB_RIGHTS, hasRights, hasSomeRights } from "@/lib/rights";
 
 import Avatar from "@/components/Avatar";
-import { Sidebar, useSidebar } from "@/components/ui/sidebar";
+import { Sidebar, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { meQueryOptions } from "@/integrations/backend/auth";
 import { logout, readNotifications } from "@/integrations/backend/settings";
 import { queryKeys } from "@/integrations/backend/query-keys";
@@ -149,14 +149,13 @@ export default function AppSidebar() {
     const [notificationsOpen, setNotificationsOpen] = useState(false);
 
     const pathname = useRouterState({ select: (s) => s.location.pathname });
-    const { isMobile, open, openMobile } = useSidebar();
-    const isSidebarVisible = isMobile ? openMobile : open;
+    const { isMobile, openMobile } = useSidebar();
 
     const meQuery = useQuery(meQueryOptions());
     const username = meQuery.data?.username ?? "Moi";
     const avatarUrl = meQuery.data?.imageUrl ?? null;
 
-    const notifications = useMemo<INotification[]>(() => {
+    const notifications = useMemo<Array<INotification>>(() => {
         const list = meQuery.data?.notifications ?? [];
         return list
             .slice()
@@ -229,7 +228,7 @@ export default function AppSidebar() {
     }, [router.history]);
 
     useEffect(() => {
-        if (!isSidebarVisible) return;
+        if (isMobile && !openMobile) return;
 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.defaultPrevented) return;
@@ -256,10 +255,10 @@ export default function AppSidebar() {
 
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [isSidebarVisible, navigateTo]);
+    }, [isMobile, openMobile, navigateTo]);
 
     return (
-        <Sidebar collapsible="offcanvas" variant="sidebar">
+        <Sidebar collapsible="icon" variant="sidebar">
             <div className="relative flex h-full w-full flex-col overflow-hidden border-r border-slate-700 bg-black text-white">
                 <div
                     aria-hidden="true"
@@ -279,22 +278,25 @@ export default function AppSidebar() {
                 />
 
                 <div className="relative z-10 flex h-full flex-col justify-between">
-                    <div className="flex flex-col gap-6 pt-8">
-                        <div className="px-6">
-                            <div className="text-[22px] font-semibold leading-none tracking-tight">
-                                galadrim.
+                    <div className="flex flex-col gap-6 pt-8 group-data-[collapsible=icon]:pt-4">
+                        <div className="flex items-start justify-between px-6 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2">
+                            <div className="group-data-[collapsible=icon]:hidden">
+                                <div className="text-[22px] font-semibold leading-none tracking-tight">
+                                    galadrim.
+                                </div>
+                                <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
+                                    Tools
+                                </div>
                             </div>
-                            <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
-                                Tools
-                            </div>
+                            <SidebarTrigger className="text-slate-400 hover:text-white" />
                         </div>
 
-                        <div className="flex items-center gap-2 px-4">
+                        <div className="flex items-center gap-2 px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2">
                             <Avatar src={avatarUrl} alt={username} size={24} className="h-6 w-6" />
                             <Link
                                 to="/settings"
                                 search={{}}
-                                className="min-w-0 flex-1 truncate text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70"
+                                className="min-w-0 flex-1 truncate text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70 group-data-[collapsible=icon]:hidden"
                             >
                                 {username}
                             </Link>
@@ -311,7 +313,7 @@ export default function AppSidebar() {
                                 <Dialog.Trigger asChild>
                                     <button
                                         type="button"
-                                        className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70"
+                                        className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-200 transition-colors hover:bg-slate-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/70 group-data-[collapsible=icon]:hidden"
                                     >
                                         <Bell className="h-4 w-4" />
                                         <span className="sr-only">Ouvrir les notifications</span>
@@ -380,7 +382,10 @@ export default function AppSidebar() {
                             </Dialog.Root>
                         </div>
 
-                        <nav className="flex flex-col gap-1 px-4">
+                        <nav
+                            className="flex flex-col gap-1 px-4 group-data-[collapsible=icon]:px-2"
+                            data-snowfall="ignore"
+                        >
                             <Link
                                 to="/planning"
                                 search={{}}
@@ -388,11 +393,18 @@ export default function AppSidebar() {
                                 className={cn(
                                     navItemBase,
                                     isPlanningActive && "bg-slate-800/50 text-white",
+                                    "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                                 )}
+                                title="Salles de réunion (S)"
+                                data-snowfall="ignore"
                             >
-                                <CalendarDays className="h-4 w-4" />
-                                <span className="flex-1">Salles de réunion</span>
-                                <span className="text-xs font-medium text-slate-400">S</span>
+                                <CalendarDays className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                                <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                    Salles de réunion
+                                </span>
+                                <span className="text-xs font-medium text-slate-400 group-data-[collapsible=icon]:hidden">
+                                    S
+                                </span>
                             </Link>
 
                             <Link
@@ -402,11 +414,18 @@ export default function AppSidebar() {
                                 className={cn(
                                     navItemBase,
                                     isIdeasActive && "bg-slate-800/50 text-white",
+                                    "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                                 )}
+                                title="Boîte à idées (I)"
+                                data-snowfall="ignore"
                             >
-                                <Lightbulb className="h-4 w-4" />
-                                <span className="flex-1">Boîte à idées</span>
-                                <span className="text-xs font-medium text-slate-400">I</span>
+                                <Lightbulb className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                                <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                    Boîte à idées
+                                </span>
+                                <span className="text-xs font-medium text-slate-400 group-data-[collapsible=icon]:hidden">
+                                    I
+                                </span>
                             </Link>
 
                             <Link
@@ -416,11 +435,18 @@ export default function AppSidebar() {
                                 className={cn(
                                     navItemBase,
                                     isMiamsActive && "bg-slate-800/50 text-white",
+                                    "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                                 )}
+                                title="Restaurants (R)"
+                                data-snowfall="ignore"
                             >
-                                <Utensils className="h-4 w-4" />
-                                <span className="flex-1">Restaurants</span>
-                                <span className="text-xs font-medium text-slate-400">R</span>
+                                <Utensils className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                                <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                    Restaurants
+                                </span>
+                                <span className="text-xs font-medium text-slate-400 group-data-[collapsible=icon]:hidden">
+                                    R
+                                </span>
                             </Link>
 
                             <Link
@@ -430,10 +456,14 @@ export default function AppSidebar() {
                                 className={cn(
                                     navItemBase,
                                     isGalakiActive && "bg-slate-800/50 text-white",
+                                    "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                                 )}
+                                title="Galaki"
                             >
-                                <Sparkles className="h-4 w-4" />
-                                <span className="flex-1">Galaki</span>
+                                <Sparkles className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                                <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                    Galaki
+                                </span>
                             </Link>
 
                             {canSeeCodeNames && (
@@ -444,10 +474,15 @@ export default function AppSidebar() {
                                     className={cn(
                                         navItemBase,
                                         isCodeNamesActive && "bg-slate-800/50 text-white",
+                                        "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                                     )}
+                                    title="Code Names"
+                                    data-snowfall="ignore"
                                 >
-                                    <Puzzle className="h-4 w-4" />
-                                    <span className="flex-1">Code Names</span>
+                                    <Puzzle className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                                    <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                        Code Names
+                                    </span>
                                 </Link>
                             )}
 
@@ -459,16 +494,20 @@ export default function AppSidebar() {
                                     className={cn(
                                         navItemBase,
                                         isAdminActive && "bg-slate-800/50 text-white",
+                                        "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                                     )}
+                                    title="Administration"
                                 >
-                                    <Shield className="h-4 w-4" />
-                                    <span className="flex-1">Administration</span>
+                                    <Shield className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                                    <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                        Administration
+                                    </span>
                                 </Link>
                             )}
                         </nav>
                     </div>
 
-                    <div className="flex flex-col gap-1 px-4 pb-6">
+                    <div className="flex flex-col gap-1 px-4 pb-6 group-data-[collapsible=icon]:px-2">
                         <Link
                             to="/settings"
                             search={{}}
@@ -476,14 +515,21 @@ export default function AppSidebar() {
                             className={cn(
                                 navItemBase,
                                 isSettingsActive && "bg-slate-800/50 text-white",
+                                "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
                             )}
+                            title="Paramètres"
                         >
-                            <Settings className="h-4 w-4" />
-                            <span className="flex-1">Paramètres</span>
+                            <Settings className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                            <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                Paramètres
+                            </span>
                         </Link>
                         <button
                             type="button"
-                            className={navItemBase}
+                            className={cn(
+                                navItemBase,
+                                "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
+                            )}
                             onClick={() => {
                                 const promise = logoutMutation.mutateAsync();
                                 toast.promise(promise, {
@@ -496,13 +542,14 @@ export default function AppSidebar() {
                                 });
                             }}
                             disabled={logoutMutation.isPending}
+                            title="Se déconnecter"
                         >
                             {logoutMutation.isPending ? (
-                                <RefreshCcw className="h-4 w-4 animate-spin" />
+                                <RefreshCcw className="h-4 w-4 animate-spin group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
                             ) : (
-                                <LogOut className="h-4 w-4" />
+                                <LogOut className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
                             )}
-                            <span className="flex-1">
+                            <span className="flex-1 group-data-[collapsible=icon]:hidden">
                                 {logoutMutation.isPending ? "" : "Se déconnecter"}
                             </span>
                         </button>
@@ -510,14 +557,29 @@ export default function AppSidebar() {
                             href="https://github.com/mle-moni/galadrim-tools"
                             target="_blank"
                             rel="noreferrer"
-                            className={navItemBase}
+                            className={cn(
+                                navItemBase,
+                                "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
+                            )}
+                            title="Contribuer"
                         >
-                            <GitBranch className="h-4 w-4" />
-                            <span className="flex-1">Contribuer</span>
+                            <GitBranch className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                            <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                Contribuer
+                            </span>
                         </a>
-                        <a href="https://forest.galadrim.fr" className={navItemBase}>
-                            <ExternalLink className="h-4 w-4" />
-                            <span className="flex-1">Retourner sur 🌳 Forest</span>
+                        <a
+                            href="https://forest.galadrim.fr"
+                            className={cn(
+                                navItemBase,
+                                "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2",
+                            )}
+                            title="Retourner sur Forest"
+                        >
+                            <ExternalLink className="h-4 w-4 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5" />
+                            <span className="flex-1 group-data-[collapsible=icon]:hidden">
+                                Retourner sur 🌳 Forest
+                            </span>
                         </a>
                     </div>
                 </div>
