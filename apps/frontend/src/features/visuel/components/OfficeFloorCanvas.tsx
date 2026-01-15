@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { type CSSProperties, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { useNow } from "@/debug/clock";
 
@@ -71,6 +71,7 @@ export default function OfficeFloorCanvas(props: {
     rooms: ApiOfficeRoom[];
     reservations: ApiRoomReservationWithUser[];
     onRoomClick: (room: ApiOfficeRoom) => void;
+    highlightedRoomIds?: Set<number>;
 }) {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -197,6 +198,7 @@ export default function OfficeFloorCanvas(props: {
 
             const reserved = room.isBookable && reservedRoomIds.has(room.id);
             const isHovered = hoveredRoomId === room.id;
+            const isHighlighted = props.highlightedRoomIds?.has(room.id);
 
             const fill = !room.isBookable
                 ? "#e2e8f0" // slate-200
@@ -208,6 +210,7 @@ export default function OfficeFloorCanvas(props: {
                 : reserved
                   ? "#fca5a5" // red-300
                   : "#bbf7d0"; // green-200
+            const highlightedFill = "#fef08a"; // yellow-200
 
             ctx.beginPath();
             polygon.forEach((pt, idx) => {
@@ -216,20 +219,29 @@ export default function OfficeFloorCanvas(props: {
             });
             ctx.closePath();
 
-            ctx.fillStyle = isHovered ? hoverFill : fill;
+            ctx.fillStyle = isHighlighted ? highlightedFill : isHovered ? hoverFill : fill;
             ctx.fill();
 
-            ctx.strokeStyle = !room.isBookable
-                ? isHovered
-                    ? "#64748b"
-                    : "#94a3b8" // slate-500 / slate-400
-                : reserved
-                  ? "#fca5a5" // red-300
-                  : "#bbf7d0"; // green-200
-            ctx.lineWidth = isHovered ? 1.5 : 1;
+            ctx.strokeStyle = isHighlighted
+                ? "#eab308" // yellow-500
+                : !room.isBookable
+                  ? isHovered
+                      ? "#64748b"
+                      : "#94a3b8" // slate-500 / slate-400
+                  : reserved
+                    ? "#fca5a5" // red-300
+                    : "#bbf7d0"; // green-200
+            ctx.lineWidth = isHighlighted || isHovered ? 2 : 1;
             ctx.stroke();
         }
-    }, [canvasHeight, canvasWidth, hoveredRoomId, props.rooms, reservedRoomIds]);
+    }, [
+        canvasHeight,
+        canvasWidth,
+        hoveredRoomId,
+        props.highlightedRoomIds,
+        props.rooms,
+        reservedRoomIds,
+    ]);
 
     return (
         <div ref={wrapperRef} className="relative h-[275px] w-full max-w-[500px]">
