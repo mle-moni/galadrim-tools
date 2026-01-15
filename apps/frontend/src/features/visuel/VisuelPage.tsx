@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Link, useRouter } from "@tanstack/react-router";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { ApiOfficeFloor, ApiOfficeRoom } from "@galadrim-tools/shared";
 
@@ -12,7 +12,9 @@ import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
 import FloorTabSelector from "@/components/FloorTabSelector";
 import OfficePicker from "@/components/OfficePicker";
 import PageTitle from "@/components/PageTitle";
+import SearchOverlay from "@/components/SearchOverlay";
 import { Button } from "@/components/ui/button";
+import { normalizeSearchText } from "@/lib/search";
 import { cn } from "@/lib/utils";
 
 import { startOfDayIso } from "@/integrations/backend/date";
@@ -35,6 +37,26 @@ export default function VisuelPage(props: {
 }) {
     const router = useRouter();
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    const [roomSearchOpen, setRoomSearchOpen] = useState(false);
+    const [roomSearch, setRoomSearch] = useState("");
+
+    const normalizedRoomSearch = useMemo(() => normalizeSearchText(roomSearch), [roomSearch]);
+
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.defaultPrevented) return;
+            if (e.key.toLowerCase() !== "f") return;
+            if (!(e.ctrlKey || e.metaKey)) return;
+            if (e.altKey) return;
+
+            e.preventDefault();
+            setRoomSearchOpen(true);
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
 
     const officesQuery = useQuery(officesQueryOptions());
     const officeFloorsQuery = useQuery(officeFloorsQueryOptions());
@@ -77,6 +99,62 @@ export default function VisuelPage(props: {
         ...roomReservationsQueryOptions(officeIdForQueries, dayIso),
         enabled: officeIdForQueries != null,
     });
+
+    const matchingRoomIds = useMemo(() => {
+        if (normalizedRoomSearch === "") return new Set<number>();
+
+        const matches = new Set<number>();
+        const rooms = officeRoomsQuery.data ?? [];
+
+        for (const room of rooms) {
+            if (normalizeSearchText(room.name).includes(normalizedRoomSearch)) {
+                matches.add(room.id);
+            }
+        }
+
+        return matches;
+    }, [normalizedRoomSearch, officeRoomsQuery.data]);
+
+    const matchingFloorIds = useMemo(() => {
+        const floorIds = new Set<number>();
+        const rooms = officeRoomsQuery.data ?? [];
+
+        for (const room of rooms) {
+            if (matchingRoomIds.has(room.id)) {
+                floorIds.add(room.officeFloorId);
+            }
+        }
+
+        return floorIds;
+    }, [matchingRoomIds, officeRoomsQuery.data]);
+
+    const firstMatchingFloorId = useMemo(() => {
+        if (matchingFloorIds.size === 0) return null;
+
+        const floors = officeFloorsForOffice.filter((f) => matchingFloorIds.has(f.id));
+        if (floors.length === 0) return null;
+
+        return floors.sort((a, b) => a.floor - b.floor)[0]?.id ?? null;
+    }, [matchingFloorIds, officeFloorsForOffice]);
+
+    useEffect(() => {
+        if (firstMatchingFloorId === null) return;
+
+        const targetFloor = visibleFloors.find((f) => f.id === firstMatchingFloorId);
+        if (!targetFloor) return;
+
+        const targetIndex = visibleFloors.indexOf(targetFloor);
+        if (targetIndex === -1) return;
+
+        const scrollRefEl = scrollRef.current;
+        if (!scrollRefEl) return;
+
+        const targetTop = targetIndex * FLOOR_ROW_HEIGHT;
+        scrollRefEl.scrollTo({
+            top: Math.max(0, targetTop - scrollRefEl.clientHeight / 2 + FLOOR_ROW_HEIGHT / 2),
+            behavior: "smooth",
+        });
+    }, [firstMatchingFloorId, visibleFloors]);
 
     const roomsByFloorId = useMemo(() => {
         const map = new Map<number, ApiOfficeRoom[]>();
@@ -265,6 +343,7 @@ export default function VisuelPage(props: {
                                         rooms={rooms.filter((r) => !r.isPhonebox)}
                                         reservations={reservationsQuery.data ?? []}
                                         onRoomClick={handleRoomClick}
+                                        highlightedRoomIds={matchingRoomIds}
                                     />
                                 </div>
                             </div>
@@ -274,6 +353,23 @@ export default function VisuelPage(props: {
 
                 <div style={{ height: bottomSpacer }} />
             </div>
+
+            <SearchOverlay
+                isOpen={roomSearchOpen}
+                onClose={() => setRoomSearchOpen(false)}
+                value={roomSearch}
+                onChange={setRoomSearch}
+                onClear={() => setRoomSearch("")}
+                placeholder="Nom de la salle"
+                label="Rechercher une salle"
+                onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                        setRoomSearchOpen(false);
+                    } else if (e.key === "Enter") {
+                        setRoomSearchOpen(false);
+                    }
+                }}
+            />
         </div>
     );
 }
