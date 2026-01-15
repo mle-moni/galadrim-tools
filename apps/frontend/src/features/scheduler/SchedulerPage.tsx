@@ -2,17 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-import { useClock } from "@/debug/clock";
-
-import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
-
-import FloorTabSelector from "@/components/FloorTabSelector";
-import OfficePicker from "@/components/OfficePicker";
-import SearchOverlay from "@/components/SearchOverlay";
-import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
 import { getBusyRoomIdsAt } from "./availability";
@@ -36,7 +25,6 @@ import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
 import FloorTabSelector from "@/components/FloorTabSelector";
 import OfficePicker from "@/components/OfficePicker";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import { normalizeSearchText } from "@/lib/search";
@@ -54,6 +42,7 @@ import {
     useDeleteRoomReservationMutation,
     useUpdateRoomReservationMutation,
 } from "@/integrations/backend/reservations";
+import SearchOverlay from "@/components/SearchOverlay";
 
 function isEntretienFinalReservation(reservation: ApiRoomReservationWithUser) {
     return (
