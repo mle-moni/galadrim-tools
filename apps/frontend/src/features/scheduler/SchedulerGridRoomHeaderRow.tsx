@@ -1,12 +1,9 @@
 import { useMemo } from "react";
 
-import { cn } from "@/lib/utils";
-
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
-import { ROOM_HEADER_COLORS } from "./constants";
-import { TIME_COLUMN_WIDTH } from "./constants";
+import { ROOM_HEADER_COLORS, TIME_COLUMN_WIDTH } from "./constants";
 import type { Room } from "./types";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const frOrdinalRules = new Intl.PluralRules("fr-FR", { type: "ordinal" });
 
@@ -19,7 +16,7 @@ function formatFloorLabel(floor: number): string {
 }
 
 export default function SchedulerGridRoomHeaderRow(props: {
-    rooms: Room[];
+    rooms: Array<Room>;
     focusedRoomId?: number;
     setRoomHeaderRef: (roomId: number, element: HTMLDivElement | null) => void;
     onRoomHover: (roomId: number) => void;
@@ -39,7 +36,7 @@ export default function SchedulerGridRoomHeaderRow(props: {
     }, [props.rooms]);
 
     return (
-        <div className="sticky top-0 z-[75] flex">
+        <div className="sticky top-0 z-[75] flex" data-snowfall="ignore">
             <div
                 className="sticky left-0 z-[80] flex h-10 flex-shrink-0 items-center justify-center border-b border-r bg-background shadow-sm"
                 style={{ width: TIME_COLUMN_WIDTH }}
