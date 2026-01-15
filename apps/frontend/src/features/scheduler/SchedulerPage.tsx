@@ -3,6 +3,16 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { useClock } from "@/debug/clock";
+
+import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
+
+import FloorTabSelector from "@/components/FloorTabSelector";
+import OfficePicker from "@/components/OfficePicker";
+import SearchOverlay from "@/components/SearchOverlay";
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+
 import SchedulerGrid from "./SchedulerGrid";
 import SchedulerHeader from "./SchedulerHeader";
 import { getBusyRoomIdsAt } from "./availability";
@@ -72,7 +82,6 @@ export default function SchedulerPage(props: {
 
     const [personSearchOpen, setPersonSearchOpen] = useState(false);
     const [personSearch, setPersonSearch] = useState("");
-    const personSearchInputRef = useRef<HTMLInputElement>(null);
 
     const normalizedPersonSearch = useMemo(() => normalizeSearchText(personSearch), [personSearch]);
 
@@ -90,15 +99,6 @@ export default function SchedulerPage(props: {
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
     }, []);
-
-    useEffect(() => {
-        if (!personSearchOpen) return;
-
-        requestAnimationFrame(() => {
-            personSearchInputRef.current?.focus();
-            personSearchInputRef.current?.select();
-        });
-    }, [personSearchOpen]);
 
     const queryClient = useQueryClient();
 
@@ -575,53 +575,24 @@ export default function SchedulerPage(props: {
                     </div>
                 )}
 
-                {personSearchOpen && (
-                    <div
-                        className="fixed inset-0 z-[90]"
-                        onMouseDown={(e) => {
-                            if (e.target === e.currentTarget) {
-                                setPersonSearchOpen(false);
-                            }
-                        }}
-                    >
-                        <div className="pointer-events-auto absolute left-1/2 top-4 w-[min(560px,calc(100vw-2rem))] -translate-x-1/2 rounded-lg border bg-background/90 p-3 shadow-xl backdrop-blur">
-                            <div className="flex items-center gap-2">
-                                <Input
-                                    ref={personSearchInputRef}
-                                    value={personSearch}
-                                    onChange={(e) => setPersonSearch(e.target.value)}
-                                    placeholder="Rechercher une personne"
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Escape") {
-                                            setPersonSearchOpen(false);
-                                            return;
-                                        }
-
-                                        if (e.key === "Tab" && !e.shiftKey) {
-                                            e.preventDefault();
-                                            completePersonSearch();
-                                            return;
-                                        }
-
-                                        if (e.key === "Enter") {
-                                            setPersonSearchOpen(false);
-                                        }
-                                    }}
-                                />
-                                {trimmedPersonSearch && (
-                                    <Button
-                                        type="button"
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => setPersonSearch("")}
-                                    >
-                                        Effacer
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <SearchOverlay
+                    isOpen={personSearchOpen}
+                    onClose={() => setPersonSearchOpen(false)}
+                    value={personSearch}
+                    onChange={setPersonSearch}
+                    onClear={() => setPersonSearch("")}
+                    placeholder="Rechercher une personne"
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape") {
+                            setPersonSearchOpen(false);
+                        } else if (e.key === "Tab" && !e.shiftKey) {
+                            e.preventDefault();
+                            completePersonSearch();
+                        } else if (e.key === "Enter") {
+                            setPersonSearchOpen(false);
+                        }
+                    }}
+                />
             </main>
         </div>
     );
