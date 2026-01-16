@@ -14,7 +14,6 @@ import { isEditableElement } from "@/lib/dom";
 import { getSidebarStateFromCookie } from "@/lib/sidebar-state";
 
 import AppSidebar from "@/components/AppSidebar";
-import SeasonalSnowfallProvider from "@/components/SeasonalSnowfall";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -23,6 +22,7 @@ import DebugDevtools from "@/debug/devtools";
 
 import { unlockPlatformerEasterEgg } from "@/features/platformer/easter-egg";
 import { KONAMI_SEQUENCE, createKeySequenceMatcher } from "@/lib/konami";
+import SeasonalSnowfall from "@/components/SeasonalSnowfall";
 
 interface MyRouterContext {
     queryClient: QueryClient;
@@ -76,7 +76,7 @@ function RootComponent() {
 
     if (isAuthRoute) {
         return (
-            <SeasonalSnowfallProvider enabled={!isAuthRoute}>
+            <>
                 <Outlet />
                 <Toaster position="top-center" />
                 <TanStackDevtools
@@ -92,12 +92,13 @@ function RootComponent() {
                         DebugDevtools,
                     ]}
                 />
-            </SeasonalSnowfallProvider>
+            </>
         );
     }
 
     return (
-        <SeasonalSnowfallProvider enabled={!isAuthRoute}>
+        <>
+            <SeasonalSnowfall enabled={!isAuthRoute} />
             <SidebarProvider
                 open={sidebarOpen}
                 onOpenChange={setSidebarOpen}
@@ -122,6 +123,6 @@ function RootComponent() {
                     ]}
                 />
             </SidebarProvider>
-        </SeasonalSnowfallProvider>
+        </>
     );
 }
