@@ -1,3 +1,5 @@
+import { useClock } from "@/debug/clock";
+import type { ApiRoomReservationWithUser } from "@/integrations/backend/reservations";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useRouter } from "@tanstack/react-router";
 import { CalendarDays, Map as MapIcon } from "lucide-react";
@@ -14,11 +16,9 @@ import {
     THEME_OTHER,
     THEME_PERSON_SEARCH_MATCH,
 } from "./constants";
+import type { Reservation, Room } from "./types";
 import { useSchedulerSocketSync } from "./use-scheduler-socket-sync";
 import { includesEntretienFinal, isIdMultipleOf } from "./utils";
-import type { Reservation, Room } from "./types";
-import type { ApiRoomReservationWithUser } from "@/integrations/backend/reservations";
-import { useClock } from "@/debug/clock";
 
 import { useOfficeFloorSelection } from "@/hooks/use-office-floor-selection";
 
@@ -29,6 +29,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 import { normalizeSearchText } from "@/lib/search";
 
+import SearchOverlay from "@/components/SearchOverlay";
 import { meQueryOptions } from "@/integrations/backend/auth";
 import { startOfDayIso } from "@/integrations/backend/date";
 import {
@@ -42,7 +43,6 @@ import {
     useDeleteRoomReservationMutation,
     useUpdateRoomReservationMutation,
 } from "@/integrations/backend/reservations";
-import SearchOverlay from "@/components/SearchOverlay";
 
 function isEntretienFinalReservation(reservation: ApiRoomReservationWithUser) {
     return (
@@ -208,7 +208,7 @@ export default function SchedulerPage(props: {
                 id: room.id,
                 name: room.name,
                 floor: floorMap.get(room.officeFloorId) ?? 0,
-                hasTv: room.hasTv ?? false,
+                hasTv: room.hasTv,
             }))
             .sort((a, b) => a.floor - b.floor);
     }, [officeFloorsQuery.data, officeRoomsQuery.data, selectedFloorId, selectedOfficeId]);

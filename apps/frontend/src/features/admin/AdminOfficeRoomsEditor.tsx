@@ -65,7 +65,7 @@ function cloneRoom(room: ApiOfficeRoom): DraftRoom {
         name: room.name,
         isBookable: room.isBookable,
         isPhonebox: room.isPhonebox,
-        hasTv: room.hasTv ?? false,
+        hasTv: room.hasTv,
         config: { points },
         pointIds: points.map(() => generatePointId()),
     };
