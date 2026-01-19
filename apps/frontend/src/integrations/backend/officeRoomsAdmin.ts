@@ -18,6 +18,7 @@ export type CreateOfficeRoomInput = {
     officeFloor: number;
     isBookable: boolean;
     isPhonebox: boolean;
+    hasTv: boolean;
 };
 
 export async function createOfficeRoom(input: CreateOfficeRoomInput): Promise<ApiOfficeRoom> {
@@ -44,6 +45,7 @@ export type UpdateOfficeRoomInput = {
     officeFloor: number;
     isBookable: boolean;
     isPhonebox: boolean;
+    hasTv: boolean;
 };
 
 export async function updateOfficeRoom(input: UpdateOfficeRoomInput): Promise<ApiOfficeRoom> {

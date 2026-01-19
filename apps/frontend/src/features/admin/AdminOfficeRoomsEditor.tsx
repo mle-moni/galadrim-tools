@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, RefreshCcw, Trash2, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import type { ApiOfficeRoom, RoomPoint } from "@galadrim-tools/shared";
@@ -19,16 +19,16 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 import {
+    createOfficeRoom,
+    deleteOfficeRoom,
+    updateOfficeRoom,
+} from "@/integrations/backend/officeRoomsAdmin";
+import {
     officeFloorsQueryOptions,
     officeRoomsQueryOptions,
     officesQueryOptions,
 } from "@/integrations/backend/offices";
 import { queryKeys } from "@/integrations/backend/query-keys";
-import {
-    createOfficeRoom,
-    deleteOfficeRoom,
-    updateOfficeRoom,
-} from "@/integrations/backend/officeRoomsAdmin";
 
 import { getDbCoordinates } from "@/features/visuel/utils/coordinates";
 import { removeById, upsertById } from "@/lib/collections";
@@ -65,6 +65,7 @@ function cloneRoom(room: ApiOfficeRoom): DraftRoom {
         name: room.name,
         isBookable: room.isBookable,
         isPhonebox: room.isPhonebox,
+        hasTv: room.hasTv,
         config: { points },
         pointIds: points.map(() => generatePointId()),
     };
@@ -275,6 +276,7 @@ export default function AdminOfficeRoomsEditor() {
                                             officeFloor: selectedFloorId,
                                             isBookable: true,
                                             isPhonebox: false,
+                                            hasTv: false,
                                         });
 
                                         toast.promise(promise, {
@@ -346,6 +348,7 @@ export default function AdminOfficeRoomsEditor() {
                                             officeFloor: floorId,
                                             isBookable: true,
                                             isPhonebox: false,
+                                            hasTv: false,
                                         });
 
                                         toast.promise(promise, {
@@ -412,6 +415,19 @@ export default function AdminOfficeRoomsEditor() {
                                                     setDraftRoom({
                                                         ...draftRoom,
                                                         isPhonebox: checked,
+                                                    })
+                                                }
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center justify-between gap-3 rounded-md border border-border/60 px-3 py-2">
+                                            <div className="text-sm font-medium">TV</div>
+                                            <Switch
+                                                checked={draftRoom.hasTv}
+                                                onCheckedChange={(checked) =>
+                                                    setDraftRoom({
+                                                        ...draftRoom,
+                                                        hasTv: checked,
                                                     })
                                                 }
                                             />
@@ -572,6 +588,7 @@ export default function AdminOfficeRoomsEditor() {
                                                     officeFloor: selectedFloorId,
                                                     isBookable: draftRoom.isBookable,
                                                     isPhonebox: draftRoom.isPhonebox,
+                                                    hasTv: draftRoom.hasTv,
                                                 });
 
                                                 toast.promise(promise, {

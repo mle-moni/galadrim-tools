@@ -251,7 +251,9 @@ export default function OfficeFloorCanvas(props: {
                     className="pointer-events-none absolute z-50 max-w-[220px] rounded-md border bg-background/95 px-2 py-1 text-xs shadow-sm backdrop-blur"
                     style={tooltipStyle}
                 >
-                    <div className="font-semibold text-foreground">{hoveredRoom.name}</div>
+                    <div className="font-semibold text-foreground">
+                        {hoveredRoom.hasTv ? `${hoveredRoom.name} 📺` : hoveredRoom.name}
+                    </div>
                     {hoveredRoomStatus && (
                         <div className={hoveredRoomStatus.className}>{hoveredRoomStatus.text}</div>
                     )}
