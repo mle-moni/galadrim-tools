@@ -29,6 +29,7 @@ export interface ApiOfficeRoom extends ModelBase {
     name: string;
     isBookable: boolean;
     isPhonebox: boolean;
+    hasTv: boolean;
     config: OfficeRoomConfig;
 }
 export interface ApiRoomReservation extends ModelBase {

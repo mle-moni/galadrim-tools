@@ -47,6 +47,8 @@ export default function SchedulerGridRoomHeaderRow(props: {
             {props.rooms.map((room) => {
                 const floorLabel = formatFloorLabel(room.floor);
 
+                const roomLabel = room.hasTv ? `${room.name} 📺` : room.name;
+
                 return (
                     <div
                         key={room.id}
@@ -63,7 +65,7 @@ export default function SchedulerGridRoomHeaderRow(props: {
                     >
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <span className="truncate px-2">{room.name}</span>
+                                <span className="truncate px-2">{roomLabel}</span>
                             </TooltipTrigger>
                             <TooltipContent>{floorLabel}</TooltipContent>
                         </Tooltip>

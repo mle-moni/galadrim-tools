@@ -1,3 +1,6 @@
+import type { HttpContext } from "@adonisjs/core/http";
+import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
+import vine from "@vinejs/vine";
 import { createFolderViewConfig } from "#adomin/create_folder_view_config";
 import { createModelViewConfig } from "#adomin/create_model_view_config";
 import type {
@@ -8,9 +11,6 @@ import Office from "#models/office";
 import OfficeFloor from "#models/office_floor";
 import OfficeRoom from "#models/office_room";
 import Sensor from "#models/sensor";
-import type { HttpContext } from "@adonisjs/core/http";
-import type { ModelQueryBuilderContract } from "@adonisjs/lucid/types/model";
-import vine from "@vinejs/vine";
 
 const checkIsRoomAdmin: AdominRightsCheckFunction = async (ctx: HttpContext) => {
     const user = ctx.auth.user;
@@ -155,6 +155,11 @@ const OFFICE_ROOMS_VIEW = createModelViewConfig(() => OfficeRoom, {
             type: "boolean",
             defaultValue: false,
         },
+        hasTv: {
+            type: "boolean",
+            label: "TV",
+            defaultValue: false,
+        },
         officeFloor: {
             type: "belongsToRelation",
             label: "Etage",
@@ -221,20 +226,20 @@ const SENSORS_VIEW = createModelViewConfig(() => Sensor, {
             modelName: "OfficeRoom",
         },
         lastBat: {
-            type: 'number',
-            label: 'Batterie',
+            type: "number",
+            label: "Batterie",
             editable: false,
             creatable: false,
         },
         lastLux: {
-            type: 'number',
-            label: 'Luminosité (lux)',
+            type: "number",
+            label: "Luminosité (lux)",
             editable: false,
             creatable: false,
         },
         lastTemp: {
-            type: 'number',
-            label: 'Température (°C)',
+            type: "number",
+            label: "Température (°C)",
             editable: false,
             creatable: false,
         },
