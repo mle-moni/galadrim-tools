@@ -5,8 +5,8 @@ PM2_NAME="galadrim-tools"
 # exit when any command fails
 set -e
 
-corepack enable
-corepack prepare pnpm@10.0.0 --activate
+# corepack enable
+# corepack prepare pnpm@10.0.0 --activate
 
 pnpm install --frozen-lockfile
 pnpm test
