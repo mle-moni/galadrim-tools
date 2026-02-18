@@ -9,6 +9,7 @@
         "test": "vitest run",
         "lint": "eslint",
         "format": "prettier",
+        "deploy": "sudo rm -rf /var/www/galadrim-tools && sudo mv ./dist /var/www/galadrim-tools",
         "check": "prettier --write . && eslint --fix"
     },
     "dependencies": {
