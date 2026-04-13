@@ -76,7 +76,7 @@ const getUserEmailFromGaladrimCookie = async ({ request }: HttpContext) => {
 };
 
 const createUserFromEmail = async (email: string) => {
-    const res = await axios.get(`https://forest.galadrim.fr/profileInfos?email=${email}`);
+    const res = await axios.get(`https://forest.galadrim.fr/api/galadrim-tools/profileInfos?email=${email}`);
     if (res.status === 200) {
         const { username } = res.data;
         await lockEmail(email);
