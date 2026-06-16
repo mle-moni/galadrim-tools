@@ -1,12 +1,10 @@
 import { DEFAULT_MESSAGE_PROVIDER_CONFIG } from "#adomin/validation/default_validator";
 import { CONNECTED_SOCKETS } from "#controllers/socket/socket_constants";
-import OfficeRoom from "#models/office_room";
-import RoomReservation from "#models/room_reservation";
+import { isReservationServiceError } from "#services/reservation_errors";
+import { roomReservationService } from "#services/room_reservation_service";
 import { Ws } from "#services/ws";
 import type { HttpContext } from "@adonisjs/core/http";
 import vine, { SimpleMessagesProvider } from "@vinejs/vine";
-import { DateTime } from "luxon";
-import { reservationUserSelector } from "./reservation_user_selecter.js";
 
 const validationSchema = vine.compile(
     vine.object({
@@ -33,42 +31,25 @@ export const storeReservation = async ({ request, auth, response }: HttpContext)
     const { start, end, officeRoomId, title } = await request.validateUsing(validationSchema, {
         messagesProvider,
     });
-    const foundRoom = await OfficeRoom.findOrFail(officeRoomId);
-    if (!foundRoom.isBookable) {
-        return response.badRequest({
-            error: `La salle n'est pas réservable`,
+
+    try {
+        const reservation = await roomReservationService.create(user, {
+            title: title ?? null,
+            start,
+            end,
+            officeRoomId,
         });
+
+        Ws.io.to(CONNECTED_SOCKETS).emit("createRoomReservation", reservation);
+
+        return {
+            message: "Salle réservée",
+            reservation,
+        };
+    } catch (error) {
+        if (isReservationServiceError(error)) {
+            return response.status(error.status).send({ error: error.message, code: error.code });
+        }
+        throw error;
     }
-
-    if (foundRoom.isPhonebox) {
-        return response.badRequest({
-            error: "Les phone box ne sont pas réservables",
-        });
-    }
-
-    const startDate = DateTime.fromJSDate(start);
-    const endDate = DateTime.fromJSDate(end);
-
-    if (startDate.day !== endDate.day) {
-        return response.badRequest({
-            error: "La date de début et la date de fin doivent être sur la même journée",
-        });
-    }
-
-    const reservation = await RoomReservation.create({
-        title: title ?? null,
-        start: startDate,
-        end: endDate,
-        officeRoomId,
-        userId: user.id,
-    });
-
-    await reservation.load("user", reservationUserSelector);
-
-    Ws.io.to(CONNECTED_SOCKETS).emit("createRoomReservation", reservation);
-
-    return {
-        message: "Salle réservée",
-        reservation,
-    };
 };

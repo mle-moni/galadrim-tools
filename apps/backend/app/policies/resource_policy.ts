@@ -1,6 +1,7 @@
 import type User from "#models/user";
-import { AuthorizationResponse, BasePolicy } from "@adonisjs/bouncer";
+import { BasePolicy } from "@adonisjs/bouncer";
 import type { AllRights } from "@galadrim-tools/shared";
+import { ownedResourceAuthorizationResponse } from "#services/reservation_authorization";
 
 interface Resource {
     userId: number | null;
@@ -8,14 +9,6 @@ interface Resource {
 
 export default class RestaurantPolicy extends BasePolicy {
     public async viewUpdateOrDelete(user: User, resource: Resource, bypassRight?: AllRights) {
-        if (bypassRight !== undefined && user.hasRights([bypassRight])) {
-            return true;
-        }
-
-        if (user.id !== resource.userId) {
-            return AuthorizationResponse.deny("Vous n'avez pas les droits nécessaires");
-        }
-
-        return true;
+        return ownedResourceAuthorizationResponse(user, resource, bypassRight);
     }
 }

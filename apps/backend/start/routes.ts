@@ -65,6 +65,8 @@ router.post("/login", [AuthController, "login"]);
 router.get("/forestLogin", [AuthController, "forestLogin"]);
 router.post("/getOtp", [AuthController, "getOtp"]);
 
+router.mcp().use(middleware.auth({ guards: ["api"] }));
+
 router
     .group(() => {
         router.post("/logout", [AuthController, "logout"]);

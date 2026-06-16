@@ -15,6 +15,7 @@ export default defineConfig({
         () => import("@adonisjs/lucid/commands"),
         () => import("@adonisjs/bouncer/commands"),
         () => import("@adonisjs/mail/commands"),
+        () => import("@jrmc/adonis-mcp/commands"),
     ],
 
     /*
@@ -42,6 +43,7 @@ export default defineConfig({
         () => import("@adonisjs/session/session_provider"),
         () => import("@adonisjs/static/static_provider"),
         () => import("@adonisjs/core/providers/edge_provider"),
+        () => import("@jrmc/adonis-mcp/mcp_provider"),
     ],
 
     /*
