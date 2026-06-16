@@ -55,7 +55,12 @@ export default class RoomsAvailableTool extends Tool<Schema> {
 
             return [
                 ctx.response.text(`Found ${rooms.length} available room(s).`),
-                ctx.response.structured({ rooms, count: rooms.length, start: range.start, end: range.end }),
+                ctx.response.structured({
+                    rooms,
+                    count: rooms.length,
+                    start: range.start,
+                    end: range.end,
+                }),
             ];
         });
     }
@@ -72,7 +77,9 @@ export default class RoomsAvailableTool extends Tool<Schema> {
             );
         }
 
-        const start = DateTime.fromISO(input.at, { setZone: true, zone: MCP_TIMEZONE }).setZone(MCP_TIMEZONE);
+        const start = DateTime.fromISO(input.at, { setZone: true, zone: MCP_TIMEZONE }).setZone(
+            MCP_TIMEZONE,
+        );
         const durationMinutes = input.durationMinutes ?? 30;
 
         if (!start.isValid) {

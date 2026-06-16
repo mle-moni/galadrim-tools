@@ -111,7 +111,9 @@ class RoomReservationService {
             .preload("officeFloor");
 
         if (input.officeId !== undefined && input.officeId !== null) {
-            allRoomsQuery.whereHas("officeFloor", (builder) => builder.where("office_id", input.officeId!));
+            allRoomsQuery.whereHas("officeFloor", (builder) =>
+                builder.where("office_id", input.officeId!),
+            );
         }
 
         if (input.hasTv !== undefined) {
@@ -122,7 +124,9 @@ class RoomReservationService {
         const reservations = await RoomReservation.query()
             .where("end", ">", range.start.toJSDate())
             .andWhere("start", "<", range.end.toJSDate());
-        const unavailableRoomIds = new Set(reservations.map((reservation) => reservation.officeRoomId));
+        const unavailableRoomIds = new Set(
+            reservations.map((reservation) => reservation.officeRoomId),
+        );
 
         return allRooms
             .filter((room) => !unavailableRoomIds.has(room.id))
@@ -140,7 +144,11 @@ class RoomReservationService {
         const userId = input.userId ?? actor.id;
 
         if (userId !== actor.id && !actor.hasRights(["EVENT_ADMIN"])) {
-            throw new ReservationServiceError("FORBIDDEN", "Vous n'avez pas les droits nécessaires", 403);
+            throw new ReservationServiceError(
+                "FORBIDDEN",
+                "Vous n'avez pas les droits nécessaires",
+                403,
+            );
         }
 
         await this.assertRoomCanBeBooked(input.officeRoomId);
@@ -168,7 +176,12 @@ class RoomReservationService {
 
         authorizeOwnedResourceMutation(actor, reservation, "EVENT_ADMIN");
         await this.assertRoomCanBeBooked(input.officeRoomId);
-        await this.assertRoomIsAvailable(input.officeRoomId, range.start, range.end, reservation.id);
+        await this.assertRoomIsAvailable(
+            input.officeRoomId,
+            range.start,
+            range.end,
+            reservation.id,
+        );
 
         reservation.title = input.title;
         reservation.start = range.start;
@@ -245,7 +258,10 @@ class RoomReservationService {
         }
 
         if (room.isPhonebox) {
-            throw new ReservationServiceError("PHONEBOX_NOT_BOOKABLE", "Les phone box ne sont pas réservables");
+            throw new ReservationServiceError(
+                "PHONEBOX_NOT_BOOKABLE",
+                "Les phone box ne sont pas réservables",
+            );
         }
     }
 
@@ -267,7 +283,10 @@ class RoomReservationService {
         const overlap = await overlapQuery.first();
 
         if (overlap) {
-            throw new ReservationServiceError("RESERVATION_OVERLAP", "La salle est déjà réservée sur ce créneau");
+            throw new ReservationServiceError(
+                "RESERVATION_OVERLAP",
+                "La salle est déjà réservée sur ce créneau",
+            );
         }
     }
 }

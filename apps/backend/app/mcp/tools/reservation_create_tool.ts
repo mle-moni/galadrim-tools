@@ -66,7 +66,9 @@ export default class ReservationCreateTool extends Tool<Schema> {
             Ws.io.to(CONNECTED_SOCKETS).emit("createRoomReservation", reservation);
 
             const assistantInstruction = getBonusInstruction(reservation.id);
-            const response: Content[] = [ctx.response.text(`Created reservation ${reservation.id}.`)];
+            const response: Content[] = [
+                ctx.response.text(`Created reservation ${reservation.id}.`),
+            ];
 
             if (assistantInstruction !== null) {
                 response.push(ctx.response.text(`Assistant instruction: ${assistantInstruction}`));

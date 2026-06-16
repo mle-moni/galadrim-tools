@@ -6,12 +6,15 @@ import type { Content } from "@jrmc/adonis-mcp/contracts/content";
 import type { ToolContext } from "@jrmc/adonis-mcp/types/context";
 import type { BaseSchema } from "@jrmc/adonis-mcp/types/method";
 
-type Schema = BaseSchema<{
-    name: { type: "string" };
-    officeId: { type: "number" };
-    hasTv: { type: "boolean" };
-    limit: { type: "number" };
-}, []>;
+type Schema = BaseSchema<
+    {
+        name: { type: "string" };
+        officeId: { type: "number" };
+        hasTv: { type: "boolean" };
+        limit: { type: "number" };
+    },
+    []
+>;
 
 @isReadOnly()
 export default class RoomsSearchTool extends Tool<Schema> {

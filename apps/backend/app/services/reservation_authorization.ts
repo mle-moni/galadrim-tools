@@ -25,7 +25,11 @@ export const authorizeOwnedResourceMutation = (
     bypassRight?: AllRights,
 ) => {
     if (!canMutateOwnedResource(user, resource, bypassRight)) {
-        throw new ReservationServiceError("FORBIDDEN", "Vous n'avez pas les droits nécessaires", 403);
+        throw new ReservationServiceError(
+            "FORBIDDEN",
+            "Vous n'avez pas les droits nécessaires",
+            403,
+        );
     }
 };
 
