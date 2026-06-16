@@ -1,5 +1,5 @@
-import OfficeRoom from "#models/office_room";
-import RoomReservation from "#models/room_reservation";
+import { isReservationServiceError } from "#services/reservation_errors";
+import { roomReservationService } from "#services/room_reservation_service";
 import type { HttpContext } from "@adonisjs/core/http";
 
 export const availableRooms = async ({ auth, request, response }: HttpContext) => {
@@ -20,24 +20,16 @@ export const availableRooms = async ({ auth, request, response }: HttpContext) =
         });
     }
 
-    const allRoomsQuery = OfficeRoom.query()
-        .select("id", "name", "officeFloorId")
-        .where("is_bookable", true)
-        .preload("officeFloor");
-    const officeId = user.officeId;
-    if (officeId) {
-        allRoomsQuery.whereHas("officeFloor", (builder) => builder.where("office_id", officeId));
+    try {
+        return roomReservationService.availableRooms({
+            start: startDate,
+            end: endDate,
+            officeId: user.officeId,
+        });
+    } catch (error) {
+        if (isReservationServiceError(error)) {
+            return response.status(error.status).send({ error: error.message, code: error.code });
+        }
+        throw error;
     }
-    const allRooms: { id: number; name: string; officeId: number }[] = (await allRoomsQuery).map(
-        ({ id, name, officeFloor }) => ({ id, name, officeId: officeFloor.officeId }),
-    );
-
-    // get all events with dates incompatible with the new event
-    const res = await RoomReservation.query()
-        .where("end", ">", startDate)
-        .andWhere("start", "<", endDate);
-
-    const unavailableRooms = new Set(res.map((resa) => resa.officeRoomId));
-
-    return allRooms.filter((room) => !unavailableRooms.has(room.id));
 };
