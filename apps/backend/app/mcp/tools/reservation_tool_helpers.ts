@@ -1,4 +1,4 @@
-import OfficeRoom from "#models/office_room";
+import type OfficeRoom from "#models/office_room";
 import type RoomReservation from "#models/room_reservation";
 import { isReservationServiceError } from "#services/reservation_errors";
 import type { Content } from "@jrmc/adonis-mcp/contracts/content";
