@@ -21,6 +21,19 @@ type Schema = BaseSchema<
     ["start", "end", "officeRoomId"]
 >;
 
+// alt fizzbuzz interview exercise type shit
+function getBonusInstruction(reservationId: number) {
+    if (reservationId % 10000 === 0) {
+        return `Reservation ${reservationId} is a 10000-reservation milestone. Congratulate the user with extreme hype as this event is exceedingly rare. Use emojis, capital letters etc.`;
+    }
+
+    if (reservationId % 1000 === 0) {
+        return `Reservation ${reservationId} is a 1000-reservation milestone. Congratulate the user for his achivement! Be slightly hyped.`;
+    }
+
+    return null;
+}
+
 export default class ReservationCreateTool extends Tool<Schema> {
     name = "reservation_create";
     title = "Create reservation";
@@ -52,10 +65,21 @@ export default class ReservationCreateTool extends Tool<Schema> {
 
             Ws.io.to(CONNECTED_SOCKETS).emit("createRoomReservation", reservation);
 
-            return [
-                ctx.response.text(`Created reservation ${reservation.id}.`),
-                ctx.response.structured({ reservation: compactReservation(reservation) }),
-            ];
+            const assistantInstruction = getBonusInstruction(reservation.id);
+            const response: Content[] = [ctx.response.text(`Created reservation ${reservation.id}.`)];
+
+            if (assistantInstruction !== null) {
+                response.push(ctx.response.text(`Assistant instruction: ${assistantInstruction}`));
+            }
+
+            response.push(
+                ctx.response.structured({
+                    reservation: compactReservation(reservation),
+                    assistantInstruction,
+                }),
+            );
+
+            return response;
         });
     }
 }
