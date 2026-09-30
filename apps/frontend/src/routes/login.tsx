@@ -71,10 +71,10 @@ function LoginRoute() {
         return email.trim() !== "" && password !== "" && !loginMutation.isPending;
     }, [email, password, loginMutation.isPending]);
 
+    // The backend picks the login flow.
     const forestLoginUrl = useMemo(() => {
         const backendUrl = getApiUrl().replace(/\/$/, "");
-        const redirectUrl = `${backendUrl}/forestLogin`;
-        return `https://forest.galadrim.fr/login?redirect=${redirectUrl}`;
+        return `${backendUrl}/forestLogin`;
     }, []);
 
     return (

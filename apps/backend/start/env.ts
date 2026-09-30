@@ -50,6 +50,13 @@ export default await Env.create(new URL("../", import.meta.url), {
     GALADRIM_SECRET_KEY: Env.schema.string(),
 
     BACKEND_URL: Env.schema.string({ format: "url", tld: false }),
+
+    /**
+     * SSO login (services/sso.ts), enabled when both are set
+     */
+    SSO_CLIENT_ID: Env.schema.string.optional(),
+    SSO_CLIENT_SECRET: Env.schema.string.optional(),
+    SSO_ISSUER: Env.schema.string.optional({ format: "url", tld: false }),
     FRONTEND_URL: Env.schema.string({ format: "url", tld: false }),
 
     /**

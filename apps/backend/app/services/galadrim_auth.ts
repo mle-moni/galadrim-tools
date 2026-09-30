@@ -75,33 +75,45 @@ const getUserEmailFromGaladrimCookie = async ({ request }: HttpContext) => {
     }
 };
 
+const createUser = async (email: string, username: string) => {
+    await lockEmail(email);
+    const user = await User.updateOrCreate(
+        { email },
+        {
+            email,
+            username,
+            password: nanoid(),
+            otpToken: nanoid(),
+            notificationsSettings: DEFAULT_NOTIFICATION_SETTINGS,
+            imageUrl:
+                "https://res.cloudinary.com/forest2/image/fetch/f_auto,w_150,h_150/https://forest.galadrim.fr/img/users/0.jpg",
+        },
+    );
+    unlockEmail(email);
+
+    return user;
+};
+
 const createUserFromEmail = async (email: string) => {
     const res = await axios.get(
         `https://forest.galadrim.fr/api/galadrim-tools/profileInfos?email=${email}`,
     );
     if (res.status === 200) {
         const { username } = res.data;
-        await lockEmail(email);
-        const user = await User.updateOrCreate(
-            { email },
-            {
-                email,
-                username,
-                password: nanoid(),
-                otpToken: nanoid(),
-                notificationsSettings: DEFAULT_NOTIFICATION_SETTINGS,
-                imageUrl:
-                    "https://res.cloudinary.com/forest2/image/fetch/f_auto,w_150,h_150/https://forest.galadrim.fr/img/users/0.jpg",
-            },
-        );
-        unlockEmail(email);
-
-        return user;
+        return createUser(email, username);
     }
 
     logger.error("Error while creating user from email (forest responded non 200 code)", res.data);
 
     return null;
+};
+
+// SSO login: the account is matched on the email and created on first login.
+export const getOrCreateSsoUser = async (email: string, username: string) => {
+    const normalized = email.trim().toLowerCase();
+    const user = await User.query().whereRaw("LOWER(email) = ?", [normalized]).first();
+    if (user) return user;
+    return createUser(normalized, username);
 };
 
 export const getUserToAuthenticate = async (ctx: HttpContext) => {
