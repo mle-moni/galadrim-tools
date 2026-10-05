@@ -7,6 +7,7 @@ import { getTimeFromPixels, roundToNearestMinutes } from "./utils";
 
 const MS_PER_MINUTE = 60_000;
 const SELECTION_ACTIVATE_DELAY_MS = 100;
+const TAP_RESERVATION_MINUTES = 30;
 
 interface MovingState {
     originalReservation: Reservation;
@@ -164,6 +165,35 @@ export function useSchedulerInteractions(input: {
         }, SELECTION_ACTIVATE_DELAY_MS);
     };
 
+    // Touch has no drag-to-select (a drag scrolls the grid), and the compat mouse events a tap emits
+    // arrive back to back, so the mouse path above always discards them as a non-drag click.
+    const handleTapOnGrid = (e: React.PointerEvent, roomId: number) => {
+        if (e.pointerType !== "touch" || e.target !== e.currentTarget) return;
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        const startTime = getTimeFromPixels(
+            e.clientY - rect.top,
+            input.currentDate,
+            input.pixelsPerHour,
+        );
+        const snappedStart = roundToNearestMinutes(startTime, input.intervalMinutes);
+
+        const endOfDay = new Date(input.currentDate);
+        endOfDay.setHours(END_HOUR, 0, 0, 0);
+        if (snappedStart >= endOfDay) return;
+
+        input.onAddReservation({
+            roomId,
+            startTime: snappedStart,
+            endTime: new Date(
+                Math.min(
+                    snappedStart.getTime() + TAP_RESERVATION_MINUTES * MS_PER_MINUTE,
+                    endOfDay.getTime(),
+                ),
+            ),
+        });
+    };
+
     const handleDragStartEvent = (e: React.MouseEvent, event: Reservation) => {
         if (!event.canEdit) return;
 
@@ -266,6 +296,7 @@ export function useSchedulerInteractions(input: {
         setSelectedEventId,
         handleGlobalMouseMove,
         handleMouseDownOnGrid,
+        handleTapOnGrid,
         handleMouseUp,
         handleDragStartEvent,
     };

@@ -20,6 +20,7 @@ export default function SchedulerRoomColumn({
     onDragStartEvent,
     onMouseDown,
     onMouseEnter,
+    onPointerUp,
     setRoomColumnRef,
     dragSelection,
     intervalMinutes,
@@ -38,6 +39,7 @@ export default function SchedulerRoomColumn({
     onDragStartEvent: (e: React.MouseEvent, event: Reservation) => void;
     onMouseDown: (e: React.MouseEvent) => void;
     onMouseEnter: () => void;
+    onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void;
     setRoomColumnRef: (el: HTMLDivElement | null) => void;
     dragSelection: import("./types").DragSelection | null;
     intervalMinutes: number;
@@ -62,6 +64,7 @@ export default function SchedulerRoomColumn({
                 style={{ height: gridHeight }}
                 onMouseEnter={onMouseEnter}
                 onMouseDown={onMouseDown}
+                onPointerUp={onPointerUp}
                 data-snowfall="ignore"
             >
                 {hourIntervals.map((hour, idx) => (

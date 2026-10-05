@@ -286,6 +286,7 @@ export default function SchedulerGrid({
                                     onMouseDown={(e) =>
                                         interactions.handleMouseDownOnGrid(e, room.id)
                                     }
+                                    onPointerUp={(e) => interactions.handleTapOnGrid(e, room.id)}
                                     setRoomColumnRef={(el) => {
                                         effectiveRoomColumnRefs.current.set(room.id, el);
                                     }}
