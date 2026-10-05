@@ -12,6 +12,7 @@ const LONG_PRESS_MS = 400;
 const LONG_PRESS_MOVE_TOLERANCE_PX = 10;
 
 interface TouchPress {
+    pointerId: number;
     timeoutId: number;
     roomId: number;
     startTime: Date;
@@ -35,6 +36,9 @@ export function useSchedulerInteractions(input: {
     onUpdateReservation: (reservation: Reservation) => void;
 }) {
     const dragActivateTimeoutRef = useRef<number | null>(null);
+    const touchPressRef = useRef<TouchPress | null>(null);
+    const touchDragActiveRef = useRef(false);
+    const pendingTapRef = useRef<TouchPress | null>(null);
 
     useEffect(() => {
         return () => {
@@ -50,8 +54,6 @@ export function useSchedulerInteractions(input: {
     const [movingState, setMovingState] = useState<MovingState | null>(null);
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
     const [hoveredRoomId, setHoveredRoomId] = useState<number | null>(null);
-    const touchPressRef = useRef<TouchPress | null>(null);
-    const touchDragActiveRef = useRef(false);
 
     const handleSelectionMove = (e: React.MouseEvent) => {
         if (!dragSelection) return;
@@ -178,8 +180,8 @@ export function useSchedulerInteractions(input: {
         }, SELECTION_ACTIVATE_DELAY_MS);
     };
 
-    // On touch a plain drag must keep scrolling the grid, so a selection starts on a long press; a
-    // quick tap books a fixed slot. The compat mouse events a tap emits are discarded by handleMouseUp.
+    // On touch a plain drag must keep scrolling the grid, so a selection starts on a long press. A quick
+    // tap books on click, which browsers don't fire for a touch that only stops a scroll fling.
     const endTouchPress = () => {
         if (touchPressRef.current) window.clearTimeout(touchPressRef.current.timeoutId);
         touchPressRef.current = null;
@@ -187,8 +189,13 @@ export function useSchedulerInteractions(input: {
 
     const getTouchHandlers = (roomId: number): React.HTMLAttributes<HTMLDivElement> => ({
         onPointerDown: (e) => {
-            if (e.pointerType !== "touch" || e.target !== e.currentTarget) return;
+            pendingTapRef.current = null;
+            if (e.pointerType !== "touch" || !e.isPrimary || e.target !== e.currentTarget) return;
             endTouchPress();
+            if (touchDragActiveRef.current) {
+                touchDragActiveRef.current = false;
+                setDragSelection(null);
+            }
 
             const rect = e.currentTarget.getBoundingClientRect();
             const startTime = roundToNearestMinutes(
@@ -200,6 +207,7 @@ export function useSchedulerInteractions(input: {
             if (startTime >= endOfDay) return;
 
             touchPressRef.current = {
+                pointerId: e.pointerId,
                 roomId,
                 startTime,
                 clientX: e.clientX,
@@ -223,22 +231,21 @@ export function useSchedulerInteractions(input: {
             };
         },
         onPointerMove: (e) => {
-            if (e.pointerType !== "touch") return;
+            const press = touchPressRef.current;
+            if (e.pointerId !== press?.pointerId) return;
             if (touchDragActiveRef.current) {
                 handleSelectionMove(e);
                 return;
             }
-            const press = touchPressRef.current;
             if (
-                press &&
                 Math.hypot(e.clientX - press.clientX, e.clientY - press.clientY) >
-                    LONG_PRESS_MOVE_TOLERANCE_PX
+                LONG_PRESS_MOVE_TOLERANCE_PX
             ) {
                 endTouchPress();
             }
         },
         onPointerUp: (e) => {
-            if (e.pointerType !== "touch") return;
+            if (e.pointerId !== touchPressRef.current?.pointerId) return;
             if (touchDragActiveRef.current) {
                 touchDragActiveRef.current = false;
                 endTouchPress();
@@ -246,8 +253,12 @@ export function useSchedulerInteractions(input: {
                 return;
             }
 
-            const press = touchPressRef.current;
+            pendingTapRef.current = touchPressRef.current;
             endTouchPress();
+        },
+        onClick: () => {
+            const press = pendingTapRef.current;
+            pendingTapRef.current = null;
             if (!press) return;
 
             const endOfDay = new Date(input.currentDate);
@@ -263,7 +274,8 @@ export function useSchedulerInteractions(input: {
                 ),
             });
         },
-        onPointerCancel: () => {
+        onPointerCancel: (e) => {
+            if (e.pointerId !== touchPressRef.current?.pointerId) return;
             endTouchPress();
             if (touchDragActiveRef.current) {
                 touchDragActiveRef.current = false;

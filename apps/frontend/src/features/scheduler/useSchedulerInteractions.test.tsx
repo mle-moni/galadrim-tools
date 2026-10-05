@@ -57,11 +57,18 @@ afterEach(() => {
     vi.useRealTimers();
 });
 
-const touch = (clientY: number, clientX = 20) => ({ pointerType: "touch", clientX, clientY });
+const touch = (clientY: number, pointerId = 1) => ({
+    pointerType: "touch",
+    pointerId,
+    isPrimary: pointerId === 1,
+    clientX: 20,
+    clientY,
+});
 
 const tap = (el: Element, clientY: number) => {
     fireEvent.pointerDown(el, touch(clientY));
     fireEvent.pointerUp(el, touch(clientY));
+    fireEvent.click(el, { clientY });
 };
 
 const longPress = (el: Element, clientY: number) => {
@@ -186,5 +193,38 @@ describe("touch on the room grid", () => {
         fireEvent.pointerUp(column, touch(570));
 
         expect(onAddReservation).not.toHaveBeenCalled();
+    });
+
+    it("books nothing for a touch that only stops a scroll fling (no click follows)", () => {
+        const { column, onAddReservation } = renderColumn();
+
+        fireEvent.pointerDown(column, touch(450));
+        fireEvent.pointerUp(column, touch(450));
+        fireEvent.pointerDown(column, { pointerType: "mouse", pointerId: 9, isPrimary: true });
+        fireEvent.click(column);
+
+        expect(onAddReservation).not.toHaveBeenCalled();
+    });
+
+    it("ignores a second finger during a long-press drag", () => {
+        vi.useFakeTimers();
+        const { column, onAddReservation } = renderColumn();
+
+        longPress(column, 450);
+        fireEvent.pointerDown(column, touch(100, 2));
+        act(() => {
+            vi.advanceTimersByTime(400);
+        });
+        fireEvent.pointerMove(column, touch(570));
+        fireEvent.pointerMove(column, touch(100, 2));
+        fireEvent.pointerUp(column, touch(100, 2));
+        fireEvent.pointerUp(column, touch(570));
+
+        expect(onAddReservation).toHaveBeenCalledTimes(1);
+        expect(onAddReservation).toHaveBeenCalledWith({
+            roomId: 7,
+            startTime: at(16, 30),
+            endTime: at(18, 30),
+        });
     });
 });
