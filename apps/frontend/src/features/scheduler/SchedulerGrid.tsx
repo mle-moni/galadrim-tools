@@ -176,6 +176,18 @@ export default function SchedulerGrid({
         onUpdateReservation,
     });
 
+    const { touchDragActiveRef } = interactions;
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const preventScrollWhileSelecting = (e: TouchEvent) => {
+            if (touchDragActiveRef.current) e.preventDefault();
+        };
+        container.addEventListener("touchmove", preventScrollWhileSelecting, { passive: false });
+        return () => container.removeEventListener("touchmove", preventScrollWhileSelecting);
+    }, [touchDragActiveRef]);
+
     const hourIntervals = Array.from({ length: HOURS_COUNT }, (_, i) => START_HOUR + i);
 
     const currentHour = currentTime.getHours();
@@ -286,7 +298,7 @@ export default function SchedulerGrid({
                                     onMouseDown={(e) =>
                                         interactions.handleMouseDownOnGrid(e, room.id)
                                     }
-                                    onPointerUp={(e) => interactions.handleTapOnGrid(e, room.id)}
+                                    touchHandlers={interactions.getTouchHandlers(room.id)}
                                     setRoomColumnRef={(el) => {
                                         effectiveRoomColumnRefs.current.set(room.id, el);
                                     }}

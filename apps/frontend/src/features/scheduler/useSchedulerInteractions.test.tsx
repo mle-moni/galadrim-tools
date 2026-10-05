@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render } from "@testing-library/react";
+import { act, cleanup, fireEvent, render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import SchedulerRoomColumn from "./SchedulerRoomColumn";
@@ -11,6 +11,7 @@ const currentDate = new Date(2026, 9, 5);
 
 function renderColumn(events: Parameters<typeof SchedulerRoomColumn>[0]["events"] = []) {
     const onAddReservation = vi.fn();
+    let column: HTMLDivElement | null = null;
 
     function Harness() {
         const interactions = useSchedulerInteractions({
@@ -18,7 +19,7 @@ function renderColumn(events: Parameters<typeof SchedulerRoomColumn>[0]["events"
             pixelsPerHour: PIXELS_PER_HOUR,
             gridHeight: 660,
             intervalMinutes: 15,
-            getRoomColumnElement: () => null,
+            getRoomColumnElement: () => column,
             onAddReservation,
             onUpdateReservation: vi.fn(),
         });
@@ -35,7 +36,7 @@ function renderColumn(events: Parameters<typeof SchedulerRoomColumn>[0]["events"
                 onDragStartEvent={vi.fn()}
                 onMouseDown={(e) => interactions.handleMouseDownOnGrid(e, 7)}
                 onMouseEnter={vi.fn()}
-                onPointerUp={(e) => interactions.handleTapOnGrid(e, 7)}
+                touchHandlers={interactions.getTouchHandlers(7)}
                 setRoomColumnRef={vi.fn()}
                 dragSelection={interactions.dragSelection}
                 intervalMinutes={15}
@@ -46,21 +47,38 @@ function renderColumn(events: Parameters<typeof SchedulerRoomColumn>[0]["events"
     }
 
     const { container } = render(<Harness />);
-    const column = container.querySelector("#room-col-7") as HTMLDivElement;
+    column = container.querySelector("#room-col-7") as HTMLDivElement;
     column.getBoundingClientRect = () => ({ top: 0 }) as DOMRect;
     return { column, container, onAddReservation };
 }
 
-afterEach(cleanup);
+afterEach(() => {
+    cleanup();
+    vi.useRealTimers();
+});
+
+const touch = (clientY: number, clientX = 20) => ({ pointerType: "touch", clientX, clientY });
+
+const tap = (el: Element, clientY: number) => {
+    fireEvent.pointerDown(el, touch(clientY));
+    fireEvent.pointerUp(el, touch(clientY));
+};
+
+const longPress = (el: Element, clientY: number) => {
+    fireEvent.pointerDown(el, touch(clientY));
+    act(() => {
+        vi.advanceTimersByTime(400);
+    });
+};
 
 const at = (h: number, m: number) => new Date(2026, 9, 5, h, m);
 
-describe("touch tap on the room grid", () => {
+describe("touch on the room grid", () => {
     it("books 30 minutes from the tapped slot", () => {
         const { column, onAddReservation } = renderColumn();
 
         // 9:00 is the top of the grid, so y=450 at 60px/h is 16:30.
-        fireEvent.pointerUp(column, { pointerType: "touch", clientY: 450 });
+        tap(column, 450);
 
         expect(onAddReservation).toHaveBeenCalledWith({
             roomId: 7,
@@ -72,7 +90,7 @@ describe("touch tap on the room grid", () => {
     it("clamps the end to closing time", () => {
         const { column, onAddReservation } = renderColumn();
 
-        fireEvent.pointerUp(column, { pointerType: "touch", clientY: 645 });
+        tap(column, 645);
 
         expect(onAddReservation).toHaveBeenCalledWith({
             roomId: 7,
@@ -84,6 +102,7 @@ describe("touch tap on the room grid", () => {
     it("ignores mouse pointers, which keep drag-to-select", () => {
         const { column, onAddReservation } = renderColumn();
 
+        fireEvent.pointerDown(column, { pointerType: "mouse", clientY: 450 });
         fireEvent.pointerUp(column, { pointerType: "mouse", clientY: 450 });
 
         expect(onAddReservation).not.toHaveBeenCalled();
@@ -107,7 +126,64 @@ describe("touch tap on the room grid", () => {
         ]);
 
         const block = container.querySelector("#room-col-7 > div.absolute.flex") as HTMLElement;
-        fireEvent.pointerUp(block, { pointerType: "touch", clientY: 450 });
+        tap(block, 450);
+
+        expect(onAddReservation).not.toHaveBeenCalled();
+    });
+
+    it("drags a range after a long press", () => {
+        vi.useFakeTimers();
+        const { column, onAddReservation } = renderColumn();
+
+        longPress(column, 450);
+        fireEvent.pointerMove(column, touch(570));
+        fireEvent.pointerUp(column, touch(570));
+
+        expect(onAddReservation).toHaveBeenCalledTimes(1);
+        expect(onAddReservation).toHaveBeenCalledWith({
+            roomId: 7,
+            startTime: at(16, 30),
+            endTime: at(18, 30),
+        });
+    });
+
+    it("drags upwards after a long press", () => {
+        vi.useFakeTimers();
+        const { column, onAddReservation } = renderColumn();
+
+        longPress(column, 450);
+        fireEvent.pointerMove(column, touch(360));
+        fireEvent.pointerUp(column, touch(360));
+
+        expect(onAddReservation).toHaveBeenCalledWith({
+            roomId: 7,
+            startTime: at(15, 0),
+            endTime: at(16, 30),
+        });
+    });
+
+    it("books nothing when the finger moves before the long press (a scroll)", () => {
+        vi.useFakeTimers();
+        const { column, onAddReservation } = renderColumn();
+
+        fireEvent.pointerDown(column, touch(450));
+        fireEvent.pointerMove(column, touch(480));
+        act(() => {
+            vi.advanceTimersByTime(400);
+        });
+        fireEvent.pointerUp(column, touch(480));
+
+        expect(onAddReservation).not.toHaveBeenCalled();
+    });
+
+    it("books nothing when the browser cancels the touch mid-selection", () => {
+        vi.useFakeTimers();
+        const { column, onAddReservation } = renderColumn();
+
+        longPress(column, 450);
+        fireEvent.pointerMove(column, touch(570));
+        fireEvent.pointerCancel(column, touch(570));
+        fireEvent.pointerUp(column, touch(570));
 
         expect(onAddReservation).not.toHaveBeenCalled();
     });

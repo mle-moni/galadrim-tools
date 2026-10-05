@@ -8,6 +8,16 @@ import { getTimeFromPixels, roundToNearestMinutes } from "./utils";
 const MS_PER_MINUTE = 60_000;
 const SELECTION_ACTIVATE_DELAY_MS = 100;
 const TAP_RESERVATION_MINUTES = 30;
+const LONG_PRESS_MS = 400;
+const LONG_PRESS_MOVE_TOLERANCE_PX = 10;
+
+interface TouchPress {
+    timeoutId: number;
+    roomId: number;
+    startTime: Date;
+    clientX: number;
+    clientY: number;
+}
 
 interface MovingState {
     originalReservation: Reservation;
@@ -32,6 +42,7 @@ export function useSchedulerInteractions(input: {
                 window.clearTimeout(dragActivateTimeoutRef.current);
                 dragActivateTimeoutRef.current = null;
             }
+            if (touchPressRef.current) window.clearTimeout(touchPressRef.current.timeoutId);
         };
     }, []);
 
@@ -39,6 +50,8 @@ export function useSchedulerInteractions(input: {
     const [movingState, setMovingState] = useState<MovingState | null>(null);
     const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
     const [hoveredRoomId, setHoveredRoomId] = useState<number | null>(null);
+    const touchPressRef = useRef<TouchPress | null>(null);
+    const touchDragActiveRef = useRef(false);
 
     const handleSelectionMove = (e: React.MouseEvent) => {
         if (!dragSelection) return;
@@ -165,34 +178,102 @@ export function useSchedulerInteractions(input: {
         }, SELECTION_ACTIVATE_DELAY_MS);
     };
 
-    // Touch has no drag-to-select (a drag scrolls the grid), and the compat mouse events a tap emits
-    // arrive back to back, so the mouse path above always discards them as a non-drag click.
-    const handleTapOnGrid = (e: React.PointerEvent, roomId: number) => {
-        if (e.pointerType !== "touch" || e.target !== e.currentTarget) return;
-
-        const rect = e.currentTarget.getBoundingClientRect();
-        const startTime = getTimeFromPixels(
-            e.clientY - rect.top,
-            input.currentDate,
-            input.pixelsPerHour,
-        );
-        const snappedStart = roundToNearestMinutes(startTime, input.intervalMinutes);
-
-        const endOfDay = new Date(input.currentDate);
-        endOfDay.setHours(END_HOUR, 0, 0, 0);
-        if (snappedStart >= endOfDay) return;
-
-        input.onAddReservation({
-            roomId,
-            startTime: snappedStart,
-            endTime: new Date(
-                Math.min(
-                    snappedStart.getTime() + TAP_RESERVATION_MINUTES * MS_PER_MINUTE,
-                    endOfDay.getTime(),
-                ),
-            ),
-        });
+    // On touch a plain drag must keep scrolling the grid, so a selection starts on a long press; a
+    // quick tap books a fixed slot. The compat mouse events a tap emits are discarded by handleMouseUp.
+    const endTouchPress = () => {
+        if (touchPressRef.current) window.clearTimeout(touchPressRef.current.timeoutId);
+        touchPressRef.current = null;
     };
+
+    const getTouchHandlers = (roomId: number): React.HTMLAttributes<HTMLDivElement> => ({
+        onPointerDown: (e) => {
+            if (e.pointerType !== "touch" || e.target !== e.currentTarget) return;
+            endTouchPress();
+
+            const rect = e.currentTarget.getBoundingClientRect();
+            const startTime = roundToNearestMinutes(
+                getTimeFromPixels(e.clientY - rect.top, input.currentDate, input.pixelsPerHour),
+                input.intervalMinutes,
+            );
+            const endOfDay = new Date(input.currentDate);
+            endOfDay.setHours(END_HOUR, 0, 0, 0);
+            if (startTime >= endOfDay) return;
+
+            touchPressRef.current = {
+                roomId,
+                startTime,
+                clientX: e.clientX,
+                clientY: e.clientY,
+                timeoutId: window.setTimeout(() => {
+                    touchDragActiveRef.current = true;
+                    setSelectedEventId(null);
+                    setDragSelection({
+                        roomId,
+                        startTime,
+                        endTime: new Date(
+                            Math.min(
+                                startTime.getTime() + input.intervalMinutes * MS_PER_MINUTE,
+                                endOfDay.getTime(),
+                            ),
+                        ),
+                        isDragging: true,
+                        isActive: true,
+                    });
+                }, LONG_PRESS_MS),
+            };
+        },
+        onPointerMove: (e) => {
+            if (e.pointerType !== "touch") return;
+            if (touchDragActiveRef.current) {
+                handleSelectionMove(e);
+                return;
+            }
+            const press = touchPressRef.current;
+            if (
+                press &&
+                Math.hypot(e.clientX - press.clientX, e.clientY - press.clientY) >
+                    LONG_PRESS_MOVE_TOLERANCE_PX
+            ) {
+                endTouchPress();
+            }
+        },
+        onPointerUp: (e) => {
+            if (e.pointerType !== "touch") return;
+            if (touchDragActiveRef.current) {
+                touchDragActiveRef.current = false;
+                endTouchPress();
+                handleMouseUp();
+                return;
+            }
+
+            const press = touchPressRef.current;
+            endTouchPress();
+            if (!press) return;
+
+            const endOfDay = new Date(input.currentDate);
+            endOfDay.setHours(END_HOUR, 0, 0, 0);
+            input.onAddReservation({
+                roomId: press.roomId,
+                startTime: press.startTime,
+                endTime: new Date(
+                    Math.min(
+                        press.startTime.getTime() + TAP_RESERVATION_MINUTES * MS_PER_MINUTE,
+                        endOfDay.getTime(),
+                    ),
+                ),
+            });
+        },
+        onPointerCancel: () => {
+            endTouchPress();
+            if (touchDragActiveRef.current) {
+                touchDragActiveRef.current = false;
+                setDragSelection(null);
+            }
+        },
+        onContextMenu: (e) => {
+            if (touchPressRef.current || touchDragActiveRef.current) e.preventDefault();
+        },
+    });
 
     const handleDragStartEvent = (e: React.MouseEvent, event: Reservation) => {
         if (!event.canEdit) return;
@@ -296,7 +377,8 @@ export function useSchedulerInteractions(input: {
         setSelectedEventId,
         handleGlobalMouseMove,
         handleMouseDownOnGrid,
-        handleTapOnGrid,
+        getTouchHandlers,
+        touchDragActiveRef,
         handleMouseUp,
         handleDragStartEvent,
     };
