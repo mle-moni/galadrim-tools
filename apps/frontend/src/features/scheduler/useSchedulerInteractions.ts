@@ -7,6 +7,19 @@ import { getTimeFromPixels, roundToNearestMinutes } from "./utils";
 
 const MS_PER_MINUTE = 60_000;
 const SELECTION_ACTIVATE_DELAY_MS = 100;
+const TAP_RESERVATION_MINUTES = 30;
+const LONG_PRESS_MS = 400;
+const LONG_PRESS_MOVE_TOLERANCE_PX = 10;
+
+interface TouchPress {
+    pointerId: number;
+    timeoutId: number;
+    roomId: number;
+    startTime: Date;
+    tapEndTime: Date;
+    clientX: number;
+    clientY: number;
+}
 
 interface MovingState {
     originalReservation: Reservation;
@@ -24,6 +37,9 @@ export function useSchedulerInteractions(input: {
     onUpdateReservation: (reservation: Reservation) => void;
 }) {
     const dragActivateTimeoutRef = useRef<number | null>(null);
+    const touchPressRef = useRef<TouchPress | null>(null);
+    const touchDragActiveRef = useRef(false);
+    const pendingTapRef = useRef<TouchPress | null>(null);
 
     useEffect(() => {
         return () => {
@@ -31,6 +47,7 @@ export function useSchedulerInteractions(input: {
                 window.clearTimeout(dragActivateTimeoutRef.current);
                 dragActivateTimeoutRef.current = null;
             }
+            if (touchPressRef.current) window.clearTimeout(touchPressRef.current.timeoutId);
         };
     }, []);
 
@@ -164,6 +181,106 @@ export function useSchedulerInteractions(input: {
         }, SELECTION_ACTIVATE_DELAY_MS);
     };
 
+    // On touch a plain drag must keep scrolling the grid, so a selection starts on a long press. A quick
+    // tap books on click, which browsers don't fire for a touch that only stops a scroll fling.
+    const endTouchPress = () => {
+        if (touchPressRef.current) window.clearTimeout(touchPressRef.current.timeoutId);
+        touchPressRef.current = null;
+    };
+
+    const cancelTouchPress = () => {
+        endTouchPress();
+        if (touchDragActiveRef.current) {
+            touchDragActiveRef.current = false;
+            setDragSelection(null);
+        }
+    };
+
+    const getTouchHandlers = (roomId: number): React.HTMLAttributes<HTMLDivElement> => ({
+        onPointerDown: (e) => {
+            pendingTapRef.current = null;
+            if (e.pointerType !== "touch" || !e.isPrimary || e.target !== e.currentTarget) return;
+            cancelTouchPress();
+
+            const rect = e.currentTarget.getBoundingClientRect();
+            const startTime = roundToNearestMinutes(
+                getTimeFromPixels(e.clientY - rect.top, input.currentDate, input.pixelsPerHour),
+                input.intervalMinutes,
+            );
+            const endOfDay = new Date(input.currentDate);
+            endOfDay.setHours(END_HOUR, 0, 0, 0);
+            if (startTime >= endOfDay) return;
+            const capAtEndOfDay = (minutes: number) =>
+                new Date(
+                    Math.min(startTime.getTime() + minutes * MS_PER_MINUTE, endOfDay.getTime()),
+                );
+
+            touchPressRef.current = {
+                pointerId: e.pointerId,
+                roomId,
+                startTime,
+                tapEndTime: capAtEndOfDay(TAP_RESERVATION_MINUTES),
+                clientX: e.clientX,
+                clientY: e.clientY,
+                timeoutId: window.setTimeout(() => {
+                    touchDragActiveRef.current = true;
+                    setSelectedEventId(null);
+                    setDragSelection({
+                        roomId,
+                        startTime,
+                        endTime: capAtEndOfDay(input.intervalMinutes),
+                        isDragging: true,
+                        isActive: true,
+                    });
+                }, LONG_PRESS_MS),
+            };
+        },
+        onPointerMove: (e) => {
+            const press = touchPressRef.current;
+            if (e.pointerId !== press?.pointerId) return;
+            if (touchDragActiveRef.current) {
+                handleSelectionMove(e);
+                return;
+            }
+            if (
+                Math.hypot(e.clientX - press.clientX, e.clientY - press.clientY) >
+                LONG_PRESS_MOVE_TOLERANCE_PX
+            ) {
+                endTouchPress();
+            }
+        },
+        onPointerUp: (e) => {
+            if (e.pointerId !== touchPressRef.current?.pointerId) return;
+            if (touchDragActiveRef.current) {
+                touchDragActiveRef.current = false;
+                endTouchPress();
+                handleMouseUp();
+                return;
+            }
+
+            pendingTapRef.current = touchPressRef.current;
+            endTouchPress();
+        },
+        onClick: () => {
+            const press = pendingTapRef.current;
+            pendingTapRef.current = null;
+            if (!press) return;
+
+            input.onAddReservation({
+                roomId: press.roomId,
+                startTime: press.startTime,
+                endTime: press.tapEndTime,
+            });
+        },
+        onPointerCancel: (e) => {
+            if (e.pointerId !== touchPressRef.current?.pointerId) return;
+            cancelTouchPress();
+        },
+        onContextMenu: (e) => {
+            if (touchPressRef.current) e.preventDefault();
+        },
+    });
+
     const handleDragStartEvent = (e: React.MouseEvent, event: Reservation) => {
         if (!event.canEdit) return;
 
@@ -266,6 +383,8 @@ export function useSchedulerInteractions(input: {
         setSelectedEventId,
         handleGlobalMouseMove,
         handleMouseDownOnGrid,
+        getTouchHandlers,
+        touchDragActiveRef,
         handleMouseUp,
         handleDragStartEvent,
     };
