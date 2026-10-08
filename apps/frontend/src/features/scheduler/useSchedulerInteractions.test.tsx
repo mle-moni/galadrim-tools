@@ -1,15 +1,17 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, render } from "@testing-library/react";
+import type { ComponentProps } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import SchedulerRoomColumn from "./SchedulerRoomColumn";
-import type { Reservation } from "./types";
 import { useSchedulerInteractions } from "./useSchedulerInteractions";
+
+type Props = ComponentProps<typeof SchedulerRoomColumn>;
 
 const PIXELS_PER_HOUR = 60;
 const currentDate = new Date(2026, 9, 5);
 
-function renderColumn(events: Parameters<typeof SchedulerRoomColumn>[0]["events"] = []) {
+function renderColumn(events: Props["events"] = []) {
     const onAddReservation = vi.fn();
     let column: HTMLDivElement | null = null;
 
@@ -25,7 +27,7 @@ function renderColumn(events: Parameters<typeof SchedulerRoomColumn>[0]["events"
         });
         return (
             <SchedulerRoomColumn
-                room={{ id: 7 } as Parameters<typeof SchedulerRoomColumn>[0]["room"]}
+                room={{ id: 7 } as Props["room"]}
                 gridHeight={660}
                 pixelsPerHour={PIXELS_PER_HOUR}
                 hourIntervals={[]}
@@ -127,10 +129,8 @@ describe("touch on the room grid", () => {
             height: 60,
             left: 0,
             width: 100,
-        } as unknown as Reservation;
-        const { container, onAddReservation } = renderColumn([
-            event as Parameters<typeof SchedulerRoomColumn>[0]["events"][number],
-        ]);
+        } as unknown as Props["events"][number];
+        const { container, onAddReservation } = renderColumn([event]);
 
         const block = container.querySelector("#room-col-7 > div.absolute.flex") as HTMLElement;
         tap(block, 450);

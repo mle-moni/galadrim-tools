@@ -16,6 +16,7 @@ interface TouchPress {
     timeoutId: number;
     roomId: number;
     startTime: Date;
+    tapEndTime: Date;
     clientX: number;
     clientY: number;
 }
@@ -187,15 +188,19 @@ export function useSchedulerInteractions(input: {
         touchPressRef.current = null;
     };
 
+    const cancelTouchPress = () => {
+        endTouchPress();
+        if (touchDragActiveRef.current) {
+            touchDragActiveRef.current = false;
+            setDragSelection(null);
+        }
+    };
+
     const getTouchHandlers = (roomId: number): React.HTMLAttributes<HTMLDivElement> => ({
         onPointerDown: (e) => {
             pendingTapRef.current = null;
             if (e.pointerType !== "touch" || !e.isPrimary || e.target !== e.currentTarget) return;
-            endTouchPress();
-            if (touchDragActiveRef.current) {
-                touchDragActiveRef.current = false;
-                setDragSelection(null);
-            }
+            cancelTouchPress();
 
             const rect = e.currentTarget.getBoundingClientRect();
             const startTime = roundToNearestMinutes(
@@ -205,11 +210,16 @@ export function useSchedulerInteractions(input: {
             const endOfDay = new Date(input.currentDate);
             endOfDay.setHours(END_HOUR, 0, 0, 0);
             if (startTime >= endOfDay) return;
+            const capAtEndOfDay = (minutes: number) =>
+                new Date(
+                    Math.min(startTime.getTime() + minutes * MS_PER_MINUTE, endOfDay.getTime()),
+                );
 
             touchPressRef.current = {
                 pointerId: e.pointerId,
                 roomId,
                 startTime,
+                tapEndTime: capAtEndOfDay(TAP_RESERVATION_MINUTES),
                 clientX: e.clientX,
                 clientY: e.clientY,
                 timeoutId: window.setTimeout(() => {
@@ -218,12 +228,7 @@ export function useSchedulerInteractions(input: {
                     setDragSelection({
                         roomId,
                         startTime,
-                        endTime: new Date(
-                            Math.min(
-                                startTime.getTime() + input.intervalMinutes * MS_PER_MINUTE,
-                                endOfDay.getTime(),
-                            ),
-                        ),
+                        endTime: capAtEndOfDay(input.intervalMinutes),
                         isDragging: true,
                         isActive: true,
                     });
@@ -261,29 +266,18 @@ export function useSchedulerInteractions(input: {
             pendingTapRef.current = null;
             if (!press) return;
 
-            const endOfDay = new Date(input.currentDate);
-            endOfDay.setHours(END_HOUR, 0, 0, 0);
             input.onAddReservation({
                 roomId: press.roomId,
                 startTime: press.startTime,
-                endTime: new Date(
-                    Math.min(
-                        press.startTime.getTime() + TAP_RESERVATION_MINUTES * MS_PER_MINUTE,
-                        endOfDay.getTime(),
-                    ),
-                ),
+                endTime: press.tapEndTime,
             });
         },
         onPointerCancel: (e) => {
             if (e.pointerId !== touchPressRef.current?.pointerId) return;
-            endTouchPress();
-            if (touchDragActiveRef.current) {
-                touchDragActiveRef.current = false;
-                setDragSelection(null);
-            }
+            cancelTouchPress();
         },
         onContextMenu: (e) => {
-            if (touchPressRef.current || touchDragActiveRef.current) e.preventDefault();
+            if (touchPressRef.current) e.preventDefault();
         },
     });
 
