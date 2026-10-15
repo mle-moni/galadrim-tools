@@ -52,6 +52,11 @@ function getReservationOwnerLabel(reservation: ApiRoomReservationWithUser): stri
     return reservation.user?.username ?? reservation.titleComputed ?? "Quelqu'un";
 }
 
+// Phoneboxes are shown on the map but can't be booked from the app.
+function isRoomBookable(room: ApiOfficeRoom): boolean {
+    return room.isBookable && !room.isPhonebox;
+}
+
 function getRoomAtPoint(
     rooms: ApiOfficeRoom[],
     point: { x: number; y: number },
@@ -109,13 +114,13 @@ export default function OfficeFloorCanvas(props: {
 
     const hoveredRoomReservedNow = useMemo(() => {
         if (!hoveredRoom) return null;
-        if (!hoveredRoom.isBookable) return null;
+        if (!isRoomBookable(hoveredRoom)) return null;
         return reservedRoomIds.has(hoveredRoom.id);
     }, [hoveredRoom, reservedRoomIds]);
 
     const hoveredRoomActiveReservation = useMemo(() => {
         if (!hoveredRoom) return null;
-        if (!hoveredRoom.isBookable) return null;
+        if (!isRoomBookable(hoveredRoom)) return null;
         return activeReservationsByRoomId.get(hoveredRoom.id) ?? null;
     }, [activeReservationsByRoomId, hoveredRoom]);
 
@@ -150,6 +155,10 @@ export default function OfficeFloorCanvas(props: {
 
     const hoveredRoomStatus = useMemo(() => {
         if (!hoveredRoom) return null;
+
+        if (hoveredRoom.isPhonebox) {
+            return { className: "text-sky-700", text: "Phonebox · non réservable" };
+        }
 
         if (!hoveredRoom.isBookable) {
             return { className: "text-slate-600", text: "Non réservable" };
@@ -196,20 +205,25 @@ export default function OfficeFloorCanvas(props: {
             const polygon = room.config.points.map((p) => getCanvasCoordinates(p, canvas));
             if (polygon.length < 3) continue;
 
-            const reserved = room.isBookable && reservedRoomIds.has(room.id);
+            const bookable = isRoomBookable(room);
+            const reserved = bookable && reservedRoomIds.has(room.id);
             const isHovered = hoveredRoomId === room.id;
             const isHighlighted = props.highlightedRoomIds?.has(room.id);
 
-            const fill = !room.isBookable
-                ? "#e2e8f0" // slate-200
-                : reserved
-                  ? "#fecaca" // red-200
-                  : "#dcfce7"; // green-100
-            const hoverFill = !room.isBookable
-                ? "#cbd5e1" // slate-300
-                : reserved
-                  ? "#fca5a5" // red-300
-                  : "#bbf7d0"; // green-200
+            const fill = room.isPhonebox
+                ? "#e0f2fe" // sky-100
+                : !bookable
+                  ? "#e2e8f0" // slate-200
+                  : reserved
+                    ? "#fecaca" // red-200
+                    : "#dcfce7"; // green-100
+            const hoverFill = room.isPhonebox
+                ? "#bae6fd" // sky-200
+                : !bookable
+                  ? "#cbd5e1" // slate-300
+                  : reserved
+                    ? "#fca5a5" // red-300
+                    : "#bbf7d0"; // green-200
             const highlightedFill = "#fef08a"; // yellow-200
 
             ctx.beginPath();
@@ -224,13 +238,17 @@ export default function OfficeFloorCanvas(props: {
 
             ctx.strokeStyle = isHighlighted
                 ? "#eab308" // yellow-500
-                : !room.isBookable
+                : room.isPhonebox
                   ? isHovered
-                      ? "#64748b"
-                      : "#94a3b8" // slate-500 / slate-400
-                  : reserved
-                    ? "#fca5a5" // red-300
-                    : "#bbf7d0"; // green-200
+                      ? "#0ea5e9"
+                      : "#7dd3fc" // sky-500 / sky-300
+                  : !bookable
+                    ? isHovered
+                        ? "#64748b"
+                        : "#94a3b8" // slate-500 / slate-400
+                    : reserved
+                      ? "#fca5a5" // red-300
+                      : "#bbf7d0"; // green-200
             ctx.lineWidth = isHighlighted || isHovered ? 2 : 1;
             ctx.stroke();
         }
@@ -278,7 +296,8 @@ export default function OfficeFloorCanvas(props: {
                     const hovered = getRoomAtPoint(props.rooms, { x, y }, canvas);
                     setHoveredRoomId(hovered?.id ?? null);
                     setHoveredPoint(hovered ? { x, y } : null);
-                    canvas.style.cursor = hovered?.isBookable ? "pointer" : "default";
+                    canvas.style.cursor =
+                        hovered && isRoomBookable(hovered) ? "pointer" : "default";
                 }}
                 onMouseLeave={() => {
                     const canvas = canvasRef.current;
@@ -300,7 +319,7 @@ export default function OfficeFloorCanvas(props: {
 
                     const clicked = getRoomAtPoint(props.rooms, { x, y }, canvas);
                     if (!clicked) return;
-                    if (!clicked.isBookable) return;
+                    if (!isRoomBookable(clicked)) return;
                     props.onRoomClick(clicked);
                 }}
                 style={{ display: "block" }}
