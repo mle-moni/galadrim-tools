@@ -340,7 +340,7 @@ export default function VisuelPage(props: {
 
                                 <div className="flex-1">
                                     <OfficeFloorCanvas
-                                        rooms={rooms.filter((r) => !r.isPhonebox)}
+                                        rooms={rooms}
                                         reservations={reservationsQuery.data ?? []}
                                         onRoomClick={handleRoomClick}
                                         highlightedRoomIds={matchingRoomIds}
