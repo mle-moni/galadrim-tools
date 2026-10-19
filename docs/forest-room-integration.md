@@ -126,3 +126,23 @@ node_modules are excluded from the test image. This command is not a production 
 
 Public Forest access and removal of Tools for rooms require separate user approval.
 The pilot alone does not migrate booking ownership away from Tools or retire its service.
+
+
+## Two-application fixture
+
+Forest's guarded `rooms:preview:twoapps` launcher runs this companion with a
+disposable MySQL target. `forest_rooms_fixture.spec.ts` is skipped unless
+`TOOLS_ROOMS_LIVE_FIXTURE=1`; it verifies SQL hostname, database, account and
+marker and refuses an existing office 1 before creating synthetic identities.
+The scoped, expiring integration credential grants read, write and generic
+`rooms:end` capabilities only for the fixture office. It never enables a
+sensor API or sensor audit in Tools.
+
+The private handoff is written mode 0600 on the internal test network. Tokens
+are never logged or returned to a browser. A bounded 15-minute handshake keeps
+the actual API running while Forest exercises real bookings and its own sensor
+worker/history. Forest stops writers before completing the handshake. Tools
+then removes only fixture-owned receipts, office and users, and asserts their
+absence. Existing tables and volumes are preserved, and cleanup failures remain
+visible. See Forest's `docs/room-reservations/preview-verification.md` for the
+reproducible verify, browser and human acceptance scenarios.
