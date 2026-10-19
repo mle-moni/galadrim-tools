@@ -5,7 +5,8 @@ export type ReservationErrorCode =
     | "NOT_BOOKABLE"
     | "PHONEBOX_NOT_BOOKABLE"
     | "RESERVATION_OVERLAP"
-    | "FORBIDDEN";
+    | "FORBIDDEN"
+    | "RESERVATION_CHANGED";
 
 export class ReservationServiceError extends Error {
     constructor(

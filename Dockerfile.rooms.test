@@ -1,0 +1,16 @@
+FROM node:24-bookworm-slim
+RUN npm install --global pnpm@10.0.0
+WORKDIR /app
+RUN chown node:node /app
+USER node
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml biome.json ./
+COPY --chown=node:node apps/backend/package.json ./apps/backend/package.json
+COPY --chown=node:node apps/frontend/package.json ./apps/frontend/package.json
+COPY --chown=node:node libs/shared/package.json ./libs/shared/package.json
+RUN pnpm install --filter backend... --frozen-lockfile
+COPY --chown=node:node libs/shared/src ./libs/shared/src
+COPY --chown=node:node libs/shared/tsconfig.json ./libs/shared/tsconfig.json
+RUN pnpm --filter @galadrim-tools/shared build
+COPY --chown=node:node apps/backend ./apps/backend
+WORKDIR /app/apps/backend
+CMD ["node", "scripts/room_tests.mjs", "--target", "rooms-test"]

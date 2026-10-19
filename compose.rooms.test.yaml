@@ -1,0 +1,70 @@
+# A separate disposable project; no normal Tools database, ports or real credentials.
+name: tools-forest-rooms-test
+services:
+  mysql:
+    image: mysql:8.4
+    hostname: tools-forest-rooms-test-mysql
+    environment:
+      MYSQL_DATABASE: tools_forest_rooms_test
+      MYSQL_ROOT_PASSWORD: disposable-tools-root-password
+      MYSQL_USER: rooms_test
+      MYSQL_PASSWORD: disposable-tools-app-password
+    volumes:
+      - rooms-test-db:/var/lib/mysql
+      - ./apps/backend/scripts/rooms_test_init.sql:/docker-entrypoint-initdb.d/rooms-target.sql:ro
+    networks: [tests]
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysql -h localhost -u root -e 'SELECT 1' >/dev/null"]
+      interval: 2s
+      timeout: 5s
+      retries: 45
+      start_period: 30s
+  runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.rooms.test
+    init: true
+    read_only: true
+    environment:
+      NODE_ENV: test
+      TOOLS_ROOMS_TEST: "1"
+      PORT: "3333"
+      HOST: "0.0.0.0"
+      LOG_LEVEL: error
+      APP_KEY: synthetic-room-tests-app-key-32-characters
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_USER: rooms_test
+      DB_PASSWORD: disposable-tools-app-password
+      DB_DATABASE: tools_forest_rooms_test
+      MAILGUN_API_KEY: synthetic-no-mail
+      MAILGUN_DOMAIN: example.test
+      SESSION_DRIVER: cookie
+      COOKIE_DOMAIN: localhost
+      CORS_ORIGINS: http://127.0.0.1
+      CACHE_VIEWS: "false"
+      GALADRIM_SECRET_KEY: synthetic-room-tests-only
+      BACKEND_URL: http://127.0.0.1:3333
+      FRONTEND_URL: http://127.0.0.1:3333
+      PORTRAIT_CARD_FETCH_URL: http://127.0.0.1:3333/disabled
+      SENSORS_SECRET: synthetic-room-tests-only
+      TZ: UTC
+    volumes:
+      - ./apps/backend/app:/app/apps/backend/app:ro
+      - ./apps/backend/database/migrations:/app/apps/backend/database/migrations:ro
+      - ./apps/backend/scripts:/app/apps/backend/scripts:ro
+      - ./apps/backend/tests:/app/apps/backend/tests:ro
+      - ./apps/backend/start:/app/apps/backend/start:ro
+      - ./apps/backend/config:/app/apps/backend/config:ro
+    tmpfs:
+      - /tmp:uid=1000,gid=1000,mode=1777
+      - /app/apps/backend/tmp:uid=1000,gid=1000,mode=1777
+    networks: [tests]
+    depends_on:
+      mysql:
+        condition: service_healthy
+networks:
+  tests:
+    internal: true
+volumes:
+  rooms-test-db:

@@ -9,6 +9,12 @@ export default class RoomReservation extends BaseModel {
     declare id: number;
 
     @column()
+    declare integrationVersion: number;
+
+    @column.dateTime()
+    declare allocationAt: DateTime;
+
+    @column()
     declare title: string | null;
 
     @column.dateTime()
