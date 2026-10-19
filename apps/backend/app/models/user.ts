@@ -1,6 +1,3 @@
-import { ATTACHMENT_COLUMN } from "#services/attachment";
-import { formatDateToNumber } from "#services/date";
-import env from "#start/env";
 import { DbAccessTokensProvider } from "@adonisjs/auth/access_tokens";
 import { withAuthFinder } from "@adonisjs/auth/mixins/lucid";
 import { DbRememberMeTokensProvider } from "@adonisjs/auth/session";
@@ -19,6 +16,9 @@ import {
     hasSomeRights,
 } from "@galadrim-tools/shared";
 import type { DateTime } from "luxon";
+import { ATTACHMENT_COLUMN } from "#services/attachment";
+import { formatDateToNumber } from "#services/date";
+import env from "#start/env";
 import Notification from "./notification.js";
 import Office from "./office.js";
 import PortraitGuess from "./portrait_guess.js";
@@ -173,6 +173,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
         return { id: this.id, username: this.username, rights: this.rights };
     }
 
+    static forestRoomTokens = DbAccessTokensProvider.forModel(User, {
+        type: "forest_room_integration",
+        prefix: "frt_",
+    });
     static accessTokens = DbAccessTokensProvider.forModel(User);
     static rememberMeTokens = DbRememberMeTokensProvider.forModel(User);
 }

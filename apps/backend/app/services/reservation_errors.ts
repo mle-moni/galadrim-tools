@@ -1,4 +1,5 @@
 export type ReservationErrorCode =
+    | "INVALID_TITLE"
     | "INVALID_DATE"
     | "INVALID_DATE_RANGE"
     | "INVALID_ROOM"

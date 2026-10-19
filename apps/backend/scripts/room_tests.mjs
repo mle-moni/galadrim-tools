@@ -40,7 +40,7 @@ try {
 }
 for (const args of [
     ["ace.js", "migration:run", "--force"],
-    ["ace.js", "test", "functional", "--files=tests/functional/room_reservations.spec.ts"],
+    ["ace.js", "test", "functional"],
 ]) {
     const result = spawnSync(process.execPath, args, { stdio: "inherit", env: process.env });
     if (result.error) throw result.error;

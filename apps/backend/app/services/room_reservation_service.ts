@@ -7,11 +7,22 @@ import type User from "#models/user";
 import { reservationUserSelector } from "../controllers/room_reservations/reservation_user_selecter.js";
 import { authorizeOwnedResourceMutation } from "./reservation_authorization.js";
 import { ReservationServiceError } from "./reservation_errors.js";
-import { withExistingReservation, withReservationRooms } from "./reservation_transactions.js";
+import {
+    assertReservationOffice,
+    withExistingReservation,
+    withReservationRooms,
+} from "./reservation_transactions.js";
 
 const DEFAULT_TIMEZONE = "Europe/Paris";
 
 type DateInput = Date | string;
+
+export interface ReservationMutationContext {
+    transaction?: TransactionClientContract;
+    officeId?: number;
+    expectedVersion?: number;
+    maxChangedTitleLength?: number;
+}
 
 export interface ReservationDateRangeInput {
     start: DateInput;
@@ -141,69 +152,108 @@ class RoomReservationService {
             }));
     }
 
-    async create(actor: User, input: CreateReservationInput) {
+    async create(
+        actor: User,
+        input: CreateReservationInput,
+        context: ReservationMutationContext = {},
+    ) {
         const range = this.parseReservationRange(input);
         const userId = input.userId ?? actor.id;
-        return withReservationRooms([input.officeRoomId], async (trx) => {
-            if (userId !== actor.id && !actor.hasRights(["EVENT_ADMIN"])) {
-                throw new ReservationServiceError(
-                    "FORBIDDEN",
-                    "Vous n'avez pas les droits nécessaires",
-                    403,
+        return withReservationRooms(
+            [input.officeRoomId],
+            async (trx) => {
+                if (userId !== actor.id && !actor.hasRights(["EVENT_ADMIN"])) {
+                    throw new ReservationServiceError(
+                        "FORBIDDEN",
+                        "Vous n'avez pas les droits nécessaires",
+                        403,
+                    );
+                }
+                await this.assertOffice(input.officeRoomId, context.officeId, trx);
+                await this.assertRoomCanBeBooked(input.officeRoomId, trx);
+                await this.assertRoomIsAvailable(input.officeRoomId, range.start, range.end, trx);
+                const reservation = await RoomReservation.create(
+                    {
+                        title: input.title ?? null,
+                        start: range.start,
+                        end: range.end,
+                        officeRoomId: input.officeRoomId,
+                        userId,
+                        integrationVersion: 1,
+                        allocationAt: this.allocationNow(),
+                    },
+                    { client: trx },
                 );
-            }
-            await this.assertRoomCanBeBooked(input.officeRoomId, trx);
-            await this.assertRoomIsAvailable(input.officeRoomId, range.start, range.end, trx);
-            const reservation = await RoomReservation.create(
-                {
-                    title: input.title ?? null,
-                    start: range.start,
-                    end: range.end,
-                    officeRoomId: input.officeRoomId,
-                    userId,
-                    integrationVersion: 1,
-                    allocationAt: this.allocationNow(),
-                },
-                { client: trx },
-            );
-            await reservation.load("user", reservationUserSelector);
-            return reservation;
-        });
+                await reservation.load("user", reservationUserSelector);
+                return reservation;
+            },
+            context.transaction,
+        );
     }
 
-    async update(actor: User, id: number, input: UpdateReservationInput) {
+    async update(
+        actor: User,
+        id: number,
+        input: UpdateReservationInput,
+        context: ReservationMutationContext = {},
+    ) {
         const range = this.parseReservationRange(input);
-        return withExistingReservation(id, input.officeRoomId, async (trx, reservation) => {
-            authorizeOwnedResourceMutation(actor, reservation, "EVENT_ADMIN");
-            await this.assertRoomCanBeBooked(input.officeRoomId, trx);
-            await this.assertRoomIsAvailable(
-                input.officeRoomId,
-                range.start,
-                range.end,
-                trx,
-                reservation.id,
-            );
-            const reallocated =
-                reservation.officeRoomId !== input.officeRoomId ||
-                reservation.start.toMillis() !== range.start.toMillis();
-            reservation.title = input.title;
-            reservation.start = range.start;
-            reservation.end = range.end;
-            reservation.officeRoomId = input.officeRoomId;
-            reservation.integrationVersion++;
-            if (reallocated) reservation.allocationAt = this.allocationNow();
-            await reservation.save();
-            await reservation.load("user", reservationUserSelector);
-            return reservation;
-        });
+        return withExistingReservation(
+            id,
+            input.officeRoomId,
+            async (trx, reservation) => {
+                await this.assertOffice(reservation.officeRoomId, context.officeId, trx);
+                this.assertVersion(reservation, context.expectedVersion);
+                authorizeOwnedResourceMutation(actor, reservation, "EVENT_ADMIN");
+                await this.assertOffice(input.officeRoomId, context.officeId, trx);
+                await this.assertRoomCanBeBooked(input.officeRoomId, trx);
+                await this.assertRoomIsAvailable(
+                    input.officeRoomId,
+                    range.start,
+                    range.end,
+                    trx,
+                    reservation.id,
+                );
+                const reallocated =
+                    reservation.officeRoomId !== input.officeRoomId ||
+                    reservation.start.toMillis() !== range.start.toMillis();
+                if (
+                    context.maxChangedTitleLength !== undefined &&
+                    input.title !== reservation.title &&
+                    (input.title?.length ?? 0) > context.maxChangedTitleLength
+                )
+                    throw new ReservationServiceError(
+                        "INVALID_TITLE",
+                        "Le titre est trop long",
+                        400,
+                    );
+                reservation.title = input.title;
+                reservation.start = range.start;
+                reservation.end = range.end;
+                reservation.officeRoomId = input.officeRoomId;
+                reservation.integrationVersion++;
+                if (reallocated) reservation.allocationAt = this.allocationNow();
+                await reservation.save();
+                await reservation.load("user", reservationUserSelector);
+                return reservation;
+            },
+            context.transaction,
+        );
     }
 
-    async delete(actor: User, id: number) {
-        return withExistingReservation(id, null, async (_trx, reservation) => {
-            authorizeOwnedResourceMutation(actor, reservation, "EVENT_ADMIN");
-            await reservation.delete();
-            return id;
-        });
+    async delete(actor: User, id: number, context: ReservationMutationContext = {}) {
+        return withExistingReservation(
+            id,
+            null,
+            async (trx, reservation) => {
+                await this.assertOffice(reservation.officeRoomId, context.officeId, trx);
+                this.assertVersion(reservation, context.expectedVersion);
+                authorizeOwnedResourceMutation(actor, reservation, "EVENT_ADMIN");
+                await reservation.delete();
+                return id;
+            },
+            context.transaction,
+        );
     }
 
     // These bot-only paths share room locks but preserve phone-box eligibility.
@@ -267,6 +317,24 @@ class RoomReservationService {
             await last.load("user");
             return last;
         });
+    }
+
+    private async assertOffice(
+        roomId: number,
+        officeId: number | undefined,
+        trx: TransactionClientContract,
+    ) {
+        if (officeId === undefined) return;
+        await assertReservationOffice(roomId, officeId, trx);
+    }
+
+    private assertVersion(reservation: RoomReservation, expected: number | undefined) {
+        if (expected !== undefined && reservation.integrationVersion !== expected)
+            throw new ReservationServiceError(
+                "RESERVATION_CHANGED",
+                "La réservation a changé",
+                409,
+            );
     }
 
     private allocationNow() {

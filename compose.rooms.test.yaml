@@ -28,6 +28,10 @@ services:
     environment:
       NODE_ENV: test
       TOOLS_ROOMS_TEST: "1"
+      FOREST_ROOMS_INTEGRATION_ENABLED: "true"
+      FOREST_ROOMS_INTEGRATION_WRITE_ENABLED: "true"
+      FOREST_ROOMS_INTEGRATION_END_ENABLED: "true"
+      FOREST_ROOMS_OFFICE_IDS: "1"
       PORT: "3333"
       HOST: "0.0.0.0"
       LOG_LEVEL: error
@@ -51,6 +55,8 @@ services:
       TZ: UTC
     volumes:
       - ./apps/backend/app:/app/apps/backend/app:ro
+      - ./apps/backend/commands:/app/apps/backend/commands:ro
+      - ./apps/backend/adonisrc.ts:/app/apps/backend/adonisrc.ts:ro
       - ./apps/backend/database/migrations:/app/apps/backend/database/migrations:ro
       - ./apps/backend/scripts:/app/apps/backend/scripts:ro
       - ./apps/backend/tests:/app/apps/backend/tests:ro

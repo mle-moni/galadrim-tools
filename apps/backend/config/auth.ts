@@ -13,6 +13,12 @@ const authConfig = defineConfig({
                 model: () => import("#models/user"),
             }),
         }),
+        forestRooms: tokensGuard({
+            provider: tokensUserProvider({
+                tokens: "forestRoomTokens",
+                model: () => import("#models/user"),
+            }),
+        }),
         api: tokensGuard({
             provider: tokensUserProvider({
                 tokens: "accessTokens",
