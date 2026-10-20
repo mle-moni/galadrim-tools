@@ -242,7 +242,9 @@ test.group("Shared reservation transactions", (group) => {
             assert.equal(booking.integrationVersion, 2);
         }
     });
-    test("legacy day selection remains unchanged", async ({ assert }) => {
+    test("day reads use Paris civil-day bounds and retain start-based selection", async ({
+        assert,
+    }) => {
         const seed = async (start: string, end: string) => {
             const [id] = await db.table("room_reservations").insert({
                 office_room_id: room.id,
@@ -252,12 +254,12 @@ test.group("Shared reservation transactions", (group) => {
             });
             return Number(id);
         };
-        // Preserve existing Tools semantics, including its UTC 24-hour day window.
+        // Keep start-based selection while respecting 23/25-hour Paris days.
         await seed("2026-03-28T22:30:00Z", "2026-03-29T00:30:00Z");
         const spring = await seed("2026-03-29T21:30:00Z", "2026-03-29T21:45:00Z");
-        const springNextDay = await seed("2026-03-29T22:30:00Z", "2026-03-29T23:00:00Z");
+        await seed("2026-03-29T22:30:00Z", "2026-03-29T23:00:00Z");
         const autumn = await seed("2026-10-25T20:30:00Z", "2026-10-25T21:00:00Z");
-        await seed("2026-10-25T22:30:00Z", "2026-10-25T22:45:00Z");
+        const autumnLastHour = await seed("2026-10-25T22:30:00Z", "2026-10-25T22:45:00Z");
         const springDay = await roomReservationService.listForOfficeDays(office.id, [
             "2026-03-29T12:00:00Z",
         ]);
@@ -266,11 +268,11 @@ test.group("Shared reservation transactions", (group) => {
         ]);
         assert.deepEqual(
             springDay.map((row) => row.id).sort((a, b) => a - b),
-            [spring, springNextDay].sort((a, b) => a - b),
+            [spring],
         );
         assert.deepEqual(
-            autumnDay.map((row) => row.id),
-            [autumn],
+            autumnDay.map((row) => row.id).sort((a, b) => a - b),
+            [autumn, autumnLastHour].sort((a, b) => a - b),
         );
     });
     test("phone-box future bot selection remains unchanged while versions are updated", async ({

@@ -299,8 +299,9 @@ class RoomReservationService {
 
     private parseDayRange(day: DateInput, timezone: string) {
         const date = this.parseDateTime(day, timezone).setZone(timezone);
-        const start = date.startOf("day").toUTC();
-        const end = start.plus({ days: 1 });
+        const midnight = date.startOf("day");
+        const start = midnight.toUTC();
+        const end = midnight.plus({ days: 1 }).toUTC();
 
         return { start, end };
     }

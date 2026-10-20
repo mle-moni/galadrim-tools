@@ -11,7 +11,8 @@ and mutate the current booking inside the same transaction. A moved lock set is 
 at most once. Existing socket messages are emitted by callers only after the service
 returns from COMMIT.
 
-The existing Tools day selection and phone-box bot rules stay unchanged. Shared
+Native planning uses Paris civil-day bounds, including 23/25-hour DST days, and
+retains its start-based selection. Phone-box bot rules stay unchanged. Shared
 reservation validation accepts an exclusive end exactly at the next local midnight,
 so bookings created through the Forest API remain editable through ordinary Tools
 writers. Later next-day ends remain invalid. Shared locking and version tracking
