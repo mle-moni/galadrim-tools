@@ -1,13 +1,11 @@
 export type ReservationErrorCode =
-    | "INVALID_TITLE"
     | "INVALID_DATE"
     | "INVALID_DATE_RANGE"
     | "INVALID_ROOM"
     | "NOT_BOOKABLE"
     | "PHONEBOX_NOT_BOOKABLE"
     | "RESERVATION_OVERLAP"
-    | "FORBIDDEN"
-    | "RESERVATION_CHANGED";
+    | "FORBIDDEN";
 
 export class ReservationServiceError extends Error {
     constructor(

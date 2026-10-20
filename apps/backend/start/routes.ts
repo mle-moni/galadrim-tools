@@ -174,18 +174,3 @@ router
 
 router.get("/sensors", [SensorsController, "index"]);
 router.get("/sensors/report", [SensorsController, "report"]);
-
-// Independent server-to-server guard; never accepts ordinary API tokens or web sessions.
-const ForestRoomsController = () => import("#controllers/forest_rooms_controller");
-router
-    .group(() => {
-        router.post("/catalog", [ForestRoomsController, "catalog"]);
-        router.post("/planning", [ForestRoomsController, "planning"]);
-        router.post("/reservations/:id/detail", [ForestRoomsController, "detail"]);
-        router.post("/commands/receipt", [ForestRoomsController, "receipt"]);
-        router.post("/commands/create", [ForestRoomsController, "create"]);
-        router.post("/commands/update", [ForestRoomsController, "update"]);
-        router.post("/commands/cancel", [ForestRoomsController, "cancel"]);
-        router.post("/commands/end", [ForestRoomsController, "end"]);
-    })
-    .prefix("/integrations/forest/rooms/v1/offices/:officeId");

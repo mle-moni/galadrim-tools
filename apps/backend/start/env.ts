@@ -68,10 +68,4 @@ export default await Env.create(new URL("../", import.meta.url), {
      * Variable for phonebox sensors
      */
     SENSORS_SECRET: Env.schema.string(),
-
-    // Operator opt-in, independent of ordinary Tools authentication and writers.
-    FOREST_ROOMS_INTEGRATION_ENABLED: Env.schema.boolean.optional(),
-    FOREST_ROOMS_INTEGRATION_WRITE_ENABLED: Env.schema.boolean.optional(),
-    FOREST_ROOMS_INTEGRATION_END_ENABLED: Env.schema.boolean.optional(),
-    FOREST_ROOMS_OFFICE_IDS: Env.schema.string.optional(),
 });
