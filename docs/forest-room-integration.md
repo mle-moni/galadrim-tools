@@ -11,9 +11,11 @@ and mutate the current booking inside the same transaction. A moved lock set is 
 at most once. Existing socket messages are emitted by callers only after the service
 returns from COMMIT.
 
-The existing Tools day selection, same-day validation and phone-box bot rules stay
-unchanged. This foundation adds shared locking and version tracking to those writers;
-it does not change their calendar or occupancy policy.
+The existing Tools day selection and phone-box bot rules stay unchanged. Shared
+reservation validation accepts an exclusive end exactly at the next local midnight,
+so bookings created through the Forest API remain editable through ordinary Tools
+writers. Later next-day ends remain invalid. Shared locking and version tracking
+apply to all writers; this does not introduce a new phone-box occupancy policy.
 
 `integration_version` increments for updates, including legacy sensor extensions.
 `allocation_at` changes on creation or room/start reallocation and is preserved by

@@ -209,14 +209,40 @@ test.group("Shared reservation transactions", (group) => {
             await roomReservationService.reservePhoneBox(actor, room.id);
         });
     });
-    test("legacy day selection and same-day validation remain unchanged", async ({ assert }) => {
-        await assert.rejects(async () => {
-            await roomReservationService.create(actor, {
+    test("shared date validation accepts exclusive midnight and rejects later next-day ends", async ({
+        assert,
+    }) => {
+        for (const [start, end] of [
+            ["2026-03-29T21:30:00Z", "2026-03-29T22:00:00Z"],
+            ["2026-10-25T22:30:00Z", "2026-10-25T23:00:00Z"],
+        ]) {
+            const booking = await roomReservationService.create(actor, {
                 officeRoomId: room.id,
-                start: "2026-03-29T21:30:00Z",
-                end: "2026-03-29T22:00:00Z",
+                start,
+                end,
             });
-        }, /même journée/);
+            const updated = await roomReservationService.update(actor, booking.id, {
+                officeRoomId: room.id,
+                start,
+                end,
+                title: "Updated in Tools",
+            });
+            assert.equal(updated.end.toMillis(), Date.parse(end));
+            assert.equal(updated.integrationVersion, 2);
+            await assert.rejects(async () => {
+                await roomReservationService.update(actor, booking.id, {
+                    officeRoomId: room.id,
+                    start,
+                    end: new Date(Date.parse(end) + 1000),
+                    title: "Invalid next-day extension",
+                });
+            }, /même journée/);
+            await booking.refresh();
+            assert.equal(booking.end.toMillis(), Date.parse(end));
+            assert.equal(booking.integrationVersion, 2);
+        }
+    });
+    test("legacy day selection remains unchanged", async ({ assert }) => {
         const seed = async (start: string, end: string) => {
             const [id] = await db.table("room_reservations").insert({
                 office_room_id: room.id,

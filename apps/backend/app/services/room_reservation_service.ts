@@ -286,7 +286,8 @@ class RoomReservationService {
             );
         }
 
-        if (!start.setZone(timezone).hasSame(end.setZone(timezone), "day")) {
+        const nextMidnight = start.setZone(timezone).startOf("day").plus({ days: 1 }).toUTC();
+        if (end > nextMidnight) {
             throw new ReservationServiceError(
                 "INVALID_DATE_RANGE",
                 "La date de début et la date de fin doivent être sur la même journée",
