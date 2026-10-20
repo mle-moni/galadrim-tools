@@ -11,6 +11,10 @@ and mutate the current booking inside the same transaction. A moved lock set is 
 at most once. Existing socket messages are emitted by callers only after the service
 returns from COMMIT.
 
+The existing Tools day selection, same-day validation and phone-box bot rules stay
+unchanged. This foundation adds shared locking and version tracking to those writers;
+it does not change their calendar or occupancy policy.
+
 `integration_version` increments for updates, including legacy sensor extensions.
 `allocation_at` changes on creation or room/start reallocation and is preserved by
 end/title-only changes. Existing rows receive a conservative migration-time anchor.

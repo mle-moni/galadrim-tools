@@ -209,24 +209,29 @@ test.group("Shared reservation transactions", (group) => {
             await roomReservationService.reservePhoneBox(actor, room.id);
         });
     });
-    test("Paris spring/fall day reads use local next midnight and accept an exclusive midnight end", async ({
-        assert,
-    }) => {
-        const spring = await roomReservationService.create(actor, {
-            officeRoomId: room.id,
-            start: "2026-03-29T21:30:00Z",
-            end: "2026-03-29T22:00:00Z",
-        });
-        await roomReservationService.create(actor, {
-            officeRoomId: room.id,
-            start: "2026-03-29T22:30:00Z",
-            end: "2026-03-29T23:00:00Z",
-        });
-        const autumn = await roomReservationService.create(actor, {
-            officeRoomId: room.id,
-            start: "2026-10-25T22:30:00Z",
-            end: "2026-10-25T23:00:00Z",
-        });
+    test("legacy day selection and same-day validation remain unchanged", async ({ assert }) => {
+        await assert.rejects(async () => {
+            await roomReservationService.create(actor, {
+                officeRoomId: room.id,
+                start: "2026-03-29T21:30:00Z",
+                end: "2026-03-29T22:00:00Z",
+            });
+        }, /même journée/);
+        const seed = async (start: string, end: string) => {
+            const [id] = await db.table("room_reservations").insert({
+                office_room_id: room.id,
+                user_id: actor.id,
+                start: new Date(start),
+                end: new Date(end),
+            });
+            return Number(id);
+        };
+        // Preserve existing Tools semantics, including its UTC 24-hour day window.
+        await seed("2026-03-28T22:30:00Z", "2026-03-29T00:30:00Z");
+        const spring = await seed("2026-03-29T21:30:00Z", "2026-03-29T21:45:00Z");
+        const springNextDay = await seed("2026-03-29T22:30:00Z", "2026-03-29T23:00:00Z");
+        const autumn = await seed("2026-10-25T20:30:00Z", "2026-10-25T21:00:00Z");
+        await seed("2026-10-25T22:30:00Z", "2026-10-25T22:45:00Z");
         const springDay = await roomReservationService.listForOfficeDays(office.id, [
             "2026-03-29T12:00:00Z",
         ]);
@@ -234,44 +239,33 @@ test.group("Shared reservation transactions", (group) => {
             "2026-10-25T12:00:00Z",
         ]);
         assert.deepEqual(
-            springDay.map((value) => value.id),
-            [spring.id],
+            springDay.map((row) => row.id).sort((a, b) => a - b),
+            [spring, springNextDay].sort((a, b) => a - b),
         );
         assert.deepEqual(
-            autumnDay.map((value) => value.id),
-            [autumn.id],
+            autumnDay.map((row) => row.id),
+            [autumn],
         );
     });
-    test("a future phone-box booking is not shortened or hidden by current sensor updates", async ({
+    test("phone-box future bot selection remains unchanged while versions are updated", async ({
         assert,
     }) => {
-        const futureStart = new Date(Date.now() + 86400000);
-        const futureEnd = new Date(Date.now() + 93600000);
-        await db.table("room_reservations").insert({
+        const [futureId] = await db.table("room_reservations").insert({
             office_room_id: phone.id,
             user_id: actor.id,
-            title: "Future bot fixture",
-            start: futureStart,
-            end: futureEnd,
+            title: "Existing future bot reservation",
+            start: new Date(Date.now() + 3600000),
+            end: new Date(Date.now() + 7200000),
         });
-        const { reservation, created } = await roomReservationService.reservePhoneBox(
-            actor,
-            phone.id,
-        );
-        assert.isTrue(created);
-        assert.isBelow(reservation.end.toMillis(), futureStart.getTime());
-        await db
-            .from("room_reservations")
-            .where("id", reservation.id)
-            .update({ start: new Date(Date.now() - 5000) });
-        const closed = await roomReservationService.endPhoneBox(actor, phone.id);
-        assert.equal(closed?.id, reservation.id);
-        const future = await db
-            .from("room_reservations")
-            .where("office_room_id", phone.id)
-            .where("title", "Future bot fixture")
-            .first();
-        assert.equal(future.integration_version, 1);
-        assert.isAbove(new Date(future.end).getTime(), new Date(future.start).getTime());
+        const result = await roomReservationService.reservePhoneBox(actor, phone.id);
+        assert.isFalse(result.created);
+        assert.equal(result.reservation.id, Number(futureId));
+        const rows = await db.from("room_reservations").where("office_room_id", phone.id);
+        assert.lengthOf(rows, 1);
+        assert.equal(rows[0].integration_version, 2);
+        const ended = await roomReservationService.endPhoneBox(actor, phone.id);
+        assert.equal(ended?.id, Number(futureId));
+        const row = await db.from("room_reservations").where("id", futureId).first();
+        assert.equal(row.integration_version, 3);
     });
 });

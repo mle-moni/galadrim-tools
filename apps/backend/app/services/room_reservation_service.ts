@@ -57,7 +57,7 @@ class RoomReservationService {
             for (const range of ranges) {
                 query.orWhere((rangeQuery) =>
                     rangeQuery
-                        .where("end", ">", range.start.toJSDate())
+                        .where("start", ">=", range.start.toJSDate())
                         .andWhere("start", "<", range.end.toJSDate()),
                 );
             }
@@ -213,17 +213,15 @@ class RoomReservationService {
                 .where("id", officeRoomId)
                 .where("is_phonebox", true)
                 .firstOrFail();
-            const now = this.allocationNow();
+            const now = DateTime.now();
             const last = await RoomReservation.query({ client: trx })
                 .where("officeRoomId", officeRoomId)
                 .where("userId", bot.id)
-                .where("start", "<=", now.toJSDate())
                 .where("end", ">", now.toJSDate())
                 .orderBy("end", "desc")
                 .forUpdate()
                 .first();
             const end = now.plus({ hours: 2 });
-            await this.assertRoomIsAvailable(officeRoomId, last?.start ?? now, end, trx, last?.id);
             let reservation = last;
             if (reservation) {
                 reservation.end = end;
@@ -235,15 +233,15 @@ class RoomReservationService {
                         title: null,
                         officeRoomId,
                         userId: bot.id,
-                        start: now,
+                        start: DateTime.now(),
                         end,
                         integrationVersion: 1,
-                        allocationAt: now,
+                        allocationAt: this.allocationNow(),
                     },
                     { client: trx },
                 );
             }
-            await reservation.load("user", reservationUserSelector);
+            await reservation.load("user");
             return { reservation, created: !last };
         });
     }
@@ -254,20 +252,19 @@ class RoomReservationService {
                 .where("id", officeRoomId)
                 .where("is_phonebox", true)
                 .firstOrFail();
-            const now = this.allocationNow();
+            const now = DateTime.now();
             const last = await RoomReservation.query({ client: trx })
                 .where("officeRoomId", officeRoomId)
                 .where("userId", bot.id)
-                .where("start", "<=", now.toJSDate())
                 .where("end", ">", now.toJSDate())
                 .orderBy("end", "desc")
                 .forUpdate()
                 .first();
-            if (!last || last.start >= now) return null;
-            last.end = now;
+            if (!last) return null;
+            last.end = DateTime.now();
             last.integrationVersion++;
             await last.save();
-            await last.load("user", reservationUserSelector);
+            await last.load("user");
             return last;
         });
     }
@@ -289,8 +286,7 @@ class RoomReservationService {
             );
         }
 
-        const nextMidnight = start.setZone(timezone).startOf("day").plus({ days: 1 }).toUTC();
-        if (end > nextMidnight) {
+        if (!start.setZone(timezone).hasSame(end.setZone(timezone), "day")) {
             throw new ReservationServiceError(
                 "INVALID_DATE_RANGE",
                 "La date de début et la date de fin doivent être sur la même journée",
@@ -302,9 +298,8 @@ class RoomReservationService {
 
     private parseDayRange(day: DateInput, timezone: string) {
         const date = this.parseDateTime(day, timezone).setZone(timezone);
-        const midnight = date.startOf("day");
-        const start = midnight.toUTC();
-        const end = midnight.plus({ days: 1 }).toUTC();
+        const start = date.startOf("day").toUTC();
+        const end = start.plus({ days: 1 });
 
         return { start, end };
     }
