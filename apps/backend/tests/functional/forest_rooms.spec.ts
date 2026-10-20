@@ -14,6 +14,7 @@ import {
     resolveForestActor,
 } from "#services/forest_rooms_service";
 import { roomReservationService } from "#services/room_reservation_service";
+import { Ws } from "#services/ws";
 import env from "#start/env";
 
 const prefix = `forest-api-${randomUUID()}`;
@@ -497,6 +498,95 @@ test.group("Forest integration guard and commands", (group) => {
                 .where("id", roomB.id)
                 .update({ office_floor_id: originalFloorId });
             await foreign.delete();
+        }
+    });
+    test("exclusive midnight bookings remain editable through both Tools and Forest HTTP routes", async ({
+        client,
+        assert,
+    }) => {
+        const ordinary = await User.accessTokens.create(actor, ["*"], { expiresIn: "10 minutes" });
+        if (!ordinary.value) throw new Error("Missing synthetic ordinary credential");
+        const nativeAuthorization = `Bearer ${ordinary.value.release()}`;
+        const nativeBase = `/offices/${office.id}/reservations`;
+        Ws.boot();
+        try {
+            for (const [start, end] of [
+                ["2026-03-29T21:30:00Z", "2026-03-29T22:00:00Z"],
+                ["2026-10-25T22:30:00Z", "2026-10-25T23:00:00Z"],
+            ]) {
+                const input = {
+                    ...allocation(),
+                    start: Date.parse(start),
+                    end: Date.parse(end),
+                    title: "Created in Forest",
+                };
+                const createdInForest = await client
+                    .post(`${base}/commands/create`)
+                    .header("Authorization", `Bearer ${token}`)
+                    .json(input);
+                createdInForest.assertStatus(200);
+                const forestBooking = createdInForest.body().booking;
+                const toolsPlanning = await client
+                    .get(`${nativeBase}?range[]=${encodeURIComponent(start)}`)
+                    .header("Authorization", nativeAuthorization);
+                toolsPlanning.assertStatus(200);
+                assert.include(
+                    toolsPlanning.body().map((row: { id: number }) => String(row.id)),
+                    forestBooking.id,
+                );
+                const editedInTools = await client
+                    .put(`${nativeBase}/${forestBooking.id}`)
+                    .header("Authorization", nativeAuthorization)
+                    .json({ officeRoomId: room.id, start, end, title: "Edited in Tools" });
+                editedInTools.assertStatus(200);
+                const readInForest = await client
+                    .post(`${base}/reservations/${forestBooking.id}/detail`)
+                    .header("Authorization", `Bearer ${token}`)
+                    .json({ actorEmail: actor.email });
+                readInForest.assertStatus(200);
+                assert.equal(readInForest.body().booking.title, "Edited in Tools");
+                assert.equal(readInForest.body().booking.end, input.end);
+                assert.equal(readInForest.body().booking.version, 2);
+                (
+                    await client
+                        .post(`${base}/commands/update`)
+                        .header("Authorization", `Bearer ${token}`)
+                        .json({
+                            ...input,
+                            ...identity(),
+                            bookingId: Number(forestBooking.id),
+                            expectedVersion: 1,
+                        })
+                ).assertStatus(409);
+
+                const createdInTools = await client
+                    .post(nativeBase)
+                    .header("Authorization", nativeAuthorization)
+                    .json({ officeRoomId: roomB.id, start, end, title: "Created in Tools" });
+                createdInTools.assertStatus(200);
+                const toolsBooking = createdInTools.body().reservation;
+                const editedInForest = await client
+                    .post(`${base}/commands/update`)
+                    .header("Authorization", `Bearer ${token}`)
+                    .json({
+                        ...input,
+                        ...identity(),
+                        officeRoomId: roomB.id,
+                        bookingId: toolsBooking.id,
+                        expectedVersion: toolsBooking.integrationVersion,
+                        title: "Edited in Forest",
+                    });
+                editedInForest.assertStatus(200);
+                const readInTools = await client
+                    .get(`${nativeBase}/${toolsBooking.id}`)
+                    .header("Authorization", nativeAuthorization);
+                readInTools.assertStatus(200);
+                assert.equal(readInTools.body().title, "Edited in Forest");
+                assert.equal(Date.parse(readInTools.body().end), input.end);
+                assert.equal(readInTools.body().integrationVersion, 2);
+            }
+        } finally {
+            await User.accessTokens.delete(actor, ordinary.identifier);
         }
     });
     test("HTTP day snapshots preserve legacy titles and the exclusive Paris DST midnight", async ({

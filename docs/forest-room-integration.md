@@ -100,9 +100,9 @@ so bookings created through the Forest API remain editable through ordinary Tool
 writers. Later next-day ends remain invalid.
 
 Ordinary REST, MCP and pre-existing phone-box booking writers share sorted room locks.
-They check ownership/overlap inside the transaction and retry a changed lock set at
-most once. Start-inclusive/end-exclusive adjacency remains available. Generic booking
-versions increment for every update; allocationAt changes only for creation or a
+Human booking commands check ownership/overlap inside the transaction. A changed
+lock set is retried at most once. Start-inclusive/end-exclusive adjacency remains
+available. Generic booking versions increment for every update; allocationAt changes only for creation or a
 room/start reallocation. Existing ongoing rows receive a conservative migration-time
 anchor. Existing socket event names remain compatible and emit after commit; an
 identical command replay does not emit a duplicate mutation event.
