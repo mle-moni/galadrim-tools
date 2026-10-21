@@ -11,11 +11,18 @@ const validationSchema = vine.compile(
 
 const messagesProvider = new SimpleMessagesProvider(DEFAULT_MESSAGE_PROVIDER_CONFIG);
 
-export const reservationsIndex = async ({ params, request }: HttpContext) => {
+export const reservationsIndex = async ({ params, request, auth }: HttpContext) => {
     const { officeId } = params;
     const searchParams = await validationSchema.validate(request.qs(), {
         messagesProvider,
     });
 
-    return roomReservationService.listForOfficeDays(+officeId, searchParams.range);
+    const includeOwnerEmail =
+        auth.authenticatedViaGuard === "api" && Boolean(auth.user?.hasRights(["EVENT_ADMIN"]));
+    return roomReservationService.listForOfficeDays(
+        +officeId,
+        searchParams.range,
+        undefined,
+        includeOwnerEmail,
+    );
 };
