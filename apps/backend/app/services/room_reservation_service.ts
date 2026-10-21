@@ -41,7 +41,12 @@ export interface AvailableRoomsInput extends ReservationDateRangeInput {
 }
 
 class RoomReservationService {
-    async listForOfficeDays(officeId: number, days: DateInput[], timezone = DEFAULT_TIMEZONE) {
+    async listForOfficeDays(
+        officeId: number,
+        days: DateInput[],
+        timezone = DEFAULT_TIMEZONE,
+        includeOwnerEmail = false,
+    ) {
         const office = await Office.query().where("id", officeId).preload("rooms").firstOrFail();
         const ranges = days.map((day) => this.parseDayRange(day, timezone));
         const roomIds = office.rooms.map((room) => room.id);
@@ -61,7 +66,10 @@ class RoomReservationService {
             }
         });
 
-        return reservationsQuery.preload("user", reservationUserSelector);
+        return reservationsQuery.preload("user", (query) => {
+            reservationUserSelector(query);
+            if (includeOwnerEmail) query.select("email");
+        });
     }
 
     async search(input: SearchReservationsInput) {
